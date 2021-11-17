@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/isoxml_dotnet/bin/Debug
+/isoxml_dotnet/obj/Debug
+/isoxml_dotnet_test/bin/Debug/netcoreapp3.1
+/isoxml_dotnet_test/obj
+/obj/Debug

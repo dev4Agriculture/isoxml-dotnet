@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!-- Schema revision date 2018-06-04, External File schema version 4.3, TC version 4, schema revision 3 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1" elementFormDefault="qualified">
+  <xs:include schemaLocation="ISO11783_Common_V4-3.xsd"/>
+  <xs:element name="XFC">
+    <xs:annotation>
+      <xs:appinfo>
+        <jaxb:class name="ExternalFileContents"/>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="BSN" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="BaseStation"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CCT" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="CodedComment"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CCG" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="CodedCommentGroup"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CLD" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="ColourLegend"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CTP" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="CropType"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CPC" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="CulturalPractice"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="CTR" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Customer"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="DVC" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Device"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="FRM" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Farm"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="OTQ" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="OperationTechnique"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="PFD" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Partfield"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="PDT" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Product"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="PGP" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="ProductGroup"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="TSK" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Task"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="VPN" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="ValuePresentation"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="WKR" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:appinfo>
+              <jaxb:property name="Worker"/>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

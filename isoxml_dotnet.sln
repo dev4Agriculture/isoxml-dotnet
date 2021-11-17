@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml_dotnet", "isoxml_dotnet\isoxml_dotnet.csproj", "{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml_dotnet_test", "isoxml_dotnet_test\isoxml_dotnet_test.csproj", "{433129DC-50C1-4447-8E24-5AF315AF8DCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F438D88B-CD78-460A-BEB4-A48229D50BF7}
+	EndGlobalSection
+EndGlobal
