@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml_dotnet", "isoxml_dotnet\isoxml_dotnet.csproj", "{B68FD0DF-D7DB-42A2-AABB-E9C3AB810867}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_test", "isoxml_dotnet_test\isoxml_dotnet_test.csproj", "{433129DC-50C1-4447-8E24-5AF315AF8DCC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FD19A659-C14B-413A-9F57-19876E6658AB} = {FD19A659-C14B-413A-9F57-19876E6658AB}
