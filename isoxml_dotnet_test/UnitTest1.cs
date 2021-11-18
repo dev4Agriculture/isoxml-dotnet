@@ -1,4 +1,4 @@
-using de.dev4agriculture.core.iso11783.taskdata;
+using de.dev4ag.iso11783;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -18,16 +18,10 @@ namespace isoxml_dotnet_test
             using ( StringReader reader = new StringReader(text))
             {
                 var output = (ISO11783_TaskData)serializer.Deserialize(reader);
-                var subElements = output.Items;
+                var subElements = output.DVC;
                 foreach(var codingData in subElements)
                 {
-                    if( codingData is TSK)
-                    {
-                        Console.WriteLine("Task Found");
-                    } else if ( codingData is DVC)
-                    {
-                        Console.WriteLine("Device Found");
-                    }
+                 Console.WriteLine("Device Found:" + codingData.A);
                 }
             }
         }
