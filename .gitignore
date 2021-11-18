@@ -14,3 +14,5 @@
 /isoxml_dotnet_core/obj
 /isoxml_dotnet_generator/bin/Debug/netcoreapp3.1
 /isoxml_dotnet_generator/obj
+
+/isoxml_dotnet_generator/out

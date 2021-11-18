@@ -29,6 +29,13 @@ namespace isoxml_dotnet_generator
                 Console.WriteLine("\tValidation error: " + args.Message);
         }
 
+        static Dictionary<string, string> fullNames = new Dictionary<string, string>();
+        static void memberCollector(CodeTypeMember codeTypeMember, PropertyModel propertyModel) {
+            if (propertyModel.Documentation.Count > 0) {
+                var name = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r", "");
+                fullNames[propertyModel.Name] = name;
+            }
+        }
 
         static void onVisitMember(CodeTypeMember codeTypeMember, PropertyModel propertyModel)
         {
@@ -77,28 +84,30 @@ namespace isoxml_dotnet_generator
         {
             string folder = "./resources/xsd/";
             
-            List<String> files = new List<string>() { folder + "ISO11783_TaskFile_V4-3.xsd" };
+            var files = new List<string>() { folder + "ISO11783_TaskFile_V4-3.xsd" };
+            var namespaceProvider = new Dictionary<NamespaceKey, string>
+                {
+                    { new NamespaceKey("http://dev4Agriculture.de"), "de.dev4ag.iso11783" }
+                }
+                .ToNamespaceProvider(new GeneratorConfiguration { NamespacePrefix = "de.dev4ag.iso11783" }.NamespaceProvider.GenerateNamespace);
+
+            NamingScheme namingScheme = new NamingScheme();
+            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme);
+
             var generator = new Generator
             {
                 OutputFolder = "./out/",
                 Log = s => Console.Out.WriteLine(s),
                 GenerateNullables = true,
-                NamespaceProvider = new Dictionary<NamespaceKey, string>
-    {
-        { new NamespaceKey("http://dev4Agriculture.de"), "de.dev4ag.iso11783" }
-    }
-                .ToNamespaceProvider(new GeneratorConfiguration { NamespacePrefix = "de.dev4ag.iso11783" }.NamespaceProvider.GenerateNamespace)
+                NamespaceProvider = namespaceProvider,
+                MemberVisitor = memberCollector,
             };
-            NamingScheme namingScheme = new NamingScheme();
-            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme);
 
-            generator.MemberVisitor = onVisitMember;
-            generator.TypeVisitor = onType;
-            generator.NamingProvider = namingProvider;
             generator.Generate(files);
 
+            // print names
+            var lines = fullNames.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
+            Console.WriteLine(string.Join(Environment.NewLine, lines));
         }
-
-
     }
 }
