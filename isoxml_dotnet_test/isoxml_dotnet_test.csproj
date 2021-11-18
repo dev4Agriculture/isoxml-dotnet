@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\isoxml_dotnet\isoxml_dotnet.csproj" />
+    <ProjectReference Include="..\isoxml_dotnet_core\isoxml_dotnet_core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
-using de.dev4agriculture.iso11783;
-using de.dev4agriculture.iso11783.taskdata;
+using de.dev4agriculture.core.iso11783;
+using de.dev4agriculture.core.iso11783.taskdata;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
