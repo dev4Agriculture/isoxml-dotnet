@@ -39,11 +39,12 @@ namespace isoxml_dotnet_generator
                 if(codeTypeMember.Name.IndexOf("Specified") != -1)
                 {
                     propertyModel.Name = $"{name}Specified";
+                    codeTypeMember.Name = $"{name}Specified";
                 }
                 else
                 {
-                    Console.WriteLine($"{propertyModel.Name} {name}");
                     propertyModel.Name = name;
+                    codeTypeMember.Name = name;
                 }
             }
         }
@@ -96,7 +97,7 @@ namespace isoxml_dotnet_generator
                 GenerateNullables = false,
                 NamespaceProvider = namespaceProvider,
                 MemberVisitor = onVisitMember,
-                TypeVisitor = onType,
+                // TypeVisitor = onType,
                 NamingProvider = namingProvider
             };
 
