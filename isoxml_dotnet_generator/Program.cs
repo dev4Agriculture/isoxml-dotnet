@@ -1,17 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Editing;
-using Microsoft.CodeAnalysis.Formatting;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using XmlSchemaClassGenerator;
 
 namespace isoxml_dotnet_generator
@@ -20,54 +12,48 @@ namespace isoxml_dotnet_generator
 
     class Program
     {
-        private static string curClass = "";
+        // private static string curClass = "";
 
         static Dictionary<string, string> fullNames = new Dictionary<string, string>();
-        static void memberCollector(CodeTypeMember codeTypeMember, PropertyModel propertyModel) {
-            if (propertyModel.Documentation.Count > 0) {
-                var name = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r", "");
-                fullNames[propertyModel.Name] = name;
+        // static void memberCollector(CodeTypeMember codeTypeMember, PropertyModel propertyModel) {
+        //     if (propertyModel.Documentation.Count > 0) {
+        //         var name = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r|,|(\s+)", "");
+        //         fullNames[propertyModel.Name] = name;
+        //     }
+        // }
+        static void typeCollector(CodeTypeDeclaration codeType, TypeModel typeModel) {
+            if (typeModel.Documentation.Count > 0) {
+                var name = Regex.Replace(typeModel.Documentation[0].Text, @"\t|\n|\r|,|(\s+)", "");
+                var originalTag = typeModel.Name.Replace("_", "");
+                fullNames[originalTag] = name;
+                fullNames[typeModel.Name] = name;
             }
         }
 
         static void onVisitMember(CodeTypeMember codeTypeMember, PropertyModel propertyModel)
         {
-            Console.WriteLine(" Param: " + codeTypeMember.Name);
+            // Console.WriteLine(" Param: " + codeTypeMember.Name);
             if (propertyModel.Documentation.Count > 0)
             {
-                var name  = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r", "");
-                if(name.IndexOf(" ") != -1)
-                {
-                    Console.WriteLine("Skipped Attribute " + name);
-                    return;
-                }
+                var name = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 if(codeTypeMember.Name.IndexOf("Specified") != -1)
                 {
-                    codeTypeMember.Name = curClass + name + "Specified";
-                    propertyModel.Name = name;
-                    propertyModel.Type.Name = name;
-                }else
+                    propertyModel.Name = $"{name}Specified";
+                }
+                else
                 {
-                    codeTypeMember.Name = curClass+name;
+                    Console.WriteLine($"{propertyModel.Name} {name}");
                     propertyModel.Name = name;
-                    propertyModel.Type.Name = name;
-
                 }
             }
         }
 
         private static void onType(CodeTypeDeclaration codeType, TypeModel typeModel)
         {
-            Console.WriteLine("Class: " + codeType.Name);
+            // Console.WriteLine("Class: " + codeType.Name);
             if (typeModel.Documentation.Count > 0)
             {
-                var name = Regex.Replace(typeModel.Documentation[0].Text, @"\t|\n|\r", "");
-                if (name.IndexOf(" ") != -1)
-                {
-                    Console.WriteLine("Skipped Class " + name);
-                    return;
-                }
-                curClass = codeType.Name;
+                var name = Regex.Replace(typeModel.Documentation[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 codeType.Name = name;
             }
         }
@@ -85,27 +71,37 @@ namespace isoxml_dotnet_generator
                 .ToNamespaceProvider(new GeneratorConfiguration { NamespacePrefix = "de.dev4ag.iso11783" }.NamespaceProvider.GenerateNamespace);
 
 
-            var generator = new Generator
+            var generatorCollector = new Generator
             {
                 OutputFolder = "./out/",
                 Log = s => Console.Out.WriteLine(s),
                 GenerateNullables = true,
                 NamespaceProvider = namespaceProvider,
-                MemberVisitor = memberCollector
+                TypeVisitor = typeCollector
             };
 
-            NamingScheme namingScheme = new NamingScheme();
-            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme, fullNames);
-
-            generator.GenerateNullables = false;
-            generator.MemberVisitor = onVisitMember;
-            generator.TypeVisitor = onType;
-            generator.NamingProvider = namingProvider;
-            generator.Generate(files);
+            generatorCollector.Generate(files);
 
             // print names
             var lines = fullNames.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
             Console.WriteLine(string.Join(Environment.NewLine, lines));
+
+            NamingScheme namingScheme = new NamingScheme();
+            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme, fullNames);
+
+            var generator = new Generator
+            {
+                OutputFolder = "./out/",
+                Log = s => Console.Out.WriteLine(s),
+                GenerateNullables = false,
+                NamespaceProvider = namespaceProvider,
+                MemberVisitor = onVisitMember,
+                TypeVisitor = onType,
+                NamingProvider = namingProvider
+            };
+
+            generator.Generate(files);
+
         }
     }
 }

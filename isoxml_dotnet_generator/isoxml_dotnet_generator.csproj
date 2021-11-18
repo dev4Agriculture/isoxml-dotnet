@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>isoxml_dotnet_generator</RootNamespace>
+    <!-- <DefaultItemExcludes>$(DefaultItemExcludes);out\**\*.*</DefaultItemExcludes> -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,4 +22,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>  
   </ItemGroup>  
+
+  <ItemGroup>
+    <!-- <Content Remove=".\out\*.*" /> -->
+</ItemGroup>
 </Project>

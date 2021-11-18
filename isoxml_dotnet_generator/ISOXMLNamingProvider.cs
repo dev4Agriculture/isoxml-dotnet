@@ -67,7 +67,15 @@ namespace isoxml_dotnet_generator
 
         public override string EnumTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            return base.EnumTypeNameFromQualifiedName(qualifiedName);
+            String name = base.EnumTypeNameFromQualifiedName(qualifiedName);
+            String value = "";
+            if (this.ReplacementDictionary.TryGetValue(name, out value))
+            {
+                return value;
+            }  else
+            {
+                return name;
+            }
         }
 
         public override bool Equals(object obj)
