@@ -8,3 +8,5 @@
 /isoxml_dotnet_test/bin/Debug/netcoreapp3.1
 /isoxml_dotnet_test/obj
 /obj/Debug
+/isoxml-dotnet-generator/bin/Debug/netcoreapp3.1
+/isoxml-dotnet-generator/obj

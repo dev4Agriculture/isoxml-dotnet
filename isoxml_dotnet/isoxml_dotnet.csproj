@@ -42,9 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="./src/xml/ISO11783_Common.cs" />
-    <Compile Include="./src/xml/ISO11783_ExternalFile.cs" />
     <Compile Include="./src/xml/ISO11783_TaskFile.cs" />
+    <Compile Include="src\xml\ISO11783_LinkListFile.cs" />
+    <Compile Include="src\xml\ISO11783_TimeLog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

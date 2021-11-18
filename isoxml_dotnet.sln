@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml_dotnet", "isoxml_dot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml_dotnet_test", "isoxml_dotnet_test\isoxml_dotnet_test.csproj", "{433129DC-50C1-4447-8E24-5AF315AF8DCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isoxml-dotnet-generator", "isoxml-dotnet-generator\isoxml-dotnet-generator.csproj", "{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
