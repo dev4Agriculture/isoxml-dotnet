@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Schema revision date 2018-06-04, Schema version 4.3, TC version 4, schema revision 3 -->
-<!-- This schema file contains the XML elements that can be used in the TASKDATA.XML file and in the External files -->
+<!-- Schema revision date 2013-03-25, External File schema version 3.0, TC version 3, schema revision 0 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-	<xs:simpleType name="emptyString">
-		<xs:restriction base="xs:string">
-			<xs:length value="0" />
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:element name="ASP">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -15,7 +9,7 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice minOccurs="0">
-				<xs:element ref="PTN" minOccurs="0" maxOccurs="2">
+				<xs:element ref="PTN" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							Position
@@ -68,86 +62,10 @@
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									Effective (Realized)
+									Effective
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="BSN">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				BaseStation
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(BSN|BSN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationDesignator
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationNorth
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:decimal">
-						<xs:minInclusive value="-90.0"/>
-						<xs:maxInclusive value="90.0"/>
-						<xs:fractionDigits value="9"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="D" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationEast
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:decimal">
-						<xs:minInclusive value="-180.0"/>
-						<xs:maxInclusive value="180.0"/>
-						<xs:fractionDigits value="9"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="E" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationUp
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483647"/>
-						<xs:maxInclusive value="2147483647"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -529,114 +447,6 @@
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="CAT">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				ControlAssignment
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice minOccurs="0">
-				<xs:element ref="ASP" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							AllocationStamp
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						SourceClientNAME
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:hexBinary">
-						<xs:length value="8"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						UserClientNAME
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:hexBinary">
-						<xs:length value="8"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						SourceDeviceStructureLabel
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:hexBinary">
-						<xs:minLength value="7"/>
-						<xs:maxLength value="39"/>
-						<xs:pattern value="((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[a-f]|[A-F])([0-9]|[a-f]|[A-F]))*"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="D" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						UserDeviceStructureLabel
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:hexBinary">
-						<xs:minLength value="7"/>
-						<xs:maxLength value="39"/>
-						<xs:pattern value="((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e]))){7}(([0-9]|[A-F]|[a-f])([0-9]|[A-F]|[a-f]))*"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="E" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						SourceDeviceElementNumber
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedShort">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4095"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="F" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						UserDeviceElementNumber
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedShort">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4095"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProcessDataDDI
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:hexBinary">
-						<xs:length value="2"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="CTP">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -679,20 +489,6 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="C" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductGroupIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PGP|PGP-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="CVT">
@@ -725,20 +521,6 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PDT|PDT-)([0-9])+"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -812,7 +594,7 @@
 			<xs:attribute name="B" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						CustomerLastName
+						CustomerDesignator
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1286,7 +1068,7 @@
 			<xs:attribute name="D" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						ClientNAME
+						WorkingSetMasterNAME
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1315,9 +1097,8 @@
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:hexBinary">
-						<xs:minLength value="7"/>
-						<xs:maxLength value="39"/>
-						<xs:pattern value="((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[a-f]|[A-F])([0-9]|[a-f]|[A-F]))*"/>
+						<xs:length value="7"/>
+						<xs:pattern value="((([0-9]|[A-E])([0-9]|[A-F]))|(F([0-9]|[A-E])))*"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1330,7 +1111,7 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:hexBinary">
 						<xs:length value="7"/>
-						<xs:pattern value="(F|f){2}((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e])))*"/>
+						<xs:pattern value="FF((([0-9]|[A-E])([0-9]|[A-F]))|(F([0-9]|[A-E])))*"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1355,7 +1136,7 @@
 			<xs:attribute name="A" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						ClientNAMEValue
+						WorkingSetMasterNameValue
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1367,7 +1148,7 @@
 			<xs:attribute name="B" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						ClientNAMEMask
+						WorkingSetMasterNameMask
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1598,7 +1379,7 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:unsignedByte">
 						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="7"/>
+						<xs:maxInclusive value="3"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1757,6 +1538,7 @@
 					<xs:restriction base="xs:decimal">
 						<xs:minInclusive value="0.000000001"/>
 						<xs:maxInclusive value="100000000.0"/>
+						<!-- ??? -->
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1925,7 +1707,6 @@
 					<xs:restriction base="xs:decimal">
 						<xs:minInclusive value="-90.0"/>
 						<xs:maxInclusive value="90.0"/>
-						<xs:fractionDigits value="9"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -1939,7 +1720,6 @@
 					<xs:restriction base="xs:decimal">
 						<xs:minInclusive value="-180.0"/>
 						<xs:maxInclusive value="180.0"/>
-						<xs:fractionDigits value="9"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2061,589 +1841,15 @@
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="GAN">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				GuidanceAllocation
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice minOccurs="1" maxOccurs="unbounded">
-				<xs:element ref="ASP">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							AllocationStamp
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="GST" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							GuidanceShift
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceGroupIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(GGP|GGP-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GGP">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				GuidanceGroup
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice maxOccurs="unbounded">
-				<xs:element ref="GPN" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							GuidancePattern
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="PLN" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							BoundaryPolygon
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceGroupId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(GGP|GGP-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceGroupDesignator
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GPN">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				GuidancePattern
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice minOccurs="1" maxOccurs="unbounded">
-				<xs:element ref="LSG" minOccurs="1" maxOccurs="1">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							LineString
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="PLN" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							BoundaryPolygon
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(GPN|GPN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternDesignator
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternType
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									AB
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									A+
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Curve
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="4">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Pivot
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="5">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Spiral
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="D" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternOptions
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Clockwise - for pivot
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Counter-clockwise - for pivot
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Full Circle - for pivot
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="E" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternPropagationDirection
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Both directions
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Left direction only
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Right direction only
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="4">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									No propagation
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="F" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternExtension
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									From both first and last point
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									From first point (A) only
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									From last point (B) only
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="4">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									No extensions
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternHeading
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:decimal">
-						<xs:minInclusive value="0.0"/>
-						<xs:maxInclusive value="360.0"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="H" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternRadius
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedLong">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4294967294"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="I" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternGNSSMethod
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="0">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									no GPS fix
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									GNSS fix
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									DGNSS fix
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Precise GNSS
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="4">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									RTK fixed integer
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="5">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									RTK float
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="6">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Est (DR) mode
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="7">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Manual input
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="8">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Simulate mode
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="16">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Desktop generated data
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="17">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Other
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="J" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternHorizontalAccuracy
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:decimal">
-						<xs:minInclusive value="0.0"/>
-						<xs:maxInclusive value="65.0"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="K" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternVerticalAccuracy
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:decimal">
-						<xs:minInclusive value="0.0"/>
-						<xs:maxInclusive value="65.0"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="L" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						BaseStationIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(BSN|BSN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="M" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						OriginalSRID
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="N" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						NumberOfSwathsLeft
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedLong">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4294967294"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="O" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						NumberOfSwathsRight
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedLong">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4294967294"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GST">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				GuidanceShift
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice minOccurs="0">
-				<xs:element ref="ASP" minOccurs="0">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							AllocationStamp
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="A" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceGroupIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(GGP|GGP-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidancePatternIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(GPN|GPN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceEastShift
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483648"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="D" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						GuidanceNorthShift
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483648"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="E" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						PropagationOffset
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483648"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="LSG">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-				LineString
+				Linestring
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice minOccurs="1" maxOccurs="unbounded">
-				<xs:element ref="PNT" minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="PNT" minOccurs="2" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							Point
@@ -2654,7 +1860,7 @@
 			<xs:attribute name="A" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						LineStringType
+						LinestringType
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -2690,7 +1896,7 @@
 						<xs:enumeration value="5">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									GuidancePattern
+									GuidancePath
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
@@ -2715,20 +1921,13 @@
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
-						<xs:enumeration value="9">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Obstacle
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="B" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						LineStringDesignator
+						LinestringDesignator
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -2740,7 +1939,7 @@
 			<xs:attribute name="C" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						LineStringWidth
+						LinestringWidth
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -2753,7 +1952,7 @@
 			<xs:attribute name="D" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						LineStringLength
+						LinestringLength
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -2766,27 +1965,13 @@
 			<xs:attribute name="E" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						LineStringColour
+						LinestringColour
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:unsignedByte">
 						<xs:minInclusive value="0"/>
 						<xs:maxInclusive value="254"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="F" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						LineStringId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(LSG|LSG-)([0-9])+"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2905,7 +2090,7 @@
 				<xs:element ref="LSG" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
-							LineString
+							Linestring
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -2913,13 +2098,6 @@
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							Point
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="GGP" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							GuidanceGroup
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -3061,89 +2239,22 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:NMTOKEN">
-								<xs:enumeration value="1">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Flag
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="2">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											other
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="3">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Field Access
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="4">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Storage
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="5">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Obstacle
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="6">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference A
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="7">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference B
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="8">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference Center
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="9">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Point
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="10">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Partfield Reference Point
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="11">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Homebase
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Flag
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="2">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									other
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="B" use="optional">
@@ -3165,15 +2276,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="-90.0"/>
-								<xs:maxInclusive value="90.0"/>
-								<xs:fractionDigits value="9"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="-90.0"/>
+						<xs:maxInclusive value="90.0"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="D" use="required">
@@ -3183,15 +2289,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="-180.0"/>
-								<xs:maxInclusive value="180.0"/>
-								<xs:fractionDigits value="9"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="-180.0"/>
+						<xs:maxInclusive value="180.0"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="E" use="optional">
@@ -3201,14 +2302,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:long">
-								<xs:minInclusive value="-2147483647"/>
-								<xs:maxInclusive value="2147483647"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:long">
+						<xs:minInclusive value="-2147483647"/>
+						<xs:maxInclusive value="2147483647"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="F" use="optional">
@@ -3218,87 +2315,9 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:unsignedByte">
-								<xs:minInclusive value="0"/>
-								<xs:maxInclusive value="254"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						PointId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PNT|PNT-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="H" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						PointHorizontalAccuracy
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="0.0"/>
-								<xs:maxInclusive value="65.0"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="I" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						PointVerticalAccuracy
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="0.0"/>
-								<xs:maxInclusive value="65.0"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="J" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						Filename
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:length value="8"/>
-						<xs:pattern value="PNT([0-9]){5}"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="K" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						Filelength
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:unsignedLong">
+					<xs:restriction base="xs:unsignedByte">
 						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="4294967294"/>
+						<xs:maxInclusive value="254"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3315,7 +2334,7 @@
 				<xs:element ref="LSG" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
-							LineString
+							Linestring
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -3384,34 +2403,6 @@
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
-						<xs:enumeration value="9">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Mainfield
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="10">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Headland
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="11">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									BufferZone
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="12">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Windbreak
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3453,20 +2444,6 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="E" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						PolygonId
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:ID">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PLN|PLN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="PTN">
@@ -3486,7 +2463,6 @@
 					<xs:restriction base="xs:decimal">
 						<xs:minInclusive value="-90.0"/>
 						<xs:maxInclusive value="90.0"/>
-						<xs:fractionDigits value="9"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3500,7 +2476,6 @@
 					<xs:restriction base="xs:decimal">
 						<xs:minInclusive value="-180.0"/>
 						<xs:maxInclusive value="180.0"/>
-						<xs:fractionDigits value="9"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -3790,32 +2765,6 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<xs:attribute name="F" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ActualCulturalPracticeValue
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483648"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ElementTypeInstanceValue
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="-2147483648"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="PDT">
@@ -3825,15 +2774,6 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="PRN" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							ProductRelation
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
 			<xs:attribute name="A" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
@@ -3891,96 +2831,12 @@
 			<xs:attribute name="E" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						QuantityDDI
+						AmountDDI
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:hexBinary">
 						<xs:length value="2"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="F" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductType
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Single (default)
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Mixture
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									TemporaryMixture
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						MixtureRecipeQuantity
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="H" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						DensityMassPerVolume
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="I" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						DensityMassPerCount
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="2147483647"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="J" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						DensityVolumePerCount
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="2147483647"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4015,7 +2871,7 @@
 			<xs:attribute name="B" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						QuantityDDI
+						AmountDDI
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4027,7 +2883,7 @@
 			<xs:attribute name="C" use="optional">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						QuantityValue
+						AmountValue
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4059,13 +2915,6 @@
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
-						<xs:enumeration value="3">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Remainder
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4094,20 +2943,6 @@
 						<xs:minLength value="4"/>
 						<xs:maxLength value="14"/>
 						<xs:pattern value="(VPN|VPN-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="G" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductSubTypeIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PDT|PDT-)([0-9])+"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4143,67 +2978,6 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 						<xs:maxLength value="32"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="C" use="optional">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductGroupType
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="1">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									ProductGroup (default)
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="2">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									CropType
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="PRN">
-		<xs:annotation>
-			<xs:documentation xml:lang="en">
-				ProductRelation
-			</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:attribute name="A" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						ProductIdRef
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:IDREF">
-						<xs:minLength value="4"/>
-						<xs:maxLength value="14"/>
-						<xs:pattern value="(PDT|PDT-)([0-9])+"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			<xs:attribute name="B" use="required">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">
-						QuantityValue
-					</xs:documentation>
-				</xs:annotation>
-				<xs:simpleType>
-					<xs:restriction base="xs:long">
-						<xs:minInclusive value="0"/>
-						<xs:maxInclusive value="2147483647"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -4291,20 +3065,6 @@
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							Grid
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="CAT" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							ControlAssignment
-						</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="GAN" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation xml:lang="en">
-							GuidanceAllocation
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -4402,7 +3162,7 @@
 						<xs:enumeration value="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									Planned
+									Initial
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
@@ -4423,21 +3183,7 @@
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									Completed
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="5">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Template
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="6">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Canceled
+									Finished
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
@@ -4493,7 +3239,7 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="PTN" minOccurs="0" maxOccurs="2">
+				<xs:element ref="PTN" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation xml:lang="en">
 							Position
@@ -4557,6 +3303,13 @@
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
+						<xs:enumeration value="3">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Preparation
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
@@ -4582,13 +3335,6 @@
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
 									Clearing
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
-						<xs:enumeration value="8">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Powered Down
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
@@ -4825,7 +3571,7 @@
 			<xs:attribute name="B" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">
-						WorkerLastName
+						WorkerDesignator
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4998,6 +3744,122 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="XFC">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+				ExternalFileContents
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="CCT" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   CodedComment
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CCG" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   CodedCommentGroup
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CLD" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   ColourLegend
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CTP" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						  CropType
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CPC" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   CulturalPractice
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CTR" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Customer
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="DVC" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Device
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="FRM" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Farm
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="OTQ" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   OperationTechnique
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PFD" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Partfield
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PDT" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Product
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PGP" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   ProductGroup
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="TSK" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Task
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="VPN" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   ValuePresentation
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="WKR" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+						   Worker
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>

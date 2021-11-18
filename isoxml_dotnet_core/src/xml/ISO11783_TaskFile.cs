@@ -12,34 +12,28 @@ namespace de.dev4ag.iso11783
 {
 
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("ASP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("ASP", Namespace = "")]
-    public partial class ASP
+    public partial class ISOAllocationStamp
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<PTN> _pTN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PTN")]
-        public System.Collections.ObjectModel.Collection<PTN> PTN
-        {
-            get
-            {
-                return this._pTN;
-            }
-            private set
-            {
-                this._pTN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<PTN> Position;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PTNSpecified
+        public bool PositionSpecified
         {
             get
             {
@@ -49,18 +43,22 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public ASP()
+        public ISOAllocationStamp()
         {
-            this._pTN = new System.Collections.ObjectModel.Collection<PTN>();
+            this._pTN = new System.Collections.ObjectModel.Collection<Position>();
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "dateTime")]
-        public System.DateTime A { get; set; }
+        public System.DateTime Start;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "dateTime")]
-        public System.DateTime BValue { get; set; }
+        public System.DateTime Stop;
 
         /// <summary>
         /// </summary>
@@ -68,8 +66,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool BValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<System.DateTime> B
+        public System.Nullable<System.DateTime> Stop
         {
             get
             {
@@ -94,7 +94,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public ulong CValue { get; set; }
+        public ulong Duration;
 
         /// <summary>
         /// </summary>
@@ -105,7 +105,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> C
+        public System.Nullable<ulong> Duration
         {
             get
             {
@@ -125,17 +125,21 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public ASPD D { get; set; }
+        public ASPD Type;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PTN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PTN", Namespace = "")]
-    public partial class PTN
+    public partial class ISOPosition
     {
 
         /// <summary>
@@ -143,21 +147,21 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-90.0", "90.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public decimal A { get; set; }
+        public decimal ASPPositionNorth;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-180.0", "180.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public decimal B { get; set; }
+        public decimal ASPPositionEast;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public long CValue { get; set; }
+        public long ASPPositionUp;
 
         /// <summary>
         /// </summary>
@@ -168,7 +172,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> C
+        public System.Nullable<long> ASPPositionUp
         {
             get
             {
@@ -188,16 +192,18 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public PTND D { get; set; }
+        public PTND ASPPositionStatus;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.0", "99.9")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public decimal EValue { get; set; }
+        public decimal ASPPDOP;
 
         /// <summary>
         /// </summary>
@@ -208,7 +214,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<decimal> E
+        public System.Nullable<decimal> ASPPDOP
         {
             get
             {
@@ -233,7 +239,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.0", "99.9")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public decimal FValue { get; set; }
+        public decimal ASPHDOP;
 
         /// <summary>
         /// </summary>
@@ -244,7 +250,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<decimal> F
+        public System.Nullable<decimal> ASPHDOP
         {
             get
             {
@@ -269,7 +275,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public byte GValue { get; set; }
+        public byte ASPNumberOfSatellites;
 
         /// <summary>
         /// </summary>
@@ -280,7 +286,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> G
+        public System.Nullable<byte> ASPNumberOfSatellites
         {
             get
             {
@@ -305,7 +311,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public ulong HValue { get; set; }
+        public ulong ASPGpsUtcTime;
 
         /// <summary>
         /// </summary>
@@ -316,7 +322,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> H
+        public System.Nullable<ulong> ASPGpsUtcTime
         {
             get
             {
@@ -341,7 +347,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "0", "65534")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public ushort IValue { get; set; }
+        public ushort ASPGpsUtcDate;
 
         /// <summary>
         /// </summary>
@@ -352,7 +358,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ushort> I
+        public System.Nullable<ushort> ASPGpsUtcDate
         {
             get
             {
@@ -376,54 +382,86 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PTND", Namespace = "", AnonymousType = true)]
-    public enum PTND
+    public enum PositionStatus
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("8")]
         Item8,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("9")]
         Item9,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("10")]
         Item10,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("11")]
         Item11,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("12")]
         Item12,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("13")]
         Item13,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("14")]
         Item14,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("15")]
         Item15,
     }
@@ -431,22 +469,28 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("ASPD", Namespace = "", AnonymousType = true)]
-    public enum ASPD
+    public enum Type
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("BSN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("BSN", Namespace = "")]
-    public partial class BSN
+    public partial class ISOBaseStation
     {
 
         /// <summary>
@@ -456,65 +500,59 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(BSN|BSN-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string PositionBaseStationId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string PositionBaseStationDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-90.0", "90.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public decimal C { get; set; }
+        public decimal PositionBaseStationNorth;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-180.0", "180.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public decimal D { get; set; }
+        public decimal PositionBaseStationEast;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public long E { get; set; }
+        public long PositionBaseStationUp;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CCT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCT", Namespace = "")]
-    public partial class CCT
+    public partial class ISOCodedComment
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<CCL> _cCL;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCL")]
-        public System.Collections.ObjectModel.Collection<CCL> CCL
-        {
-            get
-            {
-                return this._cCL;
-            }
-            private set
-            {
-                this._cCL = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<CCL> BSNCodedCommentListValue;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CCLSpecified
+        public bool BSNCodedCommentListValueSpecified
         {
             get
             {
@@ -524,9 +562,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public CCT()
+        public ISOCodedComment()
         {
-            this._cCL = new System.Collections.ObjectModel.Collection<CCL>();
+            this._cCL = new System.Collections.ObjectModel.Collection<CodedCommentListValue>();
         }
 
         /// <summary>
@@ -536,18 +574,20 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCT|CCT-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string BSNCodedCommentId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string BSNCodedCommentDesignator;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public CCTC C { get; set; }
+        public CCTC BSNCodedCommentScope;
 
         /// <summary>
         /// </summary>
@@ -555,15 +595,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCG|CCG-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string BSNCodedCommentGroupIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CCL", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCL", Namespace = "")]
-    public partial class CCL
+    public partial class ISOCodedCommentListValue
     {
 
         /// <summary>
@@ -573,38 +615,46 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCL|CCL-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CCTCodedCommentListValueId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CCTCodedCommentListValueDesignator;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CCTC", Namespace = "", AnonymousType = true)]
-    public enum CCTC
+    public enum CodedCommentScope
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CCG", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCG", Namespace = "")]
-    public partial class CCG
+    public partial class ISOCodedCommentGroup
     {
 
         /// <summary>
@@ -614,44 +664,38 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCG|CCG-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CodedCommentListValueCodedCommentGroupId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CodedCommentListValueCodedCommentGroupDesignator;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CLD", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CLD", Namespace = "")]
-    public partial class CLD
+    public partial class ISOColourLegend
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<CRG> _cRG;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CRG")]
-        public System.Collections.ObjectModel.Collection<CRG> CRG
-        {
-            get
-            {
-                return this._cRG;
-            }
-            private set
-            {
-                this._cRG = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<CRG> CCGColourRange;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CRGSpecified
+        public bool CCGColourRangeSpecified
         {
             get
             {
@@ -661,9 +705,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public CLD()
+        public ISOColourLegend()
         {
-            this._cRG = new System.Collections.ObjectModel.Collection<CRG>();
+            this._cRG = new System.Collections.ObjectModel.Collection<ColourRange>();
         }
 
         /// <summary>
@@ -673,14 +717,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CLD|CLD-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CCGColourLegendId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public byte BValue { get; set; }
+        public byte CCGDefaultColor;
 
         /// <summary>
         /// </summary>
@@ -691,7 +735,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> B
+        public System.Nullable<byte> CCGDefaultColor
         {
             get
             {
@@ -712,12 +756,14 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CRG", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CRG", Namespace = "")]
-    public partial class CRG
+    public partial class ISOColourRange
     {
 
         /// <summary>
@@ -725,33 +771,37 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public long A { get; set; }
+        public long CLDMinimumValue;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long CLDMaximumValue;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public byte C { get; set; }
+        public byte CLDColour;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CAN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CAN", Namespace = "")]
-    public partial class CAN
+    public partial class ISOCommentAllocation
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public ASP ColourRangeAllocationStamp;
 
         /// <summary>
         /// </summary>
@@ -759,7 +809,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCT|CCT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string ColourRangeCodedCommentIdRef;
 
         /// <summary>
         /// </summary>
@@ -767,21 +817,23 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CCL|CCL-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string ColourRangeCodedCommentListValueIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string ColourRangeFreeCommentText;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CNN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CNN", Namespace = "")]
-    public partial class CNN
+    public partial class ISOConnection
     {
 
         /// <summary>
@@ -791,7 +843,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DVC|DVC-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CANDeviceIdRef_0;
 
         /// <summary>
         /// </summary>
@@ -800,7 +852,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CANDeviceElementIdRef_0;
 
         /// <summary>
         /// </summary>
@@ -809,7 +861,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DVC|DVC-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string CANDeviceIdRef_1;
 
         /// <summary>
         /// </summary>
@@ -818,19 +870,23 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string CANDeviceElementIdRef_1;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CAT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CAT", Namespace = "")]
-    public partial class CAT
+    public partial class ISOControlAssignment
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public AllocationStamp CNNAllocationStamp;
 
         /// <summary>
         /// </summary>
@@ -838,7 +894,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
-        public byte[] A { get; set; }
+        public byte[] CNNSourceClientNAME;
 
         /// <summary>
         /// </summary>
@@ -846,7 +902,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "hexBinary")]
-        public byte[] B { get; set; }
+        public byte[] CNNUserClientNAME;
 
         /// <summary>
         /// </summary>
@@ -856,7 +912,7 @@ namespace de.dev4ag.iso11783
             "a-f]|[A-F])([0-9]|[a-f]|[A-F]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C", DataType = "hexBinary")]
-        public byte[] C { get; set; }
+        public byte[] CNNSourceDeviceStructureLabel;
 
         /// <summary>
         /// </summary>
@@ -866,21 +922,21 @@ namespace de.dev4ag.iso11783
             "A-F]|[a-f])([0-9]|[A-F]|[a-f]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D", DataType = "hexBinary")]
-        public byte[] D { get; set; }
+        public byte[] CNNUserDeviceStructureLabel;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "0", "4095")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public ushort E { get; set; }
+        public ushort CNNSourceDeviceElementNumber;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "0", "4095")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ushort F { get; set; }
+        public ushort CNNUserDeviceElementNumber;
 
         /// <summary>
         /// </summary>
@@ -888,37 +944,31 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G", DataType = "hexBinary")]
-        public byte[] G { get; set; }
+        public byte[] CNNProcessDataDDI;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CTP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CTP", Namespace = "")]
-    public partial class CTP
+    public partial class ISOCropType
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<CVT> _cVT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CVT")]
-        public System.Collections.ObjectModel.Collection<CVT> CVT
-        {
-            get
-            {
-                return this._cVT;
-            }
-            private set
-            {
-                this._cVT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<CVT> CATCropVariety;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CVTSpecified
+        public bool CATCropVarietySpecified
         {
             get
             {
@@ -928,9 +978,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public CTP()
+        public ISOCropType()
         {
-            this._cVT = new System.Collections.ObjectModel.Collection<CVT>();
+            this._cVT = new System.Collections.ObjectModel.Collection<CropVariety>();
         }
 
         /// <summary>
@@ -940,14 +990,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTP|CTP-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CATCropTypeId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CATCropTypeDesignator;
 
         /// <summary>
         /// </summary>
@@ -955,15 +1005,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PGP|PGP-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string CATProductGroupIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CVT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CVT", Namespace = "")]
-    public partial class CVT
+    public partial class ISOCropVariety
     {
 
         /// <summary>
@@ -973,14 +1025,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CVT|CVT-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CTPCropVarietyId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CTPCropVarietyDesignator;
 
         /// <summary>
         /// </summary>
@@ -988,37 +1040,31 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string CTPProductIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CPC", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CPC", Namespace = "")]
-    public partial class CPC
+    public partial class ISOCulturalPractice
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<OTR> _oTR;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTR")]
-        public System.Collections.ObjectModel.Collection<OTR> OTR
-        {
-            get
-            {
-                return this._oTR;
-            }
-            private set
-            {
-                this._oTR = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<OTR> CropVarietyOperationTechniqueReference;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool OTRSpecified
+        public bool CropVarietyOperationTechniqueReferenceSpecified
         {
             get
             {
@@ -1028,9 +1074,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public CPC()
+        public ISOCulturalPractice()
         {
-            this._oTR = new System.Collections.ObjectModel.Collection<OTR>();
+            this._oTR = new System.Collections.ObjectModel.Collection<OperationTechniqueReference>();
         }
 
         /// <summary>
@@ -1040,22 +1086,24 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CPC|CPC-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CropVarietyCulturalPracticeId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string CropVarietyCulturalPracticeDesignator;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("OTR", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTR", Namespace = "")]
-    public partial class OTR
+    public partial class ISOOperationTechniqueReference
     {
 
         /// <summary>
@@ -1065,15 +1113,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(OTQ|OTQ-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string CPCOperationTechniqueIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CTR", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CTR", Namespace = "")]
-    public partial class CTR
+    public partial class ISOCustomer
     {
 
         /// <summary>
@@ -1083,88 +1133,90 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTR|CTR-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string OperationTechniqueReferenceCustomerId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string OperationTechniqueReferenceCustomerLastName;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string OperationTechniqueReferenceCustomerFirstName;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string OperationTechniqueReferenceCustomerStreet;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string OperationTechniqueReferenceCustomerPOBox;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(10)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string OperationTechniqueReferenceCustomerPostalCode;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string OperationTechniqueReferenceCustomerCity;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string OperationTechniqueReferenceCustomerState;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string OperationTechniqueReferenceCustomerCountry;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(20)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public string J { get; set; }
+        public string OperationTechniqueReferenceCustomerPhone;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(20)]
         [System.Xml.Serialization.XmlAttributeAttribute("K")]
-        public string K { get; set; }
+        public string OperationTechniqueReferenceCustomerMobile;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(20)]
         [System.Xml.Serialization.XmlAttributeAttribute("L")]
-        public string L { get; set; }
+        public string OperationTechniqueReferenceCustomerFax;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(64)]
         [System.Xml.Serialization.XmlAttributeAttribute("M")]
-        public string M { get; set; }
+        public string OperationTechniqueReferenceCustomerEMail;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DLT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DLT", Namespace = "")]
-    public partial class DLT
+    public partial class ISODataLogTrigger
     {
 
         /// <summary>
@@ -1173,21 +1225,21 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
-        public byte[] A { get; set; }
+        public byte[] CTRDataLogDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "1", "31")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public byte B { get; set; }
+        public byte CTRDataLogMethod;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "1000000")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public long CValue { get; set; }
+        public long CTRDataLogDistanceInterval;
 
         /// <summary>
         /// </summary>
@@ -1198,7 +1250,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> C
+        public System.Nullable<long> CTRDataLogDistanceInterval
         {
             get
             {
@@ -1223,7 +1275,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "60000")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public long DValue { get; set; }
+        public long CTRDataLogTimeInterval;
 
         /// <summary>
         /// </summary>
@@ -1234,7 +1286,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> D
+        public System.Nullable<long> CTRDataLogTimeInterval
         {
             get
             {
@@ -1259,7 +1311,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public long EValue { get; set; }
+        public long CTRDataLogThresholdMinimum;
 
         /// <summary>
         /// </summary>
@@ -1270,7 +1322,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> E
+        public System.Nullable<long> CTRDataLogThresholdMinimum
         {
             get
             {
@@ -1295,7 +1347,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public long FValue { get; set; }
+        public long CTRDataLogThresholdMaximum;
 
         /// <summary>
         /// </summary>
@@ -1306,7 +1358,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> F
+        public System.Nullable<long> CTRDataLogThresholdMaximum
         {
             get
             {
@@ -1331,7 +1383,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483647", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public long GValue { get; set; }
+        public long CTRDataLogThresholdChange;
 
         /// <summary>
         /// </summary>
@@ -1342,7 +1394,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> G
+        public System.Nullable<long> CTRDataLogThresholdChange
         {
             get
             {
@@ -1368,7 +1420,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string CTRDeviceElementIdRef;
 
         /// <summary>
         /// </summary>
@@ -1376,14 +1428,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(VPN|VPN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string CTRValuePresentationIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "262143")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public ulong JValue { get; set; }
+        public ulong CTRDataLogPGN;
 
         /// <summary>
         /// </summary>
@@ -1394,7 +1446,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> J
+        public System.Nullable<ulong> CTRDataLogPGN
         {
             get
             {
@@ -1419,7 +1471,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "63")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("K")]
-        public byte KValue { get; set; }
+        public byte CTRDataLogPGNStartBit;
 
         /// <summary>
         /// </summary>
@@ -1430,7 +1482,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> K
+        public System.Nullable<byte> CTRDataLogPGNStartBit
         {
             get
             {
@@ -1455,7 +1507,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "63")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("L")]
-        public byte LValue { get; set; }
+        public byte CTRDataLogPGNStopBit;
 
         /// <summary>
         /// </summary>
@@ -1466,7 +1518,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> L
+        public System.Nullable<byte> CTRDataLogPGNStopBit
         {
             get
             {
@@ -1487,12 +1539,14 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DLV", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DLV", Namespace = "")]
-    public partial class DLV
+    public partial class ISODataLogValue
     {
 
         /// <summary>
@@ -1501,28 +1555,30 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
-        public byte[] A { get; set; }
+        public byte[] DLTProcessDataDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long DLTProcessDataValue;
 
         /// <summary>
         /// </summary>
-        [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
+        [System.ComponentModel.DataAnnotations.MinLengthAttribute(4)]
+        [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string DLTDeviceElementIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "262143")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public ulong DValue { get; set; }
+        public ulong DLTDataLogPGN;
 
         /// <summary>
         /// </summary>
@@ -1533,7 +1589,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> D
+        public System.Nullable<ulong> DLTDataLogPGN
         {
             get
             {
@@ -1558,7 +1614,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "63")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public byte EValue { get; set; }
+        public byte DLTDataLogPGNStartBit;
 
         /// <summary>
         /// </summary>
@@ -1569,7 +1625,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> E
+        public System.Nullable<byte> DLTDataLogPGNStartBit
         {
             get
             {
@@ -1594,7 +1650,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "63")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public byte FValue { get; set; }
+        public byte DLTDataLogPGNStopBit;
 
         /// <summary>
         /// </summary>
@@ -1605,7 +1661,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> F
+        public System.Nullable<byte> DLTDataLogPGNStopBit
         {
             get
             {
@@ -1626,34 +1682,28 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DVC", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DVC", Namespace = "")]
-    public partial class DVC
+    public partial class ISODevice
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DET> _dET;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DET")]
-        public System.Collections.ObjectModel.Collection<DET> DET
-        {
-            get
-            {
-                return this._dET;
-            }
-            private set
-            {
-                this._dET = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DET> DLVDeviceElement;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DETSpecified
+        public bool DLVDeviceElementSpecified
         {
             get
             {
@@ -1663,34 +1713,26 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public DVC()
+        public ISODevice()
         {
-            this._dET = new System.Collections.ObjectModel.Collection<DET>();
-            this._dPT = new System.Collections.ObjectModel.Collection<DPT>();
-            this._dPD = new System.Collections.ObjectModel.Collection<DPD>();
-            this._dVP = new System.Collections.ObjectModel.Collection<DVP>();
+            this._dET = new System.Collections.ObjectModel.Collection<DeviceElement>();
+            this._dPT = new System.Collections.ObjectModel.Collection<DeviceProperty>();
+            this._dPD = new System.Collections.ObjectModel.Collection<DeviceProcessData>();
+            this._dVP = new System.Collections.ObjectModel.Collection<DeviceValuePresentation>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DPT> _dPT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DPT")]
-        public System.Collections.ObjectModel.Collection<DPT> DPT
-        {
-            get
-            {
-                return this._dPT;
-            }
-            private set
-            {
-                this._dPT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DPT> DLVDeviceProperty;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DPTSpecified
+        public bool DLVDevicePropertySpecified
         {
             get
             {
@@ -1701,23 +1743,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DPD> _dPD;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DPD")]
-        public System.Collections.ObjectModel.Collection<DPD> DPD
-        {
-            get
-            {
-                return this._dPD;
-            }
-            private set
-            {
-                this._dPD = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DPD> DLVDeviceProcessData;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DPDSpecified
+        public bool DLVDeviceProcessDataSpecified
         {
             get
             {
@@ -1728,23 +1762,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DVP> _dVP;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DVP")]
-        public System.Collections.ObjectModel.Collection<DVP> DVP
-        {
-            get
-            {
-                return this._dVP;
-            }
-            private set
-            {
-                this._dVP = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DVP> DLVDeviceValuePresentation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DVPSpecified
+        public bool DLVDeviceValuePresentationSpecified
         {
             get
             {
@@ -1759,19 +1785,19 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DVC|DVC-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string DLVDeviceId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string DLVDeviceDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string DLVDeviceSoftwareVersion;
 
         /// <summary>
         /// </summary>
@@ -1779,13 +1805,13 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D", DataType = "hexBinary")]
-        public byte[] D { get; set; }
+        public byte[] DLVClientNAME;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string DLVDeviceSerialNumber;
 
         /// <summary>
         /// </summary>
@@ -1795,7 +1821,7 @@ namespace de.dev4ag.iso11783
             "a-f]|[A-F])([0-9]|[a-f]|[A-F]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F", DataType = "hexBinary")]
-        public byte[] F { get; set; }
+        public byte[] DLVDeviceStructureLabel;
 
         /// <summary>
         /// </summary>
@@ -1804,37 +1830,31 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(F|f){2}((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e])))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G", DataType = "hexBinary")]
-        public byte[] G { get; set; }
+        public byte[] DLVDeviceLocalizationLabel;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DET", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DET", Namespace = "")]
-    public partial class DET
+    public partial class ISODeviceElement
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DOR> _dOR;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DOR")]
-        public System.Collections.ObjectModel.Collection<DOR> DOR
-        {
-            get
-            {
-                return this._dOR;
-            }
-            private set
-            {
-                this._dOR = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DOR> DVCDeviceObjectReference;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DORSpecified
+        public bool DVCDeviceObjectReferenceSpecified
         {
             get
             {
@@ -1844,9 +1864,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public DET()
+        public ISODeviceElement()
         {
-            this._dOR = new System.Collections.ObjectModel.Collection<DOR>();
+            this._dOR = new System.Collections.ObjectModel.Collection<DeviceObjectReference>();
         }
 
         /// <summary>
@@ -1856,46 +1876,50 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string DVCDeviceElementId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public ushort B { get; set; }
+        public ushort DVCDeviceElementObjectId;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public DETC C { get; set; }
+        public DETC DVCDeviceElementType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string DVCDeviceElementDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "0", "4095")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public ushort E { get; set; }
+        public ushort DVCDeviceElementNumber;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "0", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ushort F { get; set; }
+        public ushort DVCParentObjectId;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DOR", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DOR", Namespace = "")]
-    public partial class DOR
+    public partial class ISODeviceObjectReference
     {
 
         /// <summary>
@@ -1903,43 +1927,59 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public ushort A { get; set; }
+        public ushort DeviceElementDeviceObjectId;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DETC", Namespace = "", AnonymousType = true)]
-    public enum DETC
+    public enum DeviceElementType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DPT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DPT", Namespace = "")]
-    public partial class DPT
+    public partial class ISODeviceProperty
     {
 
         /// <summary>
@@ -1947,7 +1987,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public ushort A { get; set; }
+        public ushort DeviceObjectReferenceDevicePropertyObjectId;
 
         /// <summary>
         /// </summary>
@@ -1955,27 +1995,27 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "hexBinary")]
-        public byte[] B { get; set; }
+        public byte[] DeviceObjectReferenceDevicePropertyDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public long C { get; set; }
+        public long DeviceObjectReferenceDevicePropertyValue;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string DeviceObjectReferenceDevicePropertyDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public ushort EValue { get; set; }
+        public ushort DeviceObjectReferenceDeviceValuePresentationObjectId;
 
         /// <summary>
         /// </summary>
@@ -1986,7 +2026,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ushort> E
+        public System.Nullable<ushort> DeviceObjectReferenceDeviceValuePresentationObjectId
         {
             get
             {
@@ -2007,12 +2047,14 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DPD", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DPD", Namespace = "")]
-    public partial class DPD
+    public partial class ISODeviceProcessData
     {
 
         /// <summary>
@@ -2020,7 +2062,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public ushort A { get; set; }
+        public ushort DevicePropertyDeviceProcessDataObjectId;
 
         /// <summary>
         /// </summary>
@@ -2028,34 +2070,34 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "hexBinary")]
-        public byte[] B { get; set; }
+        public byte[] DevicePropertyDeviceProcessDataDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "7")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public byte C { get; set; }
+        public byte DevicePropertyDeviceProcessDataProperty;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "31")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte D { get; set; }
+        public byte DevicePropertyDeviceProcessDataTriggerMethods;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string DevicePropertyDeviceProcessDataDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ushort FValue { get; set; }
+        public ushort DevicePropertyDeviceValuePresentationObjectId;
 
         /// <summary>
         /// </summary>
@@ -2066,7 +2108,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ushort> F
+        public System.Nullable<ushort> DevicePropertyDeviceValuePresentationObjectId
         {
             get
             {
@@ -2087,12 +2129,14 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DVP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DVP", Namespace = "")]
-    public partial class DVP
+    public partial class ISODeviceValuePresentation
     {
 
         /// <summary>
@@ -2100,46 +2144,50 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ushort), "1", "65534")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public ushort A { get; set; }
+        public ushort DeviceProcessDataDeviceValuePresentationObjectId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long DeviceProcessDataOffset;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.000000001", "100000000.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public decimal C { get; set; }
+        public decimal DeviceProcessDataScale;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "7")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte D { get; set; }
+        public byte DeviceProcessDataNumberOfDecimals;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string DeviceProcessDataUnitDesignator;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("DAN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DAN", Namespace = "")]
-    public partial class DAN
+    public partial class ISODeviceAllocation
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public AllocationStamp DeviceValuePresentationAllocationStamp;
 
         /// <summary>
         /// </summary>
@@ -2147,14 +2195,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
-        public byte[] A { get; set; }
+        public byte[] DeviceValuePresentationClientNAMEValue;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "hexBinary")]
-        public byte[] B { get; set; }
+        public byte[] DeviceValuePresentationClientNAMEMask;
 
         /// <summary>
         /// </summary>
@@ -2162,15 +2210,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DVC|DVC-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string DeviceValuePresentationDeviceIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("FRM", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("FRM", Namespace = "")]
-    public partial class FRM
+    public partial class ISOFarm
     {
 
         /// <summary>
@@ -2180,50 +2230,50 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(FRM|FRM-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string DANFarmId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string DANFarmDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string DANFarmStreet;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string DANFarmPOBox;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(10)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string DANFarmPostalCode;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string DANFarmCity;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string DANFarmState;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string DANFarmCountry;
 
         /// <summary>
         /// </summary>
@@ -2231,15 +2281,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTR|CTR-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string DANCustomerIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GRD", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GRD", Namespace = "")]
-    public partial class GRD
+    public partial class ISOGrid
     {
 
         /// <summary>
@@ -2247,42 +2299,42 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-90.0", "90.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public decimal A { get; set; }
+        public decimal FRMGridMinimumNorthPosition;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "-180.0", "180.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public decimal B { get; set; }
+        public decimal FRMGridMinimumEastPosition;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(double), "0.0", "1.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public double C { get; set; }
+        public double FRMGridCellNorthSize;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(double), "0.0", "1.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public double D { get; set; }
+        public double FRMGridCellEastSize;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967295")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public ulong E { get; set; }
+        public ulong FRMGridMaximumColumn;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967295")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ulong F { get; set; }
+        public ulong FRMGridMaximumRow;
 
         /// <summary>
         /// </summary>
@@ -2291,14 +2343,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("GRD[0-9][0-9][0-9][0-9][0-9]")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string FRMFilename;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public ulong HValue { get; set; }
+        public ulong FRMFilelength;
 
         /// <summary>
         /// </summary>
@@ -2309,7 +2361,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> H
+        public System.Nullable<ulong> FRMFilelength
         {
             get
             {
@@ -2329,16 +2381,18 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public GRDI I { get; set; }
+        public GRDI FRMGridType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public byte JValue { get; set; }
+        public byte FRMTreatmentZoneCode;
 
         /// <summary>
         /// </summary>
@@ -2349,7 +2403,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> J
+        public System.Nullable<byte> FRMTreatmentZoneCode
         {
             get
             {
@@ -2373,47 +2427,69 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GRDI", Namespace = "", AnonymousType = true)]
-    public enum GRDI
+    public enum GridType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GAN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GAN", Namespace = "")]
-    public partial class GAN
+    public partial class ISOGuidanceAllocation
     {
 
-        [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<GST> _gST;
+        private System.Collections.ObjectModel.Collection<AllocationStamp> _aSP;
 
-        [System.Xml.Serialization.XmlElementAttribute("GST")]
-        public System.Collections.ObjectModel.Collection<GST> GST
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("ASP")]
+        public System.Collections.ObjectModel.Collection<AllocationStamp> GRDAllocationStamp;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GRDAllocationStampSpecified
         {
             get
             {
-                return this._gST;
-            }
-            private set
-            {
-                this._gST = value;
+                return (this.ASP.Count != 0);
             }
         }
 
         /// <summary>
         /// </summary>
+        public ISOGuidanceAllocation()
+        {
+            this._aSP = new System.Collections.ObjectModel.Collection<AllocationStamp>();
+            this._gST = new System.Collections.ObjectModel.Collection<GuidanceShift>();
+        }
+
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GSTSpecified
+        private System.Collections.ObjectModel.Collection<GST> _gST;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("GST")]
+        public System.Collections.ObjectModel.Collection<GST> GRDGuidanceShift;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GRDGuidanceShiftSpecified
         {
             get
             {
@@ -2423,31 +2499,28 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public GAN()
-        {
-            this._gST = new System.Collections.ObjectModel.Collection<GST>();
-        }
-
-        /// <summary>
-        /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(4)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(GGP|GGP-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string GRDGuidanceGroupIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GST", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GST", Namespace = "")]
-    public partial class GST
+    public partial class ISOGuidanceShift
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public AllocationStamp GANAllocationStamp;
 
         /// <summary>
         /// </summary>
@@ -2455,7 +2528,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(GGP|GGP-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string GANGuidanceGroupIdRef;
 
         /// <summary>
         /// </summary>
@@ -2463,14 +2536,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(GPN|GPN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string GANGuidancePatternIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public long CValue { get; set; }
+        public long GANGuidanceEastShift;
 
         /// <summary>
         /// </summary>
@@ -2481,7 +2554,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> C
+        public System.Nullable<long> GANGuidanceEastShift
         {
             get
             {
@@ -2506,7 +2579,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public long DValue { get; set; }
+        public long GANGuidanceNorthShift;
 
         /// <summary>
         /// </summary>
@@ -2517,7 +2590,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> D
+        public System.Nullable<long> GANGuidanceNorthShift
         {
             get
             {
@@ -2542,7 +2615,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public long EValue { get; set; }
+        public long GANPropagationOffset;
 
         /// <summary>
         /// </summary>
@@ -2553,7 +2626,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> E
+        public System.Nullable<long> GANPropagationOffset
         {
             get
             {
@@ -2574,34 +2647,28 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GGP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GGP", Namespace = "")]
-    public partial class GGP
+    public partial class ISOGuidanceGroup
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<GPN> _gPN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GPN")]
-        public System.Collections.ObjectModel.Collection<GPN> GPN
-        {
-            get
-            {
-                return this._gPN;
-            }
-            private set
-            {
-                this._gPN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<GPN> GuidanceShiftGuidancePattern;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GPNSpecified
+        public bool GuidanceShiftGuidancePatternSpecified
         {
             get
             {
@@ -2611,13 +2678,30 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public GGP()
+        public ISOGuidanceGroup()
         {
-            this._gPN = new System.Collections.ObjectModel.Collection<GPN>();
+            this._gPN = new System.Collections.ObjectModel.Collection<GuidancePattern>();
+            this._pLN = new System.Collections.ObjectModel.Collection<BoundaryPolygon>();
         }
 
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<PLN> _pLN;
+
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public PLN PLN { get; set; }
+        public System.Collections.ObjectModel.Collection<PLN> GuidanceShiftBoundaryPolygon;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GuidanceShiftBoundaryPolygonSpecified
+        {
+            get
+            {
+                return (this.PLN.Count != 0);
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -2626,28 +2710,70 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(GGP|GGP-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string GuidanceShiftGuidanceGroupId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string GuidanceShiftGuidanceGroupDesignator;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GPN", Namespace = "")]
-    public partial class GPN
+    public partial class ISOGuidancePattern
     {
 
-        [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public LSG LSG { get; set; }
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<LSG> _lSG;
 
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("LSG")]
+        public System.Collections.ObjectModel.Collection<LSG> GGPLineString;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GGPLineStringSpecified
+        {
+            get
+            {
+                return (this.LSG.Count != 0);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public ISOGuidancePattern()
+        {
+            this._lSG = new System.Collections.ObjectModel.Collection<LineString>();
+            this._pLN = new System.Collections.ObjectModel.Collection<BoundaryPolygon>();
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<BoundaryPolygon> _pLN;
+
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public PLN PLN { get; set; }
+        public System.Collections.ObjectModel.Collection<BoundaryPolygon> GGPBoundaryPolygon;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GGPBoundaryPolygonSpecified
+        {
+            get
+            {
+                return (this.PLN.Count != 0);
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -2656,21 +2782,25 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(GPN|GPN-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string GGPGuidancePatternId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string GGPGuidancePatternDesignator;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public GPNC C { get; set; }
+        public GPNC GGPGuidancePatternType;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public GPND DValue { get; set; }
+        public GPND GGPGuidancePatternOptions;
 
         /// <summary>
         /// </summary>
@@ -2678,8 +2808,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool DValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<GPND> D
+        public System.Nullable<GPND> GGPGuidancePatternOptions
         {
             get
             {
@@ -2699,9 +2831,11 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public GPNE EValue { get; set; }
+        public GPNE GGPGuidancePatternPropagationDirection;
 
         /// <summary>
         /// </summary>
@@ -2709,8 +2843,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool EValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<GPNE> E
+        public System.Nullable<GPNE> GGPGuidancePatternPropagationDirection
         {
             get
             {
@@ -2730,9 +2866,11 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public GPNF FValue { get; set; }
+        public GPNF GGPGuidancePatternExtension;
 
         /// <summary>
         /// </summary>
@@ -2740,8 +2878,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool FValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<GPNF> F
+        public System.Nullable<GPNF> GGPGuidancePatternExtension
         {
             get
             {
@@ -2766,7 +2906,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.0", "360.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public decimal GValue { get; set; }
+        public decimal GGPGuidancePatternHeading;
 
         /// <summary>
         /// </summary>
@@ -2777,7 +2917,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<decimal> G
+        public System.Nullable<decimal> GGPGuidancePatternHeading
         {
             get
             {
@@ -2802,7 +2942,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public ulong HValue { get; set; }
+        public ulong GGPGuidancePatternRadius;
 
         /// <summary>
         /// </summary>
@@ -2813,7 +2953,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> H
+        public System.Nullable<ulong> GGPGuidancePatternRadius
         {
             get
             {
@@ -2833,9 +2973,11 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public GPNI IValue { get; set; }
+        public GPNI GGPGuidancePatternGNSSMethod;
 
         /// <summary>
         /// </summary>
@@ -2843,8 +2985,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool IValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<GPNI> I
+        public System.Nullable<GPNI> GGPGuidancePatternGNSSMethod
         {
             get
             {
@@ -2869,7 +3013,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.0", "65.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public decimal JValue { get; set; }
+        public decimal GGPGuidancePatternHorizontalAccuracy;
 
         /// <summary>
         /// </summary>
@@ -2880,7 +3024,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<decimal> J
+        public System.Nullable<decimal> GGPGuidancePatternHorizontalAccuracy
         {
             get
             {
@@ -2905,7 +3049,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.0", "65.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("K")]
-        public decimal KValue { get; set; }
+        public decimal GGPGuidancePatternVerticalAccuracy;
 
         /// <summary>
         /// </summary>
@@ -2916,7 +3060,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<decimal> K
+        public System.Nullable<decimal> GGPGuidancePatternVerticalAccuracy
         {
             get
             {
@@ -2942,20 +3086,20 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(BSN|BSN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("L")]
-        public string L { get; set; }
+        public string GGPBaseStationIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("M")]
-        public string M { get; set; }
+        public string GGPOriginalSRID;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("N")]
-        public ulong NValue { get; set; }
+        public ulong GGPNumberOfSwathsLeft;
 
         /// <summary>
         /// </summary>
@@ -2966,7 +3110,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> N
+        public System.Nullable<ulong> GGPNumberOfSwathsLeft
         {
             get
             {
@@ -2991,7 +3135,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("O")]
-        public ulong OValue { get; set; }
+        public ulong GGPNumberOfSwathsRight;
 
         /// <summary>
         /// </summary>
@@ -3002,7 +3146,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> O
+        public System.Nullable<ulong> GGPNumberOfSwathsRight
         {
             get
             {
@@ -3023,34 +3167,28 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("LSG", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("LSG", Namespace = "")]
-    public partial class LSG
+    public partial class ISOLineString
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<PNT> _pNT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PNT")]
-        public System.Collections.ObjectModel.Collection<PNT> PNT
-        {
-            get
-            {
-                return this._pNT;
-            }
-            private set
-            {
-                this._pNT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<PNT> GuidancePatternPoint;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PNTSpecified
+        public bool GuidancePatternPointSpecified
         {
             get
             {
@@ -3060,27 +3198,29 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public LSG()
+        public ISOLineString()
         {
-            this._pNT = new System.Collections.ObjectModel.Collection<PNT>();
+            this._pNT = new System.Collections.ObjectModel.Collection<Point>();
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public LSGA A { get; set; }
+        public LSGA GuidancePatternLineStringType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string GuidancePatternLineStringDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public ulong CValue { get; set; }
+        public ulong GuidancePatternLineStringWidth;
 
         /// <summary>
         /// </summary>
@@ -3091,7 +3231,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> C
+        public System.Nullable<ulong> GuidancePatternLineStringWidth
         {
             get
             {
@@ -3116,7 +3256,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public ulong DValue { get; set; }
+        public ulong GuidancePatternLineStringLength;
 
         /// <summary>
         /// </summary>
@@ -3127,7 +3267,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> D
+        public System.Nullable<ulong> GuidancePatternLineStringLength
         {
             get
             {
@@ -3152,7 +3292,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public byte EValue { get; set; }
+        public byte GuidancePatternLineStringColour;
 
         /// <summary>
         /// </summary>
@@ -3163,7 +3303,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> E
+        public System.Nullable<byte> GuidancePatternLineStringColour
         {
             get
             {
@@ -3189,15 +3329,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(LSG|LSG-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string GuidancePatternLineStringId;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PNT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PNT", Namespace = "")]
-    public partial class PNT
+    public partial class ISOPoint
     {
 
         /// <summary>
@@ -3206,13 +3348,13 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(0)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string LineStringPointType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string LineStringPointDesignator;
 
         /// <summary>
         /// </summary>
@@ -3221,7 +3363,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "-90.0", "90.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string LineStringPointNorth;
 
         /// <summary>
         /// </summary>
@@ -3230,7 +3372,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "-180.0", "180.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string LineStringPointEast;
 
         /// <summary>
         /// </summary>
@@ -3238,7 +3380,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(0)]
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "-2147483647", "2147483647")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string LineStringPointUp;
 
         /// <summary>
         /// </summary>
@@ -3246,7 +3388,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(0)]
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "0", "254")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string LineStringPointColour;
 
         /// <summary>
         /// </summary>
@@ -3254,7 +3396,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PNT|PNT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string LineStringPointId;
 
         /// <summary>
         /// </summary>
@@ -3262,7 +3404,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(0)]
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "0.0", "65.0")]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string LineStringPointHorizontalAccuracy;
 
         /// <summary>
         /// </summary>
@@ -3270,7 +3412,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(0)]
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(object), "0.0", "65.0")]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string LineStringPointVerticalAccuracy;
 
         /// <summary>
         /// </summary>
@@ -3278,14 +3420,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("PNT([0-9]){5}")]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public string J { get; set; }
+        public string LineStringFilename;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("K")]
-        public ulong KValue { get; set; }
+        public ulong LineStringFilelength;
 
         /// <summary>
         /// </summary>
@@ -3296,7 +3438,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> K
+        public System.Nullable<ulong> LineStringFilelength
         {
             get
             {
@@ -3320,65 +3462,77 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("LSGA", Namespace = "", AnonymousType = true)]
-    public enum LSGA
+    public enum LineStringType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("8")]
         Item8,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("9")]
         Item9,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PLN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PLN", Namespace = "")]
-    public partial class PLN
+    public partial class ISOPolygon
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LSG> _lSG;
+        private System.Collections.ObjectModel.Collection<LineString> _lSG;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public System.Collections.ObjectModel.Collection<LSG> LSG
-        {
-            get
-            {
-                return this._lSG;
-            }
-            private set
-            {
-                this._lSG = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<LineString> PointLineString;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LSGSpecified
+        public bool PointLineStringSpecified
         {
             get
             {
@@ -3388,27 +3542,29 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public PLN()
+        public ISOPolygon()
         {
-            this._lSG = new System.Collections.ObjectModel.Collection<LSG>();
+            this._lSG = new System.Collections.ObjectModel.Collection<LineString>();
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public PLNA A { get; set; }
+        public PLNA PointPolygonType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string PointPolygonDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public ulong CValue { get; set; }
+        public ulong PointPolygonArea;
 
         /// <summary>
         /// </summary>
@@ -3419,7 +3575,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> C
+        public System.Nullable<ulong> PointPolygonArea
         {
             get
             {
@@ -3444,7 +3600,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte DValue { get; set; }
+        public byte PointPolygonColour;
 
         /// <summary>
         /// </summary>
@@ -3455,7 +3611,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> D
+        public System.Nullable<byte> PointPolygonColour
         {
             get
             {
@@ -3481,48 +3637,72 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PLN|PLN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string PointPolygonId;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PLNA", Namespace = "", AnonymousType = true)]
-    public enum PLNA
+    public enum PolygonType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("8")]
         Item8,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("9")]
         Item9,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("10")]
         Item10,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("11")]
         Item11,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("12")]
         Item12,
     }
@@ -3530,21 +3710,31 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPNC", Namespace = "", AnonymousType = true)]
-    public enum GPNC
+    public enum GuidancePatternType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
     }
@@ -3552,15 +3742,21 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPND", Namespace = "", AnonymousType = true)]
-    public enum GPND
+    public enum GuidancePatternOptions
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
     }
@@ -3568,18 +3764,26 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPNE", Namespace = "", AnonymousType = true)]
-    public enum GPNE
+    public enum GuidancePatternPropagationDirection
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
     }
@@ -3587,18 +3791,26 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPNF", Namespace = "", AnonymousType = true)]
-    public enum GPNF
+    public enum GuidancePatternExtension
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
     }
@@ -3606,49 +3818,73 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("GPNI", Namespace = "", AnonymousType = true)]
-    public enum GPNI
+    public enum GuidancePatternGNSSMethod
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("8")]
         Item8,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("16")]
         Item16,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("17")]
         Item17,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("OTQ", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTQ", Namespace = "")]
-    public partial class OTQ
+    public partial class ISOOperationTechnique
     {
 
         /// <summary>
@@ -3658,22 +3894,24 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(OTQ|OTQ-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string BoundaryPolygonOperationTechniqueId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string BoundaryPolygonOperationTechniqueDesignator;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("OTP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTP", Namespace = "")]
-    public partial class OTP
+    public partial class ISOOperTechPractice
     {
 
         /// <summary>
@@ -3683,7 +3921,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CPC|CPC-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string OTQCulturalPracticeIdRef;
 
         /// <summary>
         /// </summary>
@@ -3691,22 +3929,26 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(OTQ|OTQ-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string OTQOperationTechniqueIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PFD", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PFD", Namespace = "")]
-    public partial class PFD
+    public partial class ISOPartfield
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<PLN> _pLN;
+        private System.Collections.ObjectModel.Collection<BoundaryPolygon> _pLN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public System.Collections.ObjectModel.Collection<PLN> PLN
+        public System.Collections.ObjectModel.Collection<BoundaryPolygon> PLN
         {
             get
             {
@@ -3731,34 +3973,26 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public PFD()
+        public ISOPartfield()
         {
-            this._pLN = new System.Collections.ObjectModel.Collection<PLN>();
-            this._lSG = new System.Collections.ObjectModel.Collection<LSG>();
-            this._pNT = new System.Collections.ObjectModel.Collection<PNT>();
-            this._gGP = new System.Collections.ObjectModel.Collection<GGP>();
+            this._pLN = new System.Collections.ObjectModel.Collection<BoundaryPolygon>();
+            this._lSG = new System.Collections.ObjectModel.Collection<LineString>();
+            this._pNT = new System.Collections.ObjectModel.Collection<Point>();
+            this._gGP = new System.Collections.ObjectModel.Collection<GuidanceGroup>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LSG> _lSG;
+        private System.Collections.ObjectModel.Collection<LineString> _lSG;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public System.Collections.ObjectModel.Collection<LSG> LSG
-        {
-            get
-            {
-                return this._lSG;
-            }
-            private set
-            {
-                this._lSG = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<LineString> OTPLineString;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LSGSpecified
+        public bool OTPLineStringSpecified
         {
             get
             {
@@ -3767,25 +4001,17 @@ namespace de.dev4ag.iso11783
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<PNT> _pNT;
+        private System.Collections.ObjectModel.Collection<Point> _pNT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PNT")]
-        public System.Collections.ObjectModel.Collection<PNT> PNT
-        {
-            get
-            {
-                return this._pNT;
-            }
-            private set
-            {
-                this._pNT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<Point> OTPPoint;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PNTSpecified
+        public bool OTPPointSpecified
         {
             get
             {
@@ -3796,23 +4022,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<GGP> _gGP;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GGP")]
-        public System.Collections.ObjectModel.Collection<GGP> GGP
-        {
-            get
-            {
-                return this._gGP;
-            }
-            private set
-            {
-                this._gGP = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<GGP> OTPGuidanceGroup;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GGPSpecified
+        public bool OTPGuidanceGroupSpecified
         {
             get
             {
@@ -3827,27 +4045,27 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PFD|PFD-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string OTPPartfieldId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string OTPPartfieldCode;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string OTPPartfieldDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public ulong D { get; set; }
+        public ulong OTPPartfieldArea;
 
         /// <summary>
         /// </summary>
@@ -3855,7 +4073,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTR|CTR-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string OTPCustomerIdRef;
 
         /// <summary>
         /// </summary>
@@ -3863,7 +4081,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(FRM|FRM-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string OTPFarmIdRef;
 
         /// <summary>
         /// </summary>
@@ -3871,7 +4089,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTP|CTP-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string OTPCropTypeIdRef;
 
         /// <summary>
         /// </summary>
@@ -3879,7 +4097,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CVT|CVT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string OTPCropVarietyIdRef;
 
         /// <summary>
         /// </summary>
@@ -3887,37 +4105,31 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PFD|PFD-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string OTPFieldIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PDV", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PDV", Namespace = "")]
-    public partial class PDV
+    public partial class ISOProcessDataVariable
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<PDV> _pDVProperty;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDV")]
-        public System.Collections.ObjectModel.Collection<PDV> PDVProperty
-        {
-            get
-            {
-                return this._pDVProperty;
-            }
-            private set
-            {
-                this._pDVProperty = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<PDV> PFDProcessDataVariable;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PDVPropertySpecified
+        public bool PFDProcessDataVariableSpecified
         {
             get
             {
@@ -3927,24 +4139,25 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public PDV()
+        public ISOProcessDataVariable()
         {
-            this._pDVProperty = new System.Collections.ObjectModel.Collection<PDV>();
+            this._pDVProperty = new System.Collections.ObjectModel.Collection<ProcessDataVariable>();
         }
 
         /// <summary>
         /// </summary>
+        [System.ComponentModel.DataAnnotations.MinLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
-        [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
+        public byte[] PFDProcessDataDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long PFDProcessDataValue;
 
         /// <summary>
         /// </summary>
@@ -3952,7 +4165,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string PFDProductIdRef;
 
         /// <summary>
         /// </summary>
@@ -3960,7 +4173,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string PFDDeviceElementIdRef;
 
         /// <summary>
         /// </summary>
@@ -3968,14 +4181,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(VPN|VPN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string PFDValuePresentationIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public long FValue { get; set; }
+        public long PFDActualCulturalPracticeValue;
 
         /// <summary>
         /// </summary>
@@ -3986,7 +4199,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> F
+        public System.Nullable<long> PFDActualCulturalPracticeValue
         {
             get
             {
@@ -4011,7 +4224,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public long GValue { get; set; }
+        public long PFDElementTypeInstanceValue;
 
         /// <summary>
         /// </summary>
@@ -4022,7 +4235,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> G
+        public System.Nullable<long> PFDElementTypeInstanceValue
         {
             get
             {
@@ -4043,34 +4256,28 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PDT", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PDT", Namespace = "")]
-    public partial class PDT
+    public partial class ISOProduct
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<PRN> _pRN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PRN")]
-        public System.Collections.ObjectModel.Collection<PRN> PRN
-        {
-            get
-            {
-                return this._pRN;
-            }
-            private set
-            {
-                this._pRN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<PRN> PDVProductRelation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PRNSpecified
+        public bool PDVProductRelationSpecified
         {
             get
             {
@@ -4080,9 +4287,9 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public PDT()
+        public ISOProduct()
         {
-            this._pRN = new System.Collections.ObjectModel.Collection<PRN>();
+            this._pRN = new System.Collections.ObjectModel.Collection<ProductRelation>();
         }
 
         /// <summary>
@@ -4092,14 +4299,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string PDVProductId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string PDVProductDesignator;
 
         /// <summary>
         /// </summary>
@@ -4107,7 +4314,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PGP|PGP-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string PDVProductGroupIdRef;
 
         /// <summary>
         /// </summary>
@@ -4115,18 +4322,20 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(VPN|VPN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string PDVValuePresentationIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.Xml.Serialization.XmlAttributeAttribute("E", DataType = "hexBinary")]
-        public byte[] E { get; set; }
+        public byte[] PDVQuantityDDI;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public PDTF FValue { get; set; }
+        public PDTF PDVProductType;
 
         /// <summary>
         /// </summary>
@@ -4134,8 +4343,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool FValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<PDTF> F
+        public System.Nullable<PDTF> PDVProductType
         {
             get
             {
@@ -4160,7 +4371,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public long GValue { get; set; }
+        public long PDVMixtureRecipeQuantity;
 
         /// <summary>
         /// </summary>
@@ -4171,7 +4382,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> G
+        public System.Nullable<long> PDVMixtureRecipeQuantity
         {
             get
             {
@@ -4196,7 +4407,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public long HValue { get; set; }
+        public long PDVDensityMassPerVolume;
 
         /// <summary>
         /// </summary>
@@ -4207,7 +4418,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> H
+        public System.Nullable<long> PDVDensityMassPerVolume
         {
             get
             {
@@ -4232,7 +4443,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public long IValue { get; set; }
+        public long PDVDensityMassPerCount;
 
         /// <summary>
         /// </summary>
@@ -4243,7 +4454,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> I
+        public System.Nullable<long> PDVDensityMassPerCount
         {
             get
             {
@@ -4268,7 +4479,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public long JValue { get; set; }
+        public long PDVDensityVolumePerCount;
 
         /// <summary>
         /// </summary>
@@ -4279,7 +4490,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> J
+        public System.Nullable<long> PDVDensityVolumePerCount
         {
             get
             {
@@ -4300,12 +4511,14 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PRN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PRN", Namespace = "")]
-    public partial class PRN
+    public partial class ISOProductRelation
     {
 
         /// <summary>
@@ -4315,42 +4528,50 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string PDTProductIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long PDTQuantityValue;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PDTF", Namespace = "", AnonymousType = true)]
-    public enum PDTF
+    public enum ProductType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PAN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PAN", Namespace = "")]
-    public partial class PAN
+    public partial class ISOProductAllocation
     {
 
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public AllocationStamp ASP { get; set; }
 
         /// <summary>
         /// </summary>
@@ -4359,21 +4580,21 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string ProductRelationProductIdRef;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(2)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(2)]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "hexBinary")]
-        public byte[] B { get; set; }
+        public byte[] ProductRelationQuantityDDI;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "0", "2147483647")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public long CValue { get; set; }
+        public long ProductRelationQuantityValue;
 
         /// <summary>
         /// </summary>
@@ -4384,7 +4605,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<long> C
+        public System.Nullable<long> ProductRelationQuantityValue
         {
             get
             {
@@ -4404,9 +4625,11 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public PAND DValue { get; set; }
+        public PAND ProductRelationTransferMode;
 
         /// <summary>
         /// </summary>
@@ -4414,8 +4637,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool DValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<PAND> D
+        public System.Nullable<PAND> ProductRelationTransferMode
         {
             get
             {
@@ -4441,7 +4666,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(DET|DET-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string ProductRelationDeviceElementIdRef;
 
         /// <summary>
         /// </summary>
@@ -4449,7 +4674,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(VPN|VPN-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string ProductRelationValuePresentationIdRef;
 
         /// <summary>
         /// </summary>
@@ -4457,31 +4682,39 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PDT|PDT-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string ProductRelationProductSubTypeIdRef;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PAND", Namespace = "", AnonymousType = true)]
-    public enum PAND
+    public enum TransferMode
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PGP", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PGP", Namespace = "")]
-    public partial class PGP
+    public partial class ISOProductGroup
     {
 
         /// <summary>
@@ -4491,18 +4724,20 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PGP|PGP-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string PANProductGroupId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string PANProductGroupDesignator;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public PGPC CValue { get; set; }
+        public PGPC PANProductGroupType;
 
         /// <summary>
         /// </summary>
@@ -4510,8 +4745,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool CValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<PGPC> C
+        public System.Nullable<PGPC> PANProductGroupType
         {
             get
             {
@@ -4535,44 +4772,42 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("PGPC", Namespace = "", AnonymousType = true)]
-    public enum PGPC
+    public enum ProductGroupType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TSK", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TSK", Namespace = "")]
-    public partial class TSK
+    public partial class ISOTask
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<TZN> _tZN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TZN")]
-        public System.Collections.ObjectModel.Collection<TZN> TZN
-        {
-            get
-            {
-                return this._tZN;
-            }
-            private set
-            {
-                this._tZN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<TZN> PGPTreatmentZone;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TZNSpecified
+        public bool PGPTreatmentZoneSpecified
         {
             get
             {
@@ -4582,41 +4817,35 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public TSK()
+        public ISOTask()
         {
-            this._tZN = new System.Collections.ObjectModel.Collection<TZN>();
-            this._tIM = new System.Collections.ObjectModel.Collection<TIM>();
-            this._wAN = new System.Collections.ObjectModel.Collection<WAN>();
-            this._dAN = new System.Collections.ObjectModel.Collection<DAN>();
-            this._cNN = new System.Collections.ObjectModel.Collection<CNN>();
-            this._pAN = new System.Collections.ObjectModel.Collection<PAN>();
-            this._dLT = new System.Collections.ObjectModel.Collection<DLT>();
-            this._cAN = new System.Collections.ObjectModel.Collection<CAN>();
-            this._tLG = new System.Collections.ObjectModel.Collection<TLG>();
-            this._cAT = new System.Collections.ObjectModel.Collection<CAT>();
-            this._gAN = new System.Collections.ObjectModel.Collection<GAN>();
+            this._tZN = new System.Collections.ObjectModel.Collection<TreatmentZone>();
+            this._tIM = new System.Collections.ObjectModel.Collection<Time>();
+            this._oTP = new System.Collections.ObjectModel.Collection<OperTechPractice>();
+            this._wAN = new System.Collections.ObjectModel.Collection<WorkerAllocation>();
+            this._dAN = new System.Collections.ObjectModel.Collection<DeviceAllocation>();
+            this._cNN = new System.Collections.ObjectModel.Collection<Connection>();
+            this._pAN = new System.Collections.ObjectModel.Collection<ProductAllocation>();
+            this._dLT = new System.Collections.ObjectModel.Collection<DataLogTrigger>();
+            this._cAN = new System.Collections.ObjectModel.Collection<CommentAllocation>();
+            this._tLG = new System.Collections.ObjectModel.Collection<TimeLog>();
+            this._gRD = new System.Collections.ObjectModel.Collection<Grid>();
+            this._cAT = new System.Collections.ObjectModel.Collection<ControlAssignment>();
+            this._gAN = new System.Collections.ObjectModel.Collection<GuidanceAllocation>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<TIM> _tIM;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TIM")]
-        public System.Collections.ObjectModel.Collection<TIM> TIM
-        {
-            get
-            {
-                return this._tIM;
-            }
-            private set
-            {
-                this._tIM = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<TIM> PGPTime;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TIMSpecified
+        public bool PGPTimeSpecified
         {
             get
             {
@@ -4624,29 +4853,37 @@ namespace de.dev4ag.iso11783
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("OTP")]
-        public OTP OTP { get; set; }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<WAN> _wAN;
+        private System.Collections.ObjectModel.Collection<OTP> _oTP;
 
-        [System.Xml.Serialization.XmlElementAttribute("WAN")]
-        public System.Collections.ObjectModel.Collection<WAN> WAN
-        {
-            get
-            {
-                return this._wAN;
-            }
-            private set
-            {
-                this._wAN = value;
-            }
-        }
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("OTP")]
+        public System.Collections.ObjectModel.Collection<OTP> PGPOperTechPractice;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool WANSpecified
+        public bool PGPOperTechPracticeSpecified
+        {
+            get
+            {
+                return (this.OTP.Count != 0);
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<WAN> _wAN;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("WAN")]
+        public System.Collections.ObjectModel.Collection<WAN> PGPWorkerAllocation;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PGPWorkerAllocationSpecified
         {
             get
             {
@@ -4657,23 +4894,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DAN> _dAN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DAN")]
-        public System.Collections.ObjectModel.Collection<DAN> DAN
-        {
-            get
-            {
-                return this._dAN;
-            }
-            private set
-            {
-                this._dAN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DAN> PGPDeviceAllocation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DANSpecified
+        public bool PGPDeviceAllocationSpecified
         {
             get
             {
@@ -4684,23 +4913,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<CNN> _cNN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CNN")]
-        public System.Collections.ObjectModel.Collection<CNN> CNN
-        {
-            get
-            {
-                return this._cNN;
-            }
-            private set
-            {
-                this._cNN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<CNN> PGPConnection;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CNNSpecified
+        public bool PGPConnectionSpecified
         {
             get
             {
@@ -4711,23 +4932,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<PAN> _pAN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PAN")]
-        public System.Collections.ObjectModel.Collection<PAN> PAN
-        {
-            get
-            {
-                return this._pAN;
-            }
-            private set
-            {
-                this._pAN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<PAN> PGPProductAllocation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PANSpecified
+        public bool PGPProductAllocationSpecified
         {
             get
             {
@@ -4738,23 +4951,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DLT> _dLT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DLT")]
-        public System.Collections.ObjectModel.Collection<DLT> DLT
-        {
-            get
-            {
-                return this._dLT;
-            }
-            private set
-            {
-                this._dLT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DLT> PGPDataLogTrigger;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DLTSpecified
+        public bool PGPDataLogTriggerSpecified
         {
             get
             {
@@ -4765,23 +4970,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<CAN> _cAN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CAN")]
-        public System.Collections.ObjectModel.Collection<CAN> CAN
-        {
-            get
-            {
-                return this._cAN;
-            }
-            private set
-            {
-                this._cAN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<CAN> PGPCommentAllocation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CANSpecified
+        public bool PGPCommentAllocationSpecified
         {
             get
             {
@@ -4792,23 +4989,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<TLG> _tLG;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TLG")]
-        public System.Collections.ObjectModel.Collection<TLG> TLG
-        {
-            get
-            {
-                return this._tLG;
-            }
-            private set
-            {
-                this._tLG = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<TLG> PGPTimeLog;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TLGSpecified
+        public bool PGPTimeLogSpecified
         {
             get
             {
@@ -4816,29 +5005,37 @@ namespace de.dev4ag.iso11783
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("GRD")]
-        public GRD GRD { get; set; }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<CAT> _cAT;
+        private System.Collections.ObjectModel.Collection<GRD> _gRD;
 
-        [System.Xml.Serialization.XmlElementAttribute("CAT")]
-        public System.Collections.ObjectModel.Collection<CAT> CAT
-        {
-            get
-            {
-                return this._cAT;
-            }
-            private set
-            {
-                this._cAT = value;
-            }
-        }
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("GRD")]
+        public System.Collections.ObjectModel.Collection<GRD> PGPGrid;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CATSpecified
+        public bool PGPGridSpecified
+        {
+            get
+            {
+                return (this.GRD.Count != 0);
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<CAT> _cAT;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("CAT")]
+        public System.Collections.ObjectModel.Collection<CAT> PGPControlAssignment;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PGPControlAssignmentSpecified
         {
             get
             {
@@ -4849,23 +5046,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<GAN> _gAN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GAN")]
-        public System.Collections.ObjectModel.Collection<GAN> GAN
-        {
-            get
-            {
-                return this._gAN;
-            }
-            private set
-            {
-                this._gAN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<GAN> PGPGuidanceAllocation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GANSpecified
+        public bool PGPGuidanceAllocationSpecified
         {
             get
             {
@@ -4880,13 +5069,13 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(TSK|TSK-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string PGPTaskId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string PGPTaskDesignator;
 
         /// <summary>
         /// </summary>
@@ -4894,7 +5083,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CTR|CTR-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string PGPCustomerIdRef;
 
         /// <summary>
         /// </summary>
@@ -4902,7 +5091,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(FRM|FRM-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string PGPFarmIdRef;
 
         /// <summary>
         /// </summary>
@@ -4910,7 +5099,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(PFD|PFD-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string PGPPartfieldIdRef;
 
         /// <summary>
         /// </summary>
@@ -4918,18 +5107,20 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(WKR|WKR-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string PGPResponsibleWorkerIdRef;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public TSKG G { get; set; }
+        public TSKG PGPTaskStatus;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public byte HValue { get; set; }
+        public byte PGPDefaultTreatmentZoneCode;
 
         /// <summary>
         /// </summary>
@@ -4940,7 +5131,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> H
+        public System.Nullable<byte> PGPDefaultTreatmentZoneCode
         {
             get
             {
@@ -4965,7 +5156,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public byte IValue { get; set; }
+        public byte PGPPositionLostTreatmentZoneCode;
 
         /// <summary>
         /// </summary>
@@ -4976,7 +5167,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> I
+        public System.Nullable<byte> PGPPositionLostTreatmentZoneCode
         {
             get
             {
@@ -5001,7 +5192,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public byte JValue { get; set; }
+        public byte PGPOutOfFieldTreatmentZoneCode;
 
         /// <summary>
         /// </summary>
@@ -5012,7 +5203,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> J
+        public System.Nullable<byte> PGPOutOfFieldTreatmentZoneCode
         {
             get
             {
@@ -5033,37 +5224,65 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TZN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TZN", Namespace = "")]
-    public partial class TZN
+    public partial class ISOTreatmentZone
     {
 
-        [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public PLN PLN { get; set; }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<PDV> _pDV;
+        private System.Collections.ObjectModel.Collection<BoundaryPolygon> _pLN;
 
-        [System.Xml.Serialization.XmlElementAttribute("PDV")]
-        public System.Collections.ObjectModel.Collection<PDV> PDV
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("PLN")]
+        public System.Collections.ObjectModel.Collection<BoundaryPolygon> PLN
         {
             get
             {
-                return this._pDV;
+                return this._pLN;
             }
             private set
             {
-                this._pDV = value;
+                this._pLN = value;
             }
         }
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PDVSpecified
+        public bool PLNSpecified
+        {
+            get
+            {
+                return (this.PLN.Count != 0);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public ISOTreatmentZone()
+        {
+            this._pLN = new System.Collections.ObjectModel.Collection<BoundaryPolygon>();
+            this._pDV = new System.Collections.ObjectModel.Collection<ProcessDataVariable>();
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<ProcessDataVariable> _pDV;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("PDV")]
+        public System.Collections.ObjectModel.Collection<ProcessDataVariable> TSKProcessDataVariable;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TSKProcessDataVariableSpecified
         {
             get
             {
@@ -5073,30 +5292,23 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public TZN()
-        {
-            this._pDV = new System.Collections.ObjectModel.Collection<PDV>();
-        }
-
-        /// <summary>
-        /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public byte A { get; set; }
+        public byte TSKTreatmentZoneCode;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string TSKTreatmentZoneDesignator;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public byte CValue { get; set; }
+        public byte TSKTreatmentZoneColour;
 
         /// <summary>
         /// </summary>
@@ -5107,7 +5319,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<byte> C
+        public System.Nullable<byte> TSKTreatmentZoneColour
         {
             get
             {
@@ -5128,34 +5340,28 @@ namespace de.dev4ag.iso11783
         }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TIM", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TIM", Namespace = "")]
-    public partial class TIM
+    public partial class ISOTime
     {
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<PTN> _pTN;
+        private System.Collections.ObjectModel.Collection<Position> _pTN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PTN")]
-        public System.Collections.ObjectModel.Collection<PTN> PTN
-        {
-            get
-            {
-                return this._pTN;
-            }
-            private set
-            {
-                this._pTN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<Position> TreatmentZonePosition;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PTNSpecified
+        public bool TreatmentZonePositionSpecified
         {
             get
             {
@@ -5165,32 +5371,24 @@ namespace de.dev4ag.iso11783
 
         /// <summary>
         /// </summary>
-        public TIM()
+        public ISOTime()
         {
-            this._pTN = new System.Collections.ObjectModel.Collection<PTN>();
-            this._dLV = new System.Collections.ObjectModel.Collection<DLV>();
+            this._pTN = new System.Collections.ObjectModel.Collection<Position>();
+            this._dLV = new System.Collections.ObjectModel.Collection<DataLogValue>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<DLV> _dLV;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DLV")]
-        public System.Collections.ObjectModel.Collection<DLV> DLV
-        {
-            get
-            {
-                return this._dLV;
-            }
-            private set
-            {
-                this._dLV = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<DLV> TreatmentZoneDataLogValue;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DLVSpecified
+        public bool TreatmentZoneDataLogValueSpecified
         {
             get
             {
@@ -5198,13 +5396,17 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "dateTime")]
-        public System.DateTime A { get; set; }
+        public System.DateTime TreatmentZoneStart;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("B", DataType = "dateTime")]
-        public System.DateTime BValue { get; set; }
+        public System.DateTime TreatmentZoneStop;
 
         /// <summary>
         /// </summary>
@@ -5212,8 +5414,10 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         public bool BValueSpecified { get; set; }
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<System.DateTime> B
+        public System.Nullable<System.DateTime> TreatmentZoneStop
         {
             get
             {
@@ -5238,7 +5442,7 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public ulong CValue { get; set; }
+        public ulong TreatmentZoneDuration;
 
         /// <summary>
         /// </summary>
@@ -5249,7 +5453,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> C
+        public System.Nullable<ulong> TreatmentZoneDuration
         {
             get
             {
@@ -5269,49 +5473,69 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public TIMD D { get; set; }
+        public TIMD TreatmentZoneType;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TIMD", Namespace = "", AnonymousType = true)]
-    public enum TIMD
+    public enum Type
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("7")]
         Item7,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("8")]
         Item8,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("WAN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("WAN", Namespace = "")]
-    public partial class WAN
+    public partial class ISOWorkerAllocation
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ASP ASP { get; set; }
+        public AllocationStamp TimeAllocationStamp;
 
         /// <summary>
         /// </summary>
@@ -5320,15 +5544,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(WKR|WKR-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string TimeWorkerIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TLG", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TLG", Namespace = "")]
-    public partial class TLG
+    public partial class ISOTimeLog
     {
 
         /// <summary>
@@ -5338,14 +5564,14 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("TLG[0-9][0-9][0-9][0-9][0-9]")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string WorkerAllocationFilename;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public ulong BValue { get; set; }
+        public ulong WorkerAllocationFilelength;
 
         /// <summary>
         /// </summary>
@@ -5356,7 +5582,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> B
+        public System.Nullable<ulong> WorkerAllocationFilelength
         {
             get
             {
@@ -5376,17 +5602,21 @@ namespace de.dev4ag.iso11783
             }
         }
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public TLGC C { get; set; }
+        public TLGC WorkerAllocationTimeLogType;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TLGC", Namespace = "", AnonymousType = true)]
-    public enum TLGC
+    public enum TimeLogType
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
     }
@@ -5394,34 +5624,48 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TSKG", Namespace = "", AnonymousType = true)]
-    public enum TSKG
+    public enum TaskStatus
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("5")]
         Item5,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
         Item6,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("VPN", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("VPN", Namespace = "")]
-    public partial class VPN
+    public partial class ISOValuePresentation
     {
 
         /// <summary>
@@ -5431,34 +5675,34 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(VPN|VPN-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string TimeLogValuePresentationId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(long), "-2147483648", "2147483647")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public long B { get; set; }
+        public long TimeLogOffset;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(decimal), "0.000000001", "100000000.0")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public decimal C { get; set; }
+        public decimal TimeLogScale;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "7")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte D { get; set; }
+        public byte TimeLogNumberOfDecimals;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string TimeLogUnitDesignator;
 
         /// <summary>
         /// </summary>
@@ -5466,15 +5710,17 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(14)]
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(CLD|CLD-)([0-9])+")]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string TimeLogColourLegendIdRef;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("WKR", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("WKR", Namespace = "")]
-    public partial class WKR
+    public partial class ISOWorker
     {
 
         /// <summary>
@@ -5484,88 +5730,90 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(WKR|WKR-)([0-9])+")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string VPNWorkerId;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string VPNWorkerLastName;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string VPNWorkerFirstName;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public string D { get; set; }
+        public string VPNWorkerStreet;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string VPNWorkerPOBox;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(10)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public string F { get; set; }
+        public string VPNWorkerPostalCode;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public string G { get; set; }
+        public string VPNWorkerCity;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("H")]
-        public string H { get; set; }
+        public string VPNWorkerState;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public string I { get; set; }
+        public string VPNWorkerCountry;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(20)]
         [System.Xml.Serialization.XmlAttributeAttribute("J")]
-        public string J { get; set; }
+        public string VPNWorkerPhone;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(20)]
         [System.Xml.Serialization.XmlAttributeAttribute("K")]
-        public string K { get; set; }
+        public string VPNWorkerMobile;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("L")]
-        public string L { get; set; }
+        public string VPNWorkerLicenseNumber;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(64)]
         [System.Xml.Serialization.XmlAttributeAttribute("M")]
-        public string M { get; set; }
+        public string VPNWorkerEMail;
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("AFE", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("AFE", Namespace = "")]
-    public partial class AFE
+    public partial class ISOAttachedFile
     {
 
         /// <summary>
@@ -5575,38 +5823,40 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("([0-9]|[A-Z]){8}.([0-9]|[A-Z]){3}")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string WKRFilenameWithExtension;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public AFEB B { get; set; }
+        public AFEB WKRPreserve;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public string C { get; set; }
+        public string WKRManufacturerGLN;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "1", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte D { get; set; }
+        public byte WKRFileType;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public string E { get; set; }
+        public string WKRFileVersion;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(ulong), "0", "4294967294")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ulong FValue { get; set; }
+        public ulong WKRFileLength;
 
         /// <summary>
         /// </summary>
@@ -5617,7 +5867,7 @@ namespace de.dev4ag.iso11783
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public System.Nullable<ulong> F
+        public System.Nullable<ulong> WKRFileLength
         {
             get
             {
@@ -5641,16 +5891,22 @@ namespace de.dev4ag.iso11783
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("AFEB", Namespace = "", AnonymousType = true)]
-    public enum AFEB
+    public enum Preserve
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("ISO11783_TaskData", Namespace = "", AnonymousType = true)]
@@ -5662,23 +5918,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<AFE> _aFE;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("AFE")]
-        public System.Collections.ObjectModel.Collection<AFE> AFE
-        {
-            get
-            {
-                return this._aFE;
-            }
-            private set
-            {
-                this._aFE = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<AFE> AFEAttachedFile;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AFESpecified
+        public bool AFEAttachedFileSpecified
         {
             get
             {
@@ -5690,46 +5938,39 @@ namespace de.dev4ag.iso11783
         /// </summary>
         public ISO11783_TaskData()
         {
-            this._aFE = new System.Collections.ObjectModel.Collection<AFE>();
-            this._bSN = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.BSN>();
-            this._cCT = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCT>();
-            this._cCG = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCG>();
-            this._cLD = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CLD>();
-            this._cTP = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTP>();
-            this._cPC = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CPC>();
-            this._cTR = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTR>();
-            this._dVC = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.DVC>();
-            this._fRM = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.FRM>();
-            this._oTQ = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.OTQ>();
-            this._pFD = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PFD>();
-            this._pDT = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PDT>();
-            this._pGP = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PGP>();
-            this._tSK = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.TSK>();
-            this._vPN = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.VPN>();
-            this._wKR = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.WKR>();
-            this._xFR = new System.Collections.ObjectModel.Collection<XFR>();
+            this._aFE = new System.Collections.ObjectModel.Collection<AttachedFile>();
+            this._bSN = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.BaseStation>();
+            this._cCT = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CodedComment>();
+            this._cCG = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CodedCommentGroup>();
+            this._cLD = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.ColourLegend>();
+            this._cTP = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CropType>();
+            this._cPC = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CulturalPractice>();
+            this._cTR = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Customer>();
+            this._dVC = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Device>();
+            this._fRM = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Farm>();
+            this._oTQ = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.OperationTechnique>();
+            this._pFD = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Partfield>();
+            this._pDT = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Product>();
+            this._pGP = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.ProductGroup>();
+            this._tSK = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Task>();
+            this._tCC = new System.Collections.ObjectModel.Collection<TaskControllerCapabilities>();
+            this._vPN = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.ValuePresentation>();
+            this._wKR = new System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.Worker>();
+            this._xFR = new System.Collections.ObjectModel.Collection<ExternalFileReference>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.BSN> _bSN;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("BSN")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.BSN> BSN
-        {
-            get
-            {
-                return this._bSN;
-            }
-            private set
-            {
-                this._bSN = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.BSN> AFEBaseStation;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BSNSpecified
+        public bool AFEBaseStationSpecified
         {
             get
             {
@@ -5740,23 +5981,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCT> _cCT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCT")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCT> CCT
-        {
-            get
-            {
-                return this._cCT;
-            }
-            private set
-            {
-                this._cCT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCT> AFECodedComment;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CCTSpecified
+        public bool AFECodedCommentSpecified
         {
             get
             {
@@ -5767,23 +6000,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCG> _cCG;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCG")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCG> CCG
-        {
-            get
-            {
-                return this._cCG;
-            }
-            private set
-            {
-                this._cCG = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CCG> AFECodedCommentGroup;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CCGSpecified
+        public bool AFECodedCommentGroupSpecified
         {
             get
             {
@@ -5794,23 +6019,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CLD> _cLD;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CLD")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CLD> CLD
-        {
-            get
-            {
-                return this._cLD;
-            }
-            private set
-            {
-                this._cLD = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CLD> AFEColourLegend;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CLDSpecified
+        public bool AFEColourLegendSpecified
         {
             get
             {
@@ -5821,23 +6038,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTP> _cTP;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTP")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTP> CTP
-        {
-            get
-            {
-                return this._cTP;
-            }
-            private set
-            {
-                this._cTP = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTP> AFECropType;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CTPSpecified
+        public bool AFECropTypeSpecified
         {
             get
             {
@@ -5848,23 +6057,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CPC> _cPC;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CPC")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CPC> CPC
-        {
-            get
-            {
-                return this._cPC;
-            }
-            private set
-            {
-                this._cPC = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CPC> AFECulturalPractice;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CPCSpecified
+        public bool AFECulturalPracticeSpecified
         {
             get
             {
@@ -5875,23 +6076,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTR> _cTR;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTR")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTR> CTR
-        {
-            get
-            {
-                return this._cTR;
-            }
-            private set
-            {
-                this._cTR = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.CTR> AFECustomer;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CTRSpecified
+        public bool AFECustomerSpecified
         {
             get
             {
@@ -5902,23 +6095,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.DVC> _dVC;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DVC")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.DVC> DVC
-        {
-            get
-            {
-                return this._dVC;
-            }
-            private set
-            {
-                this._dVC = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.DVC> AFEDevice;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DVCSpecified
+        public bool AFEDeviceSpecified
         {
             get
             {
@@ -5929,23 +6114,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.FRM> _fRM;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("FRM")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.FRM> FRM
-        {
-            get
-            {
-                return this._fRM;
-            }
-            private set
-            {
-                this._fRM = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.FRM> AFEFarm;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FRMSpecified
+        public bool AFEFarmSpecified
         {
             get
             {
@@ -5956,23 +6133,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.OTQ> _oTQ;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTQ")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.OTQ> OTQ
-        {
-            get
-            {
-                return this._oTQ;
-            }
-            private set
-            {
-                this._oTQ = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.OTQ> AFEOperationTechnique;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool OTQSpecified
+        public bool AFEOperationTechniqueSpecified
         {
             get
             {
@@ -5983,23 +6152,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PFD> _pFD;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PFD")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PFD> PFD
-        {
-            get
-            {
-                return this._pFD;
-            }
-            private set
-            {
-                this._pFD = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PFD> AFEPartfield;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PFDSpecified
+        public bool AFEPartfieldSpecified
         {
             get
             {
@@ -6010,23 +6171,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PDT> _pDT;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDT")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PDT> PDT
-        {
-            get
-            {
-                return this._pDT;
-            }
-            private set
-            {
-                this._pDT = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PDT> AFEProduct;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PDTSpecified
+        public bool AFEProductSpecified
         {
             get
             {
@@ -6037,23 +6190,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PGP> _pGP;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PGP")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PGP> PGP
-        {
-            get
-            {
-                return this._pGP;
-            }
-            private set
-            {
-                this._pGP = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.PGP> AFEProductGroup;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PGPSpecified
+        public bool AFEProductGroupSpecified
         {
             get
             {
@@ -6064,23 +6209,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.TSK> _tSK;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TSK")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.TSK> TSK
-        {
-            get
-            {
-                return this._tSK;
-            }
-            private set
-            {
-                this._tSK = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.TSK> AFETask;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TSKSpecified
+        public bool AFETaskSpecified
         {
             get
             {
@@ -6088,29 +6225,37 @@ namespace de.dev4ag.iso11783
             }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("TCC")]
-        public TCC TCC { get; set; }
-
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.VPN> _vPN;
+        private System.Collections.ObjectModel.Collection<TCC> _tCC;
 
-        [System.Xml.Serialization.XmlElementAttribute("VPN")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.VPN> VPN
-        {
-            get
-            {
-                return this._vPN;
-            }
-            private set
-            {
-                this._vPN = value;
-            }
-        }
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("TCC")]
+        public System.Collections.ObjectModel.Collection<TCC> AFETaskControllerCapabilities;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool VPNSpecified
+        public bool AFETaskControllerCapabilitiesSpecified
+        {
+            get
+            {
+                return (this.TCC.Count != 0);
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.VPN> _vPN;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("VPN")]
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.VPN> AFEValuePresentation;
+
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool AFEValuePresentationSpecified
         {
             get
             {
@@ -6121,23 +6266,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.WKR> _wKR;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("WKR")]
-        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.WKR> WKR
-        {
-            get
-            {
-                return this._wKR;
-            }
-            private set
-            {
-                this._wKR = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<de.dev4ag.iso11783.WKR> AFEWorker;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool WKRSpecified
+        public bool AFEWorkerSpecified
         {
             get
             {
@@ -6148,23 +6285,15 @@ namespace de.dev4ag.iso11783
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.ObjectModel.Collection<XFR> _xFR;
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("XFR")]
-        public System.Collections.ObjectModel.Collection<XFR> XFR
-        {
-            get
-            {
-                return this._xFR;
-            }
-            private set
-            {
-                this._xFR = value;
-            }
-        }
+        public System.Collections.ObjectModel.Collection<XFR> AFEExternalFileReference;
 
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool XFRSpecified
+        public bool AFEExternalFileReferenceSpecified
         {
             get
             {
@@ -6230,12 +6359,14 @@ namespace de.dev4ag.iso11783
         public string lang { get; set; }
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TCC", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TCC", Namespace = "")]
-    public partial class TCC
+    public partial class ISOTaskControllerCapabilities
     {
 
         /// <summary>
@@ -6244,76 +6375,90 @@ namespace de.dev4ag.iso11783
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A", DataType = "hexBinary")]
-        public byte[] A { get; set; }
+        public byte[] AFETaskControllerControlFunctionNAME;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(153)]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public string B { get; set; }
+        public string AFETaskControllerDesignator;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public TCCC C { get; set; }
+        public TCCC AFEVersionNumber;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "63")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public byte D { get; set; }
+        public byte AFEProvidedCapabilities;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public byte E { get; set; }
+        public byte AFENumberOfBoomsSectionControl;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public byte F { get; set; }
+        public byte AFENumberOfSectionsSectionControl;
 
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(byte), "0", "254")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public byte G { get; set; }
+        public byte AFENumberOfControlChannels;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("TCCC", Namespace = "", AnonymousType = true)]
-    public enum TCCC
+    public enum VersionNumber
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
         Item0,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Item3,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
     }
 
+    /// <summary>
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("XFR", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("XFR", Namespace = "")]
-    public partial class XFR
+    public partial class ISOExternalFileReference
     {
 
         /// <summary>
@@ -6324,19 +6469,23 @@ namespace de.dev4ag.iso11783
             "0-9][0-9]")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public string A { get; set; }
+        public string TaskControllerCapabilitiesFilename;
 
+        /// <summary>
+        /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public XFRB B { get; set; }
+        public XFRB TaskControllerCapabilitiesFiletype;
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.594.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("XFRB", Namespace = "", AnonymousType = true)]
-    public enum XFRB
+    public enum Filetype
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
     }
@@ -6347,6 +6496,8 @@ namespace de.dev4ag.iso11783
     public enum ISO11783_TaskDataVersionMajor
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Item4,
     }
@@ -6378,9 +6529,13 @@ namespace de.dev4ag.iso11783
     public enum ISO11783_TaskDataDataTransferOrigin
     {
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
         Item1,
 
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Item2,
     }

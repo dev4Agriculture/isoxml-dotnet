@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Schema revision date 2018-06-04, External File schema version 4.3, TC version 4, schema revision 3 -->
+<!-- Schema revision date 2015-05-26, External File schema version 4.2, TC version 4, schema revision 2 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:include schemaLocation="ISO11783_Common_V4-3.xsd"/>
+    <xs:include schemaLocation="ISO11783_Common_V4-2.xsd"/>
 	<xs:element name="XFC">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">

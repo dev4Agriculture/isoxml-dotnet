@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Schema revision date 2018-06-04, Schema version 4.3, TC version 4, schema revision 3 -->
+<!-- Schema revision date 2015-05-26, Schema version 4.2, TC version 4, schema revision 2 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="ISO11783LinkList">
 		<xs:annotation>
@@ -34,14 +34,13 @@
 				<xs:simpleType>
                     <xs:annotation>
                         <xs:documentation xml:lang="en">
-                            All minor versions up to 3 of the XML schema for this major version
+                            All minor versions up to 2 of the XML schema for this major version
                         </xs:documentation>
                     </xs:annotation>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="0"/>
 						<xs:enumeration value="1"/>
 						<xs:enumeration value="2"/>
-						<xs:enumeration value="3"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -119,7 +118,7 @@
 					<xs:restriction base="xs:IDREF">
 						<xs:minLength value="4"/>
 						<xs:maxLength value="14"/>
-						<xs:pattern value="(BSN|CCT|CCG|CCL|CLD|CTP|CVT|CPC|CTR|DET|DVC|FRM|GGP|GPN|LSG|OTQ|PFD|PNT|PLN|PDT|PGP|TSK|VPN|WKR)(|-)([0-9])+"/>
+						<xs:pattern value="(BSN|CCT|CCG|CLD|CTP|CPC|CTR|DVC|FRM|OTQ|PFD|PDT|PGP|TSK|VPN|WKR)(|-)([0-9])+"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>

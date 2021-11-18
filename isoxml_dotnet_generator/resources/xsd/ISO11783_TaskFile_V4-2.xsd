@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Schema revision date 2018-06-04, Schema version 4.3, TC version 4, schema revision 3 -->
+<!-- Schema revision date 2015-05-26, Schema version 4.2, TC version 4, schema revision 2 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:include schemaLocation="ISO11783_Common_V4-3.xsd"/>
+    <xs:include schemaLocation="ISO11783_Common_V4-2.xsd"/>
 	<xs:element name="AFE">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
@@ -257,14 +257,13 @@
 				<xs:simpleType>
                     <xs:annotation>
                         <xs:documentation xml:lang="en">
-                            All minor versions up to 3 of the XML schema for this major version
+                            All minor versions up to 2 of the XML schema for this major version
                         </xs:documentation>
                     </xs:annotation>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="0"/>
 						<xs:enumeration value="1"/>
 						<xs:enumeration value="2"/>
-						<xs:enumeration value="3"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
