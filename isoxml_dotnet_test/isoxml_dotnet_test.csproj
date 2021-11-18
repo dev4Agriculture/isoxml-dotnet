@@ -21,4 +21,10 @@
     <Folder Include="testdata\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="testdata\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
 </Project>
