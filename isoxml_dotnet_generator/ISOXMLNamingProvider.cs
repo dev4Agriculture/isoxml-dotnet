@@ -6,11 +6,16 @@ using XmlSchemaClassGenerator;
 
 namespace isoxml_dotnet_generator
 {
+
+
+
     class ISOXMLNamingProvider : NamingProvider
     {
-        public ISOXMLNamingProvider(NamingScheme scheme): base(scheme)
+        private Dictionary<String, String> ReplacementDictionary;
+        public ISOXMLNamingProvider(NamingScheme scheme, Dictionary<String,String> replacements): base(scheme)
         {
             Console.WriteLine("Constructed");
+            this.ReplacementDictionary = replacements;
         }
 
         public override string AttributeGroupTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
@@ -20,65 +25,49 @@ namespace isoxml_dotnet_generator
 
         public override string AttributeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.AttributeNameFromQualifiedName(qualifiedName);
-            }
+            return base.AttributeNameFromQualifiedName(qualifiedName);
         }
 
+
+        //NEEDED
         public override string ComplexTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
+
+            String name = base.ComplexTypeNameFromQualifiedName(qualifiedName);
+            String value = "";
+            if (this.ReplacementDictionary.TryGetValue(name, out value))
             {
-                return "Position";
+                return value;
             }
             else
             {
-                return base.ComplexTypeNameFromQualifiedName(qualifiedName);
+                return name;
             }
         }
 
+        //Needed
         public override string ElementNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
+            String name = base.ElementNameFromQualifiedName(qualifiedName);
+            String value = "";
+            if (this.ReplacementDictionary.TryGetValue(name, out value))
             {
-                return "Position";
-            }
-            else
+                return value;
+            }  else
             {
-                return base.ElementNameFromQualifiedName(qualifiedName);
+                return name;
             }
+
         }
 
         public override string EnumMemberNameFromValue(string enumName, string value)
         {
-            if (enumName.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else if( value.Equals("PTN"))
-            {
-                return "Position";
-            } else
-            {
-                return base.EnumMemberNameFromValue(enumName, value);
-            }
+            return base.EnumMemberNameFromValue(enumName, value);
         }
 
         public override string EnumTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.EnumTypeNameFromQualifiedName(qualifiedName);
-            }
+            return base.EnumTypeNameFromQualifiedName(qualifiedName);
         }
 
         public override bool Equals(object obj)
@@ -93,62 +82,27 @@ namespace isoxml_dotnet_generator
 
         public override string GroupTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.GroupTypeNameFromQualifiedName(qualifiedName);
-            }
+            return base.GroupTypeNameFromQualifiedName(qualifiedName);
         }
 
         public override string PropertyNameFromAttribute(string typeModelName, string attributeName)
         {
-            if (typeModelName.Equals("PTN")){
-                return "Position";
-            } else if(attributeName.Equals("PTN"))
-            {
-                return "Position";
-            }
             return base.PropertyNameFromAttribute(typeModelName, attributeName);
         }
 
         public override string PropertyNameFromElement(string typeModelName, string elementName)
         {
-            if (typeModelName.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else if (elementName.Equals("PTN"))
-            {
-                return "Position";
-            }
             return base.PropertyNameFromElement(typeModelName, elementName);
         }
 
         public override string RootClassNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.RootClassNameFromQualifiedName(qualifiedName);
-            }
+            return base.RootClassNameFromQualifiedName(qualifiedName);
         }
 
         public override string SimpleTypeNameFromQualifiedName(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.SimpleTypeNameFromQualifiedName(qualifiedName);
-            }
+            return base.SimpleTypeNameFromQualifiedName(qualifiedName);
         }
 
         public override string ToString()
@@ -158,14 +112,7 @@ namespace isoxml_dotnet_generator
 
         protected override string QualifiedNameToTitleCase(XmlQualifiedName qualifiedName)
         {
-            if (qualifiedName.Name.Equals("PTN"))
-            {
-                return "Position";
-            }
-            else
-            {
-                return base.QualifiedNameToTitleCase(qualifiedName);
-            }
+            return base.QualifiedNameToTitleCase(qualifiedName);
         }
     }
 }

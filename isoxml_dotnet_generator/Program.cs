@@ -21,13 +21,6 @@ namespace isoxml_dotnet_generator
     class Program
     {
         private static string curClass = "";
-        private static void ValidationCallBack(object sender, ValidationEventArgs args)
-        {
-            if (args.Severity == XmlSeverityType.Warning)
-                Console.WriteLine("\tWarning: Matching schema not found.  No validation occurred." + args.Message);
-            else
-                Console.WriteLine("\tValidation error: " + args.Message);
-        }
 
         static Dictionary<string, string> fullNames = new Dictionary<string, string>();
         static void memberCollector(CodeTypeMember codeTypeMember, PropertyModel propertyModel) {
@@ -40,7 +33,7 @@ namespace isoxml_dotnet_generator
         static void onVisitMember(CodeTypeMember codeTypeMember, PropertyModel propertyModel)
         {
             Console.WriteLine(" Param: " + codeTypeMember.Name);
-            /*if (propertyModel.Documentation.Count > 0)
+            if (propertyModel.Documentation.Count > 0)
             {
                 var name  = Regex.Replace(propertyModel.Documentation[0].Text, @"\t|\n|\r", "");
                 if(name.IndexOf(" ") != -1)
@@ -60,13 +53,13 @@ namespace isoxml_dotnet_generator
                     propertyModel.Type.Name = name;
 
                 }
-            }*/
+            }
         }
 
         private static void onType(CodeTypeDeclaration codeType, TypeModel typeModel)
         {
             Console.WriteLine("Class: " + codeType.Name);
-            /*if (typeModel.Documentation.Count > 0)
+            if (typeModel.Documentation.Count > 0)
             {
                 var name = Regex.Replace(typeModel.Documentation[0].Text, @"\t|\n|\r", "");
                 if (name.IndexOf(" ") != -1)
@@ -75,8 +68,8 @@ namespace isoxml_dotnet_generator
                     return;
                 }
                 curClass = codeType.Name;
-                codeType.Name = "ISO"+name;
-            }*/
+                codeType.Name = name;
+            }
         }
 
 
@@ -91,8 +84,6 @@ namespace isoxml_dotnet_generator
                 }
                 .ToNamespaceProvider(new GeneratorConfiguration { NamespacePrefix = "de.dev4ag.iso11783" }.NamespaceProvider.GenerateNamespace);
 
-            NamingScheme namingScheme = new NamingScheme();
-            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme);
 
             var generator = new Generator
             {
@@ -100,9 +91,16 @@ namespace isoxml_dotnet_generator
                 Log = s => Console.Out.WriteLine(s),
                 GenerateNullables = true,
                 NamespaceProvider = namespaceProvider,
-                MemberVisitor = memberCollector,
+                MemberVisitor = memberCollector
             };
 
+            NamingScheme namingScheme = new NamingScheme();
+            NamingProvider namingProvider = new ISOXMLNamingProvider(namingScheme, fullNames);
+
+            generator.GenerateNullables = false;
+            generator.MemberVisitor = onVisitMember;
+            generator.TypeVisitor = onType;
+            generator.NamingProvider = namingProvider;
             generator.Generate(files);
 
             // print names
