@@ -1,4 +1,4 @@
-using de.dev4ag.iso11783;
+using Dev4ag.ISO11783.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -12,7 +12,6 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void LoadSimpleTaskData()
         {
-            //var dir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Data\Names.txt"); +"/testdata/";
             XmlSerializer serializer = new XmlSerializer(typeof(ISO11783TaskDataFile));
             string text = File.ReadAllText("./testdata/devices/TASKDATA_Devices.XML");
             using ( StringReader reader = new StringReader(text))
@@ -21,7 +20,7 @@ namespace isoxml_dotnet_test
                 var subElements = output.Device;
                 foreach(var codingData in subElements)
                 {
-                 Console.WriteLine("Device Found:" + codingData.A);
+                 Console.WriteLine("Device Found: " + codingData.DeviceDesignator);
                 }
             }
         }
