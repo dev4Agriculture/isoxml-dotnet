@@ -23,7 +23,7 @@ namespace isoxml_dotnet_generator
             var generator = new Generator
             {
                 OutputFolder = "./out/",
-                GenerateNullables = false,
+                // GenerateNullables = true,
                 NamespaceProvider = namespaceProvider,
                 NamingProvider = namingProvider
             };

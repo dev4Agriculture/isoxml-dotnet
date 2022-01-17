@@ -24,5 +24,22 @@ namespace isoxml_dotnet_test
                 }
             }
         }
+
+        [TestMethod]
+        public void LoadSimpleDeviceDescription()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Device));
+            string text = File.ReadAllText("./testdata/devices/Device_description.xml");
+            using ( StringReader reader = new StringReader(text))
+            {
+                try {
+                    var device = (Device)serializer.Deserialize(reader);
+                    Console.WriteLine("Device Name: " + device.DeviceDesignator);
+                    Console.WriteLine("Device Id: " + device.DeviceId);
+                } catch (Exception ex) {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+        }
     }
 }
