@@ -6,22 +6,32 @@ using System.Xml.Serialization;
 using Dev4ag.ISO11783.TaskFile;
 
 namespace Dev4ag {
-    public class ResultWithWarnings<ResultType> where ResultType: class {
-        public ResultType result = null;
-        public List<string> warnings = new List<string>();
-
-        public ResultWithWarnings(ResultType result, List<string> warnings) {
-            this.result = result;
-            this.warnings = warnings;
-        }
-        public ResultWithWarnings(ResultType result) {
-            this.result = result;
-        }
-    }
     public class ISOXMLParser {
-        public static ResultWithWarnings<Device> ParseDeviceDescription(string xmlDeviceDescription) {
+        public class ResultMessage {
+
+            public ResultMessage(string type, string title) {
+                this.type = type;
+                this.title = title;
+            }
+            public string type;
+            public string title;
+        }
+
+        public class ResultWithMessages<ResultType> where ResultType: class {
+            public ResultType result = null;
+            public List<ResultMessage> messages = new List<ResultMessage>();
+
+            public ResultWithMessages(ResultType result, List<ResultMessage> messages) {
+                this.result = result;
+                this.messages = messages;
+            }
+            public ResultWithMessages(ResultType result) {
+                this.result = result;
+            }
+        }
+        public static ResultWithMessages<Device> ParseDeviceDescription(string xmlDeviceDescription) {
             Device device = null;
-            var warnings = new List<string>();
+            var messages = new List<ResultMessage>();
             try {
                 XmlSerializer serializer = new XmlSerializer(typeof(Device));
                 using ( StringReader reader = new StringReader(xmlDeviceDescription))
@@ -35,13 +45,13 @@ namespace Dev4ag {
 
                 if (!isValid) {
                     validationResults.ForEach(result => {
-                        warnings.Add(result.ErrorMessage);
+                        messages.Add(new ResultMessage("warning", result.ErrorMessage));
                     });
                 }
             } catch(Exception ex) {
-                warnings.Add(ex.ToString());
+                messages.Add(new ResultMessage("error", ex.Message));
             }
-            return new ResultWithWarnings<Device>(device, warnings);
+            return new ResultWithMessages<Device>(device, messages);
         }
     }
 }
