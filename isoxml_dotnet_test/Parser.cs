@@ -14,11 +14,11 @@ namespace isoxml_dotnet_test
             string text = File.ReadAllText("./testdata/devices/Device_description.xml");
             var result = ISOXMLParser.ParseDeviceDescription(text);
 
-            result.warnings.ForEach(warn => {
-                Console.WriteLine(warn);
+            result.messages.ForEach(msg => {
+                Console.WriteLine(msg.title);
             });
             Assert.IsNotNull(result.result);
-            Assert.AreEqual(0, result.warnings.Count);
+            Assert.AreEqual(0, result.messages.Count);
 
         }
     }
