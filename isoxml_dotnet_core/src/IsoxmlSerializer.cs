@@ -21,21 +21,26 @@ namespace Dev4ag {
             {"Byte[]", value => {
                 if (value.Length % 2 != 0)
                 {
-                    throw new ArgumentException();
+                    throw new Exception($"value '{value}' must have even number of symbols");
                 }
 
-                byte[] data = new byte[value.Length / 2];
-                for (int index = 0; index < data.Length; index++)
-                {
-                    string byteValue = value.Substring(index * 2, 2);
-                    data[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                try {
+                    byte[] data = new byte[value.Length / 2];
+                    for (int index = 0; index < data.Length; index++)
+                    {
+                        string byteValue = value.Substring(index * 2, 2);
+                        data[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    return data;
+                } catch (Exception) {
+                    throw new Exception($"Can not parse value '{value}'");
                 }
-
-                return data;
             }}
         };
 
         private Assembly _isoxmlAssembly;
+
+        public List<ResultMessage> messages = new List<ResultMessage>();
 
         public IsoxmlSerializer() {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -47,9 +52,11 @@ namespace Dev4ag {
             }
         }
         public object Deserialize(XmlDocument xml) {
-
-            return ParseNode(xml.FirstChild);
+            messages.Clear();
+            return ParseNode(xml.FirstChild, xml.FirstChild.Name);
         }
+
+        // mainly for debugging
         public HashSet<string> GetAllAttrTypes() {
             return _isoxmlAssembly.GetTypes()
                 .Where(type => type.Namespace == "Dev4ag.ISO11783.TaskFile")
@@ -121,6 +128,7 @@ namespace Dev4ag {
             return null;
         }
 
+        // if the property is a collection, we add the value to it, otherwise, we just set the value
         private void setValue(Type type, PropertyInfo property, object obj, object value) {
             foreach (var implInterface in property.PropertyType.GetInterfaces()) {
                 if (implInterface.Name == "IList") {
@@ -132,32 +140,87 @@ namespace Dev4ag {
             property.SetValue(obj, value);
         }
 
-        private object ParseNode(XmlNode node) {
+        private void addMessage(string type, string message) {
+            messages.Add(new ResultMessage(type, message));
+        }
+
+        private object ParseNode(XmlNode node, string isoxmlNodeId = null) {
             var type = findType(node.Name);
+            if (type == null) {
+                var isRoot = String.IsNullOrEmpty(isoxmlNodeId);
+                addMessage(
+                    isRoot ? "error" : "warning",
+                    $"Unknown XML element {node.Name} (path: {isoxmlNodeId})"
+                );
+                return null;
+            }
             var obj = Activator.CreateInstance(type);
             foreach (XmlAttribute attr in node.Attributes) {
                 var property = getPropertyByAttrName(type, attr.Name);
 
+                if (property == null) {
+                    addMessage(
+                        "warning",
+                        $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
+                    );
+                    continue;
+                }
+
                 if (property.PropertyType.IsEnum) {
                     var enumValue = getEnumValue(property.PropertyType, attr.Value);
+
+                    if (enumValue == null) {
+                        addMessage(
+                            "warning",
+                            $"Unknown enum value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
+                        );
+                        continue;
+                    }
+
                     property.SetValue(obj, Enum.Parse(property.PropertyType, enumValue));
                 } else {
                     ValueConvertor convertor = null;
                     _convertors.TryGetValue(property.PropertyType.Name, out convertor);
-
-                    if (convertor == null) {
-                        Console.WriteLine($"Unknown type: {property.PropertyType.Name}");
-                    } else {
+                    try {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
+                    } catch (Exception) {
+                        addMessage(
+                            "warning",
+                            $"Can't parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
+                        );
                     }
                 }
             }
 
+            var childrenCount = new Dictionary<string, int>();
+
             foreach (XmlNode childNode in node.ChildNodes) {
-                var property = getPropertyByElementName(type, childNode.Name);
-                var parsedNode = ParseNode(childNode);
-                setValue(type, property, obj, parsedNode);
+
+                string name = childNode.Name;
+                int count;
+                if (childrenCount.TryGetValue(name, out count)) {
+                    childrenCount[name] = count + 1;
+                } else {
+                    count = 0;
+                    childrenCount.Add(name, count + 1);
+                }
+                var childNodeIsoxmlId = $"{isoxmlNodeId}->{name}[{count}]";
+
+                var parsedNode = ParseNode(childNode, childNodeIsoxmlId);
+
+                if (parsedNode != null) {
+                    var property = getPropertyByElementName(type, name);
+                    if (property == null) {
+                        addMessage(
+                            "warning",
+                            $"Elements of type {name} can't be children of element {node.Name} (path: {isoxmlNodeId})"
+                        );
+                        continue;
+                    }
+
+                    setValue(type, property, obj, parsedNode);
+                }
             }
 
             return obj;

@@ -8,16 +8,6 @@ using Dev4ag.ISO11783.TaskFile;
 
 namespace Dev4ag {
     public class ISOXMLParser {
-        public class ResultMessage {
-
-            public ResultMessage(string type, string title) {
-                this.type = type;
-                this.title = title;
-            }
-            public string type;
-            public string title;
-        }
-
         public class ResultWithMessages<ResultType> where ResultType: class {
             public ResultType result = null;
             public List<ResultMessage> messages = new List<ResultMessage>();
@@ -39,15 +29,19 @@ namespace Dev4ag {
                 var isoxmlSerializer = new IsoxmlSerializer();
                 device = (Device)isoxmlSerializer.Deserialize(xmlDoc);
 
-                var context = new ValidationContext(device, serviceProvider: null, items: null);
-                var validationResults = new List<ValidationResult>();
+                messages.AddRange(isoxmlSerializer.messages);
 
-                bool isValid = Validator.TryValidateObject(device, context, validationResults, true);
+                if (device != null) {
+                    var context = new ValidationContext(device, serviceProvider: null, items: null);
+                    var validationResults = new List<ValidationResult>();
 
-                if (!isValid) {
-                    validationResults.ForEach(result => {
-                        messages.Add(new ResultMessage("warning", result.ErrorMessage));
-                    });
+                    bool isValid = Validator.TryValidateObject(device, context, validationResults, true);
+
+                    if (!isValid) {
+                        validationResults.ForEach(result => {
+                            messages.Add(new ResultMessage("warning", result.ErrorMessage));
+                        });
+                    }
                 }
             } catch(Exception ex) {
                 messages.Add(new ResultMessage("error", ex.Message));
