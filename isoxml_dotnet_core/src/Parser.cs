@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using Dev4ag.ISO11783.TaskFile;
 
@@ -33,11 +34,11 @@ namespace Dev4ag {
             Device device = null;
             var messages = new List<ResultMessage>();
             try {
-                XmlSerializer serializer = new XmlSerializer(typeof(Device));
-                using ( StringReader reader = new StringReader(xmlDeviceDescription))
-                {
-                    device = (Device)serializer.Deserialize(reader);
-                }
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xmlDeviceDescription);
+                var isoxmlSerializer = new IsoxmlSerializer();
+                device = (Device)isoxmlSerializer.Deserialize(xmlDoc);
+
                 var context = new ValidationContext(device, serviceProvider: null, items: null);
                 var validationResults = new List<ValidationResult>();
 
