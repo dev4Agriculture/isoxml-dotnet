@@ -713,7 +713,7 @@ namespace Dev4ag.ISO11783.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(7)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(39)]
-        [Dev4ag.ISO11783.RegularExpressionAttribute("((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[" +
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[" +
             "a-f]|[A-F])([0-9]|[a-f]|[A-F]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C", DataType="hexBinary")]
@@ -723,7 +723,7 @@ namespace Dev4ag.ISO11783.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(7)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(39)]
-        [Dev4ag.ISO11783.RegularExpressionAttribute("((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e]))){7}(([0-9]|[" +
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e]))){7}(([0-9]|[" +
             "A-F]|[a-f])([0-9]|[A-F]|[a-f]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D", DataType="hexBinary")]
@@ -1407,7 +1407,7 @@ namespace Dev4ag.ISO11783.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(7)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(39)]
-        [Dev4ag.ISO11783.RegularExpressionAttribute("((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[" +
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("((([0-9]|[a-e]|[A-E])([0-9]|[a-f]|[A-F]))|((F|f)([0-9]|[a-e]|[A-E]))){7}(([0-9]|[" +
             "a-f]|[A-F])([0-9]|[a-f]|[A-F]))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("F", DataType="hexBinary")]
@@ -1417,7 +1417,7 @@ namespace Dev4ag.ISO11783.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(7)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(7)]
-        [Dev4ag.ISO11783.RegularExpressionAttribute("(F|f){2}((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e])))*")]
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(F|f){2}((([0-9]|[A-E]|[a-e])([0-9]|[A-F]|[a-f]))|((F|f)([0-9]|[A-E]|[a-e])))*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G", DataType="hexBinary")]
         public byte[] DeviceLocalizationLabel { get; set; }

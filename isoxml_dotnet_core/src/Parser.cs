@@ -30,19 +30,6 @@ namespace Dev4ag {
                 device = (Device)isoxmlSerializer.Deserialize(xmlDoc);
 
                 messages.AddRange(isoxmlSerializer.messages);
-
-                if (device != null) {
-                    var context = new ValidationContext(device, serviceProvider: null, items: null);
-                    var validationResults = new List<ValidationResult>();
-
-                    bool isValid = Validator.TryValidateObject(device, context, validationResults, true);
-
-                    if (!isValid) {
-                        validationResults.ForEach(result => {
-                            messages.Add(new ResultMessage("warning", result.ErrorMessage));
-                        });
-                    }
-                }
             } catch(Exception ex) {
                 messages.Add(new ResultMessage("error", ex.Message));
             }

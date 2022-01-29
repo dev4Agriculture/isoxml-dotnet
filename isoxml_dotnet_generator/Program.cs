@@ -26,18 +26,6 @@ namespace isoxml_dotnet_generator
                 // GenerateNullables = true,
                 NamespaceProvider = namespaceProvider,
                 NamingProvider = namingProvider,
-                MemberVisitor = (member, type) => {
-                    if (member is CodeMemberField field) {
-                        if (field.Type.ArrayRank == 1 && field.Type.BaseType == "System.Byte") {
-                            for (int i = 0; i < member.CustomAttributes.Count; i++) {
-                                var attr = member.CustomAttributes[i];
-                                if (attr.Name == "System.ComponentModel.DataAnnotations.RegularExpressionAttribute") {
-                                    attr.Name = "Dev4ag.ISO11783.RegularExpressionAttribute";
-                                }
-                            }
-                        }
-                    }
-                }
             };
 
             generator.Generate(files);

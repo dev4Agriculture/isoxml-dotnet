@@ -44,16 +44,11 @@ namespace Dev4ag {
 
         public IsoxmlSerializer() {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies) {
-                if (assembly.GetName().Name == "isoxml_dotnet_core") {
-                    this._isoxmlAssembly = assembly;
-                    break;
-                }
-            }
+            this._isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
         }
         public object Deserialize(XmlDocument xml) {
             messages.Clear();
-            return ParseNode(xml.FirstChild, xml.FirstChild.Name);
+            return ParseNode(xml.FirstChild, $"{xml.FirstChild.Name}[0]");
         }
 
         // mainly for debugging
@@ -144,6 +139,54 @@ namespace Dev4ag {
             messages.Add(new ResultMessage(type, message));
         }
 
+        private void validateProperty(PropertyInfo property, object value, string attrValue, string isoxmlNodeId) {
+            var rangeAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RangeAttribute>();
+            var maxLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>();
+            var minLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MinLengthAttribute>();
+            var regexAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RegularExpressionAttribute>();
+
+            if (rangeAttr != null && !rangeAttr.IsValid(value)) {
+                addMessage(
+                    "warning",
+                    $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {isoxmlNodeId}; value: {value})"
+                );
+            }
+
+            if (maxLengthAttr != null && !maxLengthAttr.IsValid(value)) {
+                addMessage(
+                    "warning",
+                    $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
+                );
+            }
+
+            if (minLengthAttr != null && !minLengthAttr.IsValid(value)) {
+                addMessage(
+                    "warning",
+                    $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
+                );
+            }
+
+            if (regexAttr != null && !regexAttr.IsValid(attrValue)) {
+                addMessage(
+                    "warning",
+                    $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {isoxmlNodeId}; value: {attrValue})"
+                );
+            }
+        }
+
+        private void checkRequiredProperties(Type type, object obj, string isoxmlNodeId) {
+            foreach (var property in type.GetProperties()) {
+                var required = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RequiredAttribute>() != null;
+
+                if (required && property.GetValue(obj) == null) {
+                    addMessage(
+                        "warning",
+                        $"Missing required property {property.Name} (path: {isoxmlNodeId})"
+                    );
+                }
+            }
+        }
+
         private object ParseNode(XmlNode node, string isoxmlNodeId = null) {
             var type = findType(node.Name);
             if (type == null) {
@@ -184,6 +227,7 @@ namespace Dev4ag {
                     try {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
+                        validateProperty(property, convertedAttr, attr.Value, isoxmlNodeId);
                     } catch (Exception) {
                         addMessage(
                             "warning",
@@ -222,6 +266,8 @@ namespace Dev4ag {
                     setValue(type, property, obj, parsedNode);
                 }
             }
+
+            checkRequiredProperties(type, obj, isoxmlNodeId);
 
             return obj;
         }
