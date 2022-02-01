@@ -239,7 +239,7 @@ namespace Dev4ag {
                     catch (Exception e) {
                         addMessage(
                             "warning",
-                            $"Can't parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
+                            $"Cannot parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
                         );
                     }
                 }
