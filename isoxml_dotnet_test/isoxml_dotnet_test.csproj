@@ -18,13 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="testdata\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="testdata\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>  
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="testdata\devices\Device_Description_Unit.xml" />
   </ItemGroup>
 
 </Project>

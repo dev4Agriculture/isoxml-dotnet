@@ -21,6 +21,15 @@ namespace isoxml_dotnet_test
             Assert.AreEqual(0, result.messages.Count);
 
         }
+
+        [TestMethod]
+        public void DeviceWithBrokenScaleUnitShallCreateWarning()
+        {
+            string text = File.ReadAllText("./testdata/devices/Device_Description_Unit.xml");
+            var result = ISOXMLParser.ParseDeviceDescription(text);
+            result.messages.ForEach(msg => Console.WriteLine(msg.title));
+            Assert.AreEqual(1, result.messages.Count);
+        }
     }
 }
 

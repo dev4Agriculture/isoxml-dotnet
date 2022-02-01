@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Xml;
 
 namespace Dev4ag {
@@ -45,10 +47,15 @@ namespace Dev4ag {
         public IsoxmlSerializer() {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             this._isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
+            
         }
         public object Deserialize(XmlDocument xml) {
             messages.Clear();
-            return ParseNode(xml.FirstChild, $"{xml.FirstChild.Name}[0]");
+            var keepCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            var result = ParseNode(xml.FirstChild, $"{xml.FirstChild.Name}[0]");
+            Thread.CurrentThread.CurrentCulture = keepCulture;
+            return result;
         }
 
         // mainly for debugging
@@ -144,8 +151,8 @@ namespace Dev4ag {
             var maxLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>();
             var minLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MinLengthAttribute>();
             var regexAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RegularExpressionAttribute>();
-
-            if (rangeAttr != null && !rangeAttr.IsValid(value)) {
+            if (rangeAttr != null && !rangeAttr.IsValid(value))
+            {
                 addMessage(
                     "warning",
                     $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {isoxmlNodeId}; value: {value})"
@@ -228,10 +235,11 @@ namespace Dev4ag {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
                         validateProperty(property, convertedAttr, attr.Value, isoxmlNodeId);
-                    } catch (Exception) {
+                    }
+                    catch (Exception e) {
                         addMessage(
                             "warning",
-                            $"Can't parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
+                            $"Can't parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
                         );
                     }
                 }
