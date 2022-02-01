@@ -1,6 +1,12 @@
-﻿<DVC A="DVC-8" B="FS_14" C="Task_V01.00.02" D="A00BB40018800000" E="0" F="32343912403334" G="FF00000000000E">
-  <DET A="DET-285" B="10" C="1" D="SuperSpray" E="0" F="0">
+﻿<DVC A="DVC-8" B="FS_14" C="Task_V01.00.02" D="A00C840018800000" E="0" F="32343933303334" G="FF00000000000E">
+  <DET A="DET-285" B="10" C="1" D="MegaSpray" E="0" F="0">
     <DOR A="100"/>
+    <DOR A="101"/>
+    <DOR A="102"/>
+    <DOR A="103"/>
+    <DOR A="109"/>
+    <DOR A="110"/>
+    <DOR A="107"/>
     <DOR A="108"/>
     <DOR A="111"/>
   </DET>
@@ -74,6 +80,242 @@
     <DOR A="501"/>
     <DOR A="520"/>
   </DET>
+  <DET A="DET-297" B="521" C="4" D="Section_8" E="108" F="11">
+    <DOR A="501"/>
+    <DOR A="523"/>
+  </DET>
+  <DET A="DET-298" B="524" C="4" D="Section_9" E="109" F="11">
+    <DOR A="501"/>
+    <DOR A="526"/>
+  </DET>
+  <DET A="DET-299" B="527" C="4" D="Section_10" E="110" F="11">
+    <DOR A="501"/>
+    <DOR A="529"/>
+  </DET>
+  <DET A="DET-300" B="530" C="4" D="Section_11" E="111" F="11">
+    <DOR A="501"/>
+    <DOR A="532"/>
+  </DET>
+  <DET A="DET-301" B="533" C="4" D="Section_12" E="112" F="11">
+    <DOR A="501"/>
+    <DOR A="535"/>
+  </DET>
+  <DET A="DET-302" B="536" C="4" D="Section_13" E="113" F="11">
+    <DOR A="501"/>
+    <DOR A="538"/>
+  </DET>
+  <DET A="DET-303" B="539" C="4" D="Section_14" E="114" F="11">
+    <DOR A="501"/>
+    <DOR A="541"/>
+  </DET>
+  <DET A="DET-304" B="542" C="4" D="Section_15" E="115" F="11">
+    <DOR A="501"/>
+    <DOR A="544"/>
+  </DET>
+  <DET A="DET-305" B="545" C="4" D="Section_16" E="116" F="11">
+    <DOR A="501"/>
+    <DOR A="547"/>
+  </DET>
+  <DET A="DET-306" B="548" C="4" D="Section_17" E="117" F="11">
+    <DOR A="501"/>
+    <DOR A="550"/>
+  </DET>
+  <DET A="DET-307" B="551" C="4" D="Section_18" E="118" F="11">
+    <DOR A="501"/>
+    <DOR A="553"/>
+  </DET>
+  <DET A="DET-308" B="554" C="4" D="Section_19" E="119" F="11">
+    <DOR A="501"/>
+    <DOR A="556"/>
+  </DET>
+  <DET A="DET-309" B="557" C="4" D="Section_20" E="120" F="11">
+    <DOR A="501"/>
+    <DOR A="559"/>
+  </DET>
+  <DET A="DET-310" B="560" C="4" D="Section_21" E="121" F="11">
+    <DOR A="501"/>
+    <DOR A="562"/>
+  </DET>
+  <DET A="DET-311" B="563" C="4" D="Section_22" E="122" F="11">
+    <DOR A="501"/>
+    <DOR A="565"/>
+  </DET>
+  <DET A="DET-312" B="566" C="4" D="Section_23" E="123" F="11">
+    <DOR A="501"/>
+    <DOR A="568"/>
+  </DET>
+  <DET A="DET-313" B="569" C="4" D="Section_24" E="124" F="11">
+    <DOR A="501"/>
+    <DOR A="571"/>
+  </DET>
+  <DET A="DET-314" B="572" C="4" D="Section_25" E="125" F="11">
+    <DOR A="501"/>
+    <DOR A="574"/>
+  </DET>
+  <DET A="DET-315" B="575" C="4" D="Section_26" E="126" F="11">
+    <DOR A="501"/>
+    <DOR A="577"/>
+  </DET>
+  <DET A="DET-316" B="578" C="4" D="Section_27" E="127" F="11">
+    <DOR A="501"/>
+    <DOR A="580"/>
+  </DET>
+  <DET A="DET-317" B="581" C="4" D="Section_28" E="128" F="11">
+    <DOR A="501"/>
+    <DOR A="583"/>
+  </DET>
+  <DET A="DET-318" B="584" C="4" D="Section_29" E="129" F="11">
+    <DOR A="501"/>
+    <DOR A="586"/>
+  </DET>
+  <DET A="DET-319" B="587" C="4" D="Section_30" E="130" F="11">
+    <DOR A="501"/>
+    <DOR A="589"/>
+  </DET>
+  <DET A="DET-320" B="590" C="4" D="Section_31" E="131" F="11">
+    <DOR A="501"/>
+    <DOR A="592"/>
+  </DET>
+  <DET A="DET-321" B="593" C="4" D="Section_32" E="132" F="11">
+    <DOR A="501"/>
+    <DOR A="595"/>
+  </DET>
+  <DET A="DET-322" B="596" C="4" D="Section_33" E="133" F="11">
+    <DOR A="501"/>
+    <DOR A="598"/>
+  </DET>
+  <DET A="DET-323" B="599" C="4" D="Section_34" E="134" F="11">
+    <DOR A="501"/>
+    <DOR A="601"/>
+  </DET>
+  <DET A="DET-324" B="602" C="4" D="Section_35" E="135" F="11">
+    <DOR A="501"/>
+    <DOR A="604"/>
+  </DET>
+  <DET A="DET-325" B="605" C="4" D="Section_36" E="136" F="11">
+    <DOR A="501"/>
+    <DOR A="607"/>
+  </DET>
+  <DET A="DET-326" B="608" C="4" D="Section_37" E="137" F="11">
+    <DOR A="501"/>
+    <DOR A="610"/>
+  </DET>
+  <DET A="DET-327" B="611" C="4" D="Section_38" E="138" F="11">
+    <DOR A="501"/>
+    <DOR A="613"/>
+  </DET>
+  <DET A="DET-328" B="614" C="4" D="Section_39" E="139" F="11">
+    <DOR A="501"/>
+    <DOR A="616"/>
+  </DET>
+  <DET A="DET-329" B="617" C="4" D="Section_40" E="140" F="11">
+    <DOR A="501"/>
+    <DOR A="619"/>
+  </DET>
+  <DET A="DET-330" B="620" C="4" D="Section_41" E="141" F="11">
+    <DOR A="501"/>
+    <DOR A="622"/>
+  </DET>
+  <DET A="DET-331" B="623" C="4" D="Section_42" E="142" F="11">
+    <DOR A="501"/>
+    <DOR A="625"/>
+  </DET>
+  <DET A="DET-332" B="626" C="4" D="Section_43" E="143" F="11">
+    <DOR A="501"/>
+    <DOR A="628"/>
+  </DET>
+  <DET A="DET-333" B="629" C="4" D="Section_44" E="144" F="11">
+    <DOR A="501"/>
+    <DOR A="631"/>
+  </DET>
+  <DET A="DET-334" B="632" C="4" D="Section_45" E="145" F="11">
+    <DOR A="501"/>
+    <DOR A="634"/>
+  </DET>
+  <DET A="DET-335" B="635" C="4" D="Section_46" E="146" F="11">
+    <DOR A="501"/>
+    <DOR A="637"/>
+  </DET>
+  <DET A="DET-336" B="638" C="4" D="Section_47" E="147" F="11">
+    <DOR A="501"/>
+    <DOR A="640"/>
+  </DET>
+  <DET A="DET-337" B="641" C="4" D="Section_48" E="148" F="11">
+    <DOR A="501"/>
+    <DOR A="643"/>
+  </DET>
+  <DET A="DET-338" B="644" C="4" D="Section_49" E="149" F="11">
+    <DOR A="501"/>
+    <DOR A="646"/>
+  </DET>
+  <DET A="DET-339" B="647" C="4" D="Section_50" E="150" F="11">
+    <DOR A="501"/>
+    <DOR A="649"/>
+  </DET>
+  <DET A="DET-340" B="650" C="4" D="Section_51" E="151" F="11">
+    <DOR A="501"/>
+    <DOR A="652"/>
+  </DET>
+  <DET A="DET-341" B="653" C="4" D="Section_52" E="152" F="11">
+    <DOR A="501"/>
+    <DOR A="655"/>
+  </DET>
+  <DET A="DET-342" B="656" C="4" D="Section_53" E="153" F="11">
+    <DOR A="501"/>
+    <DOR A="658"/>
+  </DET>
+  <DET A="DET-343" B="659" C="4" D="Section_54" E="154" F="11">
+    <DOR A="501"/>
+    <DOR A="661"/>
+  </DET>
+  <DET A="DET-344" B="662" C="4" D="Section_55" E="155" F="11">
+    <DOR A="501"/>
+    <DOR A="664"/>
+  </DET>
+  <DET A="DET-345" B="665" C="4" D="Section_56" E="156" F="11">
+    <DOR A="501"/>
+    <DOR A="667"/>
+  </DET>
+  <DET A="DET-346" B="668" C="4" D="Section_57" E="157" F="11">
+    <DOR A="501"/>
+    <DOR A="670"/>
+  </DET>
+  <DET A="DET-347" B="671" C="4" D="Section_58" E="158" F="11">
+    <DOR A="501"/>
+    <DOR A="673"/>
+  </DET>
+  <DET A="DET-348" B="674" C="4" D="Section_59" E="159" F="11">
+    <DOR A="501"/>
+    <DOR A="676"/>
+  </DET>
+  <DET A="DET-349" B="677" C="4" D="Section_60" E="160" F="11">
+    <DOR A="501"/>
+    <DOR A="679"/>
+  </DET>
+  <DET A="DET-350" B="680" C="4" D="Section_61" E="161" F="11">
+    <DOR A="501"/>
+    <DOR A="682"/>
+  </DET>
+  <DET A="DET-351" B="683" C="4" D="Section_62" E="162" F="11">
+    <DOR A="501"/>
+    <DOR A="685"/>
+  </DET>
+  <DET A="DET-352" B="686" C="4" D="Section_63" E="163" F="11">
+    <DOR A="501"/>
+    <DOR A="688"/>
+  </DET>
+  <DET A="DET-353" B="689" C="4" D="Section_64" E="164" F="11">
+    <DOR A="501"/>
+    <DOR A="691"/>
+  </DET>
+  <DET A="DET-354" B="692" C="4" D="Section_65" E="165" F="11">
+    <DOR A="501"/>
+    <DOR A="694"/>
+  </DET>
+  <DET A="DET-355" B="695" C="4" D="Section_66" E="166" F="11">
+    <DOR A="501"/>
+    <DOR A="697"/>
+  </DET>
   <DET A="DET-287" B="13" C="6" D="Connector" E="3" F="10">
     <DOR A="119"/>
     <DOR A="120"/>
@@ -141,6 +383,65 @@
   <DPT A="514" B="0087" C="-14250" D="Section_5_Offset" E="1005"/>
   <DPT A="517" B="0087" C="-13750" D="Section_6_Offset" E="1005"/>
   <DPT A="520" B="0087" C="-13250" D="Section_7_Offset" E="1005"/>
+  <DPT A="523" B="0087" C="-12750" D="Section_8_Offset" E="1005"/>
+  <DPT A="526" B="0087" C="-12250" D="Section_9_Offset" E="1005"/>
+  <DPT A="529" B="0087" C="-11750" D="Section_10_Offset" E="1005"/>
+  <DPT A="532" B="0087" C="-11250" D="Section_11_Offset" E="1005"/>
+  <DPT A="535" B="0087" C="-10750" D="Section_12_Offset" E="1005"/>
+  <DPT A="538" B="0087" C="-10250" D="Section_13_Offset" E="1005"/>
+  <DPT A="541" B="0087" C="-9750" D="Section_14_Offset" E="1005"/>
+  <DPT A="544" B="0087" C="-9250" D="Section_15_Offset" E="1005"/>
+  <DPT A="547" B="0087" C="-8750" D="Section_16_Offset" E="1005"/>
+  <DPT A="550" B="0087" C="-8250" D="Section_17_Offset" E="1005"/>
+  <DPT A="553" B="0087" C="-7750" D="Section_18_Offset" E="1005"/>
+  <DPT A="556" B="0087" C="-7250" D="Section_19_Offset" E="1005"/>
+  <DPT A="559" B="0087" C="-6750" D="Section_20_Offset" E="1005"/>
+  <DPT A="562" B="0087" C="-6250" D="Section_21_Offset" E="1005"/>
+  <DPT A="565" B="0087" C="-5750" D="Section_22_Offset" E="1005"/>
+  <DPT A="568" B="0087" C="-5250" D="Section_23_Offset" E="1005"/>
+  <DPT A="571" B="0087" C="-4750" D="Section_24_Offset" E="1005"/>
+  <DPT A="574" B="0087" C="-4250" D="Section_25_Offset" E="1005"/>
+  <DPT A="577" B="0087" C="-3750" D="Section_26_Offset" E="1005"/>
+  <DPT A="580" B="0087" C="-3250" D="Section_27_Offset" E="1005"/>
+  <DPT A="583" B="0087" C="-2750" D="Section_28_Offset" E="1005"/>
+  <DPT A="586" B="0087" C="-2250" D="Section_29_Offset" E="1005"/>
+  <DPT A="589" B="0087" C="-1750" D="Section_30_Offset" E="1005"/>
+  <DPT A="592" B="0087" C="-1250" D="Section_31_Offset" E="1005"/>
+  <DPT A="595" B="0087" C="-750" D="Section_32_Offset" E="1005"/>
+  <DPT A="598" B="0087" C="-250" D="Section_33_Offset" E="1005"/>
+  <DPT A="601" B="0087" C="250" D="Section_34_Offset" E="1005"/>
+  <DPT A="604" B="0087" C="750" D="Section_35_Offset" E="1005"/>
+  <DPT A="607" B="0087" C="1250" D="Section_36_Offset" E="1005"/>
+  <DPT A="610" B="0087" C="1750" D="Section_37_Offset" E="1005"/>
+  <DPT A="613" B="0087" C="2250" D="Section_38_Offset" E="1005"/>
+  <DPT A="616" B="0087" C="2750" D="Section_39_Offset" E="1005"/>
+  <DPT A="619" B="0087" C="3250" D="Section_40_Offset" E="1005"/>
+  <DPT A="622" B="0087" C="3750" D="Section_41_Offset" E="1005"/>
+  <DPT A="625" B="0087" C="4250" D="Section_42_Offset" E="1005"/>
+  <DPT A="628" B="0087" C="4750" D="Section_43_Offset" E="1005"/>
+  <DPT A="631" B="0087" C="5250" D="Section_44_Offset" E="1005"/>
+  <DPT A="634" B="0087" C="5750" D="Section_45_Offset" E="1005"/>
+  <DPT A="637" B="0087" C="6250" D="Section_46_Offset" E="1005"/>
+  <DPT A="640" B="0087" C="6750" D="Section_47_Offset" E="1005"/>
+  <DPT A="643" B="0087" C="7250" D="Section_48_Offset" E="1005"/>
+  <DPT A="646" B="0087" C="7750" D="Section_49_Offset" E="1005"/>
+  <DPT A="649" B="0087" C="8250" D="Section_50_Offset" E="1005"/>
+  <DPT A="652" B="0087" C="8750" D="Section_51_Offset" E="1005"/>
+  <DPT A="655" B="0087" C="9250" D="Section_52_Offset" E="1005"/>
+  <DPT A="658" B="0087" C="9750" D="Section_53_Offset" E="1005"/>
+  <DPT A="661" B="0087" C="10250" D="Section_54_Offset" E="1005"/>
+  <DPT A="664" B="0087" C="10750" D="Section_55_Offset" E="1005"/>
+  <DPT A="667" B="0087" C="11250" D="Section_56_Offset" E="1005"/>
+  <DPT A="670" B="0087" C="11750" D="Section_57_Offset" E="1005"/>
+  <DPT A="673" B="0087" C="12250" D="Section_58_Offset" E="1005"/>
+  <DPT A="676" B="0087" C="12750" D="Section_59_Offset" E="1005"/>
+  <DPT A="679" B="0087" C="13250" D="Section_60_Offset" E="1005"/>
+  <DPT A="682" B="0087" C="13750" D="Section_61_Offset" E="1005"/>
+  <DPT A="685" B="0087" C="14250" D="Section_62_Offset" E="1005"/>
+  <DPT A="688" B="0087" C="14750" D="Section_63_Offset" E="1005"/>
+  <DPT A="691" B="0087" C="15250" D="Section_64_Offset" E="1005"/>
+  <DPT A="694" B="0087" C="15750" D="Section_65_Offset" E="1005"/>
+  <DPT A="697" B="0087" C="16250" D="Section_66_Offset" E="1005"/>
   <DPT A="122" B="0086" C="6850" D="Navigation Offset X" E="1005"/>
   <DPT A="123" B="0087" C="0" D="Navigation Offset Y" E="1005"/>
   <DPT A="124" B="0088" C="2400" D="Navigation Offset Z" E="1005"/>
@@ -152,7 +453,7 @@
   <DVP A="1005" B="0" C="0.100000001" D="0" E="cm"/>
   <DVP A="1006" B="0" C="1.000000000" D="0" E="kg"/>
   <DVP A="1007" B="0" C="0.001000000" D="0" E="kg"/>
-  <DVP A="1008" B="0" C="0.00000000000000001" D="2" E="ha"/>
+  <DVP A="1008" B="0" C="0.0000000001" D="2" E="ha"/>
   <DVP A="1009" B="0" C="1.000000000" D="0" E="ms"/>
   <DVP A="1010" B="0" C="0.000278000" D="2" E="hr"/>
   <DVP A="1011" B="0" C="0.001000000" D="1" E="%"/>

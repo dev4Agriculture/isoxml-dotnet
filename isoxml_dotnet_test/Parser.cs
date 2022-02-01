@@ -30,6 +30,16 @@ namespace isoxml_dotnet_test
             result.messages.ForEach(msg => Console.WriteLine(msg.title));
             Assert.AreEqual(1, result.messages.Count);
         }
+
+        [TestMethod]
+        public void CommentsShallNotThrowErrors()
+        {
+            string text = File.ReadAllText("./testdata/devices/FileWithComment.XML");
+            var result = ISOXMLParser.ParseDeviceDescription(text);
+            result.messages.ForEach(msg => Console.WriteLine(msg.title));
+            Assert.AreEqual(1, result.messages.Count);
+            Assert.AreEqual("warning", result.messages[0].type);
+        }
     }
 }
 

@@ -53,7 +53,13 @@ namespace Dev4ag {
             messages.Clear();
             var keepCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            var result = ParseNode(xml.FirstChild, $"{xml.FirstChild.Name}[0]");
+            object result = null;
+            int index = -1;
+            while (result == null && index< xml.ChildNodes.Count)
+            {
+                index++;
+                result = ParseNode(xml.ChildNodes[index], $"{xml.ChildNodes[index].Name}[0]");
+            }
             Thread.CurrentThread.CurrentCulture = keepCulture;
             return result;
         }
@@ -194,9 +200,42 @@ namespace Dev4ag {
             }
         }
 
-        private object ParseNode(XmlNode node, string isoxmlNodeId = null) {
+        private object CheckXMLDeclaration(XmlNode node)
+        {
+            return null;
+        }
+
+
+        private object ParseCDATA(XmlNode node)
+        {
+            addMessage("error", "ISOXML includes CDATA-Element which is not allowed: " + node.OuterXml); 
+            return null;
+        }
+
+        private object ParseEntity(XmlNode node)
+        {
+            addMessage("error", "ISOXML includes Entity-Element which is not allowed: " + node.OuterXml); 
+            return null;
+        }
+
+        private object ParseComment(XmlNode node)
+        {
+            addMessage("warning", "Comment found: " + node.InnerText);
+            return null;
+        }
+
+
+        private object ParseText(XmlNode node)
+        {
+            addMessage("error", "ISOXML includes Text-Element which is not allowed: " + node.InnerText);
+            return null;
+        }
+
+        private object ParseElement(XmlNode node, string isoxmlNodeId = null)
+        {
             var type = findType(node.Name);
-            if (type == null) {
+            if (type == null)
+            {
                 var isRoot = String.IsNullOrEmpty(isoxmlNodeId);
                 addMessage(
                     isRoot ? "error" : "warning",
@@ -205,10 +244,12 @@ namespace Dev4ag {
                 return null;
             }
             var obj = Activator.CreateInstance(type);
-            foreach (XmlAttribute attr in node.Attributes) {
+            foreach (XmlAttribute attr in node.Attributes)
+            {
                 var property = getPropertyByAttrName(type, attr.Name);
 
-                if (property == null) {
+                if (property == null)
+                {
                     addMessage(
                         "warning",
                         $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
@@ -216,10 +257,12 @@ namespace Dev4ag {
                     continue;
                 }
 
-                if (property.PropertyType.IsEnum) {
+                if (property.PropertyType.IsEnum)
+                {
                     var enumValue = getEnumValue(property.PropertyType, attr.Value);
 
-                    if (enumValue == null) {
+                    if (enumValue == null)
+                    {
                         addMessage(
                             "warning",
                             $"Unknown enum value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
@@ -228,15 +271,19 @@ namespace Dev4ag {
                     }
 
                     property.SetValue(obj, Enum.Parse(property.PropertyType, enumValue));
-                } else {
+                }
+                else
+                {
                     ValueConvertor convertor = null;
                     _convertors.TryGetValue(property.PropertyType.Name, out convertor);
-                    try {
+                    try
+                    {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
                         validateProperty(property, convertedAttr, attr.Value, isoxmlNodeId);
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         addMessage(
                             "warning",
                             $"Cannot parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
@@ -247,13 +294,17 @@ namespace Dev4ag {
 
             var childrenCount = new Dictionary<string, int>();
 
-            foreach (XmlNode childNode in node.ChildNodes) {
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
 
                 string name = childNode.Name;
                 int count;
-                if (childrenCount.TryGetValue(name, out count)) {
+                if (childrenCount.TryGetValue(name, out count))
+                {
                     childrenCount[name] = count + 1;
-                } else {
+                }
+                else
+                {
                     count = 0;
                     childrenCount.Add(name, count + 1);
                 }
@@ -261,9 +312,11 @@ namespace Dev4ag {
 
                 var parsedNode = ParseNode(childNode, childNodeIsoxmlId);
 
-                if (parsedNode != null) {
+                if (parsedNode != null)
+                {
                     var property = getPropertyByElementName(type, name);
-                    if (property == null) {
+                    if (property == null)
+                    {
                         addMessage(
                             "warning",
                             $"Elements of type {name} can't be children of element {node.Name} (path: {isoxmlNodeId})"
@@ -279,5 +332,51 @@ namespace Dev4ag {
 
             return obj;
         }
+
+        private object ParseNode(XmlNode node, string isoxmlNodeId = null) {
+            switch (node.NodeType)
+            {
+                case XmlNodeType.Element:
+                    return ParseElement(node, isoxmlNodeId);
+
+                case XmlNodeType.XmlDeclaration:
+                    return CheckXMLDeclaration(node);
+
+                case XmlNodeType.SignificantWhitespace:
+                case XmlNodeType.Whitespace:
+                    return null;
+
+                case XmlNodeType.Text:
+                    return ParseText(node);
+
+                case XmlNodeType.CDATA:
+                    return ParseCDATA(node);
+
+                case XmlNodeType.Entity:
+                    return ParseEntity(node);
+
+                case XmlNodeType.Comment:
+                    return ParseComment(node);
+
+                case XmlNodeType.Document:
+                case XmlNodeType.DocumentFragment:
+                case XmlNodeType.Attribute:
+                case XmlNodeType.EndElement:
+                case XmlNodeType.EndEntity:
+                case XmlNodeType.EntityReference:
+                case XmlNodeType.None:
+                case XmlNodeType.Notation:
+                case XmlNodeType.ProcessingInstruction:
+                default:
+                    addMessage("error", $"Found invalid Element in XML. Type: {node.NodeType.ToString()}, Content: {node.OuterXml}");
+                    return null;
+
+            }
+
+           
+            
+        }
+
+
     }
 }
