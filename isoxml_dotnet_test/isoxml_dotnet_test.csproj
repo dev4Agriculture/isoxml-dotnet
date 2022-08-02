@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -25,6 +25,13 @@
 
   <ItemGroup>
     <None Remove="testdata\devices\Device_Description_Unit.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="testdata\ExternalFiles\MissingExternals\" />
+    <Folder Include="testdata\ExternalFiles\MultipleExternals\" />
+    <Folder Include="testdata\ExternalFiles\OneExternal\" />
+    <Folder Include="testdata\ExternalFiles\NoExternals\" />
   </ItemGroup>
 
 </Project>
