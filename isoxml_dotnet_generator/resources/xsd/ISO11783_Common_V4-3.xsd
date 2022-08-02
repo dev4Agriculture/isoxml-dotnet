@@ -3061,89 +3061,85 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:NMTOKEN">
-								<xs:enumeration value="1">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Flag
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="2">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											other
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="3">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Field Access
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="4">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Storage
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="5">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Obstacle
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="6">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference A
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="7">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference B
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="8">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Reference Center
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="9">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Guidance Point
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="10">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Partfield Reference Point
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-								<xs:enumeration value="11">
-									<xs:annotation>
-										<xs:documentation xml:lang="en">
-											Homebase
-										</xs:documentation>
-									</xs:annotation>
-								</xs:enumeration>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="1">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Flag
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="2">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									other
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Field Access
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="4">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Storage
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="5">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Obstacle
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="6">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Guidance Reference A
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="7">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Guidance Reference B
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="8">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Guidance Reference Center
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="9">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Guidance Point
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="10">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Partfield Reference Point
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="11">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">
+									Homebase
+								</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="B" use="optional">
@@ -3165,15 +3161,11 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="-90.0"/>
-								<xs:maxInclusive value="90.0"/>
-								<xs:fractionDigits value="9"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="-90.0"/>
+						<xs:maxInclusive value="90.0"/>
+						<xs:fractionDigits value="9"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="D" use="required">
@@ -3183,15 +3175,11 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="-180.0"/>
-								<xs:maxInclusive value="180.0"/>
-								<xs:fractionDigits value="9"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="-180.0"/>
+						<xs:maxInclusive value="180.0"/>
+						<xs:fractionDigits value="9"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="E" use="optional">
@@ -3201,14 +3189,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:long">
-								<xs:minInclusive value="-2147483647"/>
-								<xs:maxInclusive value="2147483647"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:long">
+						<xs:minInclusive value="-2147483647"/>
+						<xs:maxInclusive value="2147483647"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="F" use="optional">
@@ -3218,14 +3202,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:unsignedByte">
-								<xs:minInclusive value="0"/>
-								<xs:maxInclusive value="254"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:unsignedByte">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="254"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="G" use="optional">
@@ -3249,14 +3229,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="0.0"/>
-								<xs:maxInclusive value="65.0"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="0.0"/>
+						<xs:maxInclusive value="65.0"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="I" use="optional">
@@ -3266,14 +3242,10 @@
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
-					<xs:union memberTypes="emptyString">
-						<xs:simpleType>
-							<xs:restriction base="xs:decimal">
-								<xs:minInclusive value="0.0"/>
-								<xs:maxInclusive value="65.0"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:union>
+					<xs:restriction base="xs:decimal">
+						<xs:minInclusive value="0.0"/>
+						<xs:maxInclusive value="65.0"/>
+					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="J" use="optional">

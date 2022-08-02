@@ -148,7 +148,7 @@ namespace Dev4ag {
             property.SetValue(obj, value);
         }
 
-        private void addMessage(string type, string message) {
+        private void addMessage(ResultMessageType type, string message) {
             messages.Add(new ResultMessage(type, message));
         }
 
@@ -160,28 +160,28 @@ namespace Dev4ag {
             if (rangeAttr != null && !rangeAttr.IsValid(value))
             {
                 addMessage(
-                    "warning",
+                    ResultMessageType.Warning,
                     $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {isoxmlNodeId}; value: {value})"
                 );
             }
 
             if (maxLengthAttr != null && !maxLengthAttr.IsValid(value)) {
                 addMessage(
-                    "warning",
+                    ResultMessageType.Warning,
                     $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
 
             if (minLengthAttr != null && !minLengthAttr.IsValid(value)) {
                 addMessage(
-                    "warning",
+                    ResultMessageType.Warning,
                     $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
 
             if (regexAttr != null && !regexAttr.IsValid(attrValue)) {
                 addMessage(
-                    "warning",
+                    ResultMessageType.Warning,
                     $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
@@ -193,7 +193,7 @@ namespace Dev4ag {
 
                 if (required && property.GetValue(obj) == null) {
                     addMessage(
-                        "warning",
+                        ResultMessageType.Warning,
                         $"Missing required property {property.Name} (path: {isoxmlNodeId})"
                     );
                 }
@@ -208,26 +208,26 @@ namespace Dev4ag {
 
         private object ParseCDATA(XmlNode node)
         {
-            addMessage("error", "ISOXML includes CDATA-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "ISOXML includes CDATA-Element which is not allowed: " + node.OuterXml); 
             return null;
         }
 
         private object ParseEntity(XmlNode node)
         {
-            addMessage("error", "ISOXML includes Entity-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "ISOXML includes Entity-Element which is not allowed: " + node.OuterXml); 
             return null;
         }
 
         private object ParseComment(XmlNode node)
         {
-            addMessage("warning", "Comment found: " + node.InnerText);
+            addMessage(ResultMessageType.Warning, "Comment found: " + node.InnerText);
             return null;
         }
 
 
         private object ParseText(XmlNode node)
         {
-            addMessage("error", "ISOXML includes Text-Element which is not allowed: " + node.InnerText);
+            addMessage(ResultMessageType.Error, "ISOXML includes Text-Element which is not allowed: " + node.InnerText);
             return null;
         }
 
@@ -238,7 +238,7 @@ namespace Dev4ag {
             {
                 var isRoot = String.IsNullOrEmpty(isoxmlNodeId);
                 addMessage(
-                    isRoot ? "error" : "warning",
+                    isRoot ? ResultMessageType.Error : ResultMessageType.Warning,
                     $"Unknown XML element {node.Name} (path: {isoxmlNodeId})"
                 );
                 return null;
@@ -251,7 +251,7 @@ namespace Dev4ag {
                 if (property == null)
                 {
                     addMessage(
-                        "warning",
+                        ResultMessageType.Warning,
                         $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
                     );
                     continue;
@@ -264,7 +264,7 @@ namespace Dev4ag {
                     if (enumValue == null)
                     {
                         addMessage(
-                            "warning",
+                            ResultMessageType.Warning,
                             $"Unknown enum value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
                         );
                         continue;
@@ -285,7 +285,7 @@ namespace Dev4ag {
                     catch (Exception e)
                     {
                         addMessage(
-                            "warning",
+                            ResultMessageType.Warning,
                             $"Cannot parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
                         );
                     }
@@ -318,7 +318,7 @@ namespace Dev4ag {
                     if (property == null)
                     {
                         addMessage(
-                            "warning",
+                            ResultMessageType.Warning,
                             $"Elements of type {name} can't be children of element {node.Name} (path: {isoxmlNodeId})"
                         );
                         continue;
@@ -368,7 +368,7 @@ namespace Dev4ag {
                 case XmlNodeType.Notation:
                 case XmlNodeType.ProcessingInstruction:
                 default:
-                    addMessage("error", $"Found invalid Element in XML. Type: {node.NodeType.ToString()}, Content: {node.OuterXml}");
+                    addMessage(ResultMessageType.Error, $"Found invalid Element in XML. Type: {node.NodeType.ToString()}, Content: {node.OuterXml}");
                     return null;
 
             }

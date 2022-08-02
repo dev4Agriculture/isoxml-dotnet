@@ -11,8 +11,9 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void ParseDevice()
         {
-            string text = File.ReadAllText("./testdata/devices/Device_description.xml");
-            var result = ISOXMLParser.ParseDeviceDescription(text);
+            string path = "./testdata/devices/Device_description.xml";
+            string text = File.ReadAllText(path);
+            var result = ISOXMLParser.ParseISOXML(text,path);
 
             result.messages.ForEach(msg => {
                 Console.WriteLine(msg.title);
@@ -25,8 +26,9 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void DeviceWithBrokenScaleUnitShallCreateWarning()
         {
-            string text = File.ReadAllText("./testdata/devices/Device_Description_Unit.xml");
-            var result = ISOXMLParser.ParseDeviceDescription(text);
+            string path = "./testdata/devices/Device_Description_Unit.xml";
+            string text = File.ReadAllText(path);
+            var result = ISOXMLParser.ParseISOXML(text,path);
             result.messages.ForEach(msg => Console.WriteLine(msg.title));
             Assert.AreEqual(1, result.messages.Count);
         }
@@ -34,8 +36,9 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void CommentsShallNotThrowErrors()
         {
-            string text = File.ReadAllText("./testdata/devices/FileWithComment.XML");
-            var result = ISOXMLParser.ParseDeviceDescription(text);
+            string path = "./testdata/devices/FileWithComment.XML";
+            string text = File.ReadAllText(path);
+            var result = ISOXMLParser.ParseISOXML(text, path);
             result.messages.ForEach(msg => Console.WriteLine(msg.title));
             Assert.AreEqual(1, result.messages.Count);
             Assert.AreEqual("warning", result.messages[0].type);
