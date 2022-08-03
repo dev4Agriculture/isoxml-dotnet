@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Dev4ag.ISO11783.TaskFile;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,11 +16,14 @@ namespace Dev4ag
             string path = "./out/valid/";
             string taskName = "Hello";
             var isoxml = new ISOXML(path);
-            isoxml.data.Task.Add(new ISO11783.TaskFile.Task()
+            var idTable = isoxml.idTable;
+            Task task = new Task()
             {
                 TaskDesignator = taskName,
-                TaskStatus = ISO11783.TaskFile.TaskStatus.Completed
-            });
+                TaskStatus = TaskStatus.Completed
+            };
+            task.TaskId = idTable.getNewId(task);
+            isoxml.data.Task.Add(task);
 
             isoxml.save();
 
@@ -27,6 +31,10 @@ namespace Dev4ag
             Assert.IsTrue(File.Exists(tdPath));
             string allText = File.ReadAllText(tdPath);
             Assert.IsTrue(allText.Contains(taskName));
+
+            var loaded = ISOXML.Load(path);
+            Assert.AreEqual(1,loaded.data.Task.Count);
+            Assert.AreEqual("TSK1", loaded.data.Task[0].TaskId);
 
         }
     }
