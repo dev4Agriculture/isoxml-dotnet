@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <None Remove="testdata\devices\Device_Description_Unit.xml" />
+    <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />
+    <None Remove="testdata\Grid\Type2_Invalid\TASKDATA.XML" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +34,9 @@
     <Folder Include="testdata\ExternalFiles\MultipleExternals\" />
     <Folder Include="testdata\ExternalFiles\OneExternal\" />
     <Folder Include="testdata\ExternalFiles\NoExternals\" />
+    <Folder Include="testdata\Grid\Type1_Invalid\" />
+    <Folder Include="testdata\Grid\Type2\" />
+    <Folder Include="testdata\Grid\Type1\" />
   </ItemGroup>
 
 </Project>

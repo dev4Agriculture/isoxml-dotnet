@@ -7,21 +7,19 @@ using System.Xml.Serialization;
 using Dev4ag.ISO11783.TaskFile;
 
 namespace Dev4ag {
-    public class ISOXMLParser {
-
-        public class ResultWithMessages<ResultType> where ResultType: class {
-            public ResultType result = null;
-            public List<ResultMessage> messages = new List<ResultMessage>();
-
-            public ResultWithMessages(ResultType result, List<ResultMessage> messages) {
-                this.result = result;
-                this.messages = messages;
+    internal class TaskData {
+        private static IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
+        internal static string fixTaskDataPath(string path)
+        {
+            if (path.ToUpper().EndsWith(".XML") == false)
+            {
+                path = Path.Combine(path.ToString(), "TASKDATA.XML");
             }
-            public ResultWithMessages(ResultType result) {
-                this.result = result;
-            }
+            return path;
         }
-        public static ResultWithMessages<ISO11783TaskDataFile> ParseISOXML(string isoxmlString, string path) {
+
+        
+        public static ResultWithMessages<ISO11783TaskDataFile> ParseTaskData(string isoxmlString, string path) {
             ISO11783TaskDataFile taskData = null;
             var messages = new List<ResultMessage>();
             try {
@@ -43,7 +41,6 @@ namespace Dev4ag {
                         messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing: " + element.Attributes["A"].Value));
                     }
                 }
-                var isoxmlSerializer = new IsoxmlSerializer();
                 taskData = (ISO11783TaskDataFile)isoxmlSerializer.Deserialize(xmlDoc);
 
                 messages.AddRange(isoxmlSerializer.messages);
@@ -68,23 +65,30 @@ namespace Dev4ag {
 
         }
 
-
-        public static ResultWithMessages<ISO11783TaskDataFile> Load(string path)
+        public static ResultWithMessages<ISO11783TaskDataFile> LoadTaskData(string path)
         {
             var messages = new List<ResultMessage>();
-            if (path.ToUpper(). EndsWith("TASKDATA.XML") == false)
-            {
-                path = Path.Combine(path.ToString(), "TASKDATA.XML");
-            }
+            path = fixTaskDataPath(path);
             if(File.Exists(path) == false)
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, "TASKDATA.XML not found!"));
             }
             string text = File.ReadAllText(path.ToString());
-            var result = ParseISOXML(text,path);
+            var result = ParseTaskData(text,path);
             return result;
         }
 
+
+        public static void SaveTaskData(ISO11783TaskDataFile taskData, string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = fixTaskDataPath(path);
+            var isoxmlSerializer = new IsoxmlSerializer();
+            isoxmlSerializer.Serialize(taskData, path);
+        }
 
     }
 }

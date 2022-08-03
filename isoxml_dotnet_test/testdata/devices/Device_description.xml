@@ -1,115 +1,118 @@
-<DVC A="DVC-5" B="Einzelkorn Saemaschine" C="ABC1243" D="A00880000B2054DE" F="4D313531303135" G="FF000000006564">
-    <DET A="DET-31" B="1" C="1" E="0" F="0">
-        <DOR A="3"/>
-        <DOR A="4"/>
-        <DOR A="5"/>
-        <DOR A="6"/>
-        <DOR A="7"/>
-        <DOR A="9"/>
-        <DOR A="11"/>
-        <DOR A="12"/>
-        <DOR A="13"/>
-        <DOR A="14"/>
-        <DOR A="15"/>
-        <DOR A="10"/>
-        <DOR A="25"/>
-        <DOR A="27"/>
-        <DOR A="16"/>
-        <DOR A="18"/>
-        <DOR A="19"/>
-        <DOR A="20"/>
-        <DOR A="22"/>
-        <DOR A="30"/>
-        <DOR A="31"/>
-        <DOR A="24"/>
-    </DET>
-    <DET A="DET-32" B="2" C="6" E="1" F="1">
-        <DOR A="25"/>
-        <DOR A="27"/>
-        <DOR A="32"/>
-    </DET>
-    <DET A="DET-33" B="41" C="4" E="2" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-34" B="42" C="4" E="3" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-35" B="43" C="4" E="4" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-36" B="44" C="4" E="5" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-37" B="45" C="4" E="6" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-38" B="46" C="4" E="7" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-39" B="47" C="4" E="8" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-40" B="48" C="4" E="9" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-41" B="49" C="4" E="10" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-42" B="50" C="4" E="11" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-43" B="51" C="4" E="12" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-44" B="52" C="4" E="13" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DET A="DET-45" B="53" C="4" E="14" F="1">
-        <DOR A="8"/>
-        <DOR A="27"/>
-    </DET>
-    <DPD A="3" B="000B" C="2" D="9" E="Sollwert Rate" F="33"/>
-    <DPD A="4" B="000C" C="1" D="9" E="Istwert Rate" F="33"/>
-    <DPD A="5" B="0010" C="3" D="9" E="Sollwert Abstand" F="34"/>
-    <DPD A="6" B="0011" C="1" D="9" E="Istwert Abstand" F="34"/>
-    <DPD A="7" B="0043" C="1" D="0" E="Arbeitsbreite" F="35"/>
-    <DPD A="8" B="0043" C="0" D="0" E="Ausschnitt Breite" F="35"/>
-    <DPD A="9" B="0046" C="0" D="0" E="Maximale Breite" F="35"/>
-    <DPD A="11" B="0074" C="2" D="25" E="Flache" F="36"/>
-    <DPD A="12" B="0075" C="2" D="25" E="Abstand EIN" F="38"/>
-    <DPD A="13" B="0076" C="2" D="25" E="Abstand AUS" F="38"/>
-    <DPD A="14" B="0077" C="2" D="25" E="Zeit EIN" F="39"/>
-    <DPD A="15" B="0078" C="2" D="25" E="Zeit AUS" F="39"/>
-    <DPD A="10" B="0052" C="2" D="25" E="Gesamtzahl" F="37"/>
-    <DPD A="25" B="0086" C="2" D="0" E="GPS Abstand X" F="35"/>
-    <DPD A="27" B="0087" C="0" D="0" E="GPS Abstand Y" F="35"/>
-    <DPD A="16" B="008D" C="1" D="9" E="Arbeit EIN/AUS"/>
-    <DPD A="32" B="009D" C="2" D="0" E="Anschluss-Typ"/>
-    <DPD A="18" B="009E" C="2" D="9" E="Rezept-Steuerung Zustand"/>
-    <DPD A="19" B="00A0" C="2" D="9" E="Section Control Zustand"/>
-    <DPD A="20" B="00A1" C="1" D="9"/>
-    <DPD A="22" B="0122" C="2" D="0"/>
-    <DPD A="30" B="00CD" C="2" D="9" E="SC Einschaltzeit"/>
-    <DPD A="31" B="00CE" C="2" D="9" E="SC Ausschaltzeit"/>
-    <DPD A="24" B="DFFF" C="0" D="31"/>
-    <DVP A="39" B="0" C="0.000277778" D="2" E="hr"/>
-    <DVP A="40" B="0" C="0.001" D="1" E="s"/>
-    <DVP A="37" B="0" C="0.100000001" D="1" E="k"/>
-    <DVP A="33" B="0" C="10.0" D="0" E="s/ha"/>
-    <DVP A="34" B="0" C="0.100000001" D="1" E="cm"/>
-    <DVP A="35" B="0" C="0.001" D="2" E="m"/>
-    <DVP A="36" B="0" C="0.0001" D="2" E="ha"/>
-    <DVP A="38" B="0" C="0.000001" D="2" E="km"/>
-</DVC>
+<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="3" TaskControllerManufacturer="" TaskControllerVersion="" ManagementSoftwareManufacturer="FarmSystem" ManagementSoftwareVersion="1.0" DataTransferOrigin="1">
+	<DVC A="DVC-5" B="Einzelkorn Saemaschine" C="ABC1243" D="A00880000B2054DE" F="4D313531303135" G="FF000000006564">
+		<DET A="DET-31" B="1" C="1" E="0" F="0">
+			<DOR A="3"/>
+			<DOR A="4"/>
+			<DOR A="5"/>
+			<DOR A="6"/>
+			<DOR A="7"/>
+			<DOR A="9"/>
+			<DOR A="11"/>
+			<DOR A="12"/>
+			<DOR A="13"/>
+			<DOR A="14"/>
+			<DOR A="15"/>
+			<DOR A="10"/>
+			<DOR A="25"/>
+			<DOR A="27"/>
+			<DOR A="16"/>
+			<DOR A="18"/>
+			<DOR A="19"/>
+			<DOR A="20"/>
+			<DOR A="22"/>
+			<DOR A="30"/>
+			<DOR A="31"/>
+			<DOR A="24"/>
+		</DET>
+		<DET A="DET-32" B="2" C="6" E="1" F="1">
+			<DOR A="25"/>
+			<DOR A="27"/>
+			<DOR A="32"/>
+		</DET>
+		<DET A="DET-33" B="41" C="4" E="2" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-34" B="42" C="4" E="3" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-35" B="43" C="4" E="4" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-36" B="44" C="4" E="5" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-37" B="45" C="4" E="6" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-38" B="46" C="4" E="7" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-39" B="47" C="4" E="8" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-40" B="48" C="4" E="9" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-41" B="49" C="4" E="10" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-42" B="50" C="4" E="11" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-43" B="51" C="4" E="12" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-44" B="52" C="4" E="13" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DET A="DET-45" B="53" C="4" E="14" F="1">
+			<DOR A="8"/>
+			<DOR A="27"/>
+		</DET>
+		<DPD A="3" B="000B" C="2" D="9" E="Sollwert Rate" F="33"/>
+		<DPD A="4" B="000C" C="1" D="9" E="Istwert Rate" F="33"/>
+		<DPD A="5" B="0010" C="3" D="9" E="Sollwert Abstand" F="34"/>
+		<DPD A="6" B="0011" C="1" D="9" E="Istwert Abstand" F="34"/>
+		<DPD A="7" B="0043" C="1" D="0" E="Arbeitsbreite" F="35"/>
+		<DPD A="8" B="0043" C="0" D="0" E="Ausschnitt Breite" F="35"/>
+		<DPD A="9" B="0046" C="0" D="0" E="Maximale Breite" F="35"/>
+		<DPD A="11" B="0074" C="2" D="25" E="Flache" F="36"/>
+		<DPD A="12" B="0075" C="2" D="25" E="Abstand EIN" F="38"/>
+		<DPD A="13" B="0076" C="2" D="25" E="Abstand AUS" F="38"/>
+		<DPD A="14" B="0077" C="2" D="25" E="Zeit EIN" F="39"/>
+		<DPD A="15" B="0078" C="2" D="25" E="Zeit AUS" F="39"/>
+		<DPD A="10" B="0052" C="2" D="25" E="Gesamtzahl" F="37"/>
+		<DPD A="25" B="0086" C="2" D="0" E="GPS Abstand X" F="35"/>
+		<DPD A="27" B="0087" C="0" D="0" E="GPS Abstand Y" F="35"/>
+		<DPD A="16" B="008D" C="1" D="9" E="Arbeit EIN/AUS"/>
+		<DPD A="32" B="009D" C="2" D="0" E="Anschluss-Typ"/>
+		<DPD A="18" B="009E" C="2" D="9" E="Rezept-Steuerung Zustand"/>
+		<DPD A="19" B="00A0" C="2" D="9" E="Section Control Zustand"/>
+		<DPD A="20" B="00A1" C="1" D="9"/>
+		<DPD A="22" B="0122" C="2" D="0"/>
+		<DPD A="30" B="00CD" C="2" D="9" E="SC Einschaltzeit"/>
+		<DPD A="31" B="00CE" C="2" D="9" E="SC Ausschaltzeit"/>
+		<DPD A="24" B="DFFF" C="0" D="31"/>
+		<DVP A="39" B="0" C="0.000277778" D="2" E="hr"/>
+		<DVP A="40" B="0" C="0.001" D="1" E="s"/>
+		<DVP A="37" B="0" C="0.100000001" D="1" E="k"/>
+		<DVP A="33" B="0" C="10.0" D="0" E="s/ha"/>
+		<DVP A="34" B="0" C="0.100000001" D="1" E="cm"/>
+		<DVP A="35" B="0" C="0.001" D="2" E="m"/>
+		<DVP A="36" B="0" C="0.0001" D="2" E="ha"/>
+		<DVP A="38" B="0" C="0.000001" D="2" E="km"/>
+	</DVC>
+</ISO11783_TaskData>
