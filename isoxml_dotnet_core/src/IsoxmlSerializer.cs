@@ -1,12 +1,15 @@
+using Dev4ag.ISO11783.TaskFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Dev4ag {
     public class IsoxmlSerializer {
@@ -64,6 +67,14 @@ namespace Dev4ag {
             return result;
         }
 
+
+        public void Serialize(ISO11783TaskDataFile taskData, string path)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
+            TextWriter writer = new StreamWriter(path); 
+            ser.Serialize(writer,taskData);
+            writer.Close();
+        }
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes() {
             return _isoxmlAssembly.GetTypes()
@@ -79,7 +90,7 @@ namespace Dev4ag {
                 });
         }
 
-        private Type findType(string name) {
+        private System.Type findType(string name) {
             foreach (var type in _isoxmlAssembly.GetTypes()) {
                 foreach (var attr in type.CustomAttributes) {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlTypeAttribute" &&
@@ -92,7 +103,7 @@ namespace Dev4ag {
             return null;
         }
 
-        private PropertyInfo getPropertyByAttrName(Type type, string xmlAttrName) {
+        private PropertyInfo getPropertyByAttrName(System.Type type, string xmlAttrName) {
             foreach (var property in type.GetProperties()) {
                 foreach (var attr in property.CustomAttributes) {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute" &&
@@ -105,7 +116,7 @@ namespace Dev4ag {
             return null;
         }
 
-        private PropertyInfo getPropertyByElementName(Type type, string xmlElementName) {
+        private PropertyInfo getPropertyByElementName(System.Type type, string xmlElementName) {
             foreach (var property in type.GetProperties()) {
                 foreach (var attr in property.CustomAttributes) {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlElementAttribute" &&
@@ -118,7 +129,7 @@ namespace Dev4ag {
             return null;
         }
 
-        private string getEnumValue(Type enumType, string xmlValue) {
+        private string getEnumValue(System.Type enumType, string xmlValue) {
             var enumValueMembers = enumType.GetMembers(
                 BindingFlags.Public | BindingFlags.Static
             );
@@ -137,7 +148,7 @@ namespace Dev4ag {
         }
 
         // if the property is a collection, we add the value to it, otherwise, we just set the value
-        private void setValue(Type type, PropertyInfo property, object obj, object value) {
+        private void setValue(System.Type type, PropertyInfo property, object obj, object value) {
             foreach (var implInterface in property.PropertyType.GetInterfaces()) {
                 if (implInterface.Name == "IList") {
                     IList list = (IList)property.GetValue(obj);
@@ -187,7 +198,7 @@ namespace Dev4ag {
             }
         }
 
-        private void checkRequiredProperties(Type type, object obj, string isoxmlNodeId) {
+        private void checkRequiredProperties(System.Type type, object obj, string isoxmlNodeId) {
             foreach (var property in type.GetProperties()) {
                 var required = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RequiredAttribute>() != null;
 

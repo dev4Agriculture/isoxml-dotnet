@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace isoxml_dotnet_test
+namespace Dev4ag
 {
     [TestClass]
     public class UnitTest1

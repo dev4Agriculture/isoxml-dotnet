@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="2" ManagementSoftwareManufacturer="PerfectFarm" ManagementSoftwareVersion="1.2.8" DataTransferOrigin="1">
+  <TSK A="TSK1" G="1" J="0">
+    <TZN A="0">
+      <PDV A="0006" B="0"/>
+    </TZN>
+    <TZN A="1">
+      <PDV A="0006" B="0"/>
+    </TZN>
+    <GRD A="55.82481700900832" B="39.138728173503324" C="0.0000902618210782717" D="0.00016294086058760767" E="10" F="10" G="GRD00001" H="22896" I="1" J="1"/>
+  </TSK>
+</ISO11783_TaskData>
