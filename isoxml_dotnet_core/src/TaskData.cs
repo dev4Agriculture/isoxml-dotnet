@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using Dev4ag.ISO11783.TaskFile;
 
 namespace Dev4ag {
-    internal class TaskDataParser {
+    internal class TaskData {
         private static IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
         internal static string fixTaskDataPath(string path)
         {
