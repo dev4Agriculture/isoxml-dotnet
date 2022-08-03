@@ -12,6 +12,7 @@ namespace Dev4ag
         public ISO11783TaskDataFile data;
         public string folderPath;
         public List<ResultMessage> messages;
+        public IDTable idTable;
 
         public ISOXML(string path)
         {
@@ -19,6 +20,7 @@ namespace Dev4ag
             grids = new Dictionary<IsoGrid, Task>();
             folderPath = path;
             messages = new List<ResultMessage>(); 
+            idTable = new IDTable();
         }
 
 
