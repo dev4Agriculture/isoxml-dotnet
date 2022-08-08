@@ -13,8 +13,8 @@ namespace Dev4ag
         public UInt32 width;
         public UInt32 height;
         public Byte layers;//Only for Type2
-        public byte[,] datat1;
-        public UInt32[,,] datat2;
+        private byte[,] datat1;
+        private UInt32[,,] datat2;
         public string name;
         public GridType type;
         public bool loaded;
@@ -34,6 +34,7 @@ namespace Dev4ag
                     height = height,
                     type = type,
                     name = name,
+                    layers = layers
                 };
                 FileStream binaryFileStream = File.Open(filePath, FileMode.Open);
                 switch (grid.type)
@@ -179,6 +180,54 @@ namespace Dev4ag
             catch (Exception e)
             {
                 Console.WriteLine("Could not open file " + storagePath + "; canceling to write:"+ e.ToString());
+            }
+        }
+
+        public int setValue(uint x, uint y, uint value, uint layer = 0)
+        {
+            if ((x < 0 || x >= width) || (y<0 || y >= height)){
+                return 0;
+            }
+
+            switch (this.type)
+            {
+                case GridType.gridtype1:
+                    if(value<0  ||value> 255) {
+                        return 0;
+                    }
+                    this.datat1[y, x] = (byte)value;
+                    return 1;
+                case GridType.gridtype2:
+                    if(layer<0 || layer>= layers)
+                    {
+                        return 0;
+                    }
+                    this.datat2[layer,y,x] = value;
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
+        public uint getValue(uint x, uint y, uint layer)
+        {
+            if ((x < 0 || x >= width) || (y < 0 || y >= height))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            switch (this.type)
+            {
+                case GridType.gridtype1:
+                    return this.datat1[y, x];
+                case GridType.gridtype2:
+                    if (layer < 0 || layer >= layers)
+                    {
+                        throw new IndexOutOfRangeException();
+                    }
+                    return this.datat2[layer, y, x];
+                default:
+                    throw new IndexOutOfRangeException();
             }
         }
     }
