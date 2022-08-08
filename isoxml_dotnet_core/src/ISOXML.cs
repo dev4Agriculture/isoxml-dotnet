@@ -1,4 +1,5 @@
-﻿using Dev4ag.ISO11783.TaskFile;
+﻿using Dev4ag.ISO11783.LinkListFile;
+using Dev4ag.ISO11783.TaskFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,8 @@ namespace Dev4ag
         public List<ResultMessage> messages;
         public IDTable idTable;
 
+        public ISO11783LinkListFile links;
+
         public ISOXML(string path)
         {
             data = new ISO11783TaskDataFile();
@@ -21,17 +24,22 @@ namespace Dev4ag
             folderPath = path;
             messages = new List<ResultMessage>(); 
             idTable = new IDTable();
+            links = new ISO11783LinkListFile();
         }
 
 
         public static ISOXML Load(string path, bool loadBinData = true)
         {
-            var result = TaskData.LoadTaskData(path);
+            var resultTaskData = TaskData.LoadTaskData(path);
+            var resultLinkList = IsoLinkList.LoadLinkList(path);
             var isoxml = new ISOXML(path)
             {
-                data = result.result,
-                messages = result.messages
+                data = resultTaskData.result,
+                links = resultLinkList.result
+                
             };
+            isoxml.messages.AddRange(resultTaskData.messages);
+            isoxml.messages.AddRange(resultLinkList.messages);
 
             if (loadBinData)
             {
