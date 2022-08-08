@@ -8,7 +8,7 @@ namespace Dev4ag
 {
     public class ISOXML
     {
-        public Dictionary<IsoGrid, Task> grids;
+        public Dictionary<string,IsoGrid> grids;
         public ISO11783TaskDataFile data;
         public string folderPath;
         public List<ResultMessage> messages;
@@ -17,7 +17,7 @@ namespace Dev4ag
         public ISOXML(string path)
         {
             data = new ISO11783TaskDataFile();
-            grids = new Dictionary<IsoGrid, Task>();
+            grids = new Dictionary<string, IsoGrid>();
             folderPath = path;
             messages = new List<ResultMessage>(); 
             idTable = new IDTable();
@@ -52,7 +52,7 @@ namespace Dev4ag
                 return 0;
             }
 
-            grids = new Dictionary<IsoGrid, Task>();
+            grids = new Dictionary<string,IsoGrid>();
             foreach (var task in data.Task)
             {
                 if(task.Grid != null && task.Grid.Count > 0)
@@ -68,7 +68,7 @@ namespace Dev4ag
                         }
                     }
                     var result = IsoGrid.Load(this.folderPath,grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow,grid.GridType,layers);
-                    grids.Add(result.result, task);
+                    grids.Add(task.Grid[0].Filename, result.result);
                     messages.AddRange(result.messages);
                 }
             }
@@ -83,9 +83,9 @@ namespace Dev4ag
         public void save()
         {
             TaskData.SaveTaskData(this.data, this.folderPath);
-            foreach(var grid in this.grids)
+            foreach(var entry in this.grids)
             {
-                grid.Key.save(Path.Combine(this.folderPath, grid.Value.Grid[0].Filename + ".BIN"));
+                entry.Value.save(Path.Combine(this.folderPath, entry.Key + ".BIN"));
             }
         }
 
