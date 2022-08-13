@@ -34,3 +34,11 @@ Format: datat1[layer,height,width]
 
 ### WSM
 An analysis class to Analyse WorkingSetMasterNames
+
+
+
+
+# License note on Logos
+
+Please be aware that the logo assigned to this project is only covered under Apache2 when used with this project. 
+You may not use this logo for any other purpose whatsoever without consent by https://www.dev4Agriculture.de
