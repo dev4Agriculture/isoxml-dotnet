@@ -30,10 +30,12 @@ namespace isoxml_dotnet_generator
                 // GenerateNullables = true,
                 NamespaceProvider = namespaceProvider,
                 NamingProvider = namingProvider,
+                MemberVisitor = ISOXMLMemberVisitor.Visit,
             };
 
             generator.Generate(files);
         }
+
 
         static void Main(string[] args)
         {

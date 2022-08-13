@@ -24,9 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="testdata\LinkListTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="testdata\devices\Device_Description_Unit.xml" />
     <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />
     <None Remove="testdata\Grid\Type2_Invalid\TASKDATA.XML" />
+    <None Remove="testdata\Structure\Valid_To_Extend\TASKDATA.XML" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="LinkListTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +46,8 @@
     <Folder Include="testdata\Grid\Type1_Invalid\" />
     <Folder Include="testdata\Grid\Type2\" />
     <Folder Include="testdata\Grid\Type1\" />
+    <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
+    <Folder Include="testdata\LinkList\ValidLinkList\" />
   </ItemGroup>
 
 </Project>

@@ -262,10 +262,16 @@ namespace Dev4ag {
 
                 if (property == null)
                 {
-                    addMessage(
-                        ResultMessageType.Warning,
-                        $"Unknown XML attribute {attr.Name} (path: {linkListNodeId})"
-                    );
+                    //TODO there should be a more generic way for this.
+                    //Ignore XSD Schemata information
+                    if (!attr.Name.Equals("xmlns:xsi") && !attr.Name.Equals("xmlns:xsd"))
+                    {
+
+                        addMessage(
+                            ResultMessageType.Warning,
+                            $"Unknown XML attribute {attr.Name} (path: {linkListNodeId})"
+                        );
+                    }
                     continue;
                 }
 

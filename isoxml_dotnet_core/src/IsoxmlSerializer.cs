@@ -40,7 +40,12 @@ namespace Dev4ag {
                 } catch (Exception) {
                     throw new Exception($"Can not parse value '{value}'");
                 }
-            }}
+            }},
+            {"DateTime", value =>
+            {
+                var date = DateTime.Parse(value);
+                return date;
+            } }
         };
 
         private Assembly _isoxmlAssembly;
@@ -261,10 +266,14 @@ namespace Dev4ag {
 
                 if (property == null)
                 {
-                    addMessage(
-                        ResultMessageType.Warning,
-                        $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
-                    );
+                    //TODO there should be a more generic way for this.
+                    //Ignore XSD Schemata information
+                    if(!attr.Name.Equals("xmlns:xsi") && !attr.Name.Equals("xmlns:xsd")){
+                        addMessage(
+                            ResultMessageType.Warning,
+                            $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
+                        );
+                    }
                     continue;
                 }
 

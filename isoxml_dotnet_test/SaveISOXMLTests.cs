@@ -10,22 +10,87 @@ namespace Dev4ag
     [TestClass]
     public class SaveISOXMLTests
     {
-        [TestMethod]
-        public void canCreateISOXML()
+        private void addData(ISOXML isoxml, string taskName)
         {
-            string path = "./out/valid/";
-            string taskName = "Hello";
-            var isoxml = new ISOXML(path);
-            var idTable = isoxml.idTable;
+            var idTable = isoxml.IdTable;
             Task task = new Task()
             {
                 TaskDesignator = taskName,
                 TaskStatus = TaskStatus.Completed
             };
-            task.TaskId = idTable.getNewId(task);
-            isoxml.data.Task.Add(task);
+            task.TaskId = idTable.AddObject(task);
+            isoxml.Data.Task.Add(task);
 
-            isoxml.save();
+        }
+
+
+        [TestMethod]
+        public void canExtendISOXML()
+        {
+            string path = "./testdata/Structure/Valid_To_Extend/";
+            string path_Out = "./out/Valid_Extended";
+            var isoxml = ISOXML.Load(path);
+            isoxml.SetFolderPath( path_Out);
+            string taskName = "Hello";
+            addData(isoxml, taskName); 
+
+
+            isoxml.Save();
+
+            string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
+            Assert.IsTrue(File.Exists(tdPath));
+            string allText = File.ReadAllText(tdPath);
+            Assert.IsTrue(allText.Contains(taskName));
+
+            var loaded = ISOXML.Load(path_Out);
+            Assert.AreEqual(2,loaded.Data.Task.Count);
+            Assert.AreEqual("TSK2", loaded.Data.Task[1].TaskId);
+
+        }
+
+        [TestMethod]
+        public async void canExtendISOXMLAsync()
+        {
+            string path = "./testdata/Structure/Valid_To_Extend/";
+            string path_Out = "./out/Valid_Extended_Async";
+            var waiter = ISOXML.LoadAsync(path);
+            waiter.Wait();
+            var isoxml = waiter.Result;
+            isoxml.SetFolderPath( path_Out);
+            string taskName = "Hello";
+            addData(isoxml, taskName);
+
+
+            await isoxml.SaveAsync();
+
+            string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
+            Assert.IsTrue(File.Exists(tdPath));
+            string allText = File.ReadAllText(tdPath);
+            Assert.IsTrue(allText.Contains(taskName));
+
+            var loaded = ISOXML.Load(path_Out);
+            Assert.AreEqual(2, loaded.Data.Task.Count);
+            Assert.AreEqual("TSK2", loaded.Data.Task[1].TaskId);
+
+        }
+
+
+
+        [TestMethod]
+        public void canCreateISOXML()
+        {
+            string path = "./out/valid_new/";
+            string taskName = "New";
+            var isoxml = new ISOXML(path);
+            var idTable = isoxml.IdTable;
+            Task task = new Task()
+            {
+                TaskDesignator = taskName,
+                TaskStatus = TaskStatus.Completed
+            };
+            task.TaskId = idTable.AddObject(task);
+            isoxml.Data.Task.Add(task);
+            isoxml.Save();
 
             string tdPath = Path.Combine(path, "TASKDATA.XML");
             Assert.IsTrue(File.Exists(tdPath));
@@ -33,9 +98,11 @@ namespace Dev4ag
             Assert.IsTrue(allText.Contains(taskName));
 
             var loaded = ISOXML.Load(path);
-            Assert.AreEqual(1,loaded.data.Task.Count);
-            Assert.AreEqual("TSK1", loaded.data.Task[0].TaskId);
+            Assert.AreEqual(1, loaded.Data.Task.Count);
+            Assert.AreEqual("TSK1", loaded.Data.Task[0].TaskId);
 
         }
+
+
     }
 }
