@@ -1,11 +1,11 @@
-﻿using Dev4ag.ISO11783.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using static Dev4ag.TaskData;
+using static Dev4Agriculture.ISO11783.ISOXML.TaskData;
 
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class IsoGrid
     {

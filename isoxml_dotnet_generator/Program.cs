@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using XmlSchemaClassGenerator;
 
-namespace isoxml_dotnet_generator
+namespace Dev4Agriculture.ISO11783.ISOXML 
 {
 
 
     class Program
     {
         static string outFolder = "./out/";
-        static string destinationFolder = "../../../../isoxml_dotnet_core/src/xml/";
+        static string destinationFolder = "../../../../isoxml_dotnet_core/src/_generated/";
 
         static private void processNamespace(List<string> files, string targetNamespace) {
             var namespaceProvider = new NamespaceProvider {
@@ -44,18 +44,24 @@ namespace isoxml_dotnet_generator
             processNamespace(new List<string>() {
                 folder + "ISO11783_TaskFile_V4-3.xsd",
                 folder + "ISO11783_ExternalFile_V4-3.xsd",
-            }, "Dev4ag.ISO11783.TaskFile");
+            }, "Dev4Agriculture.ISO11783.ISOXML.TaskFile");
 
             processNamespace(new List<string>() {
                 folder + "ISO11783_LinkListFile_V4-3.xsd",
-            }, "Dev4ag.ISO11783.LinkListFile");
+            }, "Dev4Agriculture.ISO11783.ISOXML.LinkListFile");
 
             processNamespace(new List<string>() {
                 folder + "ISO11783_TimeLog_V4-3.xsd",
-            }, "Dev4ag.ISO11783.TimeLog");
+            }, "Dev4Agriculture.ISO11783.ISOXML.TimeLog");
 
             //Copy updated classes to main project
             string[] files = Directory.GetFiles(outFolder,"*.cs");
+            if(Directory.Exists(destinationFolder))
+            {
+                Directory.Delete(destinationFolder, true);
+            }
+            Directory.CreateDirectory(destinationFolder);
+
             foreach(string file in files)
             {
                 File.Copy(file, destinationFolder + Path.GetFileName(file));

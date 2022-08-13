@@ -1,4 +1,5 @@
-namespace Dev4ag {
+namespace Dev4Agriculture.ISO11783.ISOXML
+{
     public enum ResultMessageType
     {
         Error,

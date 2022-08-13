@@ -2,7 +2,7 @@
 using System.CodeDom;
 using XmlSchemaClassGenerator;
 
-namespace isoxml_dotnet_generator
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
     internal class ISOXMLMemberVisitor 
     {

@@ -1,5 +1,5 @@
-﻿using Dev4ag;
-using Dev4ag.ISO11783.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

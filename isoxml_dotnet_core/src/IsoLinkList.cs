@@ -1,10 +1,10 @@
-﻿using Dev4ag.ISO11783.LinkListFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
 
 

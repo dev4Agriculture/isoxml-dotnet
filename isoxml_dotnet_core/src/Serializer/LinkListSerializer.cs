@@ -1,5 +1,5 @@
-using Dev4ag.ISO11783.LinkListFile;
-using Dev4ag.ISO11783.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,8 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Dev4ag {
+namespace Dev4Agriculture.ISO11783.ISOXML
+{
     public class LinkListSerializer {
 
         private delegate object ValueConvertor(string value);
