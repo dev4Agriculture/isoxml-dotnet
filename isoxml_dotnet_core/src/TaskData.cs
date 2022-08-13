@@ -39,15 +39,15 @@ namespace Dev4ag {
                     }
                     catch (FileNotFoundException ex)
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing: " + element.Attributes["A"].Value));
+                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing: " + element.Attributes["A"].Value + ", message: " + ex.Message));
                     }
                     catch (IOException ex)
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing or inaccessible: " + element.Attributes["A"].Value));
+                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing or inaccessible: " + element.Attributes["A"].Value + ", message: " + ex.Message));
                     }
                     catch (Exception ex) 
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file invalid: " + element.Attributes["A"].Value));
+                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file invalid: " + element.Attributes["A"].Value + ", message: " + ex.Message));
                     }
                 }
                 taskData = (ISO11783TaskDataFile)isoxmlSerializer.Deserialize(xmlDoc);
