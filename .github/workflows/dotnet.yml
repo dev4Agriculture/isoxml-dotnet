@@ -37,7 +37,7 @@ jobs:
       uses: actions/setup-dotnet@v2
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build Linux
+    - name: Build Windows
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
@@ -54,7 +54,7 @@ jobs:
       uses: actions/setup-dotnet@v2
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build Linux
+    - name: Build Mac
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
