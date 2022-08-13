@@ -250,9 +250,17 @@ namespace Dev4ag
             return Ids[id];
         }
 
-
+        /// <summary>
+        /// This function iterates through the ID List and replaces all Elements without a proper ID with one
+        /// that has a new, unique and valid Id assigned to itself; linked by this new Id as a key
+        /// </summary>
+        /// <returns>A list of Messages for each element that needed a new ID assigned</returns>
         public List<ResultMessage> CleanListFromTempEntries()
         {
+            var tempItems = new Dictionary<int, object>();
+
+
+            //First find all elements that currently are TEMP and generate an object with a proper id
             var result = new List<ResultMessage>();
             foreach( var entry in Ids)
             {
@@ -260,10 +268,23 @@ namespace Dev4ag
                 {
                     var id = BuildID(Name, NextId);
                     SetId(entry.Value, id );
+                    tempItems.Add(NextId, entry.Value);
                     result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
                 }
             }
 
+
+            //Now delete the Temp Elements
+            for(var entry = nextTmpBase; entry < NextTmpId; entry++)
+            {
+                Ids.Remove(entry);
+            }
+
+            //And add the new Elements
+            foreach (var entry in tempItems)
+            {
+                Ids.Add(entry.Key, entry.Value);
+            }
             return result;
 
         }
