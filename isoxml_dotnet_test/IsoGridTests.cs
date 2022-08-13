@@ -17,7 +17,7 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type1";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.data);
+            Assert.IsNotNull(result.Data);
             Assert.AreEqual(1,result.grids.Count);
         }
 
@@ -27,7 +27,7 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type2";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.data);
+            Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.grids.Count);
 
         }
@@ -38,8 +38,8 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type1_Invalid";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.data);
-            Assert.AreEqual(1, result.messages.Count);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(1, result.Messages.Count);
 
         }
 
@@ -49,8 +49,8 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type2_Invalid";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.data);
-            Assert.AreEqual(1, result.messages.Count);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(1, result.Messages.Count);
 
         }
 
@@ -60,13 +60,13 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type2";
             string outPath = "./out/grid_type2";
             var result = ISOXML.Load(path);
-            var taskData = result.data;
+            var taskData = result.Data;
             var task = taskData.Task[0];
             IsoGrid grid = null;
             string gridFileName = task.Grid[0].Filename;
             var success = result.grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
-            result.folderPath = outPath;
+            result.SetFolderPath(outPath);
             for(uint l = 0; l< grid.layers; l++)
             {
                 for(uint y=0; y< grid.height; y++)
@@ -77,7 +77,7 @@ namespace Dev4ag
                     }
                 }
             }
-            result.save();
+            result.Save();
 
             Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName+".BIN")));
             byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
@@ -91,13 +91,13 @@ namespace Dev4ag
             string path = "./testdata/Grid/Type1";
             string outPath = "./out/grid_type1";
             var result = ISOXML.Load(path);
-            var taskData = result.data;
+            var taskData = result.Data;
             var task = taskData.Task[0];
             IsoGrid grid = null;
             string gridFileName = task.Grid[0].Filename;
             var success = result.grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
-            result.folderPath = outPath;
+            result.SetFolderPath(outPath);
             for (uint y = 0; y < grid.height; y++)
             {
                 for (uint x = 0; x < grid.width; x++)
@@ -105,7 +105,7 @@ namespace Dev4ag
                     grid.setValue(y, x, y);
                 }
             }
-            result.save();
+            result.Save();
 
             Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
             byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));

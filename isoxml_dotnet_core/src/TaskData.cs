@@ -36,9 +36,18 @@ namespace Dev4ag {
                         XmlDocument externalDoc = new XmlDocument();
                         externalDoc.LoadXml(extContent);
                         MergeExternalContent(xmlDoc, externalDoc);
-                    } catch (Exception ex)
+                    }
+                    catch (FileNotFoundException ex)
                     {
                         messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing: " + element.Attributes["A"].Value));
+                    }
+                    catch (IOException ex)
+                    {
+                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing or inaccessible: " + element.Attributes["A"].Value));
+                    }
+                    catch (Exception ex) 
+                    {
+                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file invalid: " + element.Attributes["A"].Value));
                     }
                 }
                 taskData = (ISO11783TaskDataFile)isoxmlSerializer.Deserialize(xmlDoc);

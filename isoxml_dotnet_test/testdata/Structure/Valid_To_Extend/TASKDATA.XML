@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="3" TaskControllerManufacturer="" TaskControllerVersion="" ManagementSoftwareManufacturer="FarmSystem" ManagementSoftwareVersion="1.0" DataTransferOrigin="1">
+    <PDT A="PDT1" B="agent 1"/>
+    <CTP A="CTP1" B="wheat"/>
+    <CTR A="CTR1" B="Doe" C="John" D="Main Road 3" F="12345" G="Bielefeld" I="Germany" J="01189998819991197253"/>
+    <PFD A="PFD1" B="2" C="Near the farm" D="46516" G="CTP1">
+        <PLN A="1">
+            <LSG A="1">
+                <PNT A="2" C="42.44276046" D="9.76844219"/>
+                <PNT A="2" C="42.44425201" D="9.7710571"/>
+                <PNT A="2" C="42.44459533" D="9.76789372"/>
+                <PNT A="2" C="42.44283294" D="9.76816322"/>
+            </LSG>
+        </PLN>
+    </PFD>
+
+    <TSK A="TSK1" B="Seeding Task 1" C="CTR1" E="PFD1" G="1">
+        <PAN A="PDT1">
+            <ASP A="2022-08-11T20:30:30" C="3600" D="1"/>
+        </PAN>
+    </TSK>
+</ISO11783_TaskData>
