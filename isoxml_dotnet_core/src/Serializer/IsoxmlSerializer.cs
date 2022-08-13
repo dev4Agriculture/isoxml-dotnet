@@ -16,6 +16,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     public class IsoxmlSerializer {
 
         private delegate object ValueConvertor(string value);
+
+
         static private Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
             {"String", value => value},
             {"UInt16", value => Convert.ToUInt16(value)},
@@ -84,7 +86,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes() {
             return _isoxmlAssembly.GetTypes()
-                .Where(type => type.Namespace == "Dev4ag.ISO11783.TaskFile")
+                .Where(type => type.Namespace == Constants.ISOXMLClassName + ".TaskFile")
                 .SelectMany(type => type.GetProperties()
                     .Where(property => property.CustomAttributes.FirstOrDefault(
                         attr => attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute"

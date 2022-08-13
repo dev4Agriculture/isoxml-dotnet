@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using XmlSchemaClassGenerator;
 
+
 namespace Dev4Agriculture.ISO11783.ISOXML 
 {
 
 
     class Program
     {
-        static string outFolder = "./out/";
-        static string destinationFolder = "../../../../isoxml_dotnet_core/src/_generated/";
+        //TODO It's more save to move this Element to a common class. It's found in Generator and DotnetCore Library
+        private static string ISOXMLClassName = "Dev4Agriculture.ISO11783.ISOXML";
+        private static string outFolder = "./out/";
+        private static string destinationFolder = "../../../../isoxml_dotnet_core/src/_generated/";
 
         static private void processNamespace(List<string> files, string targetNamespace) {
             var namespaceProvider = new NamespaceProvider {
@@ -44,15 +47,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             processNamespace(new List<string>() {
                 folder + "ISO11783_TaskFile_V4-3.xsd",
                 folder + "ISO11783_ExternalFile_V4-3.xsd",
-            }, "Dev4Agriculture.ISO11783.ISOXML.TaskFile");
+            }, ISOXMLClassName + ".TaskFile");
 
             processNamespace(new List<string>() {
                 folder + "ISO11783_LinkListFile_V4-3.xsd",
-            }, "Dev4Agriculture.ISO11783.ISOXML.LinkListFile");
+            }, ISOXMLClassName + ".LinkListFile");
 
             processNamespace(new List<string>() {
                 folder + "ISO11783_TimeLog_V4-3.xsd",
-            }, "Dev4Agriculture.ISO11783.ISOXML.TimeLog");
+            }, ISOXMLClassName + ".TimeLog");
 
             //Copy updated classes to main project
             string[] files = Directory.GetFiles(outFolder,"*.cs");

@@ -80,7 +80,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes() {
             return _linkListAssembly.GetTypes()
-                .Where(type => type.Namespace == "Dev4ag.ISO11783.LinkList")
+                .Where(type => type.Namespace == Constants.ISOXMLClassName+".LinkList")
                 .SelectMany(type => type.GetProperties()
                     .Where(property => property.CustomAttributes.FirstOrDefault(
                         attr => attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute"
