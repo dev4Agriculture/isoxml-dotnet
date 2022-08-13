@@ -17,7 +17,7 @@ namespace Dev4ag
         public ISO11783TaskDataFile Data { get; private set; }
         public string FolderPath { get; private set; }
         public List<ResultMessage> Messages { get; private set; }
-        public IDTable IdTable { get; private set; }
+        public IdTable IdTable { get; private set; }
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool binaryLoaded;
@@ -37,7 +37,7 @@ namespace Dev4ag
             grids = new Dictionary<string, IsoGrid>();
             FolderPath = path;
             Messages = new List<ResultMessage>(); 
-            IdTable = new IDTable();
+            IdTable = new IdTable();
             LinkList = null;
             HasLinkList = false;
         }
