@@ -49,7 +49,7 @@ namespace Dev4ag
         }
 
         [TestMethod]
-        public async void canExtendISOXMLAsync()
+        public void canExtendISOXMLAsync()
         {
             string path = "./testdata/Structure/Valid_To_Extend/";
             string path_Out = "./out/Valid_Extended_Async";
@@ -61,7 +61,8 @@ namespace Dev4ag
             addData(isoxml, taskName);
 
 
-            await isoxml.SaveAsync();
+            var saver =  isoxml.SaveAsync();
+            saver.Wait();
 
             string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
             Assert.IsTrue(File.Exists(tdPath));
