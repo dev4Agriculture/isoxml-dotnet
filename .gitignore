@@ -3,17 +3,16 @@
 ################################################################################
 
 /.vs
-/isoxml_dotnet/bin/Debug
-/isoxml_dotnet/obj/Debug
-/isoxml_dotnet_test/bin/Debug/netcoreapp3.1
+/isoxml_dotnet/bin
+/isoxml_dotnet/obj
+/isoxml_dotnet_test/bin
 /isoxml_dotnet_test/obj
 /obj/Debug
-/isoxml_dotnet_core/bin/Debug/netstandard2.0
+/isoxml_dotnet_core/bin
 /isoxml_dotnet_core/obj
-/isoxml_dotnet_generator/bin/Debug/netcoreapp3.1
+/isoxml_dotnet_generator/bin
 /isoxml_dotnet_generator/obj
 
 /isoxml_dotnet_generator/out
 
 /.vscode
-/isoxml_dotnet_test/bin/Debug/net6.0

@@ -1,8 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>isoxml_dotnet_core</RootNamespace>
+    <Company>dev4Agriculture</Company>
+    <Authors>Frank Wiebeler, Alexander Parshin</Authors>
+    <Description>This library provides access to agricultural data in ISO11783-10 TaskController compatible ISOXML Files</Description>
+    <Copyright>Copyright 2022 by dev4Agriculture</Copyright>
+    <PackageProjectUrl>https://github.com/dev4Agriculture/isoxml-dotnet</PackageProjectUrl>
+    <PackageIcon>logo_dev4Agriculture.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,5 +17,17 @@
 
   <ItemGroup>
     <Folder Include="resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../assets/logo_dev4Agriculture.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="../README.md" />
+    <None Include="logo_dev4Agriculture.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>
