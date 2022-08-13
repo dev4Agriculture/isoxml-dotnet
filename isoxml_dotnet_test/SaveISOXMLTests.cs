@@ -1,11 +1,11 @@
-﻿using Dev4ag.ISO11783.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
     [TestClass]
     public class SaveISOXMLTests

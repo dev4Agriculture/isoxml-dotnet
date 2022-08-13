@@ -1,5 +1,4 @@
-using Dev4ag.ISO11783.LinkListFile;
-using Dev4ag.ISO11783.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,10 +11,13 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Dev4ag {
-    public class LinkListSerializer {
+namespace Dev4Agriculture.ISO11783.ISOXML
+{
+    public class IsoxmlSerializer {
 
         private delegate object ValueConvertor(string value);
+
+
         static private Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
             {"String", value => value},
             {"UInt16", value => Convert.ToUInt16(value)},
@@ -41,16 +43,21 @@ namespace Dev4ag {
                 } catch (Exception) {
                     throw new Exception($"Can not parse value '{value}'");
                 }
-            }}
+            }},
+            {"DateTime", value =>
+            {
+                var date = DateTime.Parse(value);
+                return date;
+            } }
         };
 
-        private Assembly _linkListAssembly;
+        private Assembly _isoxmlAssembly;
 
         public List<ResultMessage> messages = new List<ResultMessage>();
 
-        public LinkListSerializer() {
+        public IsoxmlSerializer() {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            this._linkListAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
+            this._isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
             
         }
         public object Deserialize(XmlDocument xml) {
@@ -69,17 +76,17 @@ namespace Dev4ag {
         }
 
 
-        public void Serialize(ISO11783LinkListFile taskData, string path)
+        public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(ISO11783LinkListFile));
+            XmlSerializer ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
             TextWriter writer = new StreamWriter(path); 
             ser.Serialize(writer,taskData);
             writer.Close();
         }
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes() {
-            return _linkListAssembly.GetTypes()
-                .Where(type => type.Namespace == "Dev4ag.ISO11783.LinkList")
+            return _isoxmlAssembly.GetTypes()
+                .Where(type => type.Namespace == Constants.ISOXMLClassName + ".TaskFile")
                 .SelectMany(type => type.GetProperties()
                     .Where(property => property.CustomAttributes.FirstOrDefault(
                         attr => attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute"
@@ -92,7 +99,7 @@ namespace Dev4ag {
         }
 
         private System.Type findType(string name) {
-            foreach (var type in _linkListAssembly.GetTypes()) {
+            foreach (var type in _isoxmlAssembly.GetTypes()) {
                 foreach (var attr in type.CustomAttributes) {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlTypeAttribute" &&
                         (string)attr.ConstructorArguments[0].Value == name
@@ -164,7 +171,7 @@ namespace Dev4ag {
             messages.Add(new ResultMessage(type, message));
         }
 
-        private void validateProperty(PropertyInfo property, object value, string attrValue, string linkListNodeId) {
+        private void validateProperty(PropertyInfo property, object value, string attrValue, string isoxmlNodeId) {
             var rangeAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RangeAttribute>();
             var maxLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>();
             var minLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MinLengthAttribute>();
@@ -173,40 +180,40 @@ namespace Dev4ag {
             {
                 addMessage(
                     ResultMessageType.Warning,
-                    $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {linkListNodeId}; value: {value})"
+                    $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {isoxmlNodeId}; value: {value})"
                 );
             }
 
             if (maxLengthAttr != null && !maxLengthAttr.IsValid(value)) {
                 addMessage(
                     ResultMessageType.Warning,
-                    $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
+                    $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
 
             if (minLengthAttr != null && !minLengthAttr.IsValid(value)) {
                 addMessage(
                     ResultMessageType.Warning,
-                    $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
+                    $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
 
             if (regexAttr != null && !regexAttr.IsValid(attrValue)) {
                 addMessage(
                     ResultMessageType.Warning,
-                    $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {linkListNodeId}; value: {attrValue})"
+                    $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {isoxmlNodeId}; value: {attrValue})"
                 );
             }
         }
 
-        private void checkRequiredProperties(System.Type type, object obj, string linkListNodeId) {
+        private void checkRequiredProperties(System.Type type, object obj, string isoxmlNodeId) {
             foreach (var property in type.GetProperties()) {
                 var required = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RequiredAttribute>() != null;
 
                 if (required && property.GetValue(obj) == null) {
                     addMessage(
                         ResultMessageType.Warning,
-                        $"Missing required property {property.Name} (path: {linkListNodeId})"
+                        $"Missing required property {property.Name} (path: {isoxmlNodeId})"
                     );
                 }
             }
@@ -220,13 +227,13 @@ namespace Dev4ag {
 
         private object ParseCDATA(XmlNode node)
         {
-            addMessage(ResultMessageType.Error, "LinkList includes CDATA-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "ISOXML includes CDATA-Element which is not allowed: " + node.OuterXml); 
             return null;
         }
 
         private object ParseEntity(XmlNode node)
         {
-            addMessage(ResultMessageType.Error, "LinkList includes Entity-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "ISOXML includes Entity-Element which is not allowed: " + node.OuterXml); 
             return null;
         }
 
@@ -239,19 +246,19 @@ namespace Dev4ag {
 
         private object ParseText(XmlNode node)
         {
-            addMessage(ResultMessageType.Error, "LinkList includes Text-Element which is not allowed: " + node.InnerText);
+            addMessage(ResultMessageType.Error, "ISOXML includes Text-Element which is not allowed: " + node.InnerText);
             return null;
         }
 
-        private object ParseElement(XmlNode node, string linkListNodeId = null)
+        private object ParseElement(XmlNode node, string isoxmlNodeId = null)
         {
             var type = findType(node.Name);
             if (type == null)
             {
-                var isRoot = String.IsNullOrEmpty(linkListNodeId);
+                var isRoot = String.IsNullOrEmpty(isoxmlNodeId);
                 addMessage(
                     isRoot ? ResultMessageType.Error : ResultMessageType.Warning,
-                    $"Unknown XML element {node.Name} (path: {linkListNodeId})"
+                    $"Unknown XML element {node.Name} (path: {isoxmlNodeId})"
                 );
                 return null;
             }
@@ -264,12 +271,10 @@ namespace Dev4ag {
                 {
                     //TODO there should be a more generic way for this.
                     //Ignore XSD Schemata information
-                    if (!attr.Name.Equals("xmlns:xsi") && !attr.Name.Equals("xmlns:xsd"))
-                    {
-
+                    if(!attr.Name.Equals("xmlns:xsi") && !attr.Name.Equals("xmlns:xsd")){
                         addMessage(
                             ResultMessageType.Warning,
-                            $"Unknown XML attribute {attr.Name} (path: {linkListNodeId})"
+                            $"Unknown XML attribute {attr.Name} (path: {isoxmlNodeId})"
                         );
                     }
                     continue;
@@ -283,7 +288,7 @@ namespace Dev4ag {
                     {
                         addMessage(
                             ResultMessageType.Warning,
-                            $"Unknown enum value {attr.Value} (path: {linkListNodeId}; property: {property.Name})"
+                            $"Unknown enum value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name})"
                         );
                         continue;
                     }
@@ -298,13 +303,13 @@ namespace Dev4ag {
                     {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
-                        validateProperty(property, convertedAttr, attr.Value, linkListNodeId);
+                        validateProperty(property, convertedAttr, attr.Value, isoxmlNodeId);
                     }
                     catch (Exception e)
                     {
                         addMessage(
                             ResultMessageType.Warning,
-                            $"Cannot parse value {attr.Value} (path: {linkListNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
+                            $"Cannot parse value {attr.Value} (path: {isoxmlNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
                         );
                     }
                 }
@@ -326,9 +331,9 @@ namespace Dev4ag {
                     count = 0;
                     childrenCount.Add(name, count + 1);
                 }
-                var childNodeLinkListId = $"{linkListNodeId}->{name}[{count}]";
+                var childNodeIsoxmlId = $"{isoxmlNodeId}->{name}[{count}]";
 
-                var parsedNode = ParseNode(childNode, childNodeLinkListId);
+                var parsedNode = ParseNode(childNode, childNodeIsoxmlId);
 
                 if (parsedNode != null)
                 {
@@ -337,7 +342,7 @@ namespace Dev4ag {
                     {
                         addMessage(
                             ResultMessageType.Warning,
-                            $"Elements of type {name} can't be children of element {node.Name} (path: {linkListNodeId})"
+                            $"Elements of type {name} can't be children of element {node.Name} (path: {isoxmlNodeId})"
                         );
                         continue;
                     }
@@ -346,16 +351,16 @@ namespace Dev4ag {
                 }
             }
 
-            checkRequiredProperties(type, obj, linkListNodeId);
+            checkRequiredProperties(type, obj, isoxmlNodeId);
 
             return obj;
         }
 
-        private object ParseNode(XmlNode node, string linkListNodeId = null) {
+        private object ParseNode(XmlNode node, string isoxmlNodeId = null) {
             switch (node.NodeType)
             {
                 case XmlNodeType.Element:
-                    return ParseElement(node, linkListNodeId);
+                    return ParseElement(node, isoxmlNodeId);
 
                 case XmlNodeType.XmlDeclaration:
                     return CheckXMLDeclaration(node);

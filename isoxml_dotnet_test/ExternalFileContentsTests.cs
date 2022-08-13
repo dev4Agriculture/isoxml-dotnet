@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dev4ag;
+using Dev4Agriculture.ISO11783.ISOXML;
 using System;
 
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
     [TestClass]
     public class ExternalFileContentsTests

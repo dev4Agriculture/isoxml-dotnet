@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using Dev4ag.ISO11783.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
-namespace Dev4ag {
+namespace Dev4Agriculture.ISO11783.ISOXML
+{
     internal class TaskData {
         private static IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
         internal static string fixTaskDataPath(string path)

@@ -1,10 +1,10 @@
-﻿using Dev4ag.ISO11783.LinkListFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
 
 
@@ -13,7 +13,7 @@ namespace Dev4ag
         private static LinkListSerializer linkListSerializer = new LinkListSerializer();
         
         private readonly ISO11783LinkListFile LinkListContent;
-        private IDList GroupIds;
+        private IdList GroupIds;
 
 
 
@@ -25,7 +25,7 @@ namespace Dev4ag
                 return;
             }
             this.LinkListContent = linkListContent;
-            this.GroupIds = new IDList("LGP");
+            this.GroupIds = new IdList("LGP");
         }
 
         internal IsoLinkList()
@@ -43,7 +43,7 @@ namespace Dev4ag
                 VersionMajor = ISO11783LinkListFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
                 VersionMinor = ISO11783LinkListFileVersionMinor.Item3
             };
-            this.GroupIds = new IDList("LGP");
+            this.GroupIds = new IdList("LGP");
         }
 
 

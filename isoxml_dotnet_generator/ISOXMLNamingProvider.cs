@@ -8,7 +8,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using XmlSchemaClassGenerator;
 
-namespace isoxml_dotnet_generator
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
 
 

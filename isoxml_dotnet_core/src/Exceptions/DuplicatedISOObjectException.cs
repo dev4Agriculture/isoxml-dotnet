@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Dev4ag.Exceptions
+namespace Dev4Agriculture.ISO11783.ISOXML.Exceptions
 {
     [Serializable]
     internal class DuplicatedISOObjectException : Exception

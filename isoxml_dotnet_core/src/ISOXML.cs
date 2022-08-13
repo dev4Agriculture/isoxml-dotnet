@@ -1,5 +1,5 @@
-﻿using Dev4ag.ISO11783.LinkListFile;
-using Dev4ag.ISO11783.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +9,7 @@ using System.Text;
 //Alias Definitions
 
 using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
-namespace Dev4ag
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
     {
@@ -17,7 +17,7 @@ namespace Dev4ag
         public ISO11783TaskDataFile Data { get; private set; }
         public string FolderPath { get; private set; }
         public List<ResultMessage> Messages { get; private set; }
-        public IDTable IdTable { get; private set; }
+        public IdTable IdTable { get; private set; }
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool binaryLoaded;
@@ -37,7 +37,7 @@ namespace Dev4ag
             grids = new Dictionary<string, IsoGrid>();
             FolderPath = path;
             Messages = new List<ResultMessage>(); 
-            IdTable = new IDTable();
+            IdTable = new IdTable();
             LinkList = null;
             HasLinkList = false;
         }
