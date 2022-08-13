@@ -17,7 +17,7 @@ namespace Dev4ag
 
 
 
-        internal IsoLinkList(ISO11783LinkListFile linkListContent)
+        private IsoLinkList(ISO11783LinkListFile linkListContent)
         {
             if( linkListContent == null)
             {
@@ -26,10 +26,6 @@ namespace Dev4ag
             }
             this.LinkListContent = linkListContent;
             this.GroupIds = new IDList("LGP");
-            foreach(var group in linkListContent.LinkGroup)
-            {
-                this.GroupIds.AddObject(group);
-            }
         }
 
         internal IsoLinkList()
@@ -123,7 +119,7 @@ namespace Dev4ag
                 ObjectIdRef = idRef,
                 LinkValue = linkValue,
             });
-            groupToAdd.LinkGroupId = GroupIds.AddObject(groupToAdd);
+            groupToAdd.LinkGroupId = GroupIds.AddObjectAndAssignIdIfNone(groupToAdd);
             LinkListContent.LinkGroup.Add(groupToAdd);
         }
 
@@ -165,7 +161,7 @@ namespace Dev4ag
                 ObjectIdRef = idRef,
                 LinkValue = linkValue,
             });
-            groupToAdd.LinkGroupId =  GroupIds.AddObject(groupToAdd);
+            groupToAdd.LinkGroupId =  GroupIds.AddObjectAndAssignIdIfNone(groupToAdd);
             LinkListContent.LinkGroup.Add(groupToAdd);
 
         }
@@ -216,7 +212,11 @@ namespace Dev4ag
             }
 
             var linkList = new IsoLinkList(linkListContent);
-
+            foreach (var group in linkListContent.LinkGroup)
+            {
+                linkList.GroupIds.ReadObject(group);
+            }
+            messages.AddRange(linkList.GroupIds.CleanListFromTempEntries());
             return new ResultWithMessages<IsoLinkList>(linkList, messages);
         }
 
