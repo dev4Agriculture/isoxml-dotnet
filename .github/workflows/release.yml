@@ -22,6 +22,6 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
     - name: Push
-      run: dotnet nuget push NuGet.Workflow.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_NUGET_TOKEN}
+      run: dotnet nuget push NuGet.Workflow.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_TOKEN}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_NUGET_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.NUGET_TOKEN }}
