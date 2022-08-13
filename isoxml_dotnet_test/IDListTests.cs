@@ -16,7 +16,7 @@ namespace isoxml_dotnet_test
             Task task = new Task();
             task.TaskId = "TSK1";
             IDList idList = new IDList("TSK");
-            idList.AddObject(task);
+            idList.AddObjectAndAssignIdIfNone(task);
             Assert.AreEqual(idList.FindObject("TSK1"),task);
         }
 

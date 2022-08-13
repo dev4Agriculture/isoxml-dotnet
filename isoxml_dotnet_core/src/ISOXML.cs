@@ -118,59 +118,59 @@ namespace Dev4ag
         {
             foreach(var obj in Data.BaseStation)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CodedComment)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CodedCommentGroup)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CropType)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CulturalPractice)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Customer)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Device)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Farm)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.OperationTechnique)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Partfield)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Product)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Task)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.ValuePresentation)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Worker)
             {
-                this.IdTable.AddObject(obj);
+                this.IdTable.ReadObject(obj);
             }
         }
 

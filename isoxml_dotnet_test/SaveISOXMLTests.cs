@@ -18,7 +18,7 @@ namespace Dev4ag
                 TaskDesignator = taskName,
                 TaskStatus = TaskStatus.Completed
             };
-            task.TaskId = idTable.AddObject(task);
+            idTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);
 
         }
@@ -89,7 +89,7 @@ namespace Dev4ag
                 TaskDesignator = taskName,
                 TaskStatus = TaskStatus.Completed
             };
-            task.TaskId = idTable.AddObject(task);
+            idTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);
             isoxml.Save();
 

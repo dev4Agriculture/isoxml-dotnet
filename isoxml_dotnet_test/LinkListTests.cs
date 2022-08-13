@@ -34,8 +34,7 @@ namespace isoxml_dotnet_test.testdata
                 TaskDesignator = taskName,
                 TaskStatus = TaskStatus.Planned
             };
-            var id = isoxml.IdTable.AddObject(task);
-            task.TaskId = id;
+            var id = isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);
 
 
