@@ -6,7 +6,7 @@ An ISOXML Implementation in DotNet
 
 ###  ISOXML 
 
-This is the main Class. Create ISOXMLs from here with new ISOXML("C:/") or load existing ones ISOXML.Load("C:/Existing");
+This is the main Class. Create ISOXMLs from here with new ISOXML.Create("C:/") or load existing ones ISOXML.Load("C:/Existing");
 
 
 ### ISO11783_TaskDataFile
