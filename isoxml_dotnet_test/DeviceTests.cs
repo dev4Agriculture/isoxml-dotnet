@@ -1,6 +1,4 @@
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dev4Agriculture.ISO11783.ISOXML;
 using System;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
@@ -14,7 +12,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/devices/Device_description.xml";
             var result = ISOXML.Load(path);
 
-            result.Messages.ForEach(msg => {
+            result.Messages.ForEach(msg =>
+            {
                 Console.WriteLine(msg.title);
             });
             Assert.IsNotNull(result.Data);

@@ -11,7 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     public class IsoLinkList
     {
         private static LinkListSerializer linkListSerializer = new LinkListSerializer();
-        
+
         private readonly ISO11783LinkListFile LinkListContent;
         private IdList GroupIds;
 
@@ -19,7 +19,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private IsoLinkList(ISO11783LinkListFile linkListContent)
         {
-            if( linkListContent == null)
+            if (linkListContent == null)
             {
                 this.LinkListContent = new ISO11783LinkListFile();
                 return;
@@ -36,7 +36,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 //TODO: Thos data can currently nowhere outside the library be changed. Add functions for that
                 DataTransferOrigin = ISO11783LinkListFileDataTransferOrigin.FMIS,
                 ManagementSoftwareManufacturer = "unknown",
-                ManagementSoftwareVersion = "unknown", 
+                ManagementSoftwareVersion = "unknown",
                 TaskControllerVersion = "unknown",
                 TaskControllerManufacturer = "unknown",
                 FileVersion = "1",
@@ -49,9 +49,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public string GetID(string uuid)
         {
-            foreach(var group in this.LinkListContent.LinkGroup)
+            foreach (var group in this.LinkListContent.LinkGroup)
             {
-                foreach(var link in group.Link)
+                foreach (var link in group.Link)
                 {
                     if (link.LinkValue.Equals(uuid))
                     {
@@ -161,7 +161,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 ObjectIdRef = idRef,
                 LinkValue = linkValue,
             });
-            groupToAdd.LinkGroupId =  GroupIds.AddObjectAndAssignIdIfNone(groupToAdd);
+            groupToAdd.LinkGroupId = GroupIds.AddObjectAndAssignIdIfNone(groupToAdd);
             LinkListContent.LinkGroup.Add(groupToAdd);
 
         }

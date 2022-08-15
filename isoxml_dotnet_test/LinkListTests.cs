@@ -2,8 +2,6 @@
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace isoxml_dotnet_test.testdata
 {
@@ -28,7 +26,7 @@ namespace isoxml_dotnet_test.testdata
             var taskName = "LinkList";
             var uuid = Guid.NewGuid().ToString();
             var isoxml = ISOXML.Create(path);
-            
+
             var task = new ISOTask()
             {
                 TaskDesignator = taskName,

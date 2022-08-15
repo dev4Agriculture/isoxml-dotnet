@@ -1,10 +1,7 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
-using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 
 //Alias Definitions
 
@@ -13,7 +10,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
     {
-        public Dictionary<string,IsoGrid> Grids { get; private set; }
+        public Dictionary<string, ISOGridFile> Grids { get; private set; }
+        private uint _maxGridIndex = 0;
         public ISO11783TaskDataFile Data { get; private set; }
         public string FolderPath { get; private set; }
         public List<ResultMessage> Messages { get; private set; }
@@ -30,13 +28,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             Data = new ISO11783TaskDataFile();
             Data.ManagementSoftwareManufacturer = "unknown";
-            Data.ManagementSoftwareVersion = "unknown"; 
-            Data.TaskControllerManufacturer = "unknown";    
+            Data.ManagementSoftwareVersion = "unknown";
+            Data.TaskControllerManufacturer = "unknown";
             Data.TaskControllerVersion = "unknown";
             Data.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
-            Grids = new Dictionary<string, IsoGrid>();
+            Grids = new Dictionary<string, ISOGridFile>();
             FolderPath = path;
-            Messages = new List<ResultMessage>(); 
+            Messages = new List<ResultMessage>();
             IdTable = new IdTable();
             LinkList = null;
             HasLinkList = false;
@@ -47,7 +45,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void AddLinkList()
         {
-            if( HasLinkList == false)
+            if (HasLinkList == false)
             {
                 LinkList = new IsoLinkList();
                 Data.AttachedFile.Add(new ISOAttachedFile()
@@ -56,14 +54,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     FilenameWithExtension = "LINKLIST.XML",
                     ManufacturerGLN = ""
                 });
-                HasLinkList=true;
+                HasLinkList = true;
             }
         }
 
 
         public void SetFolderPath(string folderPath)
         {
-                FolderPath = folderPath;    
+            FolderPath = folderPath;
         }
 
         /// <summary>
@@ -80,12 +78,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Data = resultTaskData.result,
                 Messages = resultTaskData.messages
             };
-            
-            if( isoxml.Data.AttachedFile != null)
+
+            if (isoxml.Data.AttachedFile != null)
             {
-                foreach(var file in isoxml.Data.AttachedFile)
+                foreach (var file in isoxml.Data.AttachedFile)
                 {
-                    if( file.FileType == 1 /*LinkList*/)
+                    if (file.FileType == 1 /*LinkList*/)
                     {
                         //REMARK: The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
                         var resultLinkList = IsoLinkList.LoadLinkList(path);
@@ -109,6 +107,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return isoxml;
         }
 
+        public ISOGrid GenerateGrid(ISOGridType type, uint width, uint height, byte layers)
+        {
+            var grid = new ISOGrid()
+            {
+                GridMaximumColumn = width,
+                GridMaximumRow = height,
+                GridType = type
+
+            };
+            _maxGridIndex++;
+            grid.Filename = ISOGridFile.GenerateName(_maxGridIndex);
+            this.Grids.Add(grid.Filename, ISOGridFile.Create(grid, layers));
+
+            return grid;
+        }
+
+
+        public ISOGridFile GetGridFile(ISOGrid iSOGrid)
+        {
+            return this.Grids[iSOGrid.Filename];
+        }
+
+
         /// <summary>
         /// This generates a new, empty ISOXML TaskSet
         /// </summary>
@@ -119,14 +140,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return new ISOXML(outPath);
         }
 
+
+
+        /// <summary>
+        /// Loads the given FileSet asynchronously
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="loadBinData"></param>
+        /// <returns></returns>
         public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task<ISOXML>.Run(()=>Load(path, loadBinData));
+            return await AsyncTask.Task<ISOXML>.Run(() => Load(path, loadBinData));
         }
 
+        /// <summary>
+        /// Iterates through the given TASKDATA.XML and fills the IDList Tables
+        /// </summary>
         private void ReadIDTable()
         {
-            foreach(var obj in Data.BaseStation)
+            foreach (var obj in Data.BaseStation)
             {
                 this.IdTable.ReadObject(obj);
             }
@@ -184,9 +216,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// Reads the binary data if not yet done
+        /// </summary>
         public void LoadBinaryData()
         {
-            if( this.binaryLoaded == false)
+            if (this.binaryLoaded == false)
             {
                 LoadGrids();
                 this.binaryLoaded = true;
@@ -194,28 +230,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
 
         }
-        private int LoadGrids() {
-            if(Data == null)
+
+        public AsyncTask.Task LoadBinaryDataAsync()
+        {
+            var waiter = AsyncTask.Task.Run(() => this.LoadBinaryData());
+            return waiter;
+        }
+
+        private int LoadGrids()
+        {
+            if (Data == null)
             {
                 return 0;
             }
 
-            Grids = new Dictionary<string,IsoGrid>();
+            Grids = new Dictionary<string, ISOGridFile>();
             foreach (var task in Data.Task)
             {
-                if(task.Grid != null && task.Grid.Count > 0)
+                if (task.Grid != null && task.Grid.Count > 0)
                 {
                     var grid = task.Grid[0];
                     Byte layers = 0;
-                    foreach(var tzn in task.TreatmentZone)
+                    foreach (var tzn in task.TreatmentZone)
                     {
-                        if( grid.TreatmentZoneCode == tzn.TreatmentZoneCode)
+                        if (grid.TreatmentZoneCode == tzn.TreatmentZoneCode)
                         {
                             layers = (Byte)tzn.ProcessDataVariable.Count;
                             break;
                         }
                     }
-                    var result = IsoGrid.Load(this.FolderPath,grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow,grid.GridType,layers);
+                    uint index = uint.Parse(grid.Filename.Substring(3, 5));
+                    if (index > _maxGridIndex)
+                    {
+                        _maxGridIndex = index;
+                    }
+
+                    var result = ISOGridFile.Load(this.FolderPath, grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow, grid.GridType, layers);
                     Grids.Add(task.Grid[0].Filename, result.result);
                     Messages.AddRange(result.messages);
                 }
@@ -231,13 +281,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public void Save()
         {
             TaskData.SaveTaskData(this.Data, this.FolderPath);
-            if( this.HasLinkList == true)
+            if (this.HasLinkList == true)
             {
                 this.LinkList.SaveLinkList(this.FolderPath);
             }
-            foreach(var entry in this.Grids)
+            foreach (var entry in this.Grids)
             {
-                entry.Value.save(Path.Combine(this.FolderPath, entry.Key + ".BIN"));
+                entry.Value.Save(Path.Combine(this.FolderPath, entry.Key + ".BIN"));
             }
         }
 

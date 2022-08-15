@@ -1,9 +1,7 @@
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
-using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -14,7 +12,8 @@ using System.Xml.Serialization;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
-    public class LinkListSerializer {
+    public class LinkListSerializer
+    {
 
         private delegate object ValueConvertor(string value);
         static private Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
@@ -49,18 +48,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public List<ResultMessage> messages = new List<ResultMessage>();
 
-        public LinkListSerializer() {
+        public LinkListSerializer()
+        {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             this._linkListAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
-            
+
         }
-        public object Deserialize(XmlDocument xml) {
+        public object Deserialize(XmlDocument xml)
+        {
             messages.Clear();
             var keepCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             object result = null;
             int index = -1;
-            while (result == null && index< xml.ChildNodes.Count)
+            while (result == null && index < xml.ChildNodes.Count)
             {
                 index++;
                 result = ParseNode(xml.ChildNodes[index], $"{xml.ChildNodes[index].Name}[0]");
@@ -73,31 +74,37 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public void Serialize(ISO11783LinkListFile taskData, string path)
         {
             XmlSerializer ser = new XmlSerializer(typeof(ISO11783LinkListFile));
-            TextWriter writer = new StreamWriter(path); 
-            ser.Serialize(writer,taskData);
+            TextWriter writer = new StreamWriter(path);
+            ser.Serialize(writer, taskData);
             writer.Close();
         }
         // mainly for debugging
-        public HashSet<string> GetAllAttrTypes() {
+        public HashSet<string> GetAllAttrTypes()
+        {
             return _linkListAssembly.GetTypes()
-                .Where(type => type.Namespace == Constants.ISOXMLClassName+".LinkList")
+                .Where(type => type.Namespace == Constants.ISOXMLClassName + ".LinkList")
                 .SelectMany(type => type.GetProperties()
                     .Where(property => property.CustomAttributes.FirstOrDefault(
                         attr => attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute"
                     ) != null && !property.PropertyType.IsEnum)
                     .Select(property => property.PropertyType.Name)
-                ).Aggregate(new HashSet<string>(), (res, typeName) => {
+                ).Aggregate(new HashSet<string>(), (res, typeName) =>
+                {
                     res.Add(typeName);
                     return res;
                 });
         }
 
-        private System.Type findType(string name) {
-            foreach (var type in _linkListAssembly.GetTypes()) {
-                foreach (var attr in type.CustomAttributes) {
+        private System.Type findType(string name)
+        {
+            foreach (var type in _linkListAssembly.GetTypes())
+            {
+                foreach (var attr in type.CustomAttributes)
+                {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlTypeAttribute" &&
                         (string)attr.ConstructorArguments[0].Value == name
-                    ) {
+                    )
+                    {
                         return type;
                     }
                 }
@@ -105,12 +112,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return null;
         }
 
-        private PropertyInfo getPropertyByAttrName(System.Type type, string xmlAttrName) {
-            foreach (var property in type.GetProperties()) {
-                foreach (var attr in property.CustomAttributes) {
+        private PropertyInfo getPropertyByAttrName(System.Type type, string xmlAttrName)
+        {
+            foreach (var property in type.GetProperties())
+            {
+                foreach (var attr in property.CustomAttributes)
+                {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlAttributeAttribute" &&
                         (string)attr.ConstructorArguments[0].Value == xmlAttrName
-                    ) {
+                    )
+                    {
                         return property;
                     }
                 }
@@ -118,12 +129,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return null;
         }
 
-        private PropertyInfo getPropertyByElementName(System.Type type, string xmlElementName) {
-            foreach (var property in type.GetProperties()) {
-                foreach (var attr in property.CustomAttributes) {
+        private PropertyInfo getPropertyByElementName(System.Type type, string xmlElementName)
+        {
+            foreach (var property in type.GetProperties())
+            {
+                foreach (var attr in property.CustomAttributes)
+                {
                     if (attr.AttributeType.FullName == "System.Xml.Serialization.XmlElementAttribute" &&
                         (string)attr.ConstructorArguments[0].Value == xmlElementName
-                    ) {
+                    )
+                    {
                         return property;
                     }
                 }
@@ -131,16 +146,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return null;
         }
 
-        private string getEnumValue(System.Type enumType, string xmlValue) {
+        private string getEnumValue(System.Type enumType, string xmlValue)
+        {
             var enumValueMembers = enumType.GetMembers(
                 BindingFlags.Public | BindingFlags.Static
             );
 
-            foreach (var value in enumValueMembers) {
-                foreach (var enumValueAttr in value.CustomAttributes) {
+            foreach (var value in enumValueMembers)
+            {
+                foreach (var enumValueAttr in value.CustomAttributes)
+                {
                     if (enumValueAttr.AttributeType.FullName == "System.Xml.Serialization.XmlEnumAttribute" &&
                         (string)enumValueAttr.ConstructorArguments[0].Value == xmlValue
-                    ) {
+                    )
+                    {
                         return value.Name;
                     }
                 }
@@ -150,9 +169,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         // if the property is a collection, we add the value to it, otherwise, we just set the value
-        private void setValue(System.Type type, PropertyInfo property, object obj, object value) {
-            foreach (var implInterface in property.PropertyType.GetInterfaces()) {
-                if (implInterface.Name == "IList") {
+        private void setValue(System.Type type, PropertyInfo property, object obj, object value)
+        {
+            foreach (var implInterface in property.PropertyType.GetInterfaces())
+            {
+                if (implInterface.Name == "IList")
+                {
                     IList list = (IList)property.GetValue(obj);
                     list.Add(value);
                     return;
@@ -161,11 +183,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             property.SetValue(obj, value);
         }
 
-        private void addMessage(ResultMessageType type, string message) {
+        private void addMessage(ResultMessageType type, string message)
+        {
             messages.Add(new ResultMessage(type, message));
         }
 
-        private void validateProperty(PropertyInfo property, object value, string attrValue, string linkListNodeId) {
+        private void validateProperty(PropertyInfo property, object value, string attrValue, string linkListNodeId)
+        {
             var rangeAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RangeAttribute>();
             var maxLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>();
             var minLengthAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.MinLengthAttribute>();
@@ -178,21 +202,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 );
             }
 
-            if (maxLengthAttr != null && !maxLengthAttr.IsValid(value)) {
+            if (maxLengthAttr != null && !maxLengthAttr.IsValid(value))
+            {
                 addMessage(
                     ResultMessageType.Warning,
                     $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
                 );
             }
 
-            if (minLengthAttr != null && !minLengthAttr.IsValid(value)) {
+            if (minLengthAttr != null && !minLengthAttr.IsValid(value))
+            {
                 addMessage(
                     ResultMessageType.Warning,
                     $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
                 );
             }
 
-            if (regexAttr != null && !regexAttr.IsValid(attrValue)) {
+            if (regexAttr != null && !regexAttr.IsValid(attrValue))
+            {
                 addMessage(
                     ResultMessageType.Warning,
                     $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {linkListNodeId}; value: {attrValue})"
@@ -200,11 +227,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-        private void checkRequiredProperties(System.Type type, object obj, string linkListNodeId) {
-            foreach (var property in type.GetProperties()) {
+        private void checkRequiredProperties(System.Type type, object obj, string linkListNodeId)
+        {
+            foreach (var property in type.GetProperties())
+            {
                 var required = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RequiredAttribute>() != null;
 
-                if (required && property.GetValue(obj) == null) {
+                if (required && property.GetValue(obj) == null)
+                {
                     addMessage(
                         ResultMessageType.Warning,
                         $"Missing required property {property.Name} (path: {linkListNodeId})"
@@ -221,13 +251,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private object ParseCDATA(XmlNode node)
         {
-            addMessage(ResultMessageType.Error, "LinkList includes CDATA-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "LinkList includes CDATA-Element which is not allowed: " + node.OuterXml);
             return null;
         }
 
         private object ParseEntity(XmlNode node)
         {
-            addMessage(ResultMessageType.Error, "LinkList includes Entity-Element which is not allowed: " + node.OuterXml); 
+            addMessage(ResultMessageType.Error, "LinkList includes Entity-Element which is not allowed: " + node.OuterXml);
             return null;
         }
 
@@ -352,7 +382,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return obj;
         }
 
-        private object ParseNode(XmlNode node, string linkListNodeId = null) {
+        private object ParseNode(XmlNode node, string linkListNodeId = null)
+        {
             switch (node.NodeType)
             {
                 case XmlNodeType.Element:
@@ -392,8 +423,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             }
 
-           
-            
+
+
         }
 
 

@@ -1,14 +1,13 @@
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Xml;
-using System.Xml.Serialization;
-using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
-    internal class TaskData {
+    internal class TaskData
+    {
         private static IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
         internal static string fixTaskDataPath(string path)
         {
@@ -19,16 +18,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return path;
         }
 
-        
-        public static ResultWithMessages<ISO11783TaskDataFile> ParseTaskData(string isoxmlString, string path) {
+
+        public static ResultWithMessages<ISO11783TaskDataFile> ParseTaskData(string isoxmlString, string path)
+        {
             ISO11783TaskDataFile taskData = null;
             var messages = new List<ResultMessage>();
-            try {
+            try
+            {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
                 //Check for XFR External FileReferences here as we need to merge everything before Deserialization
                 XmlNodeList externals = xmlDoc.GetElementsByTagName("XFR");
-                foreach ( XmlNode element in externals)
+                foreach (XmlNode element in externals)
                 {
                     try
                     {
@@ -46,7 +47,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing or inaccessible: " + element.Attributes["A"].Value + ", message: " + ex.Message));
                     }
-                    catch (Exception ex) 
+                    catch (Exception ex)
                     {
                         messages.Add(new ResultMessage(ResultMessageType.Error, "External file invalid: " + element.Attributes["A"].Value + ", message: " + ex.Message));
                     }
@@ -54,7 +55,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 taskData = (ISO11783TaskDataFile)isoxmlSerializer.Deserialize(xmlDoc);
 
                 messages.AddRange(isoxmlSerializer.messages);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 messages.Add(new ResultMessage(ResultMessageType.Error, ex.Message));
             }
             return new ResultWithMessages<ISO11783TaskDataFile>(taskData, messages);
@@ -62,12 +65,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private static XmlDocument MergeExternalContent(XmlDocument taskData, XmlDocument externalFile)
         {
-            if (externalFile != null && taskData!=null)
+            if (externalFile != null && taskData != null)
             {
                 var rootNode = externalFile.FirstChild;
                 foreach (XmlNode entry in rootNode.ChildNodes)
                 {
-                    var imported = taskData.ImportNode(entry,true);
+                    var imported = taskData.ImportNode(entry, true);
                     taskData.GetElementsByTagName("ISO11783_TaskData").Item(0).AppendChild(imported);
                 }
             }
@@ -79,12 +82,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var messages = new List<ResultMessage>();
             path = fixTaskDataPath(path);
-            if(File.Exists(path) == false)
+            if (File.Exists(path) == false)
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, "TASKDATA.XML not found!"));
             }
             string text = File.ReadAllText(path.ToString());
-            var result = ParseTaskData(text,path);
+            var result = ParseTaskData(text, path);
             return result;
         }
 

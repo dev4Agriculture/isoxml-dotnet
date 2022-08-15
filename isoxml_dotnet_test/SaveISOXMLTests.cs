@@ -1,9 +1,6 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
@@ -30,9 +27,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/Structure/Valid_To_Extend/";
             string path_Out = "./out/Valid_Extended";
             var isoxml = ISOXML.Load(path);
-            isoxml.SetFolderPath( path_Out);
+            isoxml.SetFolderPath(path_Out);
             string taskName = "Hello";
-            addData(isoxml, taskName); 
+            addData(isoxml, taskName);
 
 
             isoxml.Save();
@@ -43,7 +40,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsTrue(allText.Contains(taskName));
 
             var loaded = ISOXML.Load(path_Out);
-            Assert.AreEqual(2,loaded.Data.Task.Count);
+            Assert.AreEqual(2, loaded.Data.Task.Count);
             Assert.AreEqual("TSK2", loaded.Data.Task[1].TaskId);
 
         }
@@ -56,12 +53,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var waiter = ISOXML.LoadAsync(path);
             waiter.Wait();
             var isoxml = waiter.Result;
-            isoxml.SetFolderPath( path_Out);
+            isoxml.SetFolderPath(path_Out);
             string taskName = "Hello";
             addData(isoxml, taskName);
 
 
-            var saver =  isoxml.SaveAsync();
+            var saver = isoxml.SaveAsync();
             saver.Wait();
 
             string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
