@@ -8,10 +8,7 @@ using XmlSchemaClassGenerator;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Generation
 {
-
-
-
-    class ISOXMLNamingProvider : NamingProvider
+    internal class ISOXMLNamingProvider : NamingProvider
     {
         public ISOXMLNamingProvider(NamingScheme scheme) : base(scheme)
         {
@@ -83,7 +80,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Generation
 
         private static List<DocumentationModel> GetDocumentation(XmlSchemaAnnotated annotated)
         {
-            if (annotated.Annotation == null) { return new List<DocumentationModel>(); }
+            if (annotated.Annotation == null)
+            {
+                return new List<DocumentationModel>();
+            }
 
             return annotated.Annotation.Items.OfType<XmlSchemaDocumentation>()
                 .Where(d => d.Markup != null && d.Markup.Any())

@@ -1,4 +1,5 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using System;
 using System.Collections.Generic;
@@ -169,7 +170,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
 
-        internal static string fixLinkListPath(string path)
+        internal static string FixLinkListPath(string path)
         {
             if (path.ToUpper().EndsWith(".XML") == false)
             {
@@ -189,14 +190,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 Directory.CreateDirectory(path);
             }
-            path = fixLinkListPath(path);
-            IsoLinkList.LinkListSerializer.Serialize(_linkListContent, path);
+            path = FixLinkListPath(path);
+            LinkListSerializer.Serialize(_linkListContent, path);
         }
 
 
 
         internal static ResultWithMessages<IsoLinkList> ParseLinkList(string isoxmlString, string path)
         {
+            if (path is null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
             ISO11783LinkListFile linkListContent = null;
             var messages = new List<ResultMessage>();
             try
@@ -224,7 +230,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path)
         {
             var messages = new List<ResultMessage>();
-            path = fixLinkListPath(path);
+            path = FixLinkListPath(path);
             if (File.Exists(path) == false)
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, "LINKLIST.xml not found!"));

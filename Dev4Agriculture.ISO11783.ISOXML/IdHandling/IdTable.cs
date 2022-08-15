@@ -2,15 +2,15 @@
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System.Collections.Generic;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 {
     public class IdTable
     {
-        public Dictionary<System.Type, IdList> idLists;
+        public Dictionary<System.Type, IdList> IdLists;
 
         public IdTable()
         {
-            idLists = new Dictionary<System.Type, IdList>();
+            IdLists = new Dictionary<System.Type, IdList>();
 
             AddList("BSN", typeof(ISOBaseStation));
             AddList("CCT", typeof(ISOCodedComment));
@@ -36,13 +36,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private void AddList(string name, System.Type type)
         {
-            idLists.Add(type, new IdList(name));
+            IdLists.Add(type, new IdList(name));
 
         }
 
         public string AddObjectAndAssignIdIfNone(object obj)
         {
-            var result = idLists.TryGetValue(obj.GetType(), out var idList);
+            var result = IdLists.TryGetValue(obj.GetType(), out var idList);
             if (idList != null)
             {
                 return idList.AddObjectAndAssignIdIfNone(obj);
@@ -58,8 +58,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns>The ID read from the Object</returns>
         public string ReadObject(object obj)
         {
-            IdList idList = null;
-            var result = idLists.TryGetValue(obj.GetType(), out idList);
+            var result = IdLists.TryGetValue(obj.GetType(), out var idList);
             if (idList != null)
             {
                 return idList.ReadObject(obj);
@@ -76,8 +75,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="id">The ID to assign</param>
         public void AddObjectWithOwnId(ref object obj, string id)
         {
-            IdList idList = null;
-            var result = idLists.TryGetValue(obj.GetType(), out idList);
+            var result = IdLists.TryGetValue(obj.GetType(), out var idList);
             if (idList != null)
             {
                 idList.AddId(id, ref obj);
@@ -91,7 +89,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public object FindById(string id)
         {
-            foreach (var list in idLists)
+            foreach (var list in IdLists)
             {
                 if (list.Key.Equals(id.Substring(0, 3)))
                 {
@@ -106,7 +104,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var result = new List<ResultMessage>();
 
-            foreach (var entry in idLists)
+            foreach (var entry in IdLists)
             {
                 result.AddRange(entry.Value.CleanListFromTempEntries());
             }
