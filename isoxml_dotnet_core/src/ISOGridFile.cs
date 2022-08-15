@@ -219,9 +219,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-        public int SetValue(uint x, uint y, uint value, uint layer = 0)
+        public int SetValue(uint column, uint row, uint value, uint layer = 0)
         {
-            if ((x < 0 || x >= Width) || (y < 0 || y >= Height))
+            if ((column < 0 || column >= Width) || (row < 0 || row >= Height))
             {
                 return 0;
             }
@@ -233,23 +233,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         return 0;
                     }
-                    this.Datat1[y, x] = (byte)value;
+                    this.Datat1[row, column] = (byte)value;
                     return 1;
                 case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= Layers)
                     {
                         return 0;
                     }
-                    this.Datat2[layer, y, x] = value;
+                    this.Datat2[layer, row, column] = value;
                     return 1;
                 default:
                     return 0;
             }
         }
 
-        public uint GetValue(uint x, uint y, uint layer)
+        public uint GetValue(uint column, uint row, uint layer)
         {
-            if ((x < 0 || x >= Width) || (y < 0 || y >= Height))
+            if ((column < 0 || column >= Width) || (row < 0 || row >= Height))
             {
                 throw new IndexOutOfRangeException();
             }
@@ -257,13 +257,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             switch (this.Type)
             {
                 case ISOGridType.gridtype1:
-                    return this.Datat1[y, x];
+                    return this.Datat1[row, column];
                 case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= Layers)
                     {
                         throw new IndexOutOfRangeException();
                     }
-                    return this.Datat2[layer, y, x];
+                    return this.Datat2[layer, row, column];
                 default:
                     throw new IndexOutOfRangeException();
             }

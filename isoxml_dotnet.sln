@@ -15,11 +15,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6890B5CE-39EE-4756-8D2F-10DE12378B07}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
 		README.md = README.md
 		release.yml = release.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_core_example", "isoxml_dotnet_core_example\isoxml_dotnet_core_example.csproj", "{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +42,10 @@ Global
 		{FD19A659-C14B-413A-9F57-19876E6658AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD19A659-C14B-413A-9F57-19876E6658AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD19A659-C14B-413A-9F57-19876E6658AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
