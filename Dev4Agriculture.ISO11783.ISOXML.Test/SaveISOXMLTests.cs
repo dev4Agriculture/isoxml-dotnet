@@ -7,7 +7,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
     [TestClass]
     public class SaveISOXMLTests
     {
-        private void addData(ISOXML isoxml, string taskName)
+        private void AddData(ISOXML isoxml, string taskName)
         {
             var idTable = isoxml.IdTable;
             var task = new ISOTask()
@@ -22,14 +22,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
         [TestMethod]
-        public void canExtendISOXML()
+        public void CanExtendISOXML()
         {
             var path = "./testdata/Structure/Valid_To_Extend/";
             var path_Out = "./out/Valid_Extended";
             var isoxml = ISOXML.Load(path);
             isoxml.SetFolderPath(path_Out);
             var taskName = "Hello";
-            addData(isoxml, taskName);
+            AddData(isoxml, taskName);
 
 
             isoxml.Save();
@@ -46,7 +46,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         }
 
         [TestMethod]
-        public void canExtendISOXMLAsync()
+        public void CanExtendISOXMLAsync()
         {
             var path = "./testdata/Structure/Valid_To_Extend/";
             var path_Out = "./out/Valid_Extended_Async";
@@ -55,7 +55,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var isoxml = waiter.Result;
             isoxml.SetFolderPath(path_Out);
             var taskName = "Hello";
-            addData(isoxml, taskName);
+            AddData(isoxml, taskName);
 
 
             var saver = isoxml.SaveAsync();
@@ -75,7 +75,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
         [TestMethod]
-        public void canCreateISOXML()
+        public void CanCreateISOXML()
         {
             var path = "./out/valid_new/";
             var taskName = "New";
