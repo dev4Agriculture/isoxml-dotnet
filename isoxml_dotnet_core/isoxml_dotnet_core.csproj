@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>isoxml_dotnet_core</RootNamespace>
+	  <Version>0.1.0</Version>
     <Company>dev4Agriculture</Company>
     <Authors>Frank Wiebeler, Alexander Parshin</Authors>
     <Description>This library provides access to agricultural data in ISO11783-10 TaskController compatible ISOXML Files</Description>
