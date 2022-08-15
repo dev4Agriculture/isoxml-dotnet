@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisModeDesign>Recommended</AnalysisModeDesign>
+    <AnalysisModePerformance>Recommended</AnalysisModePerformance>
+    <AnalysisModeReliability>Recommended</AnalysisModeReliability>
+    <AnalysisModeSecurity>Recommended</AnalysisModeSecurity>
+  </PropertyGroup>
+</Project>
