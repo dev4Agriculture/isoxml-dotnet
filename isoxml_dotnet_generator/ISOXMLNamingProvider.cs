@@ -19,7 +19,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public override string AttributeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaAttribute xmlAttribute)
         {
-            var documentations = GetDocumentation(xmlAttribute as XmlSchemaAnnotated);
+            var documentations = GetDocumentation(xmlAttribute);
             if (documentations.Count() > 0)
             {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
@@ -45,7 +45,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public override string ElementNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaElement xmlElement)
         {
-            var documentations = GetDocumentation(xmlElement as XmlSchemaAnnotated);
+            var documentations = GetDocumentation(xmlElement);
             if (documentations.Count() > 0)
             {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");

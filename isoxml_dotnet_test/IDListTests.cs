@@ -10,9 +10,11 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void canFindID()
         {
-            ISOTask task = new ISOTask();
-            task.TaskId = "TSK1";
-            IdList idList = new IdList("TSK");
+            var task = new ISOTask
+            {
+                TaskId = "TSK1"
+            };
+            var idList = new IdList("TSK");
             idList.AddObjectAndAssignIdIfNone(task);
             Assert.AreEqual(idList.FindObject("TSK1"), task);
         }
@@ -21,22 +23,28 @@ namespace isoxml_dotnet_test
         [TestMethod]
         public void canGenerateIds()
         {
-            IdList idList = new IdList("TSK");
+            var idList = new IdList("TSK");
 
             //Valid Object
-            ISOTask task1 = new ISOTask();
-            task1.TaskId = "TSK1";
-            task1.TaskDesignator = "Task1";
+            var task1 = new ISOTask
+            {
+                TaskId = "TSK1",
+                TaskDesignator = "Task1"
+            };
             idList.ReadObject(task1);
 
             //Add a Task without assigning an ID
-            ISOTask task3 = new ISOTask();
-            task3.TaskDesignator = "Task3";
+            var task3 = new ISOTask
+            {
+                TaskDesignator = "Task3"
+            };
             idList.ReadObject(task3);
 
             //Add one where an ID is forced to be created
-            ISOTask task2 = new ISOTask();
-            task2.TaskDesignator = "Task2";
+            var task2 = new ISOTask
+            {
+                TaskDesignator = "Task2"
+            };
             idList.AddObjectAndAssignIdIfNone(task2);
 
             idList.CleanListFromTempEntries();

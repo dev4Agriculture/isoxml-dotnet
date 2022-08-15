@@ -164,15 +164,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        private string Name;
-        Dictionary<int, object> Ids;
+        private readonly string Name;
+        readonly Dictionary<int, object> Ids;
         private int NextId;
         private int NextTmpId = nextTmpBase;
         public IdList(string name)
         {
-            this.Name = name;
-            this.NextId = 1;
-            this.Ids = new Dictionary<int, object>();
+            Name = name;
+            NextId = 1;
+            Ids = new Dictionary<int, object>();
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <exception cref="DuplicatedISOObjectException"></exception>
         public string AddObjectAndAssignIdIfNone(object obj)
         {
-            string id = FindId(obj);
+            var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
                 id = BuildID(Name, NextId);
@@ -193,7 +193,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else
             {
-                int nr = int.Parse(id.Substring(3));
+                var nr = int.Parse(id.Substring(3));
                 if (Ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
@@ -217,7 +217,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <exception cref="DuplicatedISOObjectException"></exception>
         public string ReadObject(object obj)
         {
-            string id = FindId(obj);
+            var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
                 Ids.Add(NextTmpId, obj);
@@ -225,7 +225,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else
             {
-                int nr = int.Parse(id.Substring(3));
+                var nr = int.Parse(id.Substring(3));
                 if (Ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
@@ -247,7 +247,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <exception cref="DuplicatedISOObjectException"></exception>
         public void AddId(string id, ref object obj)
         {
-            int nr = int.Parse(id.Substring(3));
+            var nr = int.Parse(id.Substring(3));
             if (Ids.ContainsKey(nr))
             {
                 throw new DuplicatedISOObjectException(id);
@@ -258,7 +258,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public object FindObject(string idString)
         {
-            int id = int.Parse(idString.Substring(3));
+            var id = int.Parse(idString.Substring(3));
             return Ids[id];
         }
 

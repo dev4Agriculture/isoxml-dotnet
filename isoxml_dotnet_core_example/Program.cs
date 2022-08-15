@@ -11,53 +11,60 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var isoxml = ISOXML.Create("C:/out");
 
-            var customer = new ISOCustomer();
-            customer.CustomerLastName = "Miller";
+            var customer = new ISOCustomer
+            {
+                CustomerLastName = "Miller"
+            };
             var ctrId = isoxml.IdTable.AddObjectAndAssignIdIfNone(customer);
             isoxml.Data.Customer.Add(customer);
 
-            ISOLineString lineString = new ISOLineString();
-            lineString.LineStringType = ISOLineStringType.PolygonExterior;
 
-            Decimal north = (Decimal)52.2;
-            Decimal south = (Decimal)52.3;
-            Decimal west = (Decimal)7.2;
-            Decimal east = (Decimal)7.4;
+            var lineString = new ISOLineString
+            {
+                LineStringType = ISOLineStringType.PolygonExterior
+            };
+
+            var north = (decimal)52.2;
+            var south = (decimal)52.3;
+            var west = (decimal)7.2;
+            var east = (decimal)7.4;
 
             lineString.Point.Add(new ISOPoint()
             {
-                PointNorth = (Decimal)north,
-                PointEast = (Decimal)west,
+                PointNorth = north,
+                PointEast = west,
                 PointType = ISOPointType.other
             });
 
 
             lineString.Point.Add(new ISOPoint()
             {
-                PointNorth = (Decimal)south,
-                PointEast = (Decimal)west,
+                PointNorth = south,
+                PointEast = west,
                 PointType = ISOPointType.other
             });
 
             lineString.Point.Add(new ISOPoint()
             {
-                PointNorth = (Decimal)south,
-                PointEast = (Decimal)east,
+                PointNorth = south,
+                PointEast = east,
                 PointType = ISOPointType.other
             });
 
             lineString.Point.Add(new ISOPoint()
             {
-                PointNorth = (Decimal)north,
-                PointEast = (Decimal)east,
+                PointNorth = north,
+                PointEast = east,
                 PointType = ISOPointType.other
             });
 
             lineString.Point.Add(lineString.Point.First());
 
 
-            var polygon = new ISOPolygon();
-            polygon.PolygonType = ISOPolygonType.PartfieldBoundary;
+            var polygon = new ISOPolygon
+            {
+                PolygonType = ISOPolygonType.PartfieldBoundary
+            };
             polygon.LineString.Add(lineString);
 
             var partField = new ISOPartfield();
@@ -86,7 +93,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             var vpn = new ISOValuePresentation()
             {
-                Scale = (Decimal)0.1,
+                Scale = (decimal)0.1,
                 NumberOfDecimals = 1,
                 Offset = 0,
                 UnitDesignator = "kg/ha",

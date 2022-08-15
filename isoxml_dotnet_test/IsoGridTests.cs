@@ -11,7 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanLoadValidGridType1()
         {
-            string path = "./testdata/Grid/Type1";
+            var path = "./testdata/Grid/Type1";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
@@ -21,7 +21,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanLoadValidGridType2()
         {
-            string path = "./testdata/Grid/Type2";
+            var path = "./testdata/Grid/Type2";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
@@ -32,7 +32,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanRecognizeInvalidGridType1()
         {
-            string path = "./testdata/Grid/Type1_Invalid";
+            var path = "./testdata/Grid/Type1_Invalid";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
@@ -43,7 +43,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanRecognizeInvalidGridType2()
         {
-            string path = "./testdata/Grid/Type2_Invalid";
+            var path = "./testdata/Grid/Type2_Invalid";
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
@@ -54,13 +54,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanWriteValidGridType2()
         {
-            string path = "./testdata/Grid/Type2";
-            string outPath = "./out/grid_type2";
+            var path = "./testdata/Grid/Type2";
+            var outPath = "./out/grid_type2";
             var isoxml = ISOXML.Load(path);
             var taskData = isoxml.Data;
             var task = taskData.Task[0];
             ISOGridFile grid = null;
-            string gridFileName = task.Grid[0].Filename;
+            var gridFileName = task.Grid[0].Filename;
             var success = isoxml.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
             isoxml.SetFolderPath(outPath);
@@ -77,21 +77,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             isoxml.Save();
 
             Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
-            byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
-            Assert.AreEqual(data.Length, (Int32)(grid.Width * grid.Height * grid.Layers * sizeof(UInt32)));
+            var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
+            Assert.AreEqual(data.Length, (int)(grid.Width * grid.Height * grid.Layers * sizeof(uint)));
 
         }
 
         [TestMethod]
         public void CanWriteValidGridType1()
         {
-            string path = "./testdata/Grid/Type1";
-            string outPath = "./out/grid_type1";
+            var path = "./testdata/Grid/Type1";
+            var outPath = "./out/grid_type1";
             var result = ISOXML.Load(path);
             var taskData = result.Data;
             var task = taskData.Task[0];
             ISOGridFile grid = null;
-            string gridFileName = task.Grid[0].Filename;
+            var gridFileName = task.Grid[0].Filename;
             var success = result.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
             result.SetFolderPath(outPath);
@@ -105,8 +105,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             result.Save();
 
             Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
-            byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
-            Assert.AreEqual(data.Length, (Byte)(grid.Width * grid.Height));
+            var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
+            Assert.AreEqual(data.Length, (byte)(grid.Width * grid.Height));
 
         }
 

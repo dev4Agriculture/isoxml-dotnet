@@ -9,7 +9,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void SingleTaskDataIsParsed()
         {
-            string path = "./testdata/ExternalFiles/NoExternals/TASKDATA.XML";
+            var path = "./testdata/ExternalFiles/NoExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
             result.Messages.ForEach(msg =>
@@ -24,7 +24,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void TaskDataWithSingleExternalFileIsParsed()
         {
-            string path = "./testdata/ExternalFiles/OneExternal/TASKDATA.XML";
+            var path = "./testdata/ExternalFiles/OneExternal/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
             result.Messages.ForEach(msg =>
@@ -41,7 +41,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void TaskDataWithMultipleExternalFilesIsParsed()
         {
-            string path = "./testdata/ExternalFiles/MultipleExternals/TASKDATA.XML";
+            var path = "./testdata/ExternalFiles/MultipleExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
             result.Messages.ForEach(msg =>
@@ -60,7 +60,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void TaskDataWithMissingExternalFilesIsRecognized()
         {
-            string path = "./testdata/ExternalFiles/MissingExternals/TASKDATA.XML";
+            var path = "./testdata/ExternalFiles/MissingExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
             result.Messages.ForEach(msg =>

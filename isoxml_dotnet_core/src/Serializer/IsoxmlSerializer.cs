@@ -18,7 +18,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         private delegate object ValueConvertor(string value);
 
 
-        static private Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
+        private static readonly Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
             {"String", value => value},
             {"UInt16", value => Convert.ToUInt16(value)},
             {"UInt64", value => Convert.ToUInt64(value)},
@@ -33,10 +33,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
 
                 try {
-                    byte[] data = new byte[value.Length / 2];
-                    for (int index = 0; index < data.Length; index++)
+                    var data = new byte[value.Length / 2];
+                    for (var index = 0; index < data.Length; index++)
                     {
-                        string byteValue = value.Substring(index * 2, 2);
+                        var byteValue = value.Substring(index * 2, 2);
                         data[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                     }
                     return data;
@@ -51,14 +51,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             } }
         };
 
-        private Assembly _isoxmlAssembly;
+        private readonly Assembly _isoxmlAssembly;
 
         public List<ResultMessage> messages = new List<ResultMessage>();
 
         public IsoxmlSerializer()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            this._isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
+            _isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "isoxml_dotnet_core");
 
         }
         public object Deserialize(XmlDocument xml)
@@ -67,7 +67,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var keepCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             object result = null;
-            int index = -1;
+            var index = -1;
             while (result == null && index < xml.ChildNodes.Count)
             {
                 index++;
@@ -80,7 +80,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
+            var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
             TextWriter writer = new StreamWriter(path);
             ser.Serialize(writer, taskData);
             writer.Close();
@@ -182,7 +182,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 if (implInterface.Name == "IList")
                 {
-                    IList list = (IList)property.GetValue(obj);
+                    var list = (IList)property.GetValue(obj);
                     list.Add(value);
                     return;
                 }
@@ -286,7 +286,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var type = findType(node.Name);
             if (type == null)
             {
-                var isRoot = String.IsNullOrEmpty(isoxmlNodeId);
+                var isRoot = string.IsNullOrEmpty(isoxmlNodeId);
                 addMessage(
                     isRoot ? ResultMessageType.Error : ResultMessageType.Warning,
                     $"Unknown XML element {node.Name} (path: {isoxmlNodeId})"
@@ -352,7 +352,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             foreach (XmlNode childNode in node.ChildNodes)
             {
 
-                string name = childNode.Name;
+                var name = childNode.Name;
                 int count;
                 if (childrenCount.TryGetValue(name, out count))
                 {

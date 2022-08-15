@@ -8,7 +8,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 {
     internal class TaskData
     {
-        private static IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
+        private static readonly IsoxmlSerializer isoxmlSerializer = new IsoxmlSerializer();
         internal static string fixTaskDataPath(string path)
         {
             if (path.ToUpper().EndsWith(".XML") == false)
@@ -25,17 +25,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var messages = new List<ResultMessage>();
             try
             {
-                XmlDocument xmlDoc = new XmlDocument();
+                var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
                 //Check for XFR External FileReferences here as we need to merge everything before Deserialization
-                XmlNodeList externals = xmlDoc.GetElementsByTagName("XFR");
+                var externals = xmlDoc.GetElementsByTagName("XFR");
                 foreach (XmlNode element in externals)
                 {
                     try
                     {
                         var extPath = path.Replace("TASKDATA.XML", element.Attributes["A"].Value + ".XML");
                         var extContent = File.ReadAllText(extPath.ToString());
-                        XmlDocument externalDoc = new XmlDocument();
+                        var externalDoc = new XmlDocument();
                         externalDoc.LoadXml(extContent);
                         MergeExternalContent(xmlDoc, externalDoc);
                     }
@@ -86,7 +86,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, "TASKDATA.XML not found!"));
             }
-            string text = File.ReadAllText(path.ToString());
+            var text = File.ReadAllText(path.ToString());
             var result = ParseTaskData(text, path);
             return result;
         }

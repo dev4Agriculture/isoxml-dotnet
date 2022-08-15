@@ -12,9 +12,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void LoadSimpleTaskData()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(ISO11783TaskDataFile));
-            string text = File.ReadAllText("./testdata/devices/TASKDATA_Devices.XML");
-            using (StringReader reader = new StringReader(text))
+            var serializer = new XmlSerializer(typeof(ISO11783TaskDataFile));
+            var text = File.ReadAllText("./testdata/devices/TASKDATA_Devices.XML");
+            using (var reader = new StringReader(text))
             {
                 var output = (ISO11783TaskDataFile)serializer.Deserialize(reader);
                 var subElements = output.Device;
@@ -28,9 +28,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void LoadSimpleDeviceDescription()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(ISODevice));
-            string text = File.ReadAllText("./testdata/devices/Device_description.xml");
-            using (StringReader reader = new StringReader(text))
+            var serializer = new XmlSerializer(typeof(ISODevice));
+            var text = File.ReadAllText("./testdata/devices/Device_description.xml");
+            using (var reader = new StringReader(text))
             {
                 try
                 {

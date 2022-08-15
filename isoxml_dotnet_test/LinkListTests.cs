@@ -22,7 +22,7 @@ namespace isoxml_dotnet_test.testdata
         [TestMethod]
         public void CanCreateValidLinkList()
         {
-            string path = "./out/linklist/valid";
+            var path = "./out/linklist/valid";
             var taskName = "LinkList";
             var uuid = Guid.NewGuid().ToString();
             var isoxml = ISOXML.Create(path);

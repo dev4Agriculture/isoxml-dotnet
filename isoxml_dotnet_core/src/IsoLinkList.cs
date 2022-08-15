@@ -10,10 +10,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
     public class IsoLinkList
     {
-        private static LinkListSerializer linkListSerializer = new LinkListSerializer();
+        private static readonly LinkListSerializer linkListSerializer = new LinkListSerializer();
 
         private readonly ISO11783LinkListFile LinkListContent;
-        private IdList GroupIds;
+        private readonly IdList GroupIds;
 
 
 
@@ -21,17 +21,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             if (linkListContent == null)
             {
-                this.LinkListContent = new ISO11783LinkListFile();
+                LinkListContent = new ISO11783LinkListFile();
                 return;
             }
-            this.LinkListContent = linkListContent;
-            this.GroupIds = new IdList("LGP");
+            LinkListContent = linkListContent;
+            GroupIds = new IdList("LGP");
         }
 
         internal IsoLinkList()
         {
 
-            this.LinkListContent = new ISO11783LinkListFile()
+            LinkListContent = new ISO11783LinkListFile()
             {
                 //TODO: Thos data can currently nowhere outside the library be changed. Add functions for that
                 DataTransferOrigin = ISO11783LinkListFileDataTransferOrigin.FMIS,
@@ -43,13 +43,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 VersionMajor = ISO11783LinkListFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
                 VersionMinor = ISO11783LinkListFileVersionMinor.Item3
             };
-            this.GroupIds = new IdList("LGP");
+            GroupIds = new IdList("LGP");
         }
 
 
         public string GetID(string uuid)
         {
-            foreach (var group in this.LinkListContent.LinkGroup)
+            foreach (var group in LinkListContent.LinkGroup)
             {
                 foreach (var link in group.Link)
                 {
@@ -64,7 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public string GetFirstLink(string idRef)
         {
-            foreach (var group in this.LinkListContent.LinkGroup)
+            foreach (var group in LinkListContent.LinkGroup)
             {
                 foreach (var link in group.Link)
                 {
@@ -87,7 +87,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="type">Default is UUID</param>
         public void AddOrOverWriteLink(string idRef, string linkValue, string linkToOverwrite, ISOLinkGroupType type = ISOLinkGroupType.UUIDs)
         {
-            foreach (var group in this.LinkListContent.LinkGroup)
+            foreach (var group in LinkListContent.LinkGroup)
             {
                 if (group.LinkGroupType == type)
                 {
@@ -110,7 +110,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            ISOLinkGroup groupToAdd = new ISOLinkGroup()
+            var groupToAdd = new ISOLinkGroup()
             {
                 LinkGroupDesignator = type.ToString(),
             };
@@ -131,7 +131,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="type">Default is UUID</param>
         public void AddLink(string idRef, string linkValue, ISOLinkGroupType type = ISOLinkGroupType.UUIDs)
         {
-            foreach (var group in this.LinkListContent.LinkGroup)
+            foreach (var group in LinkListContent.LinkGroup)
             {
                 if (group.LinkGroupType == type)
                 {
@@ -152,7 +152,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            ISOLinkGroup groupToAdd = new ISOLinkGroup()
+            var groupToAdd = new ISOLinkGroup()
             {
                 LinkGroupDesignator = "IDs"
             };
@@ -200,7 +200,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var messages = new List<ResultMessage>();
             try
             {
-                XmlDocument xmlDoc = new XmlDocument();
+                var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
                 linkListContent = (ISO11783LinkListFile)linkListSerializer.Deserialize(xmlDoc);
 
@@ -228,7 +228,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, "LINKLIST.xml not found!"));
             }
-            string text = File.ReadAllText(path.ToString());
+            var text = File.ReadAllText(path.ToString());
             var result = ParseLinkList(text, path);
             return result;
         }

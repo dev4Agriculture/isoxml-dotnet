@@ -26,12 +26,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="path">The path where the ISOXML TaskSet should be stored</param>
         private ISOXML(string path)
         {
-            Data = new ISO11783TaskDataFile();
-            Data.ManagementSoftwareManufacturer = "unknown";
-            Data.ManagementSoftwareVersion = "unknown";
-            Data.TaskControllerManufacturer = "unknown";
-            Data.TaskControllerVersion = "unknown";
-            Data.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+            Data = new ISO11783TaskDataFile
+            {
+                ManagementSoftwareManufacturer = "unknown",
+                ManagementSoftwareVersion = "unknown",
+                TaskControllerManufacturer = "unknown",
+                TaskControllerVersion = "unknown",
+                DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS
+            };
             Grids = new Dictionary<string, ISOGridFile>();
             FolderPath = path;
             Messages = new List<ResultMessage>();
@@ -118,7 +120,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             };
             _maxGridIndex++;
             grid.Filename = ISOGridFile.GenerateName(_maxGridIndex);
-            this.Grids.Add(grid.Filename, ISOGridFile.Create(grid, layers));
+            Grids.Add(grid.Filename, ISOGridFile.Create(grid, layers));
 
             return grid;
         }
@@ -126,7 +128,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public ISOGridFile GetGridFile(ISOGrid iSOGrid)
         {
-            return this.Grids[iSOGrid.Filename];
+            return Grids[iSOGrid.Filename];
         }
 
 
@@ -160,59 +162,59 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             foreach (var obj in Data.BaseStation)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CodedComment)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CodedCommentGroup)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CropType)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.CulturalPractice)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Customer)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Device)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Farm)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.OperationTechnique)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Partfield)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Product)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Task)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.ValuePresentation)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
             foreach (var obj in Data.Worker)
             {
-                this.IdTable.ReadObject(obj);
+                IdTable.ReadObject(obj);
             }
         }
 
@@ -222,10 +224,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void LoadBinaryData()
         {
-            if (this.binaryLoaded == false)
+            if (binaryLoaded == false)
             {
                 LoadGrids();
-                this.binaryLoaded = true;
+                binaryLoaded = true;
 
             }
 
@@ -233,7 +235,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public AsyncTask.Task LoadBinaryDataAsync()
         {
-            var waiter = AsyncTask.Task.Run(() => this.LoadBinaryData());
+            var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
             return waiter;
         }
 
@@ -250,27 +252,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 if (task.Grid != null && task.Grid.Count > 0)
                 {
                     var grid = task.Grid[0];
-                    Byte layers = 0;
+                    byte layers = 0;
                     foreach (var tzn in task.TreatmentZone)
                     {
                         if (grid.TreatmentZoneCode == tzn.TreatmentZoneCode)
                         {
-                            layers = (Byte)tzn.ProcessDataVariable.Count;
+                            layers = (byte)tzn.ProcessDataVariable.Count;
                             break;
                         }
                     }
-                    uint index = uint.Parse(grid.Filename.Substring(3, 5));
+                    var index = uint.Parse(grid.Filename.Substring(3, 5));
                     if (index > _maxGridIndex)
                     {
                         _maxGridIndex = index;
                     }
 
-                    var result = ISOGridFile.Load(this.FolderPath, grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow, grid.GridType, layers);
+                    var result = ISOGridFile.Load(FolderPath, grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow, grid.GridType, layers);
                     Grids.Add(task.Grid[0].Filename, result.result);
                     Messages.AddRange(result.messages);
                 }
             }
-            return this.Grids.Count;
+            return Grids.Count;
         }
 
 
@@ -280,14 +282,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void Save()
         {
-            TaskData.SaveTaskData(this.Data, this.FolderPath);
-            if (this.HasLinkList == true)
+            TaskData.SaveTaskData(Data, FolderPath);
+            if (HasLinkList == true)
             {
-                this.LinkList.SaveLinkList(this.FolderPath);
+                LinkList.SaveLinkList(FolderPath);
             }
-            foreach (var entry in this.Grids)
+            foreach (var entry in Grids)
             {
-                entry.Value.Save(Path.Combine(this.FolderPath, entry.Key + ".BIN"));
+                entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".BIN"));
             }
         }
 

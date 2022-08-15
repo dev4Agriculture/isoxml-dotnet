@@ -106,7 +106,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var result = new List<ResultMessage>();
 
-            foreach (var entry in this.idLists)
+            foreach (var entry in idLists)
             {
                 result.AddRange(entry.Value.CleanListFromTempEntries());
             }

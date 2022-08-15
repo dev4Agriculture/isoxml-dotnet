@@ -8,11 +8,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     public class ISOGridFile
     {
 
-        public UInt32 Width;
-        public UInt32 Height;
-        public Byte Layers;//Only for Type2
+        public uint Width;
+        public uint Height;
+        public byte Layers;//Only for Type2
         private byte[,] Datat1;
-        private UInt32[,,] Datat2;
+        private uint[,,] Datat2;
         public string Name;
         public ISOGridType Type;
         public bool Loaded;
@@ -27,17 +27,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Type = type;
         }
 
-        public static ResultWithMessages<ISOGridFile> Load(String baseFolder, string name, UInt32 width, UInt32 height, ISOGridType type, Byte layers)
+        public static ResultWithMessages<ISOGridFile> Load(string baseFolder, string name, uint width, uint height, ISOGridType type, byte layers)
         {
-            List<ResultMessage> messages = new List<ResultMessage>();
+            var messages = new List<ResultMessage>();
             ISOGridFile grid = null;
-            string filePath = Path.Combine(baseFolder, name + ".BIN");
+            var filePath = Path.Combine(baseFolder, name + ".BIN");
             if (File.Exists(filePath))
             {
                 grid = new ISOGridFile(type);
 
                 grid.Init(width, height, layers);
-                FileStream binaryFileStream = File.Open(filePath, FileMode.Open);
+                var binaryFileStream = File.Open(filePath, FileMode.Open);
                 switch (grid.Type)
                 {
                     case ISOGridType.gridtype1:
@@ -45,13 +45,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         if (grid.Width * grid.Height == binaryFileStream.Length)
                         {
 
-                            byte[] buffer = new byte[grid.Width];
-                            for (int y = 0; y < grid.Height; y++)
+                            var buffer = new byte[grid.Width];
+                            for (var y = 0; y < grid.Height; y++)
                             {
-                                int readDataLength = binaryFileStream.Read(buffer, 0, buffer.Length);
+                                var readDataLength = binaryFileStream.Read(buffer, 0, buffer.Length);
                                 if (readDataLength == grid.Width)
                                 {
-                                    for (int x = 0; x < grid.Width; x++)
+                                    for (var x = 0; x < grid.Width; x++)
                                     {
                                         grid.Datat1[y, x] = buffer[x];
                                     }
@@ -64,19 +64,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         break;
                     case ISOGridType.gridtype2:
-                        grid.Datat2 = new UInt32[grid.Layers, grid.Height, grid.Width];
-                        if (grid.Layers * grid.Width * grid.Height * sizeof(UInt32) == binaryFileStream.Length)
+                        grid.Datat2 = new uint[grid.Layers, grid.Height, grid.Width];
+                        if (grid.Layers * grid.Width * grid.Height * sizeof(uint) == binaryFileStream.Length)
                         {
 
-                            for (int l = 0; l < layers; l++)
+                            for (var l = 0; l < layers; l++)
                             {
-                                byte[] buffer = new byte[grid.Width * sizeof(UInt32)];
-                                for (int y = 0; y < grid.Height; y++)
+                                var buffer = new byte[grid.Width * sizeof(uint)];
+                                for (var y = 0; y < grid.Height; y++)
                                 {
-                                    int readDataLength = binaryFileStream.Read(buffer, 0, buffer.Length);
+                                    var readDataLength = binaryFileStream.Read(buffer, 0, buffer.Length);
                                     if (readDataLength == buffer.Length)
                                     {
-                                        for (int x = 0; x < grid.Width; x++)
+                                        for (var x = 0; x < grid.Width; x++)
                                         {
                                             grid.Datat2[l, y, x] = BitConverter.ToUInt32(buffer, x * 4);
                                         }
@@ -122,28 +122,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public void Save(string path)
         {
-            FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
-            BinaryWriter bw = new BinaryWriter(fs);
-            switch (this.Type)
+            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            var bw = new BinaryWriter(fs);
+            switch (Type)
             {
                 case ISOGridType.gridtype1:
-                    for (int y = 0; y < this.Height; y++)
+                    for (var y = 0; y < Height; y++)
                     {
-                        for (int x = 0; x < this.Width; x++)
+                        for (var x = 0; x < Width; x++)
                         {
-                            bw.Write(this.Datat1[y, x]);
+                            bw.Write(Datat1[y, x]);
                         }
                     }
 
                     break;
                 case ISOGridType.gridtype2:
-                    for (int l = 0; l < Layers; l++)
+                    for (var l = 0; l < Layers; l++)
                     {
-                        for (int y = 0; y < this.Height; y++)
+                        for (var y = 0; y < Height; y++)
                         {
-                            for (int x = 0; x < this.Width; x++)
+                            for (var x = 0; x < Width; x++)
                             {
-                                bw.Write(this.Datat2[l, y, x]);
+                                bw.Write(Datat2[l, y, x]);
                             }
                         }
                     }
@@ -158,32 +158,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             try
             {
-                string filePath = storagePath + this.Name + ".CSV";
-                FileStream file = File.Create(filePath);
-                StreamWriter streamWriter = new StreamWriter(file);
-                switch (this.Type)
+                var filePath = storagePath + Name + ".CSV";
+                var file = File.Create(filePath);
+                var streamWriter = new StreamWriter(file);
+                switch (Type)
                 {
                     case ISOGridType.gridtype1:
-                        for (int y = 0; y < this.Height; y++)
+                        for (var y = 0; y < Height; y++)
                         {
-                            string dataLineText = "";
-                            for (int x = 0; x < this.Width; x++)
+                            var dataLineText = "";
+                            for (var x = 0; x < Width; x++)
                             {
-                                dataLineText = dataLineText + this.Datat1[this.Height - 1 - y, x] + ";";
+                                dataLineText = dataLineText + Datat1[Height - 1 - y, x] + ";";
                             }
                             streamWriter.WriteLine(dataLineText);
                             streamWriter.Flush();
                         }
                         break;
                     case ISOGridType.gridtype2:
-                        for (int l = 0; l < this.Layers; l++)
+                        for (var l = 0; l < Layers; l++)
                         {
-                            for (int y = 0; y < this.Height; y++)
+                            for (var y = 0; y < Height; y++)
                             {
-                                string dataLineText = "";
-                                for (int x = 0; x < this.Width; x++)
+                                var dataLineText = "";
+                                for (var x = 0; x < Width; x++)
                                 {
-                                    dataLineText = dataLineText + this.Datat2[l, this.Height - 1 - y, x] + ";";
+                                    dataLineText = dataLineText + Datat2[l, Height - 1 - y, x] + ";";
                                 }
                                 streamWriter.WriteLine(dataLineText);
                                 streamWriter.Flush();
@@ -205,42 +205,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public void Init(uint width, uint height, byte layers)
         {
-            this.Width = width;
-            this.Height = height;
-            this.Layers = layers;
-            switch (this.Type)
+            Width = width;
+            Height = height;
+            Layers = layers;
+            switch (Type)
             {
                 case ISOGridType.gridtype1:
-                    this.Datat1 = new byte[height, width];
+                    Datat1 = new byte[height, width];
                     break;
                 case ISOGridType.gridtype2:
-                    this.Datat2 = new uint[layers, height, width];
+                    Datat2 = new uint[layers, height, width];
                     break;
             }
         }
 
         public int SetValue(uint column, uint row, uint value, uint layer = 0)
         {
-            if ((column < 0 || column >= Width) || (row < 0 || row >= Height))
+            if (column < 0 || column >= Width || row < 0 || row >= Height)
             {
                 return 0;
             }
 
-            switch (this.Type)
+            switch (Type)
             {
                 case ISOGridType.gridtype1:
                     if (value < 0 || value > 255)
                     {
                         return 0;
                     }
-                    this.Datat1[row, column] = (byte)value;
+                    Datat1[row, column] = (byte)value;
                     return 1;
                 case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= Layers)
                     {
                         return 0;
                     }
-                    this.Datat2[layer, row, column] = value;
+                    Datat2[layer, row, column] = value;
                     return 1;
                 default:
                     return 0;
@@ -249,21 +249,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public uint GetValue(uint column, uint row, uint layer)
         {
-            if ((column < 0 || column >= Width) || (row < 0 || row >= Height))
+            if (column < 0 || column >= Width || row < 0 || row >= Height)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            switch (this.Type)
+            switch (Type)
             {
                 case ISOGridType.gridtype1:
-                    return this.Datat1[row, column];
+                    return Datat1[row, column];
                 case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= Layers)
                     {
                         throw new IndexOutOfRangeException();
                     }
-                    return this.Datat2[layer, row, column];
+                    return Datat2[layer, row, column];
                 default:
                     throw new IndexOutOfRangeException();
             }

@@ -14,8 +14,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static byte[] FormatDDI(uint value)
         {
-            byte[] longArray = BitConverter.GetBytes(value);
-            byte[] byteArray = new byte[2];
+            var longArray = BitConverter.GetBytes(value);
+            var byteArray = new byte[2];
             byteArray[0] = longArray[1];
             byteArray[1] = longArray[0];
             return byteArray;

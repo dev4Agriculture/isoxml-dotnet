@@ -24,19 +24,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void canExtendISOXML()
         {
-            string path = "./testdata/Structure/Valid_To_Extend/";
-            string path_Out = "./out/Valid_Extended";
+            var path = "./testdata/Structure/Valid_To_Extend/";
+            var path_Out = "./out/Valid_Extended";
             var isoxml = ISOXML.Load(path);
             isoxml.SetFolderPath(path_Out);
-            string taskName = "Hello";
+            var taskName = "Hello";
             addData(isoxml, taskName);
 
 
             isoxml.Save();
 
-            string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
+            var tdPath = Path.Combine(path_Out, "TASKDATA.XML");
             Assert.IsTrue(File.Exists(tdPath));
-            string allText = File.ReadAllText(tdPath);
+            var allText = File.ReadAllText(tdPath);
             Assert.IsTrue(allText.Contains(taskName));
 
             var loaded = ISOXML.Load(path_Out);
@@ -48,22 +48,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void canExtendISOXMLAsync()
         {
-            string path = "./testdata/Structure/Valid_To_Extend/";
-            string path_Out = "./out/Valid_Extended_Async";
+            var path = "./testdata/Structure/Valid_To_Extend/";
+            var path_Out = "./out/Valid_Extended_Async";
             var waiter = ISOXML.LoadAsync(path);
             waiter.Wait();
             var isoxml = waiter.Result;
             isoxml.SetFolderPath(path_Out);
-            string taskName = "Hello";
+            var taskName = "Hello";
             addData(isoxml, taskName);
 
 
             var saver = isoxml.SaveAsync();
             saver.Wait();
 
-            string tdPath = Path.Combine(path_Out, "TASKDATA.XML");
+            var tdPath = Path.Combine(path_Out, "TASKDATA.XML");
             Assert.IsTrue(File.Exists(tdPath));
-            string allText = File.ReadAllText(tdPath);
+            var allText = File.ReadAllText(tdPath);
             Assert.IsTrue(allText.Contains(taskName));
 
             var loaded = ISOXML.Load(path_Out);
@@ -77,8 +77,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void canCreateISOXML()
         {
-            string path = "./out/valid_new/";
-            string taskName = "New";
+            var path = "./out/valid_new/";
+            var taskName = "New";
             var isoxml = ISOXML.Create(path);
             var idTable = isoxml.IdTable;
             var task = new ISOTask()
@@ -90,9 +90,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             isoxml.Data.Task.Add(task);
             isoxml.Save();
 
-            string tdPath = Path.Combine(path, "TASKDATA.XML");
+            var tdPath = Path.Combine(path, "TASKDATA.XML");
             Assert.IsTrue(File.Exists(tdPath));
-            string allText = File.ReadAllText(tdPath);
+            var allText = File.ReadAllText(tdPath);
             Assert.IsTrue(allText.Contains(taskName));
 
             var loaded = ISOXML.Load(path);
