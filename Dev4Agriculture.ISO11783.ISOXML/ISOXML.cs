@@ -1,7 +1,6 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -154,7 +153,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task<ISOXML>.Run(() => Load(path, loadBinData));
+            return await AsyncTask.Task.Run(() => Load(path, loadBinData));
         }
 
         /// <summary>
@@ -285,7 +284,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public void Save()
         {
             TaskData.SaveTaskData(Data, FolderPath);
-            if (HasLinkList == true)
+            if (HasLinkList)
             {
                 LinkList.SaveLinkList(FolderPath);
             }

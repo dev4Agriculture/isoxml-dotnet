@@ -179,6 +179,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         // if the property is a collection, we add the value to it, otherwise, we just set the value
         private void SetValue(Type type, PropertyInfo property, object obj, object value)
         {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             foreach (var implInterface in property.PropertyType.GetInterfaces())
             {
                 if (implInterface.Name == "IList")
@@ -253,6 +258,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         private object CheckXMLDeclaration(XmlNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
             //TODO Fill CheckXMLDeclaration
             return null;
         }

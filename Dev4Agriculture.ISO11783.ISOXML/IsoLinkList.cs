@@ -1,6 +1,7 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using System;
 using System.Collections.Generic;
 using System.IO;
