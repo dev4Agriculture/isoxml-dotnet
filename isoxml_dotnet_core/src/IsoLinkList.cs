@@ -85,7 +85,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="linkValue">The value of the link, e.g. {d6c6f304-6180-45e2-a9ee-230f408ff897} </param>
         /// <param name="linkToOverwrite">The link to search for that should be overwritten</param>
         /// <param name="type">Default is UUID</param>
-        public void AddOrOverWriteLink(string idRef, string linkValue, string linkToOverwrite, LinkGroupType type = LinkGroupType.UUIDs)
+        public void AddOrOverWriteLink(string idRef, string linkValue, string linkToOverwrite, ISOLinkGroupType type = ISOLinkGroupType.UUIDs)
         {
             foreach (var group in this.LinkListContent.LinkGroup)
             {
@@ -101,7 +101,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     }
                     if (group.LinkGroupDesignator.Equals(type.ToString()))
                     {
-                        group.Link.Add(new Link()
+                        group.Link.Add(new ISOLink()
                         {
                             ObjectIdRef = idRef,
                             LinkValue = linkValue,
@@ -110,11 +110,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            LinkGroup groupToAdd = new LinkGroup()
+            ISOLinkGroup groupToAdd = new ISOLinkGroup()
             {
                 LinkGroupDesignator = type.ToString(),
             };
-            groupToAdd.Link.Add(new Link()
+            groupToAdd.Link.Add(new ISOLink()
             {
                 ObjectIdRef = idRef,
                 LinkValue = linkValue,
@@ -129,7 +129,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="idRef"> An IDRef for an ISOXML Element; e.g. TSK1 or PFD-1</param>
         /// <param name="linkValue">The value of the link, e.g. {d6c6f304-6180-45e2-a9ee-230f408ff897} </param>
         /// <param name="type">Default is UUID</param>
-        public void AddLink(string idRef, string linkValue, LinkGroupType type = LinkGroupType.UUIDs)
+        public void AddLink(string idRef, string linkValue, ISOLinkGroupType type = ISOLinkGroupType.UUIDs)
         {
             foreach (var group in this.LinkListContent.LinkGroup)
             {
@@ -143,7 +143,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
 
                     }
-                    group.Link.Add(new Link()
+                    group.Link.Add(new ISOLink()
                     {
                         ObjectIdRef = idRef,
                         LinkValue = linkValue,
@@ -152,11 +152,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            LinkGroup groupToAdd = new LinkGroup()
+            ISOLinkGroup groupToAdd = new ISOLinkGroup()
             {
                 LinkGroupDesignator = "IDs"
             };
-            groupToAdd.Link.Add(new Link()
+            groupToAdd.Link.Add(new ISOLink()
             {
                 ObjectIdRef = idRef,
                 LinkValue = linkValue,

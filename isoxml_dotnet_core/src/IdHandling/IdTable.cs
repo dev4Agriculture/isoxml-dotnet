@@ -13,24 +13,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             idLists = new Dictionary<System.Type, IdList>();
 
-            AddList("BSN", typeof(BaseStation));
-            AddList("CCT", typeof(CodedComment));
-            AddList("CCG", typeof(CodedCommentGroup));
-            AddList("CTP", typeof(CropType));
-            AddList("CPC", typeof(CulturalPractice));
-            AddList("CTR", typeof(Customer));
-            AddList("DVC", typeof(Device));
-            AddList("FRM", typeof(Farm));
-            AddList("OTQ", typeof(OperationTechnique));
-            AddList("PFD", typeof(Partfield));
-            AddList("PDT", typeof(Product));
-            AddList("PGP", typeof(ProductGroup));
-            AddList("TSK", typeof(Task));
-            AddList("VPN", typeof(ValuePresentation));
-            AddList("PNT", typeof(Point));
-            AddList("PLN", typeof(Polygon));
-            AddList("LSG", typeof(LineString));
-            AddList("WKR", typeof(Worker));
+            AddList("BSN", typeof(ISOBaseStation));
+            AddList("CCT", typeof(ISOCodedComment));
+            AddList("CCG", typeof(ISOCodedCommentGroup));
+            AddList("CTP", typeof(ISOCropType));
+            AddList("CPC", typeof(ISOCulturalPractice));
+            AddList("CTR", typeof(ISOCustomer));
+            AddList("DVC", typeof(ISODevice));
+            AddList("FRM", typeof(ISOFarm));
+            AddList("OTQ", typeof(ISOOperationTechnique));
+            AddList("PFD", typeof(ISOPartfield));
+            AddList("PDT", typeof(ISOProduct));
+            AddList("PGP", typeof(ISOProductGroup));
+            AddList("TSK", typeof(ISOTask));
+            AddList("VPN", typeof(ISOValuePresentation));
+            AddList("PNT", typeof(ISOPoint));
+            AddList("PLN", typeof(ISOPolygon));
+            AddList("LSG", typeof(ISOLineString));
+            AddList("WKR", typeof(ISOWorker));
         }
 
 

@@ -18,7 +18,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(1,result.grids.Count);
+            Assert.AreEqual(1,result.Grids.Count);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(1, result.grids.Count);
+            Assert.AreEqual(1, result.Grids.Count);
 
         }
 
@@ -64,7 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var task = taskData.Task[0];
             IsoGrid grid = null;
             string gridFileName = task.Grid[0].Filename;
-            var success = result.grids.TryGetValue(gridFileName, out grid);
+            var success = result.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
             result.SetFolderPath(outPath);
             for(uint l = 0; l< grid.layers; l++)
@@ -95,7 +95,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var task = taskData.Task[0];
             IsoGrid grid = null;
             string gridFileName = task.Grid[0].Filename;
-            var success = result.grids.TryGetValue(gridFileName, out grid);
+            var success = result.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
             result.SetFolderPath(outPath);
             for (uint y = 0; y < grid.height; y++)

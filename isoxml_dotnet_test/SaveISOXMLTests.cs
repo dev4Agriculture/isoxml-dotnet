@@ -13,10 +13,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         private void addData(ISOXML isoxml, string taskName)
         {
             var idTable = isoxml.IdTable;
-            Task task = new Task()
+            var task = new ISOTask()
             {
                 TaskDesignator = taskName,
-                TaskStatus = TaskStatus.Completed
+                TaskStatus = ISOTaskStatus.Completed
             };
             idTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);
@@ -82,12 +82,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         {
             string path = "./out/valid_new/";
             string taskName = "New";
-            var isoxml = new ISOXML(path);
+            var isoxml = ISOXML.Create(path);
             var idTable = isoxml.IdTable;
-            Task task = new Task()
+            var task = new ISOTask()
             {
                 TaskDesignator = taskName,
-                TaskStatus = TaskStatus.Completed
+                TaskStatus = ISOTaskStatus.Completed
             };
             idTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);

@@ -23,12 +23,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LinkGroup> _linkGroup;
+        private System.Collections.ObjectModel.Collection<ISOLinkGroup> _linkGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LGP")]
-        public System.Collections.ObjectModel.Collection<LinkGroup> LinkGroup
+        public System.Collections.ObjectModel.Collection<ISOLinkGroup> LinkGroup
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         /// </summary>
         public ISO11783LinkListFile()
         {
-            this._linkGroup = new System.Collections.ObjectModel.Collection<LinkGroup>();
+            this._linkGroup = new System.Collections.ObjectModel.Collection<ISOLinkGroup>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -123,16 +123,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
     [System.Xml.Serialization.XmlTypeAttribute("LGP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("LGP", Namespace="")]
-    public partial class LinkGroup
+    public partial class ISOLinkGroup
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Link> _link;
+        private System.Collections.ObjectModel.Collection<ISOLink> _link;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LNK")]
-        public System.Collections.ObjectModel.Collection<Link> Link
+        public System.Collections.ObjectModel.Collection<ISOLink> Link
         {
             get
             {
@@ -157,9 +157,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         
         /// <summary>
         /// </summary>
-        public LinkGroup()
+        public ISOLinkGroup()
         {
-            this._link = new System.Collections.ObjectModel.Collection<Link>();
+            this._link = new System.Collections.ObjectModel.Collection<ISOLink>();
         }
         
         /// <summary>
@@ -175,7 +175,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public LinkGroupType LinkGroupType { get; set; }
+        public ISOLinkGroupType LinkGroupType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -203,7 +203,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
     [System.Xml.Serialization.XmlTypeAttribute("LNK", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("LNK", Namespace="")]
-    public partial class Link
+    public partial class ISOLink
     {
         
         /// <summary>
@@ -232,8 +232,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("LinkGroupB", Namespace="", AnonymousType=true)]
-    public enum LinkGroupType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOLinkGroupB", Namespace="", AnonymousType=true)]
+    public enum ISOLinkGroupType
     {
         
         /// <summary>

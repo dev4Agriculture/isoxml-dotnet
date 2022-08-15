@@ -10,6 +10,11 @@
     <Copyright>Copyright 2022 by dev4Agriculture</Copyright>
     <PackageProjectUrl>https://github.com/dev4Agriculture/isoxml-dotnet</PackageProjectUrl>
     <PackageIcon>logo_dev4Agriculture.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/dev4Agriculture/isoxml-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>isoxml;agriculture;iso11783;taskcontroller;taskdata.xml;taskdata</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,18 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="../assets/logo_dev4Agriculture.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="../README.md" />
-    <None Include="logo_dev4Agriculture.png">
+    <None Include="../README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+	  <None Include="../LICENSE">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+	</None>
   </ItemGroup>
 </Project>

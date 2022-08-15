@@ -28,12 +28,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void LoadSimpleDeviceDescription()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Device));
+            XmlSerializer serializer = new XmlSerializer(typeof(ISODevice));
             string text = File.ReadAllText("./testdata/devices/Device_description.xml");
             using ( StringReader reader = new StringReader(text))
             {
                 try {
-                    var device = (Device)serializer.Deserialize(reader);
+                    var device = (ISODevice)serializer.Deserialize(reader);
                     Console.WriteLine("Device Name: " + device.DeviceDesignator);
                     Console.WriteLine("Device Id: " + device.DeviceId);
                 } catch (Exception ex) {

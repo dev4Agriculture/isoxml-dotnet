@@ -34,6 +34,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var documentations = GetDocumentation(complexType.Parent as XmlSchemaAnnotated);
             if (documentations.Count() > 0) {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
+                if (!name.StartsWith("ISO"))
+                {
+                    name = "ISO" + name;
+                }
                 return base.ComplexTypeNameFromQualifiedName(new XmlQualifiedName(name, qualifiedName.Namespace), complexType);
             }
             return base.ComplexTypeNameFromQualifiedName(qualifiedName, complexType);
@@ -44,6 +48,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var documentations = GetDocumentation(xmlElement as XmlSchemaAnnotated);
             if (documentations.Count() > 0) {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
+
                 return base.ElementNameFromQualifiedName(new XmlQualifiedName(name, qualifiedName.Namespace), xmlElement);
             }
             return base.ElementNameFromQualifiedName(qualifiedName, xmlElement);
@@ -64,6 +69,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var documentations = GetDocumentation(xmlSimpleType.Parent as XmlSchemaAnnotated);
             if (documentations.Count() > 0) {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
+                if (!name.StartsWith("ISO"))
+                {
+                    name = "ISO" + name;
+                }
                 return base.EnumTypeNameFromQualifiedName(new XmlQualifiedName(name, qualifiedName.Namespace), xmlSimpleType);
             }
             return base.EnumTypeNameFromQualifiedName(qualifiedName, xmlSimpleType);
