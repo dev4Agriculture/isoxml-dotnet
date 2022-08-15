@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -104,7 +102,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             for (int a = 0; a < 8; a++)
             {
-                String letter1 = input.Substring(a * 2,1);
+                String letter1 = input.Substring(a * 2, 1);
                 String letter2 = input.Substring(a * 2 + 1, 1);
                 for (byte b = 0; b < letters.Length; b++)
                 {

@@ -1,14 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using XmlSchemaClassGenerator;
 
 
-namespace Dev4Agriculture.ISO11783.ISOXML 
+namespace Dev4Agriculture.ISO11783.ISOXML
 {
 
 
@@ -19,8 +14,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         private static string outFolder = "./out/";
         private static string destinationFolder = "../../../../isoxml_dotnet_core/src/_generated/";
 
-        static private void processNamespace(List<string> files, string targetNamespace) {
-            var namespaceProvider = new NamespaceProvider {
+        static private void processNamespace(List<string> files, string targetNamespace)
+        {
+            var namespaceProvider = new NamespaceProvider
+            {
                 GenerateNamespace = key => targetNamespace
             };
 
@@ -58,14 +55,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }, ISOXMLClassName + ".TimeLog");
 
             //Copy updated classes to main project
-            string[] files = Directory.GetFiles(outFolder,"*.cs");
-            if(Directory.Exists(destinationFolder))
+            string[] files = Directory.GetFiles(outFolder, "*.cs");
+            if (Directory.Exists(destinationFolder))
             {
                 Directory.Delete(destinationFolder, true);
             }
             Directory.CreateDirectory(destinationFolder);
 
-            foreach(string file in files)
+            foreach (string file in files)
             {
                 File.Copy(file, destinationFolder + Path.GetFileName(file));
             }

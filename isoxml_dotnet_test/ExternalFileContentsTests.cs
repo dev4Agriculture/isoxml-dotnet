@@ -1,6 +1,4 @@
-﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dev4Agriculture.ISO11783.ISOXML;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
@@ -14,7 +12,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/ExternalFiles/NoExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
-            result.Messages.ForEach(msg => {
+            result.Messages.ForEach(msg =>
+            {
                 Console.WriteLine(msg.title);
             });
             Assert.IsNotNull(result.Data);
@@ -28,7 +27,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/ExternalFiles/OneExternal/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
-            result.Messages.ForEach(msg => {
+            result.Messages.ForEach(msg =>
+            {
                 Console.WriteLine(msg.title);
             });
             Assert.IsNotNull(result.Data);
@@ -44,7 +44,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/ExternalFiles/MultipleExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
-            result.Messages.ForEach(msg => {
+            result.Messages.ForEach(msg =>
+            {
                 Console.WriteLine(msg.title);
             });
             Assert.IsNotNull(result);
@@ -62,7 +63,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             string path = "./testdata/ExternalFiles/MissingExternals/TASKDATA.XML";
             var result = ISOXML.Load(path);
 
-            result.Messages.ForEach(msg => {
+            result.Messages.ForEach(msg =>
+            {
                 Console.WriteLine(msg.title);
             });
             Assert.AreNotEqual(0, result.Messages.Count);

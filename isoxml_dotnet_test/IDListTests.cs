@@ -1,9 +1,6 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace isoxml_dotnet_test
 {
@@ -17,7 +14,7 @@ namespace isoxml_dotnet_test
             task.TaskId = "TSK1";
             IdList idList = new IdList("TSK");
             idList.AddObjectAndAssignIdIfNone(task);
-            Assert.AreEqual(idList.FindObject("TSK1"),task);
+            Assert.AreEqual(idList.FindObject("TSK1"), task);
         }
 
 
@@ -47,7 +44,7 @@ namespace isoxml_dotnet_test
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK1")).TaskId, "TSK1");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK2")).TaskId, "TSK2");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK3")).TaskId, "TSK3");
-                   
+
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK1")).TaskDesignator, "Task1");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK2")).TaskDesignator, "Task2");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK3")).TaskDesignator, "Task3");

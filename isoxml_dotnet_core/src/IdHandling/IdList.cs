@@ -1,9 +1,7 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -19,43 +17,56 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static string FindId(object obj)
         {
-            if (obj.GetType().Equals(typeof(ISOBaseStation))){
+            if (obj.GetType().Equals(typeof(ISOBaseStation)))
+            {
                 return ((ISOBaseStation)obj).BaseStationId;
             }
-            else if(obj.GetType().Equals(typeof(ISOCodedComment))){
+            else if (obj.GetType().Equals(typeof(ISOCodedComment)))
+            {
                 return ((ISOCodedComment)obj).CodedCommentId;
             }
-            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup))){
+            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup)))
+            {
                 return ((ISOCodedCommentGroup)obj).CodedCommentGroupId;
             }
-            else if (obj.GetType().Equals(typeof(ISOCropType))){
+            else if (obj.GetType().Equals(typeof(ISOCropType)))
+            {
                 return ((ISOCropType)obj).CropTypeId;
             }
-            else if (obj.GetType().Equals(typeof(ISOCulturalPractice))){
+            else if (obj.GetType().Equals(typeof(ISOCulturalPractice)))
+            {
                 return ((ISOCulturalPractice)obj).CulturalPracticeId;
             }
-            else if (obj.GetType().Equals(typeof(ISODevice))){
+            else if (obj.GetType().Equals(typeof(ISODevice)))
+            {
                 return ((ISODevice)obj).DeviceId;
             }
-            else if (obj.GetType().Equals(typeof(ISOFarm))){
+            else if (obj.GetType().Equals(typeof(ISOFarm)))
+            {
                 return ((ISOFarm)obj).FarmId;
             }
-            else if (obj.GetType().Equals(typeof(ISOOperationTechnique))){
+            else if (obj.GetType().Equals(typeof(ISOOperationTechnique)))
+            {
                 return ((ISOOperationTechnique)obj).OperationTechniqueId;
             }
-            else if (obj.GetType().Equals(typeof(ISOPartfield))){
+            else if (obj.GetType().Equals(typeof(ISOPartfield)))
+            {
                 return ((ISOPartfield)obj).PartfieldId;
             }
-            else if (obj.GetType().Equals(typeof(ISOProduct))){
+            else if (obj.GetType().Equals(typeof(ISOProduct)))
+            {
                 return ((ISOProduct)obj).ProductId;
             }
-            else if (obj.GetType().Equals(typeof(ISOTask))){
+            else if (obj.GetType().Equals(typeof(ISOTask)))
+            {
                 return ((ISOTask)obj).TaskId;
             }
-            else if (obj.GetType().Equals(typeof(ISOValuePresentation))){
+            else if (obj.GetType().Equals(typeof(ISOValuePresentation)))
+            {
                 return ((ISOValuePresentation)obj).ValuePresentationId;
             }
-            else if (obj.GetType().Equals(typeof(ISOWorker))){
+            else if (obj.GetType().Equals(typeof(ISOWorker)))
+            {
                 return ((ISOWorker)obj).WorkerId;
             }
             else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
@@ -130,7 +141,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
             {
-                ((ISOLinkGroup)obj).LinkGroupId  = id; 
+                ((ISOLinkGroup)obj).LinkGroupId = id;
             }
             else
             {
@@ -154,14 +165,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
         private string Name;
-        Dictionary<int,object> Ids;
+        Dictionary<int, object> Ids;
         private int NextId;
         private int NextTmpId = nextTmpBase;
         public IdList(string name)
         {
             this.Name = name;
             this.NextId = 1;
-            this.Ids = new Dictionary<int,object>();
+            this.Ids = new Dictionary<int, object>();
         }
 
         /// <summary>
@@ -177,16 +188,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 id = BuildID(Name, NextId);
                 Ids.Add(NextId, obj);
-                IdList.SetId(obj,id);
+                IdList.SetId(obj, id);
                 NextId++;
-            } else
+            }
+            else
             {
                 int nr = int.Parse(id.Substring(3));
                 if (Ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
                 }
-                if(nr >= NextId)
+                if (nr >= NextId)
                 {
                     NextId = nr + 1;
                 }
@@ -241,12 +253,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 throw new DuplicatedISOObjectException(id);
             }
             IdList.SetId(obj, id);
-            Ids.Add(nr,obj);
+            Ids.Add(nr, obj);
         }
 
         public object FindObject(string idString)
         {
-            int id = int.Parse(idString.Substring(3));  
+            int id = int.Parse(idString.Substring(3));
             return Ids[id];
         }
 
@@ -262,12 +274,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             //First find all elements that currently are TEMP and generate an object with a proper id
             var result = new List<ResultMessage>();
-            foreach( var entry in Ids)
+            foreach (var entry in Ids)
             {
-                if( entry.Key >= nextTmpBase)
+                if (entry.Key >= nextTmpBase)
                 {
                     var id = BuildID(Name, NextId);
-                    SetId(entry.Value, id );
+                    SetId(entry.Value, id);
                     tempItems.Add(NextId, entry.Value);
                     result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
                 }
@@ -275,7 +287,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
             //Now delete the Temp Elements
-            for(var entry = nextTmpBase; entry < NextTmpId; entry++)
+            for (var entry = nextTmpBase; entry < NextTmpId; entry++)
             {
                 Ids.Remove(entry);
             }

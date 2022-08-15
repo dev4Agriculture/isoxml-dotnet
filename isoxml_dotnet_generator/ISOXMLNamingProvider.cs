@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -15,14 +13,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
     class ISOXMLNamingProvider : NamingProvider
     {
-        public ISOXMLNamingProvider(NamingScheme scheme): base(scheme)
+        public ISOXMLNamingProvider(NamingScheme scheme) : base(scheme)
         {
         }
 
         public override string AttributeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaAttribute xmlAttribute)
         {
             var documentations = GetDocumentation(xmlAttribute as XmlSchemaAnnotated);
-            if (documentations.Count() > 0) {
+            if (documentations.Count() > 0)
+            {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 return base.AttributeNameFromQualifiedName(new XmlQualifiedName(name, qualifiedName.Namespace), xmlAttribute);
             }
@@ -32,7 +31,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public override string ComplexTypeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaComplexType complexType)
         {
             var documentations = GetDocumentation(complexType.Parent as XmlSchemaAnnotated);
-            if (documentations.Count() > 0) {
+            if (documentations.Count() > 0)
+            {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 if (!name.StartsWith("ISO"))
                 {
@@ -46,7 +46,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public override string ElementNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaElement xmlElement)
         {
             var documentations = GetDocumentation(xmlElement as XmlSchemaAnnotated);
-            if (documentations.Count() > 0) {
+            if (documentations.Count() > 0)
+            {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
 
                 return base.ElementNameFromQualifiedName(new XmlQualifiedName(name, qualifiedName.Namespace), xmlElement);
@@ -57,7 +58,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public override string EnumMemberNameFromValue(string enumName, string value, XmlSchemaEnumerationFacet xmlFacet)
         {
             var documentations = GetDocumentation(xmlFacet);
-            if (documentations.Count() > 0) {
+            if (documentations.Count() > 0)
+            {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 return base.EnumMemberNameFromValue(enumName, name, xmlFacet);
             }
@@ -67,7 +69,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public override string EnumTypeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaSimpleType xmlSimpleType)
         {
             var documentations = GetDocumentation(xmlSimpleType.Parent as XmlSchemaAnnotated);
-            if (documentations.Count() > 0) {
+            if (documentations.Count() > 0)
+            {
                 var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
                 if (!name.StartsWith("ISO"))
                 {

@@ -5,9 +5,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         Error,
         Warning
     }
-    public class ResultMessage {
+    public class ResultMessage
+    {
 
-        public ResultMessage(ResultMessageType type, string title) {
+        public ResultMessage(ResultMessageType type, string title)
+        {
             this.type = type;
             this.title = title;
         }

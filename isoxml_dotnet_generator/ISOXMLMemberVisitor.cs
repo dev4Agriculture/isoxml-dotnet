@@ -4,7 +4,7 @@ using XmlSchemaClassGenerator;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
-    internal class ISOXMLMemberVisitor 
+    internal class ISOXMLMemberVisitor
     {
         public ISOXMLMemberVisitor()
         {

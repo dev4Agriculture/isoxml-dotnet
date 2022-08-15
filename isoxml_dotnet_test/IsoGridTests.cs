@@ -1,9 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
@@ -18,7 +15,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var result = ISOXML.Load(path);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(1,result.Grids.Count);
+            Assert.AreEqual(1, result.Grids.Count);
         }
 
         [TestMethod]
@@ -59,29 +56,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         {
             string path = "./testdata/Grid/Type2";
             string outPath = "./out/grid_type2";
-            var result = ISOXML.Load(path);
-            var taskData = result.Data;
+            var isoxml = ISOXML.Load(path);
+            var taskData = isoxml.Data;
             var task = taskData.Task[0];
-            IsoGrid grid = null;
+            ISOGridFile grid = null;
             string gridFileName = task.Grid[0].Filename;
-            var success = result.Grids.TryGetValue(gridFileName, out grid);
+            var success = isoxml.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
-            result.SetFolderPath(outPath);
-            for(uint l = 0; l< grid.layers; l++)
+            isoxml.SetFolderPath(outPath);
+            for (uint l = 0; l < grid.Layers; l++)
             {
-                for(uint y=0; y< grid.height; y++)
+                for (uint y = 0; y < grid.Height; y++)
                 {
-                    for(uint x=0; x< grid.width; x++)
+                    for (uint x = 0; x < grid.Width; x++)
                     {
-                        grid.setValue(y, x, y, l);
+                        grid.SetValue(y, x, y, l);
                     }
                 }
             }
-            result.Save();
+            isoxml.Save();
 
-            Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName+".BIN")));
+            Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
             byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
-            Assert.AreEqual(data.Length, (Int32)(grid.width * grid.height * grid.layers * sizeof(UInt32)));
+            Assert.AreEqual(data.Length, (Int32)(grid.Width * grid.Height * grid.Layers * sizeof(UInt32)));
 
         }
 
@@ -93,23 +90,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var result = ISOXML.Load(path);
             var taskData = result.Data;
             var task = taskData.Task[0];
-            IsoGrid grid = null;
+            ISOGridFile grid = null;
             string gridFileName = task.Grid[0].Filename;
             var success = result.Grids.TryGetValue(gridFileName, out grid);
             Assert.IsNotNull(grid);
             result.SetFolderPath(outPath);
-            for (uint y = 0; y < grid.height; y++)
+            for (uint y = 0; y < grid.Height; y++)
             {
-                for (uint x = 0; x < grid.width; x++)
+                for (uint x = 0; x < grid.Width; x++)
                 {
-                    grid.setValue(y, x, y);
+                    grid.SetValue(y, x, y);
                 }
             }
             result.Save();
 
             Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
             byte[] data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
-            Assert.AreEqual(data.Length, (Byte)(grid.width * grid.height));
+            Assert.AreEqual(data.Length, (Byte)(grid.Width * grid.Height));
 
         }
 
