@@ -1,4 +1,5 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,7 +9,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
     public class IDListTests
     {
         [TestMethod]
-        public void canFindID()
+        public void CanFindID()
         {
             var task = new ISOTask
             {
@@ -21,7 +22,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
         [TestMethod]
-        public void canGenerateIds()
+        public void CanGenerateIds()
         {
             var idList = new IdList("TSK");
 
@@ -56,11 +57,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK1")).TaskDesignator, "Task1");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK2")).TaskDesignator, "Task2");
             Assert.AreEqual(((ISOTask)idList.FindObject("TSK3")).TaskDesignator, "Task3");
-
-
-
-
-
 
         }
 

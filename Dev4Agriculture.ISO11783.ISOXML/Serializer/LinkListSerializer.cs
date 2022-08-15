@@ -11,13 +11,13 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 {
     public class LinkListSerializer
     {
 
         private delegate object ValueConvertor(string value);
-        private static readonly Dictionary<string, ValueConvertor> _convertors = new Dictionary<string, ValueConvertor>() {
+        private static readonly Dictionary<string, ValueConvertor> Convertors = new Dictionary<string, ValueConvertor>() {
             {"String", value => value},
             {"UInt16", value => Convert.ToUInt16(value)},
             {"UInt64", value => Convert.ToUInt64(value)},
@@ -114,7 +114,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return null;
         }
 
-        private PropertyInfo GetPropertyByAttrName(System.Type type, string xmlAttrName)
+        private PropertyInfo GetPropertyByAttrName(Type type, string xmlAttrName)
         {
             foreach (var property in type.GetProperties())
             {
@@ -253,6 +253,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private object CheckXMLDeclaration(XmlNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
             //TODO Fill CheckXMLDeclaration
             return null;
         }
@@ -332,7 +336,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
                 else
                 {
-                    _convertors.TryGetValue(property.PropertyType.Name, out var convertor);
+                    Convertors.TryGetValue(property.PropertyType.Name, out var convertor);
                     try
                     {
                         var convertedAttr = convertor(attr.Value);
@@ -425,7 +429,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 case XmlNodeType.Notation:
                 case XmlNodeType.ProcessingInstruction:
                 default:
-                    AddMessage(ResultMessageType.Error, $"Found invalid Element in XML. Type: {node.NodeType.ToString()}, Content: {node.OuterXml}");
+                    AddMessage(ResultMessageType.Error, $"Found invalid Element in XML. Type: {node.NodeType}, Content: {node.OuterXml}");
                     return null;
 
             }

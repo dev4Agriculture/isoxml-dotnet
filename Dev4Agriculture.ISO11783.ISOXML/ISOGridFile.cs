@@ -103,7 +103,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             return new ResultWithMessages<ISOGridFile>(grid)
             {
-                messages = messages
+                Messages = messages
             };
         }
 

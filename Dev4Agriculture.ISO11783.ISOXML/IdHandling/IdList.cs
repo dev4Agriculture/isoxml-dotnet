@@ -4,12 +4,12 @@ using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System.Collections.Generic;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 {
     public class IdList
     {
-        internal static int nextTmpBase = 1000000;
-        internal static ISO11783TaskDataFileDataTransferOrigin dataOrign = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+        internal static int NextTmpBase = 1000000;
+        internal static ISO11783TaskDataFileDataTransferOrigin DataOrign = ISO11783TaskDataFileDataTransferOrigin.FMIS;
 
         /// <summary>
         /// Find the ID in the Object. Object must be a valid ISO11783-10 Element with an ID attribute.
@@ -158,22 +158,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static string BuildID(string name, int index)
         {
-            return name + (dataOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ?
+            return name + (DataOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ?
                     index.ToString() :
                     "-" + index.ToString()
                     );
         }
 
 
-        private readonly string Name;
-        readonly Dictionary<int, object> Ids;
-        private int NextId;
-        private int NextTmpId = nextTmpBase;
+        private readonly string _name;
+        private readonly Dictionary<int, object> _ids;
+        private int _nextId;
+        private int _nextTmpId = NextTmpBase;
         public IdList(string name)
         {
-            Name = name;
-            NextId = 1;
-            Ids = new Dictionary<int, object>();
+            _name = name;
+            _nextId = 1;
+            _ids = new Dictionary<int, object>();
         }
 
         /// <summary>
@@ -187,23 +187,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
-                id = BuildID(Name, NextId);
-                Ids.Add(NextId, obj);
-                IdList.SetId(obj, id);
-                NextId++;
+                id = BuildID(_name, _nextId);
+                _ids.Add(_nextId, obj);
+                SetId(obj, id);
+                _nextId++;
             }
             else
             {
                 var nr = int.Parse(id.Substring(3));
-                if (Ids.ContainsKey(nr))
+                if (_ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
                 }
-                if (nr >= NextId)
+                if (nr >= _nextId)
                 {
-                    NextId = nr + 1;
+                    _nextId = nr + 1;
                 }
-                Ids.Add(nr, obj);
+                _ids.Add(nr, obj);
             }
             return id;
         }
@@ -221,21 +221,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
-                Ids.Add(NextTmpId, obj);
-                NextTmpId++;
+                _ids.Add(_nextTmpId, obj);
+                _nextTmpId++;
             }
             else
             {
                 var nr = int.Parse(id.Substring(3));
-                if (Ids.ContainsKey(nr))
+                if (_ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
                 }
-                if (nr >= NextId)
+                if (nr >= _nextId)
                 {
-                    NextId = nr + 1;
+                    _nextId = nr + 1;
                 }
-                Ids.Add(nr, obj);
+                _ids.Add(nr, obj);
             }
             return id;
         }
@@ -249,18 +249,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public void AddId(string id, ref object obj)
         {
             var nr = int.Parse(id.Substring(3));
-            if (Ids.ContainsKey(nr))
+            if (_ids.ContainsKey(nr))
             {
                 throw new DuplicatedISOObjectException(id);
             }
-            IdList.SetId(obj, id);
-            Ids.Add(nr, obj);
+            SetId(obj, id);
+            _ids.Add(nr, obj);
         }
 
         public object FindObject(string idString)
         {
             var id = int.Parse(idString.Substring(3));
-            return Ids[id];
+            return _ids[id];
         }
 
         /// <summary>
@@ -275,28 +275,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             //First find all elements that currently are TEMP and generate an object with a proper id
             var result = new List<ResultMessage>();
-            foreach (var entry in Ids)
+            foreach (var entry in _ids)
             {
-                if (entry.Key >= nextTmpBase)
+                if (entry.Key >= NextTmpBase)
                 {
-                    var id = BuildID(Name, NextId);
+                    var id = BuildID(_name, _nextId);
                     SetId(entry.Value, id);
-                    tempItems.Add(NextId, entry.Value);
-                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
+                    tempItems.Add(_nextId, entry.Value);
+                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + _name + " without ID found. Assigning " + id));
                 }
             }
 
 
             //Now delete the Temp Elements
-            for (var entry = nextTmpBase; entry < NextTmpId; entry++)
+            for (var entry = NextTmpBase; entry < _nextTmpId; entry++)
             {
-                Ids.Remove(entry);
+                _ids.Remove(entry);
             }
 
             //And add the new Elements
             foreach (var entry in tempItems)
             {
-                Ids.Add(entry.Key, entry.Value);
+                _ids.Add(entry.Key, entry.Value);
             }
             return result;
 

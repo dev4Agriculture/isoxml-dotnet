@@ -1,6 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -78,8 +78,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var resultTaskData = TaskData.LoadTaskData(path);
             var isoxml = new ISOXML(path)
             {
-                Data = resultTaskData.result,
-                Messages = resultTaskData.messages
+                Data = resultTaskData.Result,
+                Messages = resultTaskData.Messages
             };
 
             if (isoxml.Data.AttachedFile != null)
@@ -90,8 +90,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         //REMARK: The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
                         var resultLinkList = IsoLinkList.LoadLinkList(path);
-                        isoxml.LinkList = resultLinkList.result;
-                        isoxml.Messages.AddRange(resultLinkList.messages);
+                        isoxml.LinkList = resultLinkList.Result;
+                        isoxml.Messages.AddRange(resultLinkList.Messages);
                         isoxml.HasLinkList = true;
                         break;//TODO We currently only support one attached File!
                     }
@@ -153,7 +153,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task<ISOXML>.Run(() => Load(path, loadBinData));
+            return await AsyncTask.Task.Run(() => Load(path, loadBinData));
         }
 
         /// <summary>
@@ -269,8 +269,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     }
 
                     var result = ISOGridFile.Load(FolderPath, grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow, grid.GridType, layers);
-                    Grids.Add(task.Grid[0].Filename, result.result);
-                    Messages.AddRange(result.messages);
+                    Grids.Add(task.Grid[0].Filename, result.Result);
+                    Messages.AddRange(result.Messages);
                 }
             }
             return Grids.Count;
@@ -284,7 +284,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public void Save()
         {
             TaskData.SaveTaskData(Data, FolderPath);
-            if (HasLinkList == true)
+            if (HasLinkList)
             {
                 LinkList.SaveLinkList(FolderPath);
             }

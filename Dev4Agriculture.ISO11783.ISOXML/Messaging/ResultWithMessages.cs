@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
-using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
 {
     public class ResultWithMessages<ResultType> where ResultType : class
     {
-        public ResultType result = null;
-        public List<ResultMessage> messages = new List<ResultMessage>();
+        public ResultType Result = null;
+        public List<ResultMessage> Messages = new List<ResultMessage>();
 
         public ResultWithMessages(ResultType result, List<ResultMessage> messages)
         {
-            this.result = result;
-            this.messages = messages;
+            Result = result;
+            Messages = messages;
         }
         public ResultWithMessages(ResultType result)
         {
-            this.result = result;
+            Result = result;
         }
     }
 }
