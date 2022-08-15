@@ -19,16 +19,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("ASP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("ASP", Namespace="")]
-    public partial class AllocationStamp
+    public partial class ISOAllocationStamp
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Position> _position;
+        private System.Collections.ObjectModel.Collection<ISOPosition> _position;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PTN")]
-        public System.Collections.ObjectModel.Collection<Position> Position
+        public System.Collections.ObjectModel.Collection<ISOPosition> Position
         {
             get
             {
@@ -53,9 +53,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public AllocationStamp()
+        public ISOAllocationStamp()
         {
-            this._position = new System.Collections.ObjectModel.Collection<Position>();
+            this._position = new System.Collections.ObjectModel.Collection<ISOPosition>();
         }
         
         /// <summary>
@@ -89,7 +89,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public Type Type { get; set; }
+        public ISOType Type { get; set; }
     }
     
     /// <summary>
@@ -99,7 +99,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PTN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PTN", Namespace="")]
-    public partial class Position
+    public partial class ISOPosition
     {
         
         /// <summary>
@@ -131,7 +131,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public PositionStatus PositionStatus { get; set; }
+        public ISOPositionStatus PositionStatus { get; set; }
         
         /// <summary>
         /// </summary>
@@ -191,8 +191,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("PositionD", Namespace="", AnonymousType=true)]
-    public enum PositionStatus
+    [System.Xml.Serialization.XmlTypeAttribute("ISOPositionD", Namespace="", AnonymousType=true)]
+    public enum ISOPositionStatus
     {
         
         /// <summary>
@@ -278,8 +278,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("AllocationStampD", Namespace="", AnonymousType=true)]
-    public enum Type
+    [System.Xml.Serialization.XmlTypeAttribute("ISOAllocationStampD", Namespace="", AnonymousType=true)]
+    public enum ISOType
     {
         
         /// <summary>
@@ -300,7 +300,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("BSN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("BSN", Namespace="")]
-    public partial class BaseStation
+    public partial class ISOBaseStation
     {
         
         /// <summary>
@@ -348,16 +348,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CCT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCT", Namespace="")]
-    public partial class CodedComment
+    public partial class ISOCodedComment
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<CodedCommentListValue> _codedCommentListValue;
+        private System.Collections.ObjectModel.Collection<ISOCodedCommentListValue> _codedCommentListValue;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCL")]
-        public System.Collections.ObjectModel.Collection<CodedCommentListValue> CodedCommentListValue
+        public System.Collections.ObjectModel.Collection<ISOCodedCommentListValue> CodedCommentListValue
         {
             get
             {
@@ -382,9 +382,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public CodedComment()
+        public ISOCodedComment()
         {
-            this._codedCommentListValue = new System.Collections.ObjectModel.Collection<CodedCommentListValue>();
+            this._codedCommentListValue = new System.Collections.ObjectModel.Collection<ISOCodedCommentListValue>();
         }
         
         /// <summary>
@@ -407,7 +407,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public CodedCommentScope CodedCommentScope { get; set; }
+        public ISOCodedCommentScope CodedCommentScope { get; set; }
         
         /// <summary>
         /// </summary>
@@ -425,7 +425,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CCL", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCL", Namespace="")]
-    public partial class CodedCommentListValue
+    public partial class ISOCodedCommentListValue
     {
         
         /// <summary>
@@ -447,8 +447,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("CodedCommentC", Namespace="", AnonymousType=true)]
-    public enum CodedCommentScope
+    [System.Xml.Serialization.XmlTypeAttribute("ISOCodedCommentC", Namespace="", AnonymousType=true)]
+    public enum ISOCodedCommentScope
     {
         
         /// <summary>
@@ -474,7 +474,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CCG", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CCG", Namespace="")]
-    public partial class CodedCommentGroup
+    public partial class ISOCodedCommentGroup
     {
         
         /// <summary>
@@ -501,16 +501,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CLD", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CLD", Namespace="")]
-    public partial class ColourLegend
+    public partial class ISOColourLegend
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ColourRange> _colourRange;
+        private System.Collections.ObjectModel.Collection<ISOColourRange> _colourRange;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CRG")]
-        public System.Collections.ObjectModel.Collection<ColourRange> ColourRange
+        public System.Collections.ObjectModel.Collection<ISOColourRange> ColourRange
         {
             get
             {
@@ -535,9 +535,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public ColourLegend()
+        public ISOColourLegend()
         {
-            this._colourRange = new System.Collections.ObjectModel.Collection<ColourRange>();
+            this._colourRange = new System.Collections.ObjectModel.Collection<ISOColourRange>();
         }
         
         /// <summary>
@@ -568,7 +568,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CRG", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CRG", Namespace="")]
-    public partial class ColourRange
+    public partial class ISOColourRange
     {
         
         /// <summary>
@@ -600,13 +600,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CAN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CAN", Namespace="")]
-    public partial class CommentAllocation
+    public partial class ISOCommentAllocation
     {
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp AllocationStamp { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>
@@ -638,7 +638,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CNN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CNN", Namespace="")]
-    public partial class Connection
+    public partial class ISOConnection
     {
         
         /// <summary>
@@ -685,13 +685,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CAT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CAT", Namespace="")]
-    public partial class ControlAssignment
+    public partial class ISOControlAssignment
     {
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp AllocationStamp { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>
@@ -759,16 +759,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CTP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CTP", Namespace="")]
-    public partial class CropType
+    public partial class ISOCropType
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<CropVariety> _cropVariety;
+        private System.Collections.ObjectModel.Collection<ISOCropVariety> _cropVariety;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CVT")]
-        public System.Collections.ObjectModel.Collection<CropVariety> CropVariety
+        public System.Collections.ObjectModel.Collection<ISOCropVariety> CropVariety
         {
             get
             {
@@ -793,9 +793,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public CropType()
+        public ISOCropType()
         {
-            this._cropVariety = new System.Collections.ObjectModel.Collection<CropVariety>();
+            this._cropVariety = new System.Collections.ObjectModel.Collection<ISOCropVariety>();
         }
         
         /// <summary>
@@ -830,7 +830,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CVT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CVT", Namespace="")]
-    public partial class CropVariety
+    public partial class ISOCropVariety
     {
         
         /// <summary>
@@ -865,16 +865,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CPC", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CPC", Namespace="")]
-    public partial class CulturalPractice
+    public partial class ISOCulturalPractice
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<OperationTechniqueReference> _operationTechniqueReference;
+        private System.Collections.ObjectModel.Collection<ISOOperationTechniqueReference> _operationTechniqueReference;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTR")]
-        public System.Collections.ObjectModel.Collection<OperationTechniqueReference> OperationTechniqueReference
+        public System.Collections.ObjectModel.Collection<ISOOperationTechniqueReference> OperationTechniqueReference
         {
             get
             {
@@ -899,9 +899,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public CulturalPractice()
+        public ISOCulturalPractice()
         {
-            this._operationTechniqueReference = new System.Collections.ObjectModel.Collection<OperationTechniqueReference>();
+            this._operationTechniqueReference = new System.Collections.ObjectModel.Collection<ISOOperationTechniqueReference>();
         }
         
         /// <summary>
@@ -928,7 +928,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("OTR", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTR", Namespace="")]
-    public partial class OperationTechniqueReference
+    public partial class ISOOperationTechniqueReference
     {
         
         /// <summary>
@@ -948,7 +948,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("CTR", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("CTR", Namespace="")]
-    public partial class Customer
+    public partial class ISOCustomer
     {
         
         /// <summary>
@@ -1041,7 +1041,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DLT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DLT", Namespace="")]
-    public partial class DataLogTrigger
+    public partial class ISODataLogTrigger
     {
         
         /// <summary>
@@ -1171,7 +1171,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DLV", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DLV", Namespace="")]
-    public partial class DataLogValue
+    public partial class ISODataLogValue
     {
         
         /// <summary>
@@ -1239,16 +1239,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DVC", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DVC", Namespace="")]
-    public partial class Device
+    public partial class ISODevice
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceElement> _deviceElement;
+        private System.Collections.ObjectModel.Collection<ISODeviceElement> _deviceElement;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DET")]
-        public System.Collections.ObjectModel.Collection<DeviceElement> DeviceElement
+        public System.Collections.ObjectModel.Collection<ISODeviceElement> DeviceElement
         {
             get
             {
@@ -1273,21 +1273,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Device()
+        public ISODevice()
         {
-            this._deviceElement = new System.Collections.ObjectModel.Collection<DeviceElement>();
-            this._deviceProperty = new System.Collections.ObjectModel.Collection<DeviceProperty>();
-            this._deviceProcessData = new System.Collections.ObjectModel.Collection<DeviceProcessData>();
-            this._deviceValuePresentation = new System.Collections.ObjectModel.Collection<DeviceValuePresentation>();
+            this._deviceElement = new System.Collections.ObjectModel.Collection<ISODeviceElement>();
+            this._deviceProperty = new System.Collections.ObjectModel.Collection<ISODeviceProperty>();
+            this._deviceProcessData = new System.Collections.ObjectModel.Collection<ISODeviceProcessData>();
+            this._deviceValuePresentation = new System.Collections.ObjectModel.Collection<ISODeviceValuePresentation>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceProperty> _deviceProperty;
+        private System.Collections.ObjectModel.Collection<ISODeviceProperty> _deviceProperty;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DPT")]
-        public System.Collections.ObjectModel.Collection<DeviceProperty> DeviceProperty
+        public System.Collections.ObjectModel.Collection<ISODeviceProperty> DeviceProperty
         {
             get
             {
@@ -1311,12 +1311,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceProcessData> _deviceProcessData;
+        private System.Collections.ObjectModel.Collection<ISODeviceProcessData> _deviceProcessData;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DPD")]
-        public System.Collections.ObjectModel.Collection<DeviceProcessData> DeviceProcessData
+        public System.Collections.ObjectModel.Collection<ISODeviceProcessData> DeviceProcessData
         {
             get
             {
@@ -1340,12 +1340,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceValuePresentation> _deviceValuePresentation;
+        private System.Collections.ObjectModel.Collection<ISODeviceValuePresentation> _deviceValuePresentation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DVP")]
-        public System.Collections.ObjectModel.Collection<DeviceValuePresentation> DeviceValuePresentation
+        public System.Collections.ObjectModel.Collection<ISODeviceValuePresentation> DeviceValuePresentation
         {
             get
             {
@@ -1430,16 +1430,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DET", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DET", Namespace="")]
-    public partial class DeviceElement
+    public partial class ISODeviceElement
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceObjectReference> _deviceObjectReference;
+        private System.Collections.ObjectModel.Collection<ISODeviceObjectReference> _deviceObjectReference;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DOR")]
-        public System.Collections.ObjectModel.Collection<DeviceObjectReference> DeviceObjectReference
+        public System.Collections.ObjectModel.Collection<ISODeviceObjectReference> DeviceObjectReference
         {
             get
             {
@@ -1464,9 +1464,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public DeviceElement()
+        public ISODeviceElement()
         {
-            this._deviceObjectReference = new System.Collections.ObjectModel.Collection<DeviceObjectReference>();
+            this._deviceObjectReference = new System.Collections.ObjectModel.Collection<ISODeviceObjectReference>();
         }
         
         /// <summary>
@@ -1489,7 +1489,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public DeviceElementType DeviceElementType { get; set; }
+        public ISODeviceElementType DeviceElementType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -1519,7 +1519,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DOR", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DOR", Namespace="")]
-    public partial class DeviceObjectReference
+    public partial class ISODeviceObjectReference
     {
         
         /// <summary>
@@ -1532,8 +1532,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("DeviceElementC", Namespace="", AnonymousType=true)]
-    public enum DeviceElementType
+    [System.Xml.Serialization.XmlTypeAttribute("ISODeviceElementC", Namespace="", AnonymousType=true)]
+    public enum ISODeviceElementType
     {
         
         /// <summary>
@@ -1579,7 +1579,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DPT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DPT", Namespace="")]
-    public partial class DeviceProperty
+    public partial class ISODeviceProperty
     {
         
         /// <summary>
@@ -1629,7 +1629,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DPD", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DPD", Namespace="")]
-    public partial class DeviceProcessData
+    public partial class ISODeviceProcessData
     {
         
         /// <summary>
@@ -1686,7 +1686,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DVP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DVP", Namespace="")]
-    public partial class DeviceValuePresentation
+    public partial class ISODeviceValuePresentation
     {
         
         /// <summary>
@@ -1731,13 +1731,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("DAN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DAN", Namespace="")]
-    public partial class DeviceAllocation
+    public partial class ISODeviceAllocation
     {
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp AllocationStamp { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>
@@ -1770,7 +1770,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("FRM", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("FRM", Namespace="")]
-    public partial class Farm
+    public partial class ISOFarm
     {
         
         /// <summary>
@@ -1841,7 +1841,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("GRD", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GRD", Namespace="")]
-    public partial class Grid
+    public partial class ISOGrid
     {
         
         /// <summary>
@@ -1910,7 +1910,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public GridType GridType { get; set; }
+        public ISOGridType GridType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -1926,8 +1926,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GridI", Namespace="", AnonymousType=true)]
-    public enum GridType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGridI", Namespace="", AnonymousType=true)]
+    public enum ISOGridType
     {
         
         /// <summary>
@@ -1948,16 +1948,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("GAN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GAN", Namespace="")]
-    public partial class GuidanceAllocation
+    public partial class ISOGuidanceAllocation
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<AllocationStamp> _allocationStamp;
+        private System.Collections.ObjectModel.Collection<ISOAllocationStamp> _allocationStamp;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public System.Collections.ObjectModel.Collection<AllocationStamp> AllocationStamp
+        public System.Collections.ObjectModel.Collection<ISOAllocationStamp> AllocationStamp
         {
             get
             {
@@ -1982,19 +1982,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public GuidanceAllocation()
+        public ISOGuidanceAllocation()
         {
-            this._allocationStamp = new System.Collections.ObjectModel.Collection<AllocationStamp>();
-            this._guidanceShift = new System.Collections.ObjectModel.Collection<GuidanceShift>();
+            this._allocationStamp = new System.Collections.ObjectModel.Collection<ISOAllocationStamp>();
+            this._guidanceShift = new System.Collections.ObjectModel.Collection<ISOGuidanceShift>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<GuidanceShift> _guidanceShift;
+        private System.Collections.ObjectModel.Collection<ISOGuidanceShift> _guidanceShift;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GST")]
-        public System.Collections.ObjectModel.Collection<GuidanceShift> GuidanceShift
+        public System.Collections.ObjectModel.Collection<ISOGuidanceShift> GuidanceShift
         {
             get
             {
@@ -2034,13 +2034,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("GST", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GST", Namespace="")]
-    public partial class GuidanceShift
+    public partial class ISOGuidanceShift
     {
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp AllocationStamp { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2099,16 +2099,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("GGP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GGP", Namespace="")]
-    public partial class GuidanceGroup
+    public partial class ISOGuidanceGroup
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<GuidancePattern> _guidancePattern;
+        private System.Collections.ObjectModel.Collection<ISOGuidancePattern> _guidancePattern;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GPN")]
-        public System.Collections.ObjectModel.Collection<GuidancePattern> GuidancePattern
+        public System.Collections.ObjectModel.Collection<ISOGuidancePattern> GuidancePattern
         {
             get
             {
@@ -2133,19 +2133,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public GuidanceGroup()
+        public ISOGuidanceGroup()
         {
-            this._guidancePattern = new System.Collections.ObjectModel.Collection<GuidancePattern>();
-            this._boundaryPolygon = new System.Collections.ObjectModel.Collection<Polygon>();
+            this._guidancePattern = new System.Collections.ObjectModel.Collection<ISOGuidancePattern>();
+            this._boundaryPolygon = new System.Collections.ObjectModel.Collection<ISOPolygon>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Polygon> _boundaryPolygon;
+        private System.Collections.ObjectModel.Collection<ISOPolygon> _boundaryPolygon;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public System.Collections.ObjectModel.Collection<Polygon> BoundaryPolygon
+        public System.Collections.ObjectModel.Collection<ISOPolygon> BoundaryPolygon
         {
             get
             {
@@ -2191,16 +2191,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("GPN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("GPN", Namespace="")]
-    public partial class GuidancePattern
+    public partial class ISOGuidancePattern
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LineString> _lineString;
+        private System.Collections.ObjectModel.Collection<ISOLineString> _lineString;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public System.Collections.ObjectModel.Collection<LineString> LineString
+        public System.Collections.ObjectModel.Collection<ISOLineString> LineString
         {
             get
             {
@@ -2225,19 +2225,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public GuidancePattern()
+        public ISOGuidancePattern()
         {
-            this._lineString = new System.Collections.ObjectModel.Collection<LineString>();
-            this._boundaryPolygon = new System.Collections.ObjectModel.Collection<Polygon>();
+            this._lineString = new System.Collections.ObjectModel.Collection<ISOLineString>();
+            this._boundaryPolygon = new System.Collections.ObjectModel.Collection<ISOPolygon>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Polygon> _boundaryPolygon;
+        private System.Collections.ObjectModel.Collection<ISOPolygon> _boundaryPolygon;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public System.Collections.ObjectModel.Collection<Polygon> BoundaryPolygon
+        public System.Collections.ObjectModel.Collection<ISOPolygon> BoundaryPolygon
         {
             get
             {
@@ -2279,12 +2279,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public GuidancePatternType GuidancePatternType { get; set; }
+        public ISOGuidancePatternType GuidancePatternType { get; set; }
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public GuidancePatternOptions GuidancePatternOptions { get; set; }
+        public ISOGuidancePatternOptions GuidancePatternOptions { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2294,7 +2294,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("E")]
-        public GuidancePatternPropagationDirection GuidancePatternPropagationDirection { get; set; }
+        public ISOGuidancePatternPropagationDirection GuidancePatternPropagationDirection { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2304,7 +2304,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public GuidancePatternExtension GuidancePatternExtension { get; set; }
+        public ISOGuidancePatternExtension GuidancePatternExtension { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2336,7 +2336,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("I")]
-        public GuidancePatternGNSSMethod GuidancePatternGNSSMethod { get; set; }
+        public ISOGuidancePatternGNSSMethod GuidancePatternGNSSMethod { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2409,16 +2409,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("LSG", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("LSG", Namespace="")]
-    public partial class LineString
+    public partial class ISOLineString
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Point> _point;
+        private System.Collections.ObjectModel.Collection<ISOPoint> _point;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PNT")]
-        public System.Collections.ObjectModel.Collection<Point> Point
+        public System.Collections.ObjectModel.Collection<ISOPoint> Point
         {
             get
             {
@@ -2443,16 +2443,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public LineString()
+        public ISOLineString()
         {
-            this._point = new System.Collections.ObjectModel.Collection<Point>();
+            this._point = new System.Collections.ObjectModel.Collection<ISOPoint>();
         }
         
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public LineStringType LineStringType { get; set; }
+        public ISOLineStringType LineStringType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2509,14 +2509,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PNT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PNT", Namespace="")]
-    public partial class Point
+    public partial class ISOPoint
     {
         
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public PointType PointType { get; set; }
+        public ISOPointType PointType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2612,8 +2612,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("PointA", Namespace="", AnonymousType=true)]
-    public enum PointType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOPointA", Namespace="", AnonymousType=true)]
+    public enum ISOPointType
     {
         
         /// <summary>
@@ -2674,8 +2674,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("LineStringA", Namespace="", AnonymousType=true)]
-    public enum LineStringType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOLineStringA", Namespace="", AnonymousType=true)]
+    public enum ISOLineStringType
     {
         
         /// <summary>
@@ -2731,16 +2731,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PLN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PLN", Namespace="")]
-    public partial class Polygon
+    public partial class ISOPolygon
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LineString> _lineString;
+        private System.Collections.ObjectModel.Collection<ISOLineString> _lineString;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public System.Collections.ObjectModel.Collection<LineString> LineString
+        public System.Collections.ObjectModel.Collection<ISOLineString> LineString
         {
             get
             {
@@ -2765,16 +2765,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Polygon()
+        public ISOPolygon()
         {
-            this._lineString = new System.Collections.ObjectModel.Collection<LineString>();
+            this._lineString = new System.Collections.ObjectModel.Collection<ISOLineString>();
         }
         
         /// <summary>
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
-        public PolygonType PolygonType { get; set; }
+        public ISOPolygonType PolygonType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -2815,8 +2815,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("PolygonA", Namespace="", AnonymousType=true)]
-    public enum PolygonType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOPolygonA", Namespace="", AnonymousType=true)]
+    public enum ISOPolygonType
     {
         
         /// <summary>
@@ -2882,8 +2882,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GuidancePatternC", Namespace="", AnonymousType=true)]
-    public enum GuidancePatternType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGuidancePatternC", Namespace="", AnonymousType=true)]
+    public enum ISOGuidancePatternType
     {
         
         /// <summary>
@@ -2914,8 +2914,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GuidancePatternD", Namespace="", AnonymousType=true)]
-    public enum GuidancePatternOptions
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGuidancePatternD", Namespace="", AnonymousType=true)]
+    public enum ISOGuidancePatternOptions
     {
         
         /// <summary>
@@ -2936,8 +2936,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GuidancePatternE", Namespace="", AnonymousType=true)]
-    public enum GuidancePatternPropagationDirection
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGuidancePatternE", Namespace="", AnonymousType=true)]
+    public enum ISOGuidancePatternPropagationDirection
     {
         
         /// <summary>
@@ -2963,8 +2963,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GuidancePatternF", Namespace="", AnonymousType=true)]
-    public enum GuidancePatternExtension
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGuidancePatternF", Namespace="", AnonymousType=true)]
+    public enum ISOGuidancePatternExtension
     {
         
         /// <summary>
@@ -2990,8 +2990,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("GuidancePatternI", Namespace="", AnonymousType=true)]
-    public enum GuidancePatternGNSSMethod
+    [System.Xml.Serialization.XmlTypeAttribute("ISOGuidancePatternI", Namespace="", AnonymousType=true)]
+    public enum ISOGuidancePatternGNSSMethod
     {
         
         /// <summary>
@@ -3057,7 +3057,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("OTQ", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTQ", Namespace="")]
-    public partial class OperationTechnique
+    public partial class ISOOperationTechnique
     {
         
         /// <summary>
@@ -3084,7 +3084,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("OTP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("OTP", Namespace="")]
-    public partial class OperTechPractice
+    public partial class ISOOperTechPractice
     {
         
         /// <summary>
@@ -3112,16 +3112,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PFD", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PFD", Namespace="")]
-    public partial class Partfield
+    public partial class ISOPartfield
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Polygon> _polygonnonTreatmentZoneonly;
+        private System.Collections.ObjectModel.Collection<ISOPolygon> _polygonnonTreatmentZoneonly;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public System.Collections.ObjectModel.Collection<Polygon> PolygonnonTreatmentZoneonly
+        public System.Collections.ObjectModel.Collection<ISOPolygon> PolygonnonTreatmentZoneonly
         {
             get
             {
@@ -3146,21 +3146,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Partfield()
+        public ISOPartfield()
         {
-            this._polygonnonTreatmentZoneonly = new System.Collections.ObjectModel.Collection<Polygon>();
-            this._lineString = new System.Collections.ObjectModel.Collection<LineString>();
-            this._point = new System.Collections.ObjectModel.Collection<Point>();
-            this._guidanceGroup = new System.Collections.ObjectModel.Collection<GuidanceGroup>();
+            this._polygonnonTreatmentZoneonly = new System.Collections.ObjectModel.Collection<ISOPolygon>();
+            this._lineString = new System.Collections.ObjectModel.Collection<ISOLineString>();
+            this._point = new System.Collections.ObjectModel.Collection<ISOPoint>();
+            this._guidanceGroup = new System.Collections.ObjectModel.Collection<ISOGuidanceGroup>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<LineString> _lineString;
+        private System.Collections.ObjectModel.Collection<ISOLineString> _lineString;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("LSG")]
-        public System.Collections.ObjectModel.Collection<LineString> LineString
+        public System.Collections.ObjectModel.Collection<ISOLineString> LineString
         {
             get
             {
@@ -3184,12 +3184,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Point> _point;
+        private System.Collections.ObjectModel.Collection<ISOPoint> _point;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PNT")]
-        public System.Collections.ObjectModel.Collection<Point> Point
+        public System.Collections.ObjectModel.Collection<ISOPoint> Point
         {
             get
             {
@@ -3213,12 +3213,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<GuidanceGroup> _guidanceGroup;
+        private System.Collections.ObjectModel.Collection<ISOGuidanceGroup> _guidanceGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GGP")]
-        public System.Collections.ObjectModel.Collection<GuidanceGroup> GuidanceGroup
+        public System.Collections.ObjectModel.Collection<ISOGuidanceGroup> GuidanceGroup
         {
             get
             {
@@ -3318,43 +3318,43 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PDV", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PDV", Namespace="")]
-    public partial class ProcessDataVariable
+    public partial class ISOProcessDataVariable
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ProcessDataVariable> _processDataVariableProperty;
+        private System.Collections.ObjectModel.Collection<ISOProcessDataVariable> _processDataVariable;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDV")]
-        public System.Collections.ObjectModel.Collection<ProcessDataVariable> ProcessDataVariableProperty
+        public System.Collections.ObjectModel.Collection<ISOProcessDataVariable> ProcessDataVariable
         {
             get
             {
-                return _processDataVariableProperty;
+                return _processDataVariable;
             }
             private set
             {
-                _processDataVariableProperty = value;
+                _processDataVariable = value;
             }
         }
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ProcessDataVariablePropertySpecified
+        public bool ProcessDataVariableSpecified
         {
             get
             {
-                return (this.ProcessDataVariableProperty.Count != 0);
+                return (this.ProcessDataVariable.Count != 0);
             }
         }
         
         /// <summary>
         /// </summary>
-        public ProcessDataVariable()
+        public ISOProcessDataVariable()
         {
-            this._processDataVariableProperty = new System.Collections.ObjectModel.Collection<ProcessDataVariable>();
+            this._processDataVariable = new System.Collections.ObjectModel.Collection<ISOProcessDataVariable>();
         }
         
         /// <summary>
@@ -3426,16 +3426,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PDT", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PDT", Namespace="")]
-    public partial class Product
+    public partial class ISOProduct
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ProductRelation> _productRelation;
+        private System.Collections.ObjectModel.Collection<ISOProductRelation> _productRelation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PRN")]
-        public System.Collections.ObjectModel.Collection<ProductRelation> ProductRelation
+        public System.Collections.ObjectModel.Collection<ISOProductRelation> ProductRelation
         {
             get
             {
@@ -3460,9 +3460,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Product()
+        public ISOProduct()
         {
-            this._productRelation = new System.Collections.ObjectModel.Collection<ProductRelation>();
+            this._productRelation = new System.Collections.ObjectModel.Collection<ISOProductRelation>();
         }
         
         /// <summary>
@@ -3507,7 +3507,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("F")]
-        public ProductType ProductType { get; set; }
+        public ISOProductType ProductType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -3566,7 +3566,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PRN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PRN", Namespace="")]
-    public partial class ProductRelation
+    public partial class ISOProductRelation
     {
         
         /// <summary>
@@ -3588,8 +3588,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("ProductF", Namespace="", AnonymousType=true)]
-    public enum ProductType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOProductF", Namespace="", AnonymousType=true)]
+    public enum ISOProductType
     {
         
         /// <summary>
@@ -3615,11 +3615,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PAN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PAN", Namespace="")]
-    public partial class ProductAllocation
+    public partial class ISOProductAllocation
     {
         
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp ASP { get; set; }
+        public ISOAllocationStamp ASP { get; set; }
         
         /// <summary>
         /// </summary>
@@ -3651,7 +3651,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public TransferMode TransferMode { get; set; }
+        public ISOTransferMode TransferMode { get; set; }
         
         /// <summary>
         /// </summary>
@@ -3685,8 +3685,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("ProductAllocationD", Namespace="", AnonymousType=true)]
-    public enum TransferMode
+    [System.Xml.Serialization.XmlTypeAttribute("ISOProductAllocationD", Namespace="", AnonymousType=true)]
+    public enum ISOTransferMode
     {
         
         /// <summary>
@@ -3712,7 +3712,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("PGP", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PGP", Namespace="")]
-    public partial class ProductGroup
+    public partial class ISOProductGroup
     {
         
         /// <summary>
@@ -3734,7 +3734,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public ProductGroupType ProductGroupType { get; set; }
+        public ISOProductGroupType ProductGroupType { get; set; }
         
         /// <summary>
         /// </summary>
@@ -3744,8 +3744,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("ProductGroupC", Namespace="", AnonymousType=true)]
-    public enum ProductGroupType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOProductGroupC", Namespace="", AnonymousType=true)]
+    public enum ISOProductGroupType
     {
         
         /// <summary>
@@ -3766,16 +3766,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("TSK", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TSK", Namespace="")]
-    public partial class Task
+    public partial class ISOTask
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<TreatmentZone> _treatmentZone;
+        private System.Collections.ObjectModel.Collection<ISOTreatmentZone> _treatmentZone;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TZN")]
-        public System.Collections.ObjectModel.Collection<TreatmentZone> TreatmentZone
+        public System.Collections.ObjectModel.Collection<ISOTreatmentZone> TreatmentZone
         {
             get
             {
@@ -3800,30 +3800,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Task()
+        public ISOTask()
         {
-            this._treatmentZone = new System.Collections.ObjectModel.Collection<TreatmentZone>();
-            this._time = new System.Collections.ObjectModel.Collection<Time>();
-            this._operTechPractice = new System.Collections.ObjectModel.Collection<OperTechPractice>();
-            this._workerAllocation = new System.Collections.ObjectModel.Collection<WorkerAllocation>();
-            this._deviceAllocation = new System.Collections.ObjectModel.Collection<DeviceAllocation>();
-            this._connection = new System.Collections.ObjectModel.Collection<Connection>();
-            this._productAllocation = new System.Collections.ObjectModel.Collection<ProductAllocation>();
-            this._dataLogTrigger = new System.Collections.ObjectModel.Collection<DataLogTrigger>();
-            this._commentAllocation = new System.Collections.ObjectModel.Collection<CommentAllocation>();
-            this._timeLog = new System.Collections.ObjectModel.Collection<TimeLog>();
-            this._grid = new System.Collections.ObjectModel.Collection<Grid>();
-            this._controlAssignment = new System.Collections.ObjectModel.Collection<ControlAssignment>();
-            this._guidanceAllocation = new System.Collections.ObjectModel.Collection<GuidanceAllocation>();
+            this._treatmentZone = new System.Collections.ObjectModel.Collection<ISOTreatmentZone>();
+            this._time = new System.Collections.ObjectModel.Collection<ISOTime>();
+            this._operTechPractice = new System.Collections.ObjectModel.Collection<ISOOperTechPractice>();
+            this._workerAllocation = new System.Collections.ObjectModel.Collection<ISOWorkerAllocation>();
+            this._deviceAllocation = new System.Collections.ObjectModel.Collection<ISODeviceAllocation>();
+            this._connection = new System.Collections.ObjectModel.Collection<ISOConnection>();
+            this._productAllocation = new System.Collections.ObjectModel.Collection<ISOProductAllocation>();
+            this._dataLogTrigger = new System.Collections.ObjectModel.Collection<ISODataLogTrigger>();
+            this._commentAllocation = new System.Collections.ObjectModel.Collection<ISOCommentAllocation>();
+            this._timeLog = new System.Collections.ObjectModel.Collection<ISOTimeLog>();
+            this._grid = new System.Collections.ObjectModel.Collection<ISOGrid>();
+            this._controlAssignment = new System.Collections.ObjectModel.Collection<ISOControlAssignment>();
+            this._guidanceAllocation = new System.Collections.ObjectModel.Collection<ISOGuidanceAllocation>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Time> _time;
+        private System.Collections.ObjectModel.Collection<ISOTime> _time;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TIM")]
-        public System.Collections.ObjectModel.Collection<Time> Time
+        public System.Collections.ObjectModel.Collection<ISOTime> Time
         {
             get
             {
@@ -3847,12 +3847,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<OperTechPractice> _operTechPractice;
+        private System.Collections.ObjectModel.Collection<ISOOperTechPractice> _operTechPractice;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTP")]
-        public System.Collections.ObjectModel.Collection<OperTechPractice> OperTechPractice
+        public System.Collections.ObjectModel.Collection<ISOOperTechPractice> OperTechPractice
         {
             get
             {
@@ -3876,12 +3876,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<WorkerAllocation> _workerAllocation;
+        private System.Collections.ObjectModel.Collection<ISOWorkerAllocation> _workerAllocation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("WAN")]
-        public System.Collections.ObjectModel.Collection<WorkerAllocation> WorkerAllocation
+        public System.Collections.ObjectModel.Collection<ISOWorkerAllocation> WorkerAllocation
         {
             get
             {
@@ -3905,12 +3905,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DeviceAllocation> _deviceAllocation;
+        private System.Collections.ObjectModel.Collection<ISODeviceAllocation> _deviceAllocation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DAN")]
-        public System.Collections.ObjectModel.Collection<DeviceAllocation> DeviceAllocation
+        public System.Collections.ObjectModel.Collection<ISODeviceAllocation> DeviceAllocation
         {
             get
             {
@@ -3934,12 +3934,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Connection> _connection;
+        private System.Collections.ObjectModel.Collection<ISOConnection> _connection;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CNN")]
-        public System.Collections.ObjectModel.Collection<Connection> Connection
+        public System.Collections.ObjectModel.Collection<ISOConnection> Connection
         {
             get
             {
@@ -3963,12 +3963,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ProductAllocation> _productAllocation;
+        private System.Collections.ObjectModel.Collection<ISOProductAllocation> _productAllocation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PAN")]
-        public System.Collections.ObjectModel.Collection<ProductAllocation> ProductAllocation
+        public System.Collections.ObjectModel.Collection<ISOProductAllocation> ProductAllocation
         {
             get
             {
@@ -3992,12 +3992,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DataLogTrigger> _dataLogTrigger;
+        private System.Collections.ObjectModel.Collection<ISODataLogTrigger> _dataLogTrigger;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DLT")]
-        public System.Collections.ObjectModel.Collection<DataLogTrigger> DataLogTrigger
+        public System.Collections.ObjectModel.Collection<ISODataLogTrigger> DataLogTrigger
         {
             get
             {
@@ -4021,12 +4021,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<CommentAllocation> _commentAllocation;
+        private System.Collections.ObjectModel.Collection<ISOCommentAllocation> _commentAllocation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CAN")]
-        public System.Collections.ObjectModel.Collection<CommentAllocation> CommentAllocation
+        public System.Collections.ObjectModel.Collection<ISOCommentAllocation> CommentAllocation
         {
             get
             {
@@ -4050,12 +4050,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<TimeLog> _timeLog;
+        private System.Collections.ObjectModel.Collection<ISOTimeLog> _timeLog;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TLG")]
-        public System.Collections.ObjectModel.Collection<TimeLog> TimeLog
+        public System.Collections.ObjectModel.Collection<ISOTimeLog> TimeLog
         {
             get
             {
@@ -4079,12 +4079,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Grid> _grid;
+        private System.Collections.ObjectModel.Collection<ISOGrid> _grid;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GRD")]
-        public System.Collections.ObjectModel.Collection<Grid> Grid
+        public System.Collections.ObjectModel.Collection<ISOGrid> Grid
         {
             get
             {
@@ -4108,12 +4108,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ControlAssignment> _controlAssignment;
+        private System.Collections.ObjectModel.Collection<ISOControlAssignment> _controlAssignment;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CAT")]
-        public System.Collections.ObjectModel.Collection<ControlAssignment> ControlAssignment
+        public System.Collections.ObjectModel.Collection<ISOControlAssignment> ControlAssignment
         {
             get
             {
@@ -4137,12 +4137,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<GuidanceAllocation> _guidanceAllocation;
+        private System.Collections.ObjectModel.Collection<ISOGuidanceAllocation> _guidanceAllocation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("GAN")]
-        public System.Collections.ObjectModel.Collection<GuidanceAllocation> GuidanceAllocation
+        public System.Collections.ObjectModel.Collection<ISOGuidanceAllocation> GuidanceAllocation
         {
             get
             {
@@ -4216,7 +4216,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("G")]
-        public TaskStatus TaskStatus { get; set; }
+        public ISOTaskStatus TaskStatus { get; set; }
         
         /// <summary>
         /// </summary>
@@ -4259,16 +4259,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("TZN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TZN", Namespace="")]
-    public partial class TreatmentZone
+    public partial class ISOTreatmentZone
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Polygon> _polygonTreatmentZoneonly;
+        private System.Collections.ObjectModel.Collection<ISOPolygon> _polygonTreatmentZoneonly;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PLN")]
-        public System.Collections.ObjectModel.Collection<Polygon> PolygonTreatmentZoneonly
+        public System.Collections.ObjectModel.Collection<ISOPolygon> PolygonTreatmentZoneonly
         {
             get
             {
@@ -4293,19 +4293,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public TreatmentZone()
+        public ISOTreatmentZone()
         {
-            this._polygonTreatmentZoneonly = new System.Collections.ObjectModel.Collection<Polygon>();
-            this._processDataVariable = new System.Collections.ObjectModel.Collection<ProcessDataVariable>();
+            this._polygonTreatmentZoneonly = new System.Collections.ObjectModel.Collection<ISOPolygon>();
+            this._processDataVariable = new System.Collections.ObjectModel.Collection<ISOProcessDataVariable>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ProcessDataVariable> _processDataVariable;
+        private System.Collections.ObjectModel.Collection<ISOProcessDataVariable> _processDataVariable;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDV")]
-        public System.Collections.ObjectModel.Collection<ProcessDataVariable> ProcessDataVariable
+        public System.Collections.ObjectModel.Collection<ISOProcessDataVariable> ProcessDataVariable
         {
             get
             {
@@ -4360,16 +4360,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("TIM", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TIM", Namespace="")]
-    public partial class Time
+    public partial class ISOTime
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Position> _position;
+        private System.Collections.ObjectModel.Collection<ISOPosition> _position;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PTN")]
-        public System.Collections.ObjectModel.Collection<Position> Position
+        public System.Collections.ObjectModel.Collection<ISOPosition> Position
         {
             get
             {
@@ -4394,19 +4394,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public Time()
+        public ISOTime()
         {
-            this._position = new System.Collections.ObjectModel.Collection<Position>();
-            this._dataLogValue = new System.Collections.ObjectModel.Collection<DataLogValue>();
+            this._position = new System.Collections.ObjectModel.Collection<ISOPosition>();
+            this._dataLogValue = new System.Collections.ObjectModel.Collection<ISODataLogValue>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DataLogValue> _dataLogValue;
+        private System.Collections.ObjectModel.Collection<ISODataLogValue> _dataLogValue;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DLV")]
-        public System.Collections.ObjectModel.Collection<DataLogValue> DataLogValue
+        public System.Collections.ObjectModel.Collection<ISODataLogValue> DataLogValue
         {
             get
             {
@@ -4460,13 +4460,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public Type2 Type { get; set; }
+        public ISOType2 Type { get; set; }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("TimeD", Namespace="", AnonymousType=true)]
-    public enum Type2
+    [System.Xml.Serialization.XmlTypeAttribute("ISOTimeD", Namespace="", AnonymousType=true)]
+    public enum ISOType2
     {
         
         /// <summary>
@@ -4512,13 +4512,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("WAN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("WAN", Namespace="")]
-    public partial class WorkerAllocation
+    public partial class ISOWorkerAllocation
     {
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public AllocationStamp AllocationStamp { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>
@@ -4537,7 +4537,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("TLG", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TLG", Namespace="")]
-    public partial class TimeLog
+    public partial class ISOTimeLog
     {
         
         /// <summary>
@@ -4564,13 +4564,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public TimeLogType TimeLogType { get; set; }
+        public ISOTimeLogType TimeLogType { get; set; }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("TimeLogC", Namespace="", AnonymousType=true)]
-    public enum TimeLogType
+    [System.Xml.Serialization.XmlTypeAttribute("ISOTimeLogC", Namespace="", AnonymousType=true)]
+    public enum ISOTimeLogType
     {
         
         /// <summary>
@@ -4581,8 +4581,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("TaskG", Namespace="", AnonymousType=true)]
-    public enum TaskStatus
+    [System.Xml.Serialization.XmlTypeAttribute("ISOTaskG", Namespace="", AnonymousType=true)]
+    public enum ISOTaskStatus
     {
         
         /// <summary>
@@ -4623,7 +4623,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("VPN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("VPN", Namespace="")]
-    public partial class ValuePresentation
+    public partial class ISOValuePresentation
     {
         
         /// <summary>
@@ -4678,7 +4678,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("WKR", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("WKR", Namespace="")]
-    public partial class Worker
+    public partial class ISOWorker
     {
         
         /// <summary>
@@ -4771,7 +4771,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("AFE", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("AFE", Namespace="")]
-    public partial class AttachedFile
+    public partial class ISOAttachedFile
     {
         
         /// <summary>
@@ -4787,7 +4787,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public Preserve Preserve { get; set; }
+        public ISOPreserve Preserve { get; set; }
         
         /// <summary>
         /// </summary>
@@ -4823,8 +4823,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("AttachedFileB", Namespace="", AnonymousType=true)]
-    public enum Preserve
+    [System.Xml.Serialization.XmlTypeAttribute("ISOAttachedFileB", Namespace="", AnonymousType=true)]
+    public enum ISOPreserve
     {
         
         /// <summary>
@@ -4849,12 +4849,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<AttachedFile> _attachedFile;
+        private System.Collections.ObjectModel.Collection<ISOAttachedFile> _attachedFile;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("AFE")]
-        public System.Collections.ObjectModel.Collection<AttachedFile> AttachedFile
+        public System.Collections.ObjectModel.Collection<ISOAttachedFile> AttachedFile
         {
             get
             {
@@ -4881,34 +4881,34 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         public ISO11783TaskDataFile()
         {
-            this._attachedFile = new System.Collections.ObjectModel.Collection<AttachedFile>();
-            this._baseStation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation>();
-            this._codedComment = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment>();
-            this._codedCommentGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup>();
-            this._colourLegend = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend>();
-            this._cropType = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType>();
-            this._culturalPractice = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice>();
-            this._customer = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer>();
-            this._device = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device>();
-            this._farm = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm>();
-            this._operationTechnique = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique>();
-            this._partfield = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield>();
-            this._product = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product>();
-            this._productGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup>();
-            this._task = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task>();
-            this._taskControllerCapabilities = new System.Collections.ObjectModel.Collection<TaskControllerCapabilities>();
-            this._valuePresentation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation>();
-            this._worker = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker>();
-            this._externalFileReference = new System.Collections.ObjectModel.Collection<ExternalFileReference>();
+            this._attachedFile = new System.Collections.ObjectModel.Collection<ISOAttachedFile>();
+            this._baseStation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation>();
+            this._codedComment = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment>();
+            this._codedCommentGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup>();
+            this._colourLegend = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend>();
+            this._cropType = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType>();
+            this._culturalPractice = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice>();
+            this._customer = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer>();
+            this._device = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice>();
+            this._farm = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm>();
+            this._operationTechnique = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique>();
+            this._partfield = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield>();
+            this._product = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct>();
+            this._productGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup>();
+            this._task = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask>();
+            this._taskControllerCapabilities = new System.Collections.ObjectModel.Collection<ISOTaskControllerCapabilities>();
+            this._valuePresentation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation>();
+            this._worker = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker>();
+            this._externalFileReference = new System.Collections.ObjectModel.Collection<ISOExternalFileReference>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation> _baseStation;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation> _baseStation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("BSN")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation> BaseStation
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation> BaseStation
         {
             get
             {
@@ -4932,12 +4932,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment> _codedComment;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment> _codedComment;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCT")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment> CodedComment
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment> CodedComment
         {
             get
             {
@@ -4961,12 +4961,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup> _codedCommentGroup;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup> _codedCommentGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCG")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup> CodedCommentGroup
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup> CodedCommentGroup
         {
             get
             {
@@ -4990,12 +4990,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend> _colourLegend;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend> _colourLegend;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CLD")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend> ColourLegend
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend> ColourLegend
         {
             get
             {
@@ -5019,12 +5019,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType> _cropType;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType> _cropType;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTP")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType> CropType
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType> CropType
         {
             get
             {
@@ -5048,12 +5048,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice> _culturalPractice;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice> _culturalPractice;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CPC")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice> CulturalPractice
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice> CulturalPractice
         {
             get
             {
@@ -5077,12 +5077,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer> _customer;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer> _customer;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTR")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer> Customer
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer> Customer
         {
             get
             {
@@ -5106,12 +5106,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device> _device;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice> _device;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DVC")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device> Device
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice> Device
         {
             get
             {
@@ -5135,12 +5135,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm> _farm;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm> _farm;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("FRM")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm> Farm
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm> Farm
         {
             get
             {
@@ -5164,12 +5164,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique> _operationTechnique;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique> _operationTechnique;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTQ")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique> OperationTechnique
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique> OperationTechnique
         {
             get
             {
@@ -5193,12 +5193,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield> _partfield;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield> _partfield;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PFD")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield> Partfield
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield> Partfield
         {
             get
             {
@@ -5222,12 +5222,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product> _product;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct> _product;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDT")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product> Product
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct> Product
         {
             get
             {
@@ -5251,12 +5251,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup> _productGroup;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup> _productGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PGP")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup> ProductGroup
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup> ProductGroup
         {
             get
             {
@@ -5280,12 +5280,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task> _task;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask> _task;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TSK")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task> Task
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask> Task
         {
             get
             {
@@ -5309,12 +5309,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<TaskControllerCapabilities> _taskControllerCapabilities;
+        private System.Collections.ObjectModel.Collection<ISOTaskControllerCapabilities> _taskControllerCapabilities;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TCC")]
-        public System.Collections.ObjectModel.Collection<TaskControllerCapabilities> TaskControllerCapabilities
+        public System.Collections.ObjectModel.Collection<ISOTaskControllerCapabilities> TaskControllerCapabilities
         {
             get
             {
@@ -5338,12 +5338,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation> _valuePresentation;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation> _valuePresentation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("VPN")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation> ValuePresentation
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation> ValuePresentation
         {
             get
             {
@@ -5367,12 +5367,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker> _worker;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker> _worker;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("WKR")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker> Worker
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker> Worker
         {
             get
             {
@@ -5396,12 +5396,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<ExternalFileReference> _externalFileReference;
+        private System.Collections.ObjectModel.Collection<ISOExternalFileReference> _externalFileReference;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("XFR")]
-        public System.Collections.ObjectModel.Collection<ExternalFileReference> ExternalFileReference
+        public System.Collections.ObjectModel.Collection<ISOExternalFileReference> ExternalFileReference
         {
             get
             {
@@ -5489,7 +5489,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("TCC", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TCC", Namespace="")]
-    public partial class TaskControllerCapabilities
+    public partial class ISOTaskControllerCapabilities
     {
         
         /// <summary>
@@ -5511,7 +5511,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("C")]
-        public VersionNumber VersionNumber { get; set; }
+        public ISOVersionNumber VersionNumber { get; set; }
         
         /// <summary>
         /// </summary>
@@ -5544,8 +5544,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("TaskControllerCapabilitiesC", Namespace="", AnonymousType=true)]
-    public enum VersionNumber
+    [System.Xml.Serialization.XmlTypeAttribute("ISOTaskControllerCapabilitiesC", Namespace="", AnonymousType=true)]
+    public enum ISOVersionNumber
     {
         
         /// <summary>
@@ -5581,7 +5581,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("XFR", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("XFR", Namespace="")]
-    public partial class ExternalFileReference
+    public partial class ISOExternalFileReference
     {
         
         /// <summary>
@@ -5598,13 +5598,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("B")]
-        public Filetype Filetype { get; set; }
+        public ISOFiletype Filetype { get; set; }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("ExternalFileReferenceB", Namespace="", AnonymousType=true)]
-    public enum Filetype
+    [System.Xml.Serialization.XmlTypeAttribute("ISOExternalFileReferenceB", Namespace="", AnonymousType=true)]
+    public enum ISOFiletype
     {
         
         /// <summary>
@@ -5670,16 +5670,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     [System.Xml.Serialization.XmlTypeAttribute("XFC", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("XFC", Namespace="")]
-    public partial class ExternalFileContents
+    public partial class ISOExternalFileContents
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation> _baseStation;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation> _baseStation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("BSN")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation> BaseStation
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation> BaseStation
         {
             get
             {
@@ -5704,33 +5704,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
-        public ExternalFileContents()
+        public ISOExternalFileContents()
         {
-            this._baseStation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.BaseStation>();
-            this._codedComment = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment>();
-            this._codedCommentGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup>();
-            this._colourLegend = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend>();
-            this._cropType = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType>();
-            this._culturalPractice = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice>();
-            this._customer = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer>();
-            this._device = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device>();
-            this._farm = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm>();
-            this._operationTechnique = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique>();
-            this._partfield = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield>();
-            this._product = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product>();
-            this._productGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup>();
-            this._task = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task>();
-            this._valuePresentation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation>();
-            this._worker = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker>();
+            this._baseStation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOBaseStation>();
+            this._codedComment = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment>();
+            this._codedCommentGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup>();
+            this._colourLegend = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend>();
+            this._cropType = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType>();
+            this._culturalPractice = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice>();
+            this._customer = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer>();
+            this._device = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice>();
+            this._farm = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm>();
+            this._operationTechnique = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique>();
+            this._partfield = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield>();
+            this._product = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct>();
+            this._productGroup = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup>();
+            this._task = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask>();
+            this._valuePresentation = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation>();
+            this._worker = new System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment> _codedComment;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment> _codedComment;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCT")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedComment> CodedComment
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedComment> CodedComment
         {
             get
             {
@@ -5754,12 +5754,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup> _codedCommentGroup;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup> _codedCommentGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CCG")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CodedCommentGroup> CodedCommentGroup
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCodedCommentGroup> CodedCommentGroup
         {
             get
             {
@@ -5783,12 +5783,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend> _colourLegend;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend> _colourLegend;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CLD")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ColourLegend> ColourLegend
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOColourLegend> ColourLegend
         {
             get
             {
@@ -5812,12 +5812,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType> _cropType;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType> _cropType;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTP")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CropType> CropType
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCropType> CropType
         {
             get
             {
@@ -5841,12 +5841,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice> _culturalPractice;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice> _culturalPractice;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CPC")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.CulturalPractice> CulturalPractice
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCulturalPractice> CulturalPractice
         {
             get
             {
@@ -5870,12 +5870,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer> _customer;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer> _customer;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("CTR")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Customer> Customer
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOCustomer> Customer
         {
             get
             {
@@ -5899,12 +5899,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device> _device;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice> _device;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DVC")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Device> Device
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISODevice> Device
         {
             get
             {
@@ -5928,12 +5928,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm> _farm;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm> _farm;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("FRM")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Farm> Farm
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOFarm> Farm
         {
             get
             {
@@ -5957,12 +5957,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique> _operationTechnique;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique> _operationTechnique;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("OTQ")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.OperationTechnique> OperationTechnique
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOOperationTechnique> OperationTechnique
         {
             get
             {
@@ -5986,12 +5986,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield> _partfield;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield> _partfield;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PFD")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Partfield> Partfield
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOPartfield> Partfield
         {
             get
             {
@@ -6015,12 +6015,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product> _product;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct> _product;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PDT")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Product> Product
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProduct> Product
         {
             get
             {
@@ -6044,12 +6044,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup> _productGroup;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup> _productGroup;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PGP")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ProductGroup> ProductGroup
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOProductGroup> ProductGroup
         {
             get
             {
@@ -6073,12 +6073,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task> _task;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask> _task;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("TSK")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Task> Task
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOTask> Task
         {
             get
             {
@@ -6102,12 +6102,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation> _valuePresentation;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation> _valuePresentation;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("VPN")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ValuePresentation> ValuePresentation
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOValuePresentation> ValuePresentation
         {
             get
             {
@@ -6131,12 +6131,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker> _worker;
+        private System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker> _worker;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("WKR")]
-        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.Worker> Worker
+        public System.Collections.ObjectModel.Collection<Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISOWorker> Worker
         {
             get
             {

@@ -19,48 +19,48 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static string FindId(object obj)
         {
-            if (obj.GetType().Equals(typeof(BaseStation))){
-                return ((BaseStation)obj).BaseStationId;
+            if (obj.GetType().Equals(typeof(ISOBaseStation))){
+                return ((ISOBaseStation)obj).BaseStationId;
             }
-            else if(obj.GetType().Equals(typeof(CodedComment))){
-                return ((CodedComment)obj).CodedCommentId;
+            else if(obj.GetType().Equals(typeof(ISOCodedComment))){
+                return ((ISOCodedComment)obj).CodedCommentId;
             }
-            else if (obj.GetType().Equals(typeof(CodedCommentGroup))){
-                return ((CodedCommentGroup)obj).CodedCommentGroupId;
+            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup))){
+                return ((ISOCodedCommentGroup)obj).CodedCommentGroupId;
             }
-            else if (obj.GetType().Equals(typeof(CropType))){
-                return ((CropType)obj).CropTypeId;
+            else if (obj.GetType().Equals(typeof(ISOCropType))){
+                return ((ISOCropType)obj).CropTypeId;
             }
-            else if (obj.GetType().Equals(typeof(CulturalPractice))){
-                return ((CulturalPractice)obj).CulturalPracticeId;
+            else if (obj.GetType().Equals(typeof(ISOCulturalPractice))){
+                return ((ISOCulturalPractice)obj).CulturalPracticeId;
             }
-            else if (obj.GetType().Equals(typeof(Device))){
-                return ((Device)obj).DeviceId;
+            else if (obj.GetType().Equals(typeof(ISODevice))){
+                return ((ISODevice)obj).DeviceId;
             }
-            else if (obj.GetType().Equals(typeof(Farm))){
-                return ((Farm)obj).FarmId;
+            else if (obj.GetType().Equals(typeof(ISOFarm))){
+                return ((ISOFarm)obj).FarmId;
             }
-            else if (obj.GetType().Equals(typeof(OperationTechnique))){
-                return ((OperationTechnique)obj).OperationTechniqueId;
+            else if (obj.GetType().Equals(typeof(ISOOperationTechnique))){
+                return ((ISOOperationTechnique)obj).OperationTechniqueId;
             }
-            else if (obj.GetType().Equals(typeof(Partfield))){
-                return ((Partfield)obj).PartfieldId;
+            else if (obj.GetType().Equals(typeof(ISOPartfield))){
+                return ((ISOPartfield)obj).PartfieldId;
             }
-            else if (obj.GetType().Equals(typeof(Product))){
-                return ((Product)obj).ProductId;
+            else if (obj.GetType().Equals(typeof(ISOProduct))){
+                return ((ISOProduct)obj).ProductId;
             }
-            else if (obj.GetType().Equals(typeof(Task))){
-                return ((Task)obj).TaskId;
+            else if (obj.GetType().Equals(typeof(ISOTask))){
+                return ((ISOTask)obj).TaskId;
             }
-            else if (obj.GetType().Equals(typeof(ValuePresentation))){
-                return ((ValuePresentation)obj).ValuePresentationId;
+            else if (obj.GetType().Equals(typeof(ISOValuePresentation))){
+                return ((ISOValuePresentation)obj).ValuePresentationId;
             }
-            else if (obj.GetType().Equals(typeof(Worker))){
-                return ((Worker)obj).WorkerId;
+            else if (obj.GetType().Equals(typeof(ISOWorker))){
+                return ((ISOWorker)obj).WorkerId;
             }
-            else if (obj.GetType().Equals(typeof(LinkGroup)))
+            else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
             {
-                return ((LinkGroup)obj).LinkGroupId;
+                return ((ISOLinkGroup)obj).LinkGroupId;
             }
             else
             {
@@ -76,61 +76,61 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="id">The ID to set</param>
         public static void SetId(object obj, string id)
         {
-            if (obj.GetType().Equals(typeof(BaseStation)))
+            if (obj.GetType().Equals(typeof(ISOBaseStation)))
             {
-                ((BaseStation)obj).BaseStationId = id;
+                ((ISOBaseStation)obj).BaseStationId = id;
             }
-            else if (obj.GetType().Equals(typeof(CodedComment)))
+            else if (obj.GetType().Equals(typeof(ISOCodedComment)))
             {
-                ((CodedComment)obj).CodedCommentId = id;
+                ((ISOCodedComment)obj).CodedCommentId = id;
             }
-            else if (obj.GetType().Equals(typeof(CodedCommentGroup)))
+            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup)))
             {
-                ((CodedCommentGroup)obj).CodedCommentGroupId = id;
+                ((ISOCodedCommentGroup)obj).CodedCommentGroupId = id;
             }
-            else if (obj.GetType().Equals(typeof(CropType)))
+            else if (obj.GetType().Equals(typeof(ISOCropType)))
             {
-                ((CropType)obj).CropTypeId = id;
+                ((ISOCropType)obj).CropTypeId = id;
             }
-            else if (obj.GetType().Equals(typeof(CulturalPractice)))
+            else if (obj.GetType().Equals(typeof(ISOCulturalPractice)))
             {
-                ((CulturalPractice)obj).CulturalPracticeId = id;
+                ((ISOCulturalPractice)obj).CulturalPracticeId = id;
             }
-            else if (obj.GetType().Equals(typeof(Device)))
+            else if (obj.GetType().Equals(typeof(ISODevice)))
             {
-                ((Device)obj).DeviceId = id;
+                ((ISODevice)obj).DeviceId = id;
             }
-            else if (obj.GetType().Equals(typeof(Farm)))
+            else if (obj.GetType().Equals(typeof(ISOFarm)))
             {
-                ((Farm)obj).FarmId = id;
+                ((ISOFarm)obj).FarmId = id;
             }
-            else if (obj.GetType().Equals(typeof(OperationTechnique)))
+            else if (obj.GetType().Equals(typeof(ISOOperationTechnique)))
             {
-                ((OperationTechnique)obj).OperationTechniqueId = id;
+                ((ISOOperationTechnique)obj).OperationTechniqueId = id;
             }
-            else if (obj.GetType().Equals(typeof(Partfield)))
+            else if (obj.GetType().Equals(typeof(ISOPartfield)))
             {
-                ((Partfield)obj).PartfieldId = id;
+                ((ISOPartfield)obj).PartfieldId = id;
             }
-            else if (obj.GetType().Equals(typeof(Product)))
+            else if (obj.GetType().Equals(typeof(ISOProduct)))
             {
-                ((Product)obj).ProductId = id;
+                ((ISOProduct)obj).ProductId = id;
             }
-            else if (obj.GetType().Equals(typeof(Task)))
+            else if (obj.GetType().Equals(typeof(ISOTask)))
             {
-                ((Task)obj).TaskId = id;
+                ((ISOTask)obj).TaskId = id;
             }
-            else if (obj.GetType().Equals(typeof(ValuePresentation)))
+            else if (obj.GetType().Equals(typeof(ISOValuePresentation)))
             {
-                ((ValuePresentation)obj).ValuePresentationId = id;
+                ((ISOValuePresentation)obj).ValuePresentationId = id;
             }
-            else if (obj.GetType().Equals(typeof(Worker)))
+            else if (obj.GetType().Equals(typeof(ISOWorker)))
             {
-                ((Worker)obj).WorkerId = id;
+                ((ISOWorker)obj).WorkerId = id;
             }
-            else if (obj.GetType().Equals(typeof(LinkGroup)))
+            else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
             {
-                ((LinkGroup)obj).LinkGroupId  = id; 
+                ((ISOLinkGroup)obj).LinkGroupId  = id; 
             }
             else
             {

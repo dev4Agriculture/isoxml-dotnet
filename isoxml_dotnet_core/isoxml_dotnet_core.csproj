@@ -3,12 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>isoxml_dotnet_core</RootNamespace>
+	  <Version>0.1.0</Version>
     <Company>dev4Agriculture</Company>
     <Authors>Frank Wiebeler, Alexander Parshin</Authors>
     <Description>This library provides access to agricultural data in ISO11783-10 TaskController compatible ISOXML Files</Description>
     <Copyright>Copyright 2022 by dev4Agriculture</Copyright>
     <PackageProjectUrl>https://github.com/dev4Agriculture/isoxml-dotnet</PackageProjectUrl>
     <PackageIcon>logo_dev4Agriculture.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/dev4Agriculture/isoxml-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>isoxml;agriculture;iso11783;taskcontroller;taskdata.xml;taskdata</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,18 +22,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="../assets/logo_dev4Agriculture.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="../README.md" />
-    <None Include="logo_dev4Agriculture.png">
+    <None Include="../README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+	  <None Include="../LICENSE">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+	</None>
   </ItemGroup>
 </Project>

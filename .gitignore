@@ -16,3 +16,4 @@
 /isoxml_dotnet_generator/out
 
 /.vscode
+/isoxml_dotnet_core/nuget.config

@@ -19,7 +19,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     [System.Xml.Serialization.XmlTypeAttribute("DLV", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("DLV", Namespace="")]
-    public partial class DataLogValue
+    public partial class ISODataLogValue
     {
         
         /// <summary>
@@ -88,7 +88,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     [System.Xml.Serialization.XmlTypeAttribute("PTN", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("PTN", Namespace="")]
-    public partial class Position
+    public partial class ISOPosition
     {
         
         /// <summary>
@@ -173,16 +173,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     [System.Xml.Serialization.XmlTypeAttribute("TIM", Namespace="", AnonymousType=true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("TIM", Namespace="")]
-    public partial class Time
+    public partial class ISOTime
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<Position> _position;
+        private System.Collections.ObjectModel.Collection<ISOPosition> _position;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("PTN")]
-        public System.Collections.ObjectModel.Collection<Position> Position
+        public System.Collections.ObjectModel.Collection<ISOPosition> Position
         {
             get
             {
@@ -207,19 +207,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         
         /// <summary>
         /// </summary>
-        public Time()
+        public ISOTime()
         {
-            this._position = new System.Collections.ObjectModel.Collection<Position>();
-            this._dataLogValue = new System.Collections.ObjectModel.Collection<DataLogValue>();
+            this._position = new System.Collections.ObjectModel.Collection<ISOPosition>();
+            this._dataLogValue = new System.Collections.ObjectModel.Collection<ISODataLogValue>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.ObjectModel.Collection<DataLogValue> _dataLogValue;
+        private System.Collections.ObjectModel.Collection<ISODataLogValue> _dataLogValue;
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("DLV")]
-        public System.Collections.ObjectModel.Collection<DataLogValue> DataLogValue
+        public System.Collections.ObjectModel.Collection<ISODataLogValue> DataLogValue
         {
             get
             {
@@ -254,13 +254,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// </summary>
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("D")]
-        public Type Type { get; set; }
+        public ISOType Type { get; set; }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.719.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("TimeD", Namespace="", AnonymousType=true)]
-    public enum Type
+    [System.Xml.Serialization.XmlTypeAttribute("ISOTimeD", Namespace="", AnonymousType=true)]
+    public enum ISOType
     {
         
         /// <summary>

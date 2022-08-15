@@ -16,12 +16,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         private byte[,] datat1;
         private UInt32[,,] datat2;
         public string name;
-        public GridType type;
+        public ISOGridType type;
         public bool loaded;
 
 
 
-        public static ResultWithMessages<IsoGrid> Load(String baseFolder, string name, UInt32 width, UInt32 height, GridType type,Byte layers)
+        public static ResultWithMessages<IsoGrid> Load(String baseFolder, string name, UInt32 width, UInt32 height, ISOGridType type,Byte layers)
         {
             List<ResultMessage> messages = new List<ResultMessage>();
             IsoGrid grid = null;
@@ -39,7 +39,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 FileStream binaryFileStream = File.Open(filePath, FileMode.Open);
                 switch (grid.type)
                 {
-                    case GridType.gridtype1:
+                    case ISOGridType.gridtype1:
                         grid.datat1 = new byte[grid.height, grid.width];
                         if (grid.width * grid.height == binaryFileStream.Length)
                         {
@@ -59,7 +59,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             messages.Add(new ResultMessage(ResultMessageType.Error, "FileSize of Grid doesn't match: " + filePath));
                         }
                         break;
-                    case GridType.gridtype2:
+                    case ISOGridType.gridtype2:
                         grid.datat2 = new UInt32[grid.layers,grid.height, grid.width];
                         if (grid.layers * grid.width * grid.height * sizeof(UInt32)== binaryFileStream.Length)
                         {
@@ -107,7 +107,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             BinaryWriter bw = new BinaryWriter(fs);
             switch (this.type)
             {
-                case GridType.gridtype1:
+                case ISOGridType.gridtype1:
                     for (int y = 0; y < this.height; y++)
                     {
                         for (int x = 0; x < this.width; x++)
@@ -117,7 +117,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     }
 
                     break;
-                case GridType.gridtype2:
+                case ISOGridType.gridtype2:
                     for( int l = 0; l< layers; l++)
                     {
                         for (int y = 0; y < this.height; y++)
@@ -144,7 +144,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 StreamWriter streamWriter = new StreamWriter(file);
                 switch (this.type)
                 {
-                    case GridType.gridtype1:
+                    case ISOGridType.gridtype1:
                         for (int y = 0; y < this.height; y++)
                         {
                             string dataLineText = "";
@@ -156,7 +156,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             streamWriter.Flush();
                         }
                         break;
-                    case GridType.gridtype2:
+                    case ISOGridType.gridtype2:
                         for(int l=0; l < this.layers; l++)
                         {
                             for (int y = 0; y < this.height; y++)
@@ -191,13 +191,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             switch (this.type)
             {
-                case GridType.gridtype1:
+                case ISOGridType.gridtype1:
                     if(value<0  ||value> 255) {
                         return 0;
                     }
                     this.datat1[y, x] = (byte)value;
                     return 1;
-                case GridType.gridtype2:
+                case ISOGridType.gridtype2:
                     if(layer<0 || layer>= layers)
                     {
                         return 0;
@@ -218,9 +218,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             switch (this.type)
             {
-                case GridType.gridtype1:
+                case ISOGridType.gridtype1:
                     return this.datat1[y, x];
-                case GridType.gridtype2:
+                case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= layers)
                     {
                         throw new IndexOutOfRangeException();

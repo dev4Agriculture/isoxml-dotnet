@@ -27,12 +27,12 @@ namespace isoxml_dotnet_test.testdata
             string path = "./out/linklist/valid";
             var taskName = "LinkList";
             var uuid = Guid.NewGuid().ToString();
-            var isoxml = new ISOXML(path);
+            var isoxml = ISOXML.Create(path);
             
-            var task = new Task()
+            var task = new ISOTask()
             {
                 TaskDesignator = taskName,
-                TaskStatus = TaskStatus.Planned
+                TaskStatus = ISOTaskStatus.Planned
             };
             var id = isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
             isoxml.Data.Task.Add(task);
