@@ -1,5 +1,11 @@
-# isoxml-dotnet
-An ISOXML Implementation in DotNet
+# Abstract
+ISOXML is an agricultural data format to create Task Descriptions and record machine data in agricultural machines.
+ISOXML is standardized in ISO11783-10.
+
+# Developers and Maintainers
+![Logo](/assets/dev4Agriculture.svg)
+
+Dev4Agriculture is specialized in agricultural data analysis. We love to make farming software work.
 
 
 ## Classes
