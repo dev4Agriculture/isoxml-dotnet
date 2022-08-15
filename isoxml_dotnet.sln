@@ -3,15 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_test", "isoxml_dotnet_test\isoxml_dotnet_test.csproj", "{433129DC-50C1-4447-8E24-5AF315AF8DCC}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FD19A659-C14B-413A-9F57-19876E6658AB} = {FD19A659-C14B-413A-9F57-19876E6658AB}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_generator", "isoxml_dotnet_generator\isoxml_dotnet_generator.csproj", "{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_core", "isoxml_dotnet_core\isoxml_dotnet_core.csproj", "{FD19A659-C14B-413A-9F57-19876E6658AB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6890B5CE-39EE-4756-8D2F-10DE12378B07}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -23,7 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		release.yml = release.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isoxml_dotnet_core_example", "isoxml_dotnet_core_example\isoxml_dotnet_core_example.csproj", "{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev4Agriculture.ISO11783.ISOXML", "Dev4Agriculture.ISO11783.ISOXML\Dev4Agriculture.ISO11783.ISOXML.csproj", "{90BE7915-7AE6-4F88-B935-8869C1DFD810}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev4Agriculture.ISO11783.ISOXML.Examples", "Dev4Agriculture.ISO11783.ISOXML.Example\Dev4Agriculture.ISO11783.ISOXML.Examples.csproj", "{3EB53825-89E4-4B5B-B66A-B1A0106BFB46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev4Agriculture.ISO11783.ISOXML.Test", "Dev4Agriculture.ISO11783.ISOXML.Test\Dev4Agriculture.ISO11783.ISOXML.Test.csproj", "{04C1AF2C-930D-46B0-891F-D19CED4C30F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev4Agriculture.ISO11783.ISOXML.Generation", "Dev4Agriculture.ISO11783.ISOXML.Generation\Dev4Agriculture.ISO11783.ISOXML.Generation.csproj", "{EC118283-F622-46AD-B891-5234DC07A1B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,22 +28,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{433129DC-50C1-4447-8E24-5AF315AF8DCC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7711228-1FF5-4C94-84A4-AD8EA15D2A78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD19A659-C14B-413A-9F57-19876E6658AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD19A659-C14B-413A-9F57-19876E6658AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD19A659-C14B-413A-9F57-19876E6658AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD19A659-C14B-413A-9F57-19876E6658AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EBAA5F7-FF98-49FA-8111-F2F5B952EFEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90BE7915-7AE6-4F88-B935-8869C1DFD810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90BE7915-7AE6-4F88-B935-8869C1DFD810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90BE7915-7AE6-4F88-B935-8869C1DFD810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90BE7915-7AE6-4F88-B935-8869C1DFD810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB53825-89E4-4B5B-B66A-B1A0106BFB46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB53825-89E4-4B5B-B66A-B1A0106BFB46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB53825-89E4-4B5B-B66A-B1A0106BFB46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB53825-89E4-4B5B-B66A-B1A0106BFB46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04C1AF2C-930D-46B0-891F-D19CED4C30F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C1AF2C-930D-46B0-891F-D19CED4C30F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C1AF2C-930D-46B0-891F-D19CED4C30F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C1AF2C-930D-46B0-891F-D19CED4C30F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC118283-F622-46AD-B891-5234DC07A1B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC118283-F622-46AD-B891-5234DC07A1B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC118283-F622-46AD-B891-5234DC07A1B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC118283-F622-46AD-B891-5234DC07A1B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

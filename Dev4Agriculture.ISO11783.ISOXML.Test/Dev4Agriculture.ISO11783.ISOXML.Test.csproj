@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Dev4Agriculture.ISO11783.ISOXML.Test</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
+    <PackageReference Include="coverlet.collector" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="testdata\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="testdata\LinkListTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="testdata\devices\Device_Description_Unit.xml" />
+    <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />
+    <None Remove="testdata\Grid\Type2_Invalid\TASKDATA.XML" />
+    <None Remove="testdata\Structure\Valid_To_Extend\TASKDATA.XML" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="LinkListTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="testdata\ExternalFiles\MissingExternals\" />
+    <Folder Include="testdata\ExternalFiles\MultipleExternals\" />
+    <Folder Include="testdata\ExternalFiles\OneExternal\" />
+    <Folder Include="testdata\ExternalFiles\NoExternals\" />
+    <Folder Include="testdata\Grid\Type1_Invalid\" />
+    <Folder Include="testdata\Grid\Type2\" />
+    <Folder Include="testdata\Grid\Type1\" />
+    <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
+    <Folder Include="testdata\LinkList\ValidLinkList\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dev4Agriculture.ISO11783.ISOXML\Dev4Agriculture.ISO11783.ISOXML.csproj" />
+  </ItemGroup>
+
+</Project>
