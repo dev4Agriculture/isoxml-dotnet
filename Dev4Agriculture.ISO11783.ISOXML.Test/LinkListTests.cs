@@ -14,7 +14,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsTrue(isoxml != null);
             Assert.IsTrue(isoxml.Data != null);
             Assert.IsTrue(isoxml.Messages.Count == 0);
-            Assert.IsTrue(isoxml.HasLinkList == true);
+            Assert.IsTrue(isoxml.HasLinkList);
 
         }
 

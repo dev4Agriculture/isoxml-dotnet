@@ -7,7 +7,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
     {
 
         [TestMethod]
-        public void canReadValidWSM()
+        public void CanReadValidWSM()
         {
             var clientName = "A00E84000DE0DB4B";//This mostly comes from a Device.D Attribute (Device.ClientName)
             var wsm = new WSM(clientName);
