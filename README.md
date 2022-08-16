@@ -7,6 +7,8 @@ ISOXML is standardized in ISO11783-10.
 
 Dev4Agriculture is specialized in agricultural data analysis. We love to make farming software work.
 
+- [Website](https://www.dev4agriculture.de)
+- [Get in Contact](https://www.dev4agriculture.de/en/company/#contactus)
 
 ## Classes
 
