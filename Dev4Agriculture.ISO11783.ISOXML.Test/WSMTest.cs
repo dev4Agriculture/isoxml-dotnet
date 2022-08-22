@@ -14,5 +14,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(wsm.ManufacturerCode, 111);
             Assert.AreEqual(wsm.DeviceClass, DeviceClass.Harvesters);
         }
+
+
+        [TestMethod]
+        public void CanReadValidLowerCaseWSM()
+        {
+            var clientName = "a00e84000de0db4b";//This mostly comes from a Device.D Attribute (Device.ClientName)
+            var wsm = new WSM(clientName);
+            Assert.AreEqual(wsm.ManufacturerCode, 111);
+            Assert.AreEqual(wsm.DeviceClass, DeviceClass.Harvesters);
+        }
     }
 }

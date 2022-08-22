@@ -8,16 +8,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         Tractor,
         PrimarySoilTillage,
         SecondarySoilTillage,
-        PlantersSeeders_,
+        PlantersSeeders,
         Fertilizer,
         Sprayers,
         Harvesters,
         RootHarvester,
         ForageHarvester,
         Irrigation,
-        TransportTrailers_,
+        TransportTrailers,
         FarmyardWork,
-        PoweredAuxilary_Units,
+        PoweredAuxilaryUnits,
         SpecialCrops,
         MunicipalWork,
         SensorSystem,
@@ -93,6 +93,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public WSM(string input)
         {
             input = input.Replace(" ", "");
+            input = input.ToUpper();
             if (input.Length != 16)
             {
                 throw new Exception("WSM is invalid");
