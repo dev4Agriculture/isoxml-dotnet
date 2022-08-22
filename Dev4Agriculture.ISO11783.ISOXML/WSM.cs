@@ -4,32 +4,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public enum DeviceClass
     {
-        NonSpecificSystem,
-        Tractor,
-        PrimarySoilTillage,
-        SecondarySoilTillage,
-        PlantersSeeders_,
-        Fertilizer,
-        Sprayers,
-        Harvesters,
-        RootHarvester,
-        ForageHarvester,
-        Irrigation,
-        TransportTrailers_,
-        FarmyardWork,
-        PoweredAuxilary_Units,
-        SpecialCrops,
-        MunicipalWork,
-        SensorSystem,
-        ReservedForFutureAssignment,
-        TimberHarvesters,
-        Forwarders,
-        TimberLoaders,
-        TimberProcessingMachines,
-        Mulchers,
-        UtilityVehicles,
-        FeederMixer,
-        SlurryApplicators,
+        NonSpecificSystem = 0,
+        Tractor = 1,
+        PrimarySoilTillage = 2,
+        SecondarySoilTillage = 3,
+        PlantersSeeders = 4,
+        Fertilizer = 5,
+        Sprayers = 6,
+        Harvesters = 7,
+        RootHarvester = 8,
+        ForageHarvester = 9,
+        Irrigation = 10,
+        TransportTrailers = 11,
+        FarmyardWork = 12,
+        PoweredAuxilaryUnits = 13,
+        SpecialCrops = 14,
+        MunicipalWork = 15,
+        UnDefined16 = 16,
+        SensorSystem = 17,
+        ReservedForFutureAssignment = 18,
+        TimberHarvesters = 19,
+        Forwarders = 20,
+        TimberLoaders = 21,
+        TimberProcessingMachines = 22,
+        Mulchers = 23,
+        UtilityVehicles = 24,
+        FeederMixer = 25,
+        SlurryApplicators = 26,
     }
 
     public class WSM
@@ -93,6 +94,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public WSM(string input)
         {
             input = input.Replace(" ", "");
+            input = input.ToUpper();
             if (input.Length != 16)
             {
                 throw new Exception("WSM is invalid");
