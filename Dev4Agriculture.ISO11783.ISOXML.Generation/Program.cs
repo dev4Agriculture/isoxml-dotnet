@@ -55,9 +55,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Generation
                 folder + "ISO11783_LinkListFile_V4-3.xsd",
             }, ISOXMLClassName + ".LinkListFile");
 
-            ProcessNamespace(new List<string>() {
-                folder + "ISO11783_TimeLog_V4-3.xsd",
-            }, ISOXMLClassName + ".TimeLog");
 
             //Copy updated classes to main project
             var files = Directory.GetFiles(OutFolder, "*.cs");
