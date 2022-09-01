@@ -1,0 +1,3 @@
+﻿V0.5.0.1
+  - WSM can now handle upper and lower case
+  - Adjusted Namings and Values of the DeviceClass enum to fit the definition in https://isobus.net 

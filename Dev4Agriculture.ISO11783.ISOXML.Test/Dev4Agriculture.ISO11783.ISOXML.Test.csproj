@@ -44,6 +44,9 @@
     <Folder Include="testdata\Grid\Type1\" />
     <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
     <Folder Include="testdata\LinkList\ValidLinkList\" />
+    <Folder Include="testdata\TimeLogs\BrokenTimeLogs\" />
+    <Folder Include="testdata\TimeLogs\MissingTimeLogs\" />
+    <Folder Include="testdata\TimeLogs\ValidTimeLogs\" />
   </ItemGroup>
 
   <ItemGroup>
