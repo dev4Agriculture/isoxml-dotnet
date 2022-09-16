@@ -16,6 +16,13 @@ Dev4Agriculture is specialized in agricultural data analysis. We love to make fa
 
 This is the main Class. Create ISOXMLs from here with new ISOXML.Create("C:/") or load existing ones ISOXML.Load("C:/Existing");
 
+#### SubElements
+ 
+* Data: Represents the ISOXML Tree
+* Grids: A list of available Grids
+* LinkList: An *abstracted* LinkList. Use AddLinkList() to create this SubObject
+* VersionMajor/VersionMinor/ManagementSoftware-/TaskController-/-Version/-Name : These elements represent the parameters of the root elements of TASKDATA.XML as well as LinkList.XML
+
 
 ### ISO11783_TaskDataFile
 
@@ -30,19 +37,17 @@ Each Grid can be of Type1 or Type2
 
 Type 1 is an array of bytes; each value in the grid redirects to the corresponding TreatmentZone and its proposed Value
 
-Format: datat1[height,width]
-
 ### Type2
 
-Type 2 can include multiple layers and 
+Type 2 can include multiple layers and directly includes values rather than a link to the treatmentZone.
 
-Format: datat1[layer,height,width]
+
+>**Remark**: Both Grids should be acessed through the Functions GetValue/SetValue only!
 
 
 
 ### WSM
 An analysis class to Analyse WorkingSetMasterNames
-
 
 
 

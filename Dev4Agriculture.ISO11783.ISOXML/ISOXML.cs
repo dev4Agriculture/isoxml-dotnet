@@ -1,4 +1,5 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using System.Collections.Generic;
@@ -20,6 +21,99 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
+
+
+        public ISO11783TaskDataFileVersionMajor VersionMajor
+        {
+            get => Data.VersionMajor;
+            set
+            {
+                Data.VersionMajor = value;
+                if (HasLinkList)
+                {
+                    LinkList.VersionMajor = (ISO11783LinkListFileVersionMajor)value;
+                }
+            }
+        }
+        public ISO11783TaskDataFileVersionMinor VersionMinor
+        {
+            get => Data.VersionMinor;
+            set
+            {
+                Data.VersionMinor = value;
+                if (HasLinkList)
+                {
+                    LinkList.VersionMinor = (ISO11783LinkListFileVersionMinor)value;
+                }
+            }
+        }
+
+
+        public string ManagementSoftwareManufacturer
+        {
+            get => Data.ManagementSoftwareManufacturer;
+            set
+            {
+                Data.ManagementSoftwareManufacturer = value;
+                if (HasLinkList)
+                {
+                    LinkList.ManagementSoftwareManufacturer = value;
+                }
+            }
+        }
+
+        public string ManagementSoftwareVersion
+        {
+            get => Data.ManagementSoftwareVersion;
+            set
+            {
+                Data.ManagementSoftwareVersion = value;
+                if (HasLinkList)
+                {
+                    LinkList.ManagementSoftwareVersion = value;
+                }
+            }
+        }
+
+        public string TaskControllerManufacturer
+        {
+            get => Data.TaskControllerManufacturer;
+            set
+            {
+                Data.TaskControllerManufacturer = value;
+                if (HasLinkList)
+                {
+                    LinkList.TaskControllerManufacturer = value;
+                }
+            }
+        }
+
+        public string TaskControllerVersion
+        {
+            get => Data.TaskControllerVersion;
+            set
+            {
+                Data.TaskControllerVersion = value;
+                if (HasLinkList)
+                {
+                    LinkList.TaskControllerVersion = value;
+                }
+            }
+        }
+
+        public ISO11783TaskDataFileDataTransferOrigin DataTransferOrigin
+        {
+            get => Data.DataTransferOrigin;
+            set
+            {
+                Data.DataTransferOrigin = value;
+                if (HasLinkList)
+                {
+                    LinkList.DataTransferOrigin = (ISO11783LinkListFileDataTransferOrigin)value;
+                }
+            }
+        }
+
 
         /// <summary>
         ///  This generates an initial ISOXML Element. It does NOT Load any file
@@ -50,7 +144,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             if (HasLinkList == false)
             {
-                LinkList = new IsoLinkList();
+                LinkList = new IsoLinkList()
+                {
+                    DataTransferOrigin = (ISO11783LinkListFileDataTransferOrigin)Data.DataTransferOrigin,
+                    ManagementSoftwareManufacturer = Data.ManagementSoftwareManufacturer,
+                    ManagementSoftwareVersion = Data.ManagementSoftwareVersion,
+                    TaskControllerManufacturer = Data.TaskControllerManufacturer,
+                    TaskControllerVersion = Data.TaskControllerVersion,
+                    VersionMajor = (ISO11783LinkListFileVersionMajor)Data.VersionMajor,
+                    VersionMinor = (ISO11783LinkListFileVersionMinor)Data.VersionMinor
+                };
                 Data.AttachedFile.Add(new ISOAttachedFile()
                 {
                     FileType = 1,
