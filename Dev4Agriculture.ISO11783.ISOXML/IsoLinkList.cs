@@ -19,6 +19,47 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         private readonly IdList _groupIds;
 
 
+        public ISO11783LinkListFileVersionMajor VersionMajor
+        {
+            get => _linkListContent.VersionMajor;
+            set => _linkListContent.VersionMajor = value;
+        }
+        public ISO11783LinkListFileVersionMinor VersionMinor
+        {
+            get => _linkListContent.VersionMinor;
+            set => _linkListContent.VersionMinor = value;
+        }
+
+        public string ManagementSoftwareManufacturer
+        {
+            get => _linkListContent.ManagementSoftwareManufacturer;
+            set => _linkListContent.ManagementSoftwareManufacturer = value;
+        }
+
+
+        public string ManagementSoftwareVersion 
+        {
+            get => _linkListContent.ManagementSoftwareVersion;
+            set => _linkListContent.ManagementSoftwareVersion = value;
+        }
+
+        public string TaskControllerManufacturer
+        {
+            get => _linkListContent.TaskControllerManufacturer;
+            set => _linkListContent.TaskControllerManufacturer = value;
+        }
+
+        public string TaskControllerVersion
+        {
+            get => _linkListContent.TaskControllerVersion;
+            set => _linkListContent.TaskControllerVersion = value;
+        }
+
+        public ISO11783LinkListFileDataTransferOrigin DataTransferOrigin
+        {
+            get => _linkListContent.DataTransferOrigin;
+            set => _linkListContent.DataTransferOrigin = value;
+        }
 
         private IsoLinkList(ISO11783LinkListFile linkListContent)
         {
