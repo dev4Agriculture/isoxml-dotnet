@@ -81,10 +81,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
-            TextWriter writer = new StreamWriter(path);
-            ser.Serialize(writer, taskData);
-            writer.Close();
+            using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
+            ser.Serialize(xmlWriter, taskData);
         }
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes()
