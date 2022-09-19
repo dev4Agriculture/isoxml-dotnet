@@ -63,7 +63,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var tlg));
-            Assert.IsTrue(tlg.Header.Ddis.Contains()
+            //Assert.IsTrue(tlg.Header.Ddis.Contains()
         }
     }
 }
