@@ -53,6 +53,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00018", out tlg));
             Assert.AreEqual(tlg.Loaded, TLGStatus.LOADED);
             Assert.AreEqual(isoxml.Messages.Count, 4);
+
+            Assert.IsTrue(isoxml.TimeLogs.TryGetValue(isoxml.Data.Task[0].TimeLog[0].Filename, out tlg));
+            Assert.AreEqual(tlg.Entries.Count, 4716);
+            Assert.AreEqual(tlg.Header.MaximumNumberOfEntries, 26);
+            var dateString = DateUtilities.GetDateFromDaysSince1980(tlg.Entries[1].Date);
+            var date = DateTime.Parse(dateString);
+            Assert.AreEqual(date.Year, 2020);
+            Assert.AreEqual(date.Month, 1);
+            Assert.AreEqual(date.Day, 2);
         }
 
 
@@ -63,7 +72,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var tlg));
-            //Assert.IsTrue(tlg.Header.Ddis.Contains()
+            Assert.IsTrue(tlg.Header.HasDDI(141));
+            Assert.IsFalse(tlg.Header.HasDDI(1000));
+            Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var timeLog));
+            var extract = ISOTLGExtract.FromTimeLog(timeLog, 141);
+            Assert.AreEqual(extract.ddi, 141);
+            Assert.AreEqual(extract.data.Count, 4716);
+
+            extract = ISOTLGExtract.FromTimeLog(timeLog, 148 /*Total FuelConsumption*/);
+            Assert.AreEqual(extract.ddi, 148);
+            Assert.AreEqual(extract.data.Count, 560);
+
+        }
+
+
+        [TestMethod]
+        public void CanSummarizeData()
+        {
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs/");
+
+            //Testing Totals
+            Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
+            Assert.AreEqual(totalYield, (uint)242461);
+
         }
     }
 }

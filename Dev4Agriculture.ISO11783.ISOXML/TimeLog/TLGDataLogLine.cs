@@ -16,8 +16,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     public class TLGDataLogEntry
     {
         public bool IsSet;
-        public int Value;
+        public uint Value;
     }
+
 
     public class TLGDataLogLine
     {
@@ -46,6 +47,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Entries[index] = new TLGDataLogEntry();
             }
         }
+
+
 
 
         public TLGDataLogReadResults ReadLine(TLGDataLogHeader header, BinaryReader binaryReader, FileStream file, ushort lastDate)
@@ -182,7 +185,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     return TLGDataLogReadResults.MORE_DATA_THAN_IN_HEADER;
                 }
                 Entries[dataLogIndex].IsSet = true;
-                Entries[dataLogIndex].Value = binaryReader.ReadInt32();
+                Entries[dataLogIndex].Value = binaryReader.ReadUInt32();
             }
 
 
@@ -318,5 +321,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
             return text;
         }
+
+
+
+        public bool Has(uint index)
+        {
+            return index < ArraySize && Entries[index].IsSet;
+        }
+
+
+        public uint Get(int index)
+        {
+            return Entries[index].Value;
+        }
+
+        public bool TryGetValue(uint index, out uint value)
+        {
+            if (index >= 0 && index < ArraySize && Entries[index].IsSet)
+            {
+                value = Entries[index].Value;
+                return true;
+            }
+            value = 0;
+            return false;
+        }
+
     }
 }

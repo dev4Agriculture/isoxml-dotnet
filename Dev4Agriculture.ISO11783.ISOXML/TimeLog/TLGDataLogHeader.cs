@@ -361,5 +361,45 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
             return new ResultWithMessages<TLGDataLogHeader>(tlgHeader);
         }
+
+
+        public int GetDDIIndex(int ddi, int detId)
+        {
+            foreach (var entry in Ddis)
+            {
+                if (entry.Ddi == ddi && (entry.DeviceElement == detId || detId == 0))
+                {
+                    return entry.Index;
+                }
+            }
+
+            return -1;
+        }
+
+        public bool TryGetDDIIndex(int ddi, int detId, out uint index)
+        {
+            var result = GetDDIIndex(ddi, detId);
+            if( result != -1)
+            {
+                index = (uint)result;
+                return true;
+            } else
+            {
+                index = 0;
+                return false;
+            }
+        }
+
+        public bool HasDDI(ushort ddi, ushort det = 0)
+        {
+            foreach(var entry in this.Ddis)
+            {
+                if ( (entry.Ddi == ddi) && (entry.DeviceElement == det || det == 0))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

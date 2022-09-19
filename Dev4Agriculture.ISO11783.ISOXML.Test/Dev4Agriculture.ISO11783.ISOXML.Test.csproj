@@ -28,6 +28,13 @@
     <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />
     <None Remove="testdata\Grid\Type2_Invalid\TASKDATA.XML" />
     <None Remove="testdata\Structure\Valid_To_Extend\TASKDATA.XML" />
+    <None Remove="testdata\TaskData.xml" />
+    <None Remove="testdata\TLG00001.bin" />
+    <None Remove="testdata\TLG00001.xml" />
+    <None Remove="testdata\TLG00002.bin" />
+    <None Remove="testdata\TLG00002.xml" />
+    <None Remove="testdata\TLG00003.bin" />
+    <None Remove="testdata\TLG00003.xml" />
   </ItemGroup>
 
   <ItemGroup>

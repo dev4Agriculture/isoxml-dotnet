@@ -2,8 +2,10 @@
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
+
     public class DateUtilities
     {
+        private static readonly double MILLISECONDS_IN_DAY = 24.0 * 60 * 60 * 1000;
         public static string GetDateFromDaysSince1980(int daysSince1980)
         {
             var date = new DateTime(1980, 1, 1).AddDays(daysSince1980);
@@ -19,5 +21,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             return timeString;
         }
+
+
+        public static DateTime GetDateTimeFromTimeLogInfos(int daysSince1980, uint milliSecondsSinceMidnight)
+        {
+            return new DateTime(1980, 1, 1).AddDays(daysSince1980 + (milliSecondsSinceMidnight/MILLISECONDS_IN_DAY));
+        }
+
     }
 }

@@ -106,13 +106,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.ReadIDTable();
 
 
-
             if (loadBinData)
             {
                 isoxml.LoadBinaryData();
             }
+            isoxml.InitExtensionData();
 
             return isoxml;
+        }
+
+        /// <summary>
+        /// Initialize all such elements that extend the pure ISOXML Functionality in the ISOExtensions Folder
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void InitExtensionData()
+        {
+            foreach(var task in Data.Task)
+            {
+                task.initTimeLogList(this.TimeLogs);
+            }
         }
 
         public ISOGrid GenerateGrid(ISOGridType type, uint width, uint height, byte layers)
@@ -142,7 +154,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public int CountValidTimeLogs()
         {
             int counts = 0;
-            foreach(var tlg in this.TimeLogs)
+            foreach(var tlg in TimeLogs)
             {
                 if( tlg.Value.Loaded == TLGStatus.LOADED)
                 {
@@ -271,6 +283,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     var entry = ISOTLG.LoadTLG(tlg.Filename, FolderPath);
                     Messages.AddRange(entry.Messages);
                     TimeLogs.Add(tlg.Filename, entry.Result);
+                    int count = task.CountTimeLogs();
+                    Console.WriteLine("Loaded TimeLogs: " + count);
                 }
             }
             return TimeLogs.Count;

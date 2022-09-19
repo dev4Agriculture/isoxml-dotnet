@@ -37,10 +37,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         ERROR
     }
 
-
-    public class ISOTLG
+    public enum TriggerMethods
     {
-        public const double GPS_FACTOR = 10000000.0;
+        OnTime = 1,
+        OnDistance = 2,
+        ThresholdLimits = 4,
+        OnChange = 8,
+        Total = 16
+
+    }
+
+
+    public partial class ISOTLG
+    {
 
         public string Name;
         public string BinName;
@@ -48,7 +57,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public string Path;
         public TLGStatus Loaded;
         public TLGDataLogHeader Header { get; private set; }
-        private readonly List<TLGDataLogLine> _entries;
+        public readonly List<TLGDataLogLine> Entries;
 
         private ISOTLG(string name, string path)
         {
@@ -58,7 +67,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             BinName = Name + ".BIN";
             XmlName = Name + ".XML";
             Header = new TLGDataLogHeader();
-            _entries = new List<TLGDataLogLine>();
+            Entries = new List<TLGDataLogLine>();
         }
 
         internal string GetPath()
@@ -144,30 +153,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         }
 
-        internal string GetKMLLineString()
-        {
-            var content = "";
 
-            foreach (var entry in _entries)
-            {
-                /*if( ( (GPSQuality)entry.posStatus != GPSQuality.ERROR) &&
-                    ( (GPSQuality)entry.posStatus != GPSQuality.UNKNOWN)
-                    )
-                {*/
-                content += "\n" +
-                    (entry.PosEast / GPS_FACTOR).ToString().Replace(",", ".") + "," +
-                    (entry.PosNorth / GPS_FACTOR).ToString().Replace(",", ".") + "," +
-                    entry.PosUp.ToString();
-                //}
-            }
-
-
-            return content;
-        }
         internal void WriteBinaryData(FileStream binaryFile, TLGDataLogHeader header)
         {
             var binaryWriter = new BinaryWriter(binaryFile);
-            foreach (var line in _entries)
+            foreach (var line in Entries)
             {
                 line.WriteLine(header, binaryWriter);
             }
@@ -190,12 +180,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 switch (tlgDataLogLine.ReadLine(header, binaryReader, binaryFile, lastDate))
                 {
                     case TLGDataLogReadResults.OK:
-                        _entries.Add(tlgDataLogLine);
+                        Entries.Add(tlgDataLogLine);
                         lastDataLineBeginIndex = dataLineBeginIndex;
                         lastDate = tlgDataLogLine.Date;
                         break;
                     case TLGDataLogReadResults.FILE_END_OK:
-                        _entries.Add(tlgDataLogLine);
+                        Entries.Add(tlgDataLogLine);
                         quitReading = true;
                         break;
                     case TLGDataLogReadResults.INVALID_DATA:
@@ -260,7 +250,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 var file = File.Create(filePath);
                 var streamWriter = new StreamWriter(file);
                 streamWriter.WriteLine(Header.ToStringWithDDIsOnly());
-                foreach (var entry in _entries)
+                foreach (var entry in Entries)
                 {
                     streamWriter.WriteLine(entry.ToStringWithDDIsOnly(Header));
                 }
