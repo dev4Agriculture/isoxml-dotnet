@@ -36,8 +36,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var isoxml = ISOXML.Load("./testdata/TimeLogs/MissingTimeLogs/");
 
             Assert.AreEqual(isoxml.CountValidTimeLogs(), 17);
-            ISOTLG tlg;
-            Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00003", out tlg));
+            Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00003", out var tlg));
             Assert.AreEqual(tlg.Loaded, TLGStatus.ERROR);
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00004", out tlg));
             Assert.AreEqual(tlg.Loaded, TLGStatus.ERROR);
@@ -54,6 +53,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00018", out tlg));
             Assert.AreEqual(tlg.Loaded, TLGStatus.LOADED);
             Assert.AreEqual(isoxml.Messages.Count, 4);
+        }
+
+
+        [TestMethod]
+        public void CanReadTimeLogContents()
+        {
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs/");
+
+
+            Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var tlg));
+            Assert.IsTrue(tlg.Header.Ddis.Contains()
         }
     }
 }
