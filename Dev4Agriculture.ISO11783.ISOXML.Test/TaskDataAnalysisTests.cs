@@ -11,7 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanCalculateTotals()
         {
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
 
             //Testing LifeTime Totals
             Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x114, 0, out var totalFuelLifeTime, TLGTotalAlgorithmType.LIFETIME));
