@@ -510,3 +510,5 @@ FodyWeavers.xsd
 # Verify tests
 *.received.*
 *.verified.txt.bak
+/Dev4Agriculture.ISO11783.ISOXML.Test/testdata/TimeLogs/ValidTimeLogs/Export/MachineData
+/Dev4Agriculture.ISO11783.ISOXML.Test/testdata/TimeLogs/ValidTimeLogs/Export

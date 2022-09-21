@@ -12,7 +12,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanLoadValidTimeLogs()
         {
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
             Assert.AreEqual(isoxml.TimeLogs.Count, 21);
             Assert.AreEqual(isoxml.Messages.Count, 0);
@@ -23,7 +23,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         public void FindsErrorsInInvalidTimeLogs()
         {
             //In this folder, TLG00003 has an Invalid XML Structure
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/BrokenTimeLogs/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/BrokenTimeLogs");
 
             Assert.AreEqual(isoxml.CountValidTimeLogs(), 20);
             Assert.AreEqual(isoxml.Messages.Count, 0);
@@ -33,7 +33,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         public void FindsErrorWithMissingTimeLogs()
         {
             //In this Folder, TLG00003.BIN, TLG00004.BIN, TLG00005.BIN, TLG00006.BIN are missing
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/MissingTimeLogs/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/MissingTimeLogs");
 
             Assert.AreEqual(isoxml.CountValidTimeLogs(), 17);
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00003", out var tlg));
@@ -68,7 +68,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanReadTimeLogContents()
         {
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
 
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var tlg));
@@ -89,7 +89,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanSummarizeData()
         {
-            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs/");
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
             //Testing Totals
             Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
