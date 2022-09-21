@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
+    /*
     [TestClass]
     public class TLGTest
     {
@@ -79,7 +80,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(extract.ddi, 141);
             Assert.AreEqual(extract.data.Count, 4716);
 
-            extract = ISOTLGExtract.FromTimeLog(timeLog, 148 /*Total FuelConsumption*/);
+            extract = ISOTLGExtract.FromTimeLog(timeLog, 148 /*Total FuelConsumption);
             Assert.AreEqual(extract.ddi, 148);
             Assert.AreEqual(extract.data.Count, 560);
 
@@ -97,4 +98,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
         }
     }
+    */
 }

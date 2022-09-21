@@ -386,8 +386,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     var entry = ISOTLG.LoadTLG(tlg.Filename, FolderPath);
                     Messages.AddRange(entry.Messages);
                     TimeLogs.Add(tlg.Filename, entry.Result);
-                    int count = task.CountTimeLogs();
-                    Console.WriteLine("Loaded TimeLogs: " + count);
                 }
             }
             return TimeLogs.Count;
