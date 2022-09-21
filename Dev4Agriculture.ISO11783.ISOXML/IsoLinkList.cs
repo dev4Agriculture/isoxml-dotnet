@@ -269,17 +269,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return new ResultWithMessages<IsoLinkList>(linkList, messages);
         }
 
-        internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path)
+        internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
             var messages = new List<ResultMessage>();
-            path = FixLinkListPath(path);
-            if (File.Exists(path) == false)
+            if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "LINKLIST.xml not found!"));
+                messages.Add(new ResultMessage(ResultMessageType.Error, fileName + " not found!"));
+                return new ResultWithMessages<IsoLinkList>(new IsoLinkList(), messages);
+            } else
+            {
+                var text = File.ReadAllText(linkListPath.ToString());
+                return ParseLinkList(text, path);
             }
-            var text = File.ReadAllText(path.ToString());
-            var result = ParseLinkList(text, path);
-            return result;
+            
         }
 
 

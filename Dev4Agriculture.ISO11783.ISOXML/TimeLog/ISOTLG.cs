@@ -70,37 +70,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             Entries = new List<TLGDataLogLine>();
         }
 
-        internal string GetPath()
-        {
-            if (Path.EndsWith("\\") == false)
-            {
-                Path += "\\";
-            }
-
-            return Path;
-        }
-
-        public bool IsComplete()
-        {
-            if (File.Exists(GetPath() + BinName) == false ||
-                File.Exists(GetPath() + XmlName) == false)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
 
 
         private List<ResultMessage> LoadData()
         {
-            var headerResult = TLGDataLogHeader.Load(GetPath(), XmlName);
+            var headerResult = TLGDataLogHeader.Load(Path, XmlName);
             if (headerResult.Result == null)
             {
-                this.Loaded = TLGStatus.ERROR;
+                Loaded = TLGStatus.ERROR;
 
                 return headerResult.Messages;
             }
@@ -109,10 +86,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-            var filePath = GetPath() + BinName;
-            if (File.Exists(filePath))
+            if (Utils.AdjustFileNameToIgnoreCasing(Path,BinName, out var binPath))
             {
-                var binaryFile = File.Open(filePath, FileMode.Open);
+                var binaryFile = File.Open(binPath, FileMode.Open);
                 messages.AddRange( ReadBinaryData(binaryFile, Header));
                 binaryFile.Close();
                 Loaded = TLGStatus.LOADED;

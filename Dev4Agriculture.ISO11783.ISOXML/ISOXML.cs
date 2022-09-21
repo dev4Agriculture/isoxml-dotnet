@@ -197,7 +197,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     if (file.FileType == 1 /*LinkList*/)
                     {
                         //REMARK: The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
-                        var resultLinkList = IsoLinkList.LoadLinkList(path);
+                        var resultLinkList = IsoLinkList.LoadLinkList(path, file.FilenameWithExtension);
                         isoxml.LinkList = resultLinkList.Result;
                         isoxml.Messages.AddRange(resultLinkList.Messages);
                         isoxml.HasLinkList = true;

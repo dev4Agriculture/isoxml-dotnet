@@ -80,17 +80,35 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         }
 
+        /// <summary>
+        /// Loads a TASKDATA into an ISOXML Object. First checks, if the file itself exists, otherwise the Function assumes it was provided with a Directory Path and has to add TASKDATA.XML
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static ResultWithMessages<ISO11783TaskDataFile> LoadTaskData(string path)
         {
-            var messages = new List<ResultMessage>();
-            path = FixTaskDataPath(path);
-            if (File.Exists(path) == false)
+            var text = "";
+            if (!File.Exists(path))
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "TASKDATA.XML not found!"));
+                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out var filePath))
+                {
+                    return new ResultWithMessages<ISO11783TaskDataFile>(
+                        new ISO11783TaskDataFile(),
+                        new ResultMessage(
+                            ResultMessageType.Error,
+                            "TASKDATA.XML not found in " + path
+                            )
+                        );
+                }
+                text = File.ReadAllText(filePath);
             }
-            var text = File.ReadAllText(path.ToString());
-            var result = ParseTaskData(text, path);
-            return result;
+            else
+            {
+                text = File.ReadAllText(path);
+
+            }
+
+            return ParseTaskData(text, path);
         }
 
 

@@ -341,25 +341,37 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal static ResultWithMessages<TLGDataLogHeader> Load(string path, string name)
         {
-            var tlgHeader = new TLGDataLogHeader();
-            var filePath = path + name;
-            if (File.Exists(filePath))
+            if (Utils.AdjustFileNameToIgnoreCasing(path,name,out var filePath))
             {
                 var xmlDocument = new XmlDocument();
                 try
                 {
                     xmlDocument.Load(filePath);
+                    var tlgHeader = new TLGDataLogHeader();
                     tlgHeader.ReadElement(xmlDocument.DocumentElement);
                     return new ResultWithMessages<TLGDataLogHeader>(tlgHeader);
                 }
                 catch ( Exception e)
                 {
-                    var result = new ResultWithMessages<TLGDataLogHeader>(null);
-                    result.Messages.Add(new ResultMessage(ResultMessageType.Error, "Could not read Header " + name + ", Exception: " + e.ToString()));
-                    return new ResultWithMessages<TLGDataLogHeader>(null);
+                    return new ResultWithMessages<TLGDataLogHeader>(
+                        null,
+                        new ResultMessage(
+                            ResultMessageType.Error,
+                            "Could not read Header " + name + ", Exception: " + e.ToString()
+                            )
+                        );
                 }
             }
-            return new ResultWithMessages<TLGDataLogHeader>(tlgHeader);
+            else
+            {
+                return new ResultWithMessages<TLGDataLogHeader>(
+                    null,
+                    new ResultMessage(
+                        ResultMessageType.Error,
+                        "File not found: " + name + " in " + path
+                        )
+                    );
+            }
         }
 
 
@@ -379,7 +391,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public bool TryGetDDIIndex(int ddi, int detId, out uint index)
         {
             var result = GetDDIIndex(ddi, detId);
-            if( result != -1)
+            if (result != -1)
             {
                 index = (uint)result;
                 return true;

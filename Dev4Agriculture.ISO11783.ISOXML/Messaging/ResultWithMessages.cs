@@ -17,6 +17,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         {
             Result = result;
         }
+        public ResultWithMessages(ResultType result, ResultMessage onlyOneMessage)
+        {
+            Result = result;
+            Messages = new List<ResultMessage>
+            {
+                onlyOneMessage
+            };
+        }
 
 
         public int CountErrors()

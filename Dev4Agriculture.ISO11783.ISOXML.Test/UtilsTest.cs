@@ -29,5 +29,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         }
 
 
+        [TestMethod]
+        public void CanAdjustFileName()
+        {
+            Assert.IsTrue(Utils.AdjustFileNameToIgnoreCasing("./testdata/TimeLogs/ValidTimeLogs/", "TLG00001.XML", out var path));
+            Assert.IsTrue(path.Contains("TLG00001.xml"));
+        }
+
     }
 }
