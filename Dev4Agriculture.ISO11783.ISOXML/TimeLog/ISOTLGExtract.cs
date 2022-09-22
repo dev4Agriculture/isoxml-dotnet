@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -89,17 +88,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             this.data = data;
         }
 
-        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, ushort det=0)
+        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, ushort det = 0, string name = "")
         {
 
-            List<ISOTLGExtractPoint> entries = new List<ISOTLGExtractPoint>();
-            if(timeLog.Header.TryGetDDIIndex(ddi, det, out uint index))
+            var entries = new List<ISOTLGExtractPoint>();
+            if (timeLog.Header.TryGetDDIIndex(ddi, det, out uint index))
             {
-                foreach(var entry in timeLog.Entries)
+                foreach (var entry in timeLog.Entries)
                 {
                     if (entry.Has(index))
                     {
-                        entries.Add(ISOTLGExtractPoint.FromTLGDataLogLine(entry,index));
+                        entries.Add(ISOTLGExtractPoint.FromTLGDataLogLine(entry, index));
                     }
                 }
             }
@@ -107,7 +106,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return new ISOTLGExtract(
                 ddi,
                 det,
-                ""/*TODO*/,
+                name,
                 entries
             );
         }

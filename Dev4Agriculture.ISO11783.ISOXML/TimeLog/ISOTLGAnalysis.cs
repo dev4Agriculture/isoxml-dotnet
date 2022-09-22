@@ -93,7 +93,7 @@
 
             _ddiAvailabilityStatus = DDIAvailabilityStatus.NO_VALUE;
             var v = Entries.Count - 1;
-            for ( int entryIndex = v; entryIndex > 0; entryIndex--)
+            for (int entryIndex = v; entryIndex > 0; entryIndex--)
             {
                 if (Entries[entryIndex].TryGetValue(index, out var entryValue))
                 {
@@ -128,7 +128,7 @@
 
             _ddiAvailabilityStatus = DDIAvailabilityStatus.NO_VALUE;
 
-            if ( totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
+            if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
             {
                 return TryGetLastValue(ddi, deviceElement, out totalValue);
             }
@@ -136,7 +136,7 @@
             {
                 if (TryGetFirstValue(ddi, deviceElement, out uint first))
                 {
-                    if ( TryGetLastValue(ddi,deviceElement,out uint last))
+                    if (TryGetLastValue(ddi, deviceElement, out uint last))
                     {
                         totalValue = last - first;
                         return true;
@@ -150,7 +150,7 @@
                 uint lastValue = 0;
                 var isStarted = false;
                 totalValue = 0;
-                foreach(var entry in Entries)
+                foreach (var entry in Entries)
                 {
                     if (entry.TryGetValue(index, out var curValue))
                     {
@@ -163,7 +163,8 @@
                         {
                             totalValue += curValue - lastValue;
                             lastValue = curValue;
-                        } else
+                        }
+                        else
                         {
                             lastValue = curValue;
                         }

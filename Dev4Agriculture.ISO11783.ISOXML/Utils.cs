@@ -20,18 +20,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return byteArray;
         }
 
-        public static bool AdjustFileNameToIgnoreCasing(string root, string fileName,  out string path)
+        public static bool AdjustFileNameToIgnoreCasing(string root, string fileName, out string path)
         {
 
             fileName = fileName.ToLower();
-            if(!Directory.Exists(Path.GetFullPath(root)))
+            if (!Directory.Exists(Path.GetFullPath(root)))
             {
                 path = "";
                 return false;
             }
-            foreach( var file in Directory.GetFiles(root))
+            foreach (var file in Directory.GetFiles(root))
             {
-                if(file.ToLower().EndsWith(fileName))
+                if (file.ToLower().EndsWith(fileName))
                 {
                     path = file;
                     return true;

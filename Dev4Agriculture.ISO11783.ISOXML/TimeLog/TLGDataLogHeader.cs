@@ -1,7 +1,6 @@
-﻿using System.Xml;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -341,7 +340,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal static ResultWithMessages<TLGDataLogHeader> Load(string path, string name)
         {
-            if (Utils.AdjustFileNameToIgnoreCasing(path,name,out var filePath))
+            if (Utils.AdjustFileNameToIgnoreCasing(path, name, out var filePath))
             {
                 var xmlDocument = new XmlDocument();
                 try
@@ -351,7 +350,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     tlgHeader.ReadElement(xmlDocument.DocumentElement);
                     return new ResultWithMessages<TLGDataLogHeader>(tlgHeader);
                 }
-                catch ( Exception e)
+                catch (Exception e)
                 {
                     return new ResultWithMessages<TLGDataLogHeader>(
                         null,
@@ -395,7 +394,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 index = (uint)result;
                 return true;
-            } else
+            }
+            else
             {
                 index = 0;
                 return false;
@@ -404,9 +404,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public bool HasDDI(ushort ddi, ushort det = 0)
         {
-            foreach(var entry in this.Ddis)
+            foreach (var entry in this.Ddis)
             {
-                if ( (entry.Ddi == ddi) && (entry.DeviceElement == det || det == 0))
+                if ((entry.Ddi == ddi) && (entry.DeviceElement == det || det == 0))
                 {
                     return true;
                 }

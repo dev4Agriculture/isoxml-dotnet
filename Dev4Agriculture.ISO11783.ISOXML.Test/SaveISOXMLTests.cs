@@ -1,6 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+﻿using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {

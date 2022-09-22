@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
-    
+
     [TestClass]
     public class TLGTest
     {
@@ -95,9 +93,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
             //Testing Totals
-            Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
+            Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetLastValue(179, 0, out var totalYield));
             Assert.AreEqual(totalYield, (uint)242461);
-
         }
     }
 }

@@ -10,8 +10,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         public void CanCalculateTotals()
         {
             var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
-            Console.WriteLine("Number of messages: "+ isoxml.Messages.Count);
-            foreach(var entry in isoxml.Messages)
+            Console.WriteLine("Number of messages: " + isoxml.Messages.Count);
+            foreach (var entry in isoxml.Messages)
             {
                 Console.WriteLine("T: " + entry.Type.ToString() + " MSG: " + entry.Title);
             }

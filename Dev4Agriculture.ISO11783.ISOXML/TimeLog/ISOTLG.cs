@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -86,10 +87,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-            if (Utils.AdjustFileNameToIgnoreCasing(Path,BinName, out var binPath))
+            if (Utils.AdjustFileNameToIgnoreCasing(Path, BinName, out var binPath))
             {
                 var binaryFile = File.Open(binPath, FileMode.Open);
-                messages.AddRange( ReadBinaryData(binaryFile, Header));
+                messages.AddRange(ReadBinaryData(binaryFile, Header));
                 binaryFile.Close();
                 Loaded = TLGStatus.LOADED;
             }
@@ -215,7 +216,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
             catch (Exception e)
             {
-                //TODO Add Error or throw Exception
+                throw new CouldNotStoreTLGException();
             }
         }
         public void SaveCSV(string storagePath)

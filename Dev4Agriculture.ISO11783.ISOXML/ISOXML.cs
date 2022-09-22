@@ -1,12 +1,11 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 //Alias Definitions
 
 using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
@@ -224,9 +223,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <exception cref="NotImplementedException"></exception>
         private void InitExtensionData()
         {
-            foreach(var task in Data.Task)
+            foreach (var task in Data.Task)
             {
-                task.initTimeLogList(this.TimeLogs);
+                task.initTimeLogList(TimeLogs);
             }
         }
 
@@ -257,9 +256,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public int CountValidTimeLogs()
         {
             int counts = 0;
-            foreach(var tlg in TimeLogs)
+            foreach (var tlg in TimeLogs)
             {
-                if( tlg.Value.Loaded == TLGStatus.LOADED)
+                if (tlg.Value.Loaded == TLGStatus.LOADED)
                 {
                     counts++;
                 }

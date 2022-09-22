@@ -1,11 +1,11 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
-using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
-using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using Dev4Agriculture.ISO11783.ISOXML.Serializer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -37,7 +37,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        public string ManagementSoftwareVersion 
+        public string ManagementSoftwareVersion
         {
             get => _linkListContent.ManagementSoftwareVersion;
             set => _linkListContent.ManagementSoftwareVersion = value;
@@ -276,12 +276,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 messages.Add(new ResultMessage(ResultMessageType.Error, fileName + " not found!"));
                 return new ResultWithMessages<IsoLinkList>(new IsoLinkList(), messages);
-            } else
+            }
+            else
             {
                 var text = File.ReadAllText(linkListPath.ToString());
                 return ParseLinkList(text, path);
             }
-            
+
         }
 
 

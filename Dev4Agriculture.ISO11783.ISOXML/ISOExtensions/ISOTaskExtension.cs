@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
@@ -15,11 +14,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
 
-        internal void initTimeLogList(Dictionary<string,ISOTLG> timeLogs)
+        internal void initTimeLogList(Dictionary<string, ISOTLG> timeLogs)
         {
-            foreach(var tlg in TimeLog)
+            foreach (var tlg in TimeLog)
             {
-                if( timeLogs.TryGetValue(tlg.Filename, out var isoTLG))
+                if (timeLogs.TryGetValue(tlg.Filename, out var isoTLG))
                 {
                     TimeLogs.Add(isoTLG);
                 }
@@ -29,7 +28,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public List<ISOTLGExtract> GetTaskExtract(ushort ddi, ushort det)
         {
             var extracts = new List<ISOTLGExtract>();
-            foreach(var tlg in TimeLogs)
+            foreach (var tlg in TimeLogs)
             {
                 extracts.Add(ISOTLGExtract.FromTimeLog(tlg, ddi, det));
             }
@@ -57,15 +56,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        
+
 
         public bool TryGetMaximum(int ddi, int deviceElement, out uint maximum)
         {
             maximum = 0;
             var found = false;
-            foreach(var tlg in TimeLogs)
+            foreach (var tlg in TimeLogs)
             {
-                if( tlg.TryGetMaximum(ddi, deviceElement, out var compare))
+                if (tlg.TryGetMaximum(ddi, deviceElement, out var compare))
                 {
                     found = true;
                     if (maximum < compare)
@@ -79,7 +78,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool TryGetMinimum(int ddi, int deviceElement, out uint minimum)
         {
-            minimum = UInt32.MaxValue;
+            minimum = uint.MaxValue;
             var found = false;
             foreach (var tlg in TimeLogs)
             {
@@ -102,7 +101,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             foreach (var tlg in TimeLogs)
             {
-                if(TryGetFirstValue(ddi, deviceElement, out firstValue))
+                if (TryGetFirstValue(ddi, deviceElement, out firstValue))
                 {
                     return true;
                 }
@@ -114,9 +113,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool TryGetLastValue(int ddi, int deviceElement, out uint lastValue)
         {
-            for(int index = TimeLogs.Count-1;index >= 0; index--)
+            for (int index = TimeLogs.Count - 1; index >= 0; index--)
             {
-                if (TimeLogs[index].TryGetLastValue(ddi,deviceElement, out lastValue))
+                if (TimeLogs[index].TryGetLastValue(ddi, deviceElement, out lastValue))
                 {
                     return true;
                 }
@@ -139,11 +138,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public bool TryGetTotalValue(int ddi, int deviceElement, out uint totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
             bool found = false;
-            if( totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
+            if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
             {
                 for (int index = TimeLogs.Count - 1; index >= 0; index--)
                 {
-                    if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue,totalAlgorithm))
+                    if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
                     {
                         return true;
                     }
@@ -151,9 +150,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
 
             totalValue = 0;
-            foreach(var tlg in TimeLogs)
+            foreach (var tlg in TimeLogs)
             {
-                if( tlg.TryGetTotalValue(ddi,deviceElement,out var additional, totalAlgorithm))
+                if (tlg.TryGetTotalValue(ddi, deviceElement, out var additional, totalAlgorithm))
                 {
                     totalValue += additional;
                     found = true;
@@ -165,28 +164,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
-
-        /// <summary>
-        /// Returns the Availability-Status for a value based on the result from the latest call for TryGetMaximum,-Minimum, etc.
-        /// This function does NOT actually check the availability status
-        /// </summary>
-        /// <returns></returns>
-        public DDIAvailabilityStatus GetLatestDDIAvailabilityStatus()
-        {
-            return _ddiAvailabilityStatus;
-        }
-
-        /// <summary>
-        /// Checks if values for a specific combination of DDI and DeviceElement are available
-        /// </summary>
-        /// <param name="ddi"></param>
-        /// <param name="deviceElement"></param>
-        /// <returns></returns>
-        public DDIAvailabilityStatus GetDDIAvailabilityStatus(int ddi, int deviceElement)
-        {
-            //TODO
-            return DDIAvailabilityStatus.NO_VALUE;
-        }
 
     }
 }
