@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -60,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(tlg.Header.MaximumNumberOfEntries, 26);
             var dateString = DateUtilities.GetDateFromDaysSince1980(tlg.Entries[1].Date);
             Console.WriteLine("Date is " + dateString);
-            var date = DateTime.Parse(dateString).AddHours(12);
+            var date = DateTime.ParseExact(dateString, DateUtilities.DATE_FORMAT, CultureInfo.InvariantCulture);
             Assert.AreEqual(date.Year, 2020);
             Assert.AreEqual(date.Day, 2);
             Assert.AreEqual(date.Month, 1);
