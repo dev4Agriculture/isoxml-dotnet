@@ -62,8 +62,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Console.WriteLine("Date is " + dateString);
             var date = DateTime.Parse(dateString).AddHours(12);
             Assert.AreEqual(date.Year, 2020);
-            Assert.AreEqual(date.Month, 1);
             Assert.AreEqual(date.Day, 2);
+            Assert.AreEqual(date.Month, 1);
         }
 
 
