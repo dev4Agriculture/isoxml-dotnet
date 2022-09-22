@@ -20,7 +20,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     }
 
 
-    public class TLGDataLogLine
+    public partial class TLGDataLogLine
     {
         public uint Time;
         public ushort Date;
@@ -257,71 +257,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
 
         }
-
-        public string ToStringWithDDIsOnly(TLGDataLogHeader header)
-        {
-            var text = "" +
-                DateUtilities.GetDateFromDaysSince1980(Date) + ";" +
-                DateUtilities.GetTimeFromMilliSeconds(Time) + ";";
-            if (header.GpsOptions.PosNorth)
-            {
-                text += PosNorth * Math.Pow(10, -7) + ";";
-            }
-            if (header.GpsOptions.PosEast)
-            {
-                text += PosEast * Math.Pow(10, -7) + ";";
-            }
-
-            if (header.GpsOptions.PosUp)
-            {
-                text += PosUp + ";";
-            }
-
-
-            if (header.GpsOptions.PosStatus)
-            {
-                text += PosStatus;
-            }
-
-
-            if (header.GpsOptions.Pdop)
-            {
-                text += Pdop;
-            }
-
-            if (header.GpsOptions.Hdop)
-            {
-                text += Hdop;
-            }
-
-            if (header.GpsOptions.NumberOfSatellites)
-            {
-                text += NumberOfSatellites;
-            }
-
-
-            if (header.GpsOptions.GpsUTCTime)
-            {
-                text += GpsUTCTime;
-            }
-
-            if (header.GpsOptions.GpsUTCDate)
-            {
-                text += GpsUTCDate;
-            }
-
-
-            foreach (var ddi in header.Ddis)
-            {
-                text += ";";
-                if (Entries[ddi.Index].IsSet)
-                {
-                    text += Entries[ddi.Index].Value;
-                }
-            }
-            return text;
-        }
-
 
 
         public bool Has(uint index)

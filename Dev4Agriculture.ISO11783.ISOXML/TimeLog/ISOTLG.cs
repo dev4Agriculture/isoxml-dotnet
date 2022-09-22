@@ -8,7 +8,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
     public enum DDILIST : ushort
     {
-        DDI_PGN = 57342
+        DDI_PGN = 57342,
+        DDI_DefaultDataLogTrigger = 0xDFFF
     }
 
     public enum GPSQuality : byte
@@ -53,11 +54,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
     {
 
         public string Name;
-        public string BinName;
-        public string XmlName;
+        public string BinName { get; private set; }
+        public string XmlName { get; private set; }
         public string Path;
-        public TLGStatus Loaded;
-        public TLGDataLogHeader Header { get; private set; }
+        public TLGStatus Loaded { get; private set; }
+    public TLGDataLogHeader Header { get; private set; }
         public readonly List<TLGDataLogLine> Entries;
 
         private ISOTLG(string name, string path)
@@ -142,7 +143,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        internal List<ResultMessage> ReadBinaryData(FileStream binaryFile, TLGDataLogHeader header)
+        private List<ResultMessage> ReadBinaryData(FileStream binaryFile, TLGDataLogHeader header)
         {
             var messages = new List<ResultMessage>();
             var binaryReader = new BinaryReader(binaryFile);

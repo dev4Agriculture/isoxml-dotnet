@@ -138,6 +138,7 @@
                 {
                     if (TryGetLastValue(ddi, deviceElement, out uint last))
                     {
+                        _ddiAvailabilityStatus = DDIAvailabilityStatus.HAS_VALUE;
                         totalValue = last - first;
                         return true;
                     }
@@ -154,6 +155,7 @@
                 {
                     if (entry.TryGetValue(index, out var curValue))
                     {
+                        _ddiAvailabilityStatus = DDIAvailabilityStatus.HAS_VALUE;
                         if (!isStarted)
                         {
                             isStarted = true;

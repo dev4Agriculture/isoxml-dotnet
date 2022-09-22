@@ -46,24 +46,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtractPoint
     {
-        public static readonly UInt32 TLG_VALUE_FOR_NO_VALUE = 0xFFFFFFFF;
+        public static readonly uint TLG_VALUE_FOR_NO_VALUE = 0xFFFFFFFF;
 
-        private DateTime timeStamp;
-        private TLGGPSInfo gps;
-        private uint ddiValue;
-        private bool hasValue;
+        public DateTime TimeStamp { get; private set; }
+        public TLGGPSInfo GPS { get; private set; }
+        public uint DDIValue { get; private set; }
+        public bool HasValue { get; private set; }
 
         private ISOTLGExtractPoint(DateTime timeStamp, TLGGPSInfo gps, uint ddiValue, bool hasValue)
         {
-            this.timeStamp = timeStamp;
-            this.gps = gps;
-            this.ddiValue = ddiValue;
-            this.hasValue = hasValue;
+            TimeStamp = timeStamp;
+            GPS = gps;
+            DDIValue = ddiValue;
+            HasValue = hasValue;
         }
 
         public static ISOTLGExtractPoint FromTLGDataLogLine(TLGDataLogLine line, uint index)
         {
-            bool has = line.TryGetValue(index, out uint value);
+            var has = line.TryGetValue(index, out var value);
             return new ISOTLGExtractPoint(
                         DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
                         TLGGPSInfo.FromTLGDataLogLine(line),
@@ -75,17 +75,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtract
     {
-        public readonly int ddi;
-        public readonly int det;
-        public readonly string name;
-        public List<ISOTLGExtractPoint> data;
+        public readonly int Ddi;
+        public readonly int Det;
+        public readonly string Name;
+        public List<ISOTLGExtractPoint> Data {  get; private set; }
 
         public ISOTLGExtract(int ddi, int det, string name, List<ISOTLGExtractPoint> data)
         {
-            this.ddi = ddi;
-            this.det = det;
-            this.name = name;
-            this.data = data;
+            Ddi = ddi;
+            Det = det;
+            Name = name;
+            Data = data;
         }
 
         public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, ushort det = 0, string name = "")

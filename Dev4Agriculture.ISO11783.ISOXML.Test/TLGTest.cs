@@ -77,12 +77,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsFalse(tlg.Header.HasDDI(1000));
             Assert.IsTrue(isoxml.TimeLogs.TryGetValue("TLG00001", out var timeLog));
             var extract = ISOTLGExtract.FromTimeLog(timeLog, 141);
-            Assert.AreEqual(extract.ddi, 141);
-            Assert.AreEqual(extract.data.Count, 4716);
+            Assert.AreEqual(extract.Ddi, 141);
+            Assert.AreEqual(extract.Data.Count, 4716);
 
             extract = ISOTLGExtract.FromTimeLog(timeLog, 148 /*Total FuelConsumption*/);
-            Assert.AreEqual(extract.ddi, 148);
-            Assert.AreEqual(extract.data.Count, 560);
+            Assert.AreEqual(extract.Ddi, 148);
+            Assert.AreEqual(extract.Data.Count, 560);
 
         }
 
@@ -93,7 +93,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
             //Testing Totals
-            Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetLastValue(179, 0, out var totalYield));
+            Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
             Assert.AreEqual(totalYield, (uint)242461);
         }
     }
