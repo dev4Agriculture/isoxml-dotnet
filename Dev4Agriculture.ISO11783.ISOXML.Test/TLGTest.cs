@@ -59,6 +59,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(tlg.Entries.Count, 4716);
             Assert.AreEqual(tlg.Header.MaximumNumberOfEntries, 26);
             var dateString = DateUtilities.GetDateFromDaysSince1980(tlg.Entries[1].Date);
+            Console.WriteLine("Date is " + dateString);
             var date = DateTime.Parse(dateString);
             Assert.AreEqual(date.Year, 2020);
             Assert.AreEqual(date.Month, 1);
