@@ -1,6 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+﻿using System.Collections.Generic;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System.Collections.Generic;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 {

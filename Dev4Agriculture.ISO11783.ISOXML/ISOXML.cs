@@ -1,10 +1,11 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System.Collections.Generic;
-using System.IO;
-
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 //Alias Definitions
 
 using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
@@ -13,6 +14,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     public class ISOXML
     {
         public Dictionary<string, ISOGridFile> Grids { get; private set; }
+        public Dictionary<string, ISOTLG> TimeLogs { get; private set; }
+
         private uint _maxGridIndex = 0;
         public ISO11783TaskDataFile Data { get; private set; }
         public string FolderPath { get; private set; }
@@ -130,6 +133,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS
             };
             Grids = new Dictionary<string, ISOGridFile>();
+            TimeLogs = new Dictionary<string, ISOTLG>();
             FolderPath = path;
             Messages = new List<ResultMessage>();
             IdTable = new IdTable();
@@ -192,7 +196,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     if (file.FileType == 1 /*LinkList*/)
                     {
                         //REMARK: The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
-                        var resultLinkList = IsoLinkList.LoadLinkList(path);
+                        var resultLinkList = IsoLinkList.LoadLinkList(path, file.FilenameWithExtension);
                         isoxml.LinkList = resultLinkList.Result;
                         isoxml.Messages.AddRange(resultLinkList.Messages);
                         isoxml.HasLinkList = true;
@@ -204,13 +208,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.ReadIDTable();
 
 
-
             if (loadBinData)
             {
                 isoxml.LoadBinaryData();
             }
+            isoxml.InitExtensionData();
 
             return isoxml;
+        }
+
+        /// <summary>
+        /// Initialize all such elements that extend the pure ISOXML Functionality in the ISOExtensions Folder
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void InitExtensionData()
+        {
+            foreach (var task in Data.Task)
+            {
+                task.initTimeLogList(TimeLogs);
+            }
         }
 
         public ISOGrid GenerateGrid(ISOGridType type, uint width, uint height, byte layers)
@@ -233,6 +249,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public ISOGridFile GetGridFile(ISOGrid iSOGrid)
         {
             return Grids[iSOGrid.Filename];
+        }
+
+
+
+        public int CountValidTimeLogs()
+        {
+            int counts = 0;
+            foreach (var tlg in TimeLogs)
+            {
+                if (tlg.Value.Loaded == TLGStatus.LOADED)
+                {
+                    counts++;
+                }
+            }
+
+            return counts;
         }
 
 
@@ -331,6 +363,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             if (_binaryLoaded == false)
             {
                 LoadGrids();
+                LoadTimeLogs();
                 _binaryLoaded = true;
 
             }
@@ -342,6 +375,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
             return waiter;
         }
+
+        private int LoadTimeLogs()
+        {
+            foreach (var task in Data.Task)
+            {
+                foreach (var tlg in task.TimeLog)
+                {
+                    var entry = ISOTLG.LoadTLG(tlg.Filename, FolderPath);
+                    Messages.AddRange(entry.Messages);
+                    TimeLogs.Add(tlg.Filename, entry.Result);
+                }
+            }
+            return TimeLogs.Count;
+
+        }
+
 
         private int LoadGrids()
         {
@@ -401,8 +450,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             return AsyncTask.Task.Run(() => Save());
         }
-
-
-
     }
 }

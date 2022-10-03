@@ -1,6 +1,4 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
-using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,6 +8,8 @@ using System.Reflection;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 {

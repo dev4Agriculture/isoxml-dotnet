@@ -1,6 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {

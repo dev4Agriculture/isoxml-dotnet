@@ -1,8 +1,8 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -32,8 +32,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var messages = new List<ResultMessage>();
             ISOGridFile grid = null;
-            var filePath = Path.Combine(baseFolder, name + ".BIN");
-            if (File.Exists(filePath))
+            if (Utils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".BIN", out var filePath))
             {
                 grid = new ISOGridFile(type);
 

@@ -1,11 +1,11 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
-using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
-using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using Dev4Agriculture.ISO11783.ISOXML.Serializer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -37,7 +37,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        public string ManagementSoftwareVersion 
+        public string ManagementSoftwareVersion
         {
             get => _linkListContent.ManagementSoftwareVersion;
             set => _linkListContent.ManagementSoftwareVersion = value;
@@ -269,17 +269,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return new ResultWithMessages<IsoLinkList>(linkList, messages);
         }
 
-        internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path)
+        internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
             var messages = new List<ResultMessage>();
-            path = FixLinkListPath(path);
-            if (File.Exists(path) == false)
+            if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "LINKLIST.xml not found!"));
+                messages.Add(new ResultMessage(ResultMessageType.Error, fileName + " not found!"));
+                return new ResultWithMessages<IsoLinkList>(new IsoLinkList(), messages);
             }
-            var text = File.ReadAllText(path.ToString());
-            var result = ParseLinkList(text, path);
-            return result;
+            else
+            {
+                var text = File.ReadAllText(linkListPath.ToString());
+                return ParseLinkList(text, path);
+            }
+
         }
 
 

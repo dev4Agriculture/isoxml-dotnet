@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
 {
@@ -15,6 +16,36 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         public ResultWithMessages(ResultType result)
         {
             Result = result;
+        }
+        public ResultWithMessages(ResultType result, ResultMessage onlyOneMessage)
+        {
+            Result = result;
+            Messages = new List<ResultMessage>
+            {
+                onlyOneMessage
+            };
+        }
+
+
+        public int CountErrors()
+        {
+            return Messages.Count(entry => entry.Type == ResultMessageType.Error);
+        }
+
+        public bool HasErrors()
+        {
+            return CountErrors() > 0;
+        }
+
+
+        public int CountWarnings()
+        {
+            return Messages.Count(entry => entry.Type == ResultMessageType.Warning);
+        }
+
+        public bool HasWarnings()
+        {
+            return CountWarnings() > 0;
         }
     }
 }

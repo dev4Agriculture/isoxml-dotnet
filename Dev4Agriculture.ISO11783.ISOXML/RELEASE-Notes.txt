@@ -1,0 +1,8 @@
+﻿V0.5.0.1
+  - WSM can now handle upper and lower case
+  - Adjusted Namings and Values of the DeviceClass enum to fit the definition in https://isobus.net 
+V0.6.0.1
+  - Add functions to set the Core Root Information of an ISOXML and its LinkList in parallel
+V0.7.0.1
+  - Add TimeLog Reading Functionalities
+
