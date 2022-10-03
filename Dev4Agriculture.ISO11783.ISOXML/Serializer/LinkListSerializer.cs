@@ -56,6 +56,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             _linkListAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
 
         }
+
         public object Deserialize(XmlDocument xml)
         {
             Messages.Clear();
@@ -72,14 +73,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             return result;
         }
 
-
         public void Serialize(ISO11783LinkListFile taskData, string path)
         {
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             var ser = new XmlSerializer(typeof(ISO11783LinkListFile));
-            TextWriter writer = new StreamWriter(path);
-            ser.Serialize(writer, taskData);
-            writer.Close();
+            using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
+            ser.Serialize(xmlWriter, taskData);
         }
+
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes()
         {

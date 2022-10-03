@@ -48,7 +48,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
 
-        public override string ToString()
+        public byte[] ToArray()
         {
             var array = new byte[8];
 
@@ -64,6 +64,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             array[7] += (byte)((SelfConfigurable ? 1 : 0) << 7);
             array[7] += (byte)DeviceClassInstance;
 
+            return array;
+
+        }
+
+        public override string ToString()
+        {
+            var array = ToArray();
 
             var workingSetMasterName = "";
             for (byte a = 0; a < 8; a++)
@@ -90,6 +97,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             SerialNo = (array[2] & 0xFF & 0x1F) << 16 | ((array[1] & 0xFF) << 8) | (array[0] & 0xFF);
         }
 
+
+        public WSM()
+        {
+            SelfConfigurable = false;
+            IndustryGroup = 2;
+            SerialNo = 0;
+            ManufacturerCode = 0;
+            DeviceClass = DeviceClass.NonSpecificSystem;
+            Function = 0;
+            FunctionInstance = 0;
+            DeviceClassInstance = 0;
+            EcuInstance = 0;
+        }
 
         public WSM(string input)
         {

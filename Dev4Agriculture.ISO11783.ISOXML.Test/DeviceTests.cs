@@ -40,6 +40,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(1, result.Messages.Count);
             Assert.AreEqual(ResultMessageType.Warning, result.Messages[0].Type);
         }
+
+        [TestMethod]
+        public void CanSetDeviceNameFromWSM()
+        {
+            var path_out = "./out/dvc/wsm";
+            var result = ISOXML.Create(path_out);
+            result.Data.Device.Add(new TaskFile.ISODevice());
+            result.IdTable.AddObjectAndAssignIdIfNone(result.Data.Device[0]);
+            var clientName = new WSM()
+            {
+                ManufacturerCode = 339,
+                DeviceClass = DeviceClass.SecondarySoilTillage
+            };
+            result.Data.Device[0].ClientNAME = clientName.ToArray();
+            result.SetFolderPath(path_out);
+            result.Save();
+            result = ISOXML.Load(path_out);
+            var wsm = new WSM(result.Data.Device[0].ClientNAME);
+            Assert.AreEqual(wsm.ManufacturerCode, 339);
+            Assert.AreEqual(wsm.DeviceClass, DeviceClass.SecondarySoilTillage);
+
+        }
     }
 }
 
