@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -25,7 +26,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
 
-
         public ISO11783TaskDataFileVersionMajor VersionMajor
         {
             get => Data.VersionMajor;
@@ -38,6 +38,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
         }
+
         public ISO11783TaskDataFileVersionMinor VersionMinor
         {
             get => Data.VersionMinor;
@@ -50,7 +51,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
         }
-
 
         public string ManagementSoftwareManufacturer
         {
@@ -117,7 +117,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-
         /// <summary>
         ///  This generates an initial ISOXML Element. It does NOT Load any file
         /// </summary>
@@ -146,6 +145,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void AddLinkList()
         {
+            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
+            {
+                throw new Exception("LinkList can be included started from Version 4");
+            }
+
             if (HasLinkList == false)
             {
                 LinkList = new IsoLinkList()
@@ -167,7 +171,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 HasLinkList = true;
             }
         }
-
 
         public void SetFolderPath(string folderPath)
         {
@@ -207,7 +210,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             isoxml.ReadIDTable();
 
-
             if (loadBinData)
             {
                 isoxml.LoadBinaryData();
@@ -245,13 +247,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return grid;
         }
 
-
         public ISOGridFile GetGridFile(ISOGrid iSOGrid)
         {
             return Grids[iSOGrid.Filename];
         }
-
-
 
         public int CountValidTimeLogs()
         {
@@ -277,8 +276,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             return new ISOXML(outPath);
         }
-
-
 
         /// <summary>
         /// Loads the given FileSet asynchronously
@@ -354,7 +351,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-
         /// <summary>
         /// Reads the binary data if not yet done
         /// </summary>
@@ -390,7 +386,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return TimeLogs.Count;
 
         }
-
 
         private int LoadGrids()
         {
@@ -428,13 +423,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return Grids.Count;
         }
 
-
         /// <summary>
         /// This saves the ISOXML FileSet including all binary and attached files
         /// All TASKDATA.XML Elements are stored within the main file TASKDATA.XML, not in external CTR00001.XML Files
         /// </summary>
         public void Save()
         {
+            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
+            {
+                UpdateDataForV3();
+            }
+
             TaskData.SaveTaskData(Data, FolderPath);
             if (HasLinkList)
             {
@@ -443,6 +442,202 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             foreach (var entry in Grids)
             {
                 entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".BIN"));
+            }
+        }
+
+        private void UpdateDataForV3()
+        {
+            //change taskStatus template and Canceled
+            foreach (var task in Data.Task)
+            {
+                switch (task.TaskStatus)
+                {
+                    //p.141
+                    case ISOTaskStatus.Template:
+                    case ISOTaskStatus.Canceled:
+                        task.TaskStatus = ISOTaskStatus.Planned;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (task.GuidanceAllocationSpecified)
+                {
+                    //clear GuidanceAllocation and GuidanceShift
+                    //p.142
+                    task.GuidanceAllocation.Clear();
+                }
+
+                //Time doesn't have a timezone included in a V3. But it also don't have it in our implementation.
+                foreach (var time in task.Time)
+                {
+                    if(time.Type == ISOType2.PoweredDown)
+                    {
+                        //p.146
+                        time.Type = ISOType2.Clearing;
+                    }
+
+                }
+                //described on p.75
+                if (task.ControlAssignmentSpecified)
+                {
+                    //p.142
+                    task.ControlAssignment.Clear();
+                }
+
+                if (task.TreatmentZoneSpecified)
+                {
+                    foreach (var trZone in task.TreatmentZone)
+                    {
+                        if(trZone.ProcessDataVariable.Count > 1)
+                        {
+                            //leave only one element
+                            //p.148
+                            trZone.ProcessDataVariable.ToList().RemoveRange(1, trZone.ProcessDataVariable.Count - 1);
+                        }
+
+                        //p.129
+                        trZone.ProcessDataVariable.First().ActualCulturalPracticeValue = null;
+                        trZone.ProcessDataVariable.First().ElementTypeInstanceValue = null;
+
+                        if (trZone.PolygonTreatmentZoneonly.Count > 1)
+                        {
+                            trZone.PolygonTreatmentZoneonly.ToList().RemoveRange(1, trZone.PolygonTreatmentZoneonly.Count - 1);
+                        }
+                    }
+                }
+
+                foreach (var pAlloc in task.ProductAllocation)
+                {
+                    if(pAlloc.TransferMode.HasValue && pAlloc.TransferMode == ISOTransferMode.Remainder)
+                    {
+                        //p.136
+                        pAlloc.TransferMode = ISOTransferMode.Emptying;
+                    }
+                }
+            }
+
+            foreach (var partfield in Data.Partfield)
+            {
+                if (partfield.GuidanceGroupSpecified)
+                {
+                    //clear GuidanceGroups and GuidancePatterns
+                    partfield.GuidanceGroup.Clear();
+                }
+
+                foreach (var line in partfield.LineString)
+                {
+                    if (line.LineStringType == ISOLineStringType.Obstacle)
+                    {
+                        line.LineStringType = ISOLineStringType.Flag;//p.117
+                        line.LineStringId = null; //p.118
+                        foreach (var point in line.Point)
+                        {
+                            if (point.PointType > ISOPointType.other)
+                            {
+                                point.PointType = ISOPointType.other; //p.123
+                            }
+                            //p.124
+                            point.PointId = null;
+                            point.PointHorizontalAccuracy = null;
+                            point.PointVerticalAccuracy = null;
+                            point.Filename = null;
+                            point.Filelength = null;
+                        }
+                    }
+                }
+
+                foreach (var polygon in partfield.PolygonnonTreatmentZoneonly)
+                {
+                    //p.125
+                    if(polygon.PolygonType > ISOPolygonType.Other)
+                    {
+                        polygon.PolygonType = ISOPolygonType.Other;
+                    }
+                    polygon.PolygonId = null;
+                }
+            }
+
+            foreach (var product in Data.Product)
+            {
+                if (product.ProductRelationSpecified)
+                {
+                    //clear ProductRelation
+                    product.ProductRelation.Clear();
+                }
+                //p.133
+                product.ProductType = null;
+                product.MixtureRecipeQuantity = null;
+                product.DensityMassPerVolume = null;
+                product.DensityMassPerCount = null;
+                product.DensityVolumePerCount = null;
+            }
+
+            if (Data.TaskControllerCapabilitiesSpecified)
+            {
+                Data.TaskControllerCapabilities.Clear();
+
+            }
+
+            //remove attached files
+            if (Data.AttachedFileSpecified)
+            {
+                Data.AttachedFile.Clear();
+
+                //TODO: make sure it is correct way
+                LinkList = null;
+                HasLinkList = false;
+            }
+            //Data.Device "Number of Extended Structure Label bytes" property is not presented in our xsd file (p.46 of the PDF)
+            //Peer control assignment messages (p.56) What is this?
+
+            if (Data.BaseStationSpecified)
+            {
+                Data.BaseStation.Clear();
+            }
+
+            if (Data.CropTypeSpecified)
+            {
+                foreach (var crop in Data.CropType)
+                {
+                    crop.ProductGroupIdRef = null; //p.87
+                    if (crop.CropVarietySpecified)
+                    {
+                        foreach (var item in crop.CropVariety)
+                        {
+                            item.ProductIdRef = null; //p.88
+                        }
+                    }
+                }
+            }
+
+            if (Data.DeviceSpecified)
+            {
+                foreach (var device in Data.Device)
+                {
+                    foreach (var item in device.DeviceProcessData)
+                    {
+                        if (item.DeviceProcessDataProperty == 4)
+                        {
+                            item.DeviceProcessDataProperty = 1; // p.99
+                        }
+                    }
+                }
+            }
+
+            Data.lang = null; //p.115
+            if (Data.TaskControllerCapabilitiesSpecified)
+            {
+                Data.TaskControllerCapabilities.Clear();//p.116, p.143
+            }
+
+            if (Data.ProductGroupSpecified)
+            {
+                foreach (var productGroup in Data.ProductGroup)
+                {
+                    //p.139
+                    productGroup.ProductGroupType = null;
+                }
             }
         }
 
