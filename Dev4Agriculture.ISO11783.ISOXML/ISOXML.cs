@@ -198,7 +198,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     if (file.FileType == 1 /*LinkList*/)
                     {
-                        //REMARK: The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
+                        //The parameters of the AttachedFileObject are not used, we assume the file is called LinkList as defined in the standard!
                         var resultLinkList = IsoLinkList.LoadLinkList(path, file.FilenameWithExtension);
                         isoxml.LinkList = resultLinkList.Result;
                         isoxml.Messages.AddRange(resultLinkList.Messages);
@@ -533,6 +533,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         line.LineStringId = null; //p.118
                         foreach (var point in line.Point)
                         {
+                            //REMARK DR: PointType 3; should become 1
+
+                            //REMARK DR: Just delete all Points with a Type of abouve ISOPOintType.other.
                             if (point.PointType > ISOPointType.other)
                             {
                                 point.PointType = ISOPointType.other; //p.123
@@ -541,6 +544,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             point.PointId = null;
                             point.PointHorizontalAccuracy = null;
                             point.PointVerticalAccuracy = null;
+                            //REMARK DR: If we have a filename, we need to load the PointFile and convert it into Points. 
                             point.Filename = null;
                             point.Filelength = null;
                         }
@@ -558,6 +562,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
+
+            //REMARK FW: There is an inofficial definition on how to handle Product Mixtures in V3. Should be implemented here
             foreach (var product in Data.Product)
             {
                 if (product.ProductRelationSpecified)
@@ -585,11 +591,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Data.AttachedFile.Clear();
 
                 //TODO: make sure it is correct way
+                //REMARK: Don't just delete the structure; we need another way to store the LinkList File in our Own Database.
                 LinkList = null;
                 HasLinkList = false;
             }
             //Data.Device "Number of Extended Structure Label bytes" property is not presented in our xsd file (p.46 of the PDF)
+            //REMARK DR: The StructureLabel is in DVC.F. The Extended StructueLabel just makes this one longer. While in Version 3 you must have 7 bytes, you can have 7-39 bytes in V4. In case of V3
+            //          just cut at the beginning so that 7 bytes are left
+            //REMARK FW: There is one ByteArray that switched its Order between V3 & V4 FW to check which ones those are
+
             //Peer control assignment messages (p.56) What is this?
+            //REMARK DR: Peer control allows one machine to control another one.For example there is a nitrogen sensor in front of the tractor that directly controls the fertilizer in the rear of
+            //           the Tractor. The relevant ISOXML element is CAT (Control Assignment), you've handled it all correct :-) 
 
             if (Data.BaseStationSpecified)
             {
@@ -617,7 +630,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     foreach (var item in device.DeviceProcessData)
                     {
-                        if (item.DeviceProcessDataProperty == 4)
+                        if (item.DeviceProcessDataProperty == 4)//REMARK DR: This is BitEncoded, so we need to check if the BIT representing 4 is set, not if the Value is 4. you can just unset the bit representing 4
                         {
                             item.DeviceProcessDataProperty = 1; // p.99
                         }
