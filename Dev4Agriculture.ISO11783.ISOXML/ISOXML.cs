@@ -531,14 +531,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         line.LineStringType = ISOLineStringType.Flag;//p.117
                         line.LineStringId = null; //p.118
+                        var pointsToDelete = new List<ISOPoint>();
                         foreach (var point in line.Point)
                         {
-                            //REMARK DR: PointType 3; should become 1
-
-                            //REMARK DR: Just delete all Points with a Type of abouve ISOPOintType.other.
                             if (point.PointType > ISOPointType.other)
                             {
-                                point.PointType = ISOPointType.other; //p.123
+                                pointsToDelete.Add(point);
+                                continue;
                             }
                             //p.124
                             point.PointId = null;
@@ -547,6 +546,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             //REMARK DR: If we have a filename, we need to load the PointFile and convert it into Points. 
                             point.Filename = null;
                             point.Filelength = null;
+                        }
+
+                        foreach (var item in pointsToDelete)
+                        {
+                            line.Point.Remove(item);
                         }
                     }
                 }
@@ -599,11 +603,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             //REMARK DR: The StructureLabel is in DVC.F. The Extended StructueLabel just makes this one longer. While in Version 3 you must have 7 bytes, you can have 7-39 bytes in V4. In case of V3
             //          just cut at the beginning so that 7 bytes are left
             //REMARK FW: There is one ByteArray that switched its Order between V3 & V4 FW to check which ones those are
-
-            //Peer control assignment messages (p.56) What is this?
-            //REMARK DR: Peer control allows one machine to control another one.For example there is a nitrogen sensor in front of the tractor that directly controls the fertilizer in the rear of
-            //           the Tractor. The relevant ISOXML element is CAT (Control Assignment), you've handled it all correct :-) 
-
             if (Data.BaseStationSpecified)
             {
                 Data.BaseStation.Clear();
