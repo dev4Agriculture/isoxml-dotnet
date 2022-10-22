@@ -4945,7 +4945,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        SingleLeftParenthesisdefaultRightParenthesis,
+        SingleDefault,
         
         /// <summary>
         /// </summary>
