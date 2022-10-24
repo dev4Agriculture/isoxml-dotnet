@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {

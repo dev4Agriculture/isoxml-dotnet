@@ -67,7 +67,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return new ISOTLGExtractPoint(
                         DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
                         TLGGPSInfo.FromTLGDataLogLine(line),
-                        has == true ? value : TLG_VALUE_FOR_NO_VALUE,
+                        has ? value : TLG_VALUE_FOR_NO_VALUE,
                         has
                 );
         }
@@ -78,7 +78,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public readonly int Ddi;
         public readonly int Det;
         public readonly string Name;
-        public List<ISOTLGExtractPoint> Data {  get; private set; }
+        public List<ISOTLGExtractPoint> Data { get; private set; }
 
         public ISOTLGExtract(int ddi, int det, string name, List<ISOTLGExtractPoint> data)
         {
@@ -92,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
 
             var entries = new List<ISOTLGExtractPoint>();
-            if (timeLog.Header.TryGetDDIIndex(ddi, det, out uint index))
+            if (timeLog.Header.TryGetDDIIndex(ddi, det, out var index))
             {
                 foreach (var entry in timeLog.Entries)
                 {

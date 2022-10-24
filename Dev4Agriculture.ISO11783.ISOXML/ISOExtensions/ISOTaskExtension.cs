@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
@@ -11,10 +10,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public List<ISOTLG> TimeLogs = new List<ISOTLG>();
 
-        [XmlIgnore]
-        private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
-
-        internal void initTimeLogList(Dictionary<string, ISOTLG> timeLogs)
+        internal void InitTimeLogList(Dictionary<string, ISOTLG> timeLogs)
         {
             foreach (var tlg in TimeLog)
             {
@@ -113,7 +109,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool TryGetLastValue(int ddi, int deviceElement, out uint lastValue)
         {
-            for (int index = TimeLogs.Count - 1; index >= 0; index--)
+            for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
                 if (TimeLogs[index].TryGetLastValue(ddi, deviceElement, out lastValue))
                 {
@@ -137,10 +133,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <returns></returns>
         public bool TryGetTotalValue(int ddi, int deviceElement, out uint totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
-            bool found = false;
+            var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
             {
-                for (int index = TimeLogs.Count - 1; index >= 0; index--)
+                for (var index = TimeLogs.Count - 1; index >= 0; index--)
                 {
                     if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
                     {

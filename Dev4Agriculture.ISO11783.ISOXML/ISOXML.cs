@@ -225,7 +225,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             foreach (var task in Data.Task)
             {
-                task.initTimeLogList(TimeLogs);
+                task.InitTimeLogList(TimeLogs);
             }
         }
 
@@ -255,7 +255,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public int CountValidTimeLogs()
         {
-            int counts = 0;
+            var counts = 0;
             foreach (var tlg in TimeLogs)
             {
                 if (tlg.Value.Loaded == TLGStatus.LOADED)

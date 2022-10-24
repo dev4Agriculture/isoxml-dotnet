@@ -58,7 +58,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public string XmlName { get; private set; }
         public string Path;
         public TLGStatus Loaded { get; private set; }
-    public TLGDataLogHeader Header { get; private set; }
+        public TLGDataLogHeader Header { get; private set; }
         public readonly List<TLGDataLogLine> Entries;
 
         private ISOTLG(string name, string path)
@@ -209,15 +209,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal void SaveTLG(string storagePath)
         {
+            var filePath = storagePath + Name + ".BIN";
             try
             {
-                var filePath = storagePath + Name + ".BIN";
                 var file = File.Create(filePath);
                 WriteBinaryData(file, Header);
             }
             catch (Exception e)
             {
-                throw new CouldNotStoreTLGException();
+                throw new CouldNotStoreTLGException("Could not store " + filePath, e);
             }
         }
         public void SaveCSV(string storagePath)
