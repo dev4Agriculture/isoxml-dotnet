@@ -45,7 +45,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             DataLogTrigger.Add(new ISODataLogTrigger()
             {
-                DataLogDDI = BitConverter.GetBytes((ushort)0xDFFF),
+                DataLogDDI = Utils.FormatDDI(0xDFFF),
                 DataLogMethod = (byte)(TriggerMethods.OnTime
                 | TriggerMethods.OnDistance
                 | TriggerMethods.ThresholdLimits
