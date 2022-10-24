@@ -93,7 +93,7 @@
 
             _ddiAvailabilityStatus = DDIAvailabilityStatus.NO_VALUE;
             var v = Entries.Count - 1;
-            for (int entryIndex = v; entryIndex > 0; entryIndex--)
+            for (var entryIndex = v; entryIndex > 0; entryIndex--)
             {
                 if (Entries[entryIndex].TryGetValue(index, out var entryValue))
                 {
@@ -134,9 +134,9 @@
             }
             else if (totalAlgorithm == TLGTotalAlgorithmType.NO_RESETS)
             {
-                if (TryGetFirstValue(ddi, deviceElement, out uint first))
+                if (TryGetFirstValue(ddi, deviceElement, out var first))
                 {
-                    if (TryGetLastValue(ddi, deviceElement, out uint last))
+                    if (TryGetLastValue(ddi, deviceElement, out var last))
                     {
                         _ddiAvailabilityStatus = DDIAvailabilityStatus.HAS_VALUE;
                         totalValue = last - first;
