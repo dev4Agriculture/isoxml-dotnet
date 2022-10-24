@@ -5,4 +5,5 @@ V0.6.0.1
   - Add functions to set the Core Root Information of an ISOXML and its LinkList in parallel
 V0.7.0.1
   - Add TimeLog Reading Functionalities
-
+V0.7.1.1
+  - Add DefaultDataLogTrigger-Function for Tasks
