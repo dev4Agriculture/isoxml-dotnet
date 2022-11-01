@@ -19,6 +19,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             AddList("CPC", typeof(ISOCulturalPractice));
             AddList("CTR", typeof(ISOCustomer));
             AddList("DVC", typeof(ISODevice));
+            AddList("DET", typeof(ISODeviceElement));
             AddList("FRM", typeof(ISOFarm));
             AddList("OTQ", typeof(ISOOperationTechnique));
             AddList("PFD", typeof(ISOPartfield));
@@ -91,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         {
             foreach (var list in IdLists)
             {
-                if (list.Key.Equals(id.Substring(0, 3)))
+                if (list.Value.Name.Equals(id.Substring(0, 3)))
                 {
                     return list.Value.FindObject(id);
                 }

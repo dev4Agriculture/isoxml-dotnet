@@ -59,5 +59,31 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
         }
 
+
+        [TestMethod]
+        public void CanGenerateIdsForDeviceElement()
+        {
+            var isoxml = ISOXML.Create("");
+            for (var a = 1; a < 3; a++)
+            {
+                var device = new ISODevice();
+                isoxml.IdTable.AddObjectAndAssignIdIfNone(device);
+                for (var b = 0; b < 3; b++)
+                {
+                    var det = new ISODeviceElement();
+                    isoxml.IdTable.AddObjectAndAssignIdIfNone(det);
+                    device.DeviceElement.Add(det);
+                }
+                isoxml.Data.Device.Add(device);
+            }
+            Assert.IsNotNull(isoxml.IdTable.FindById("DET1"));
+            Assert.IsNotNull(isoxml.IdTable.FindById("DET2"));
+            Assert.IsNotNull(isoxml.IdTable.FindById("DET3"));
+            Assert.IsNotNull(isoxml.IdTable.FindById("DET4"));
+            Assert.IsNull(isoxml.IdTable.FindById("DET10"));
+            Assert.IsNull(isoxml.IdTable.FindById("DET-1"));
+        }
     }
+
+
 }

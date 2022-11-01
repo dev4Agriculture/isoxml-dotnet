@@ -42,6 +42,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 return ((ISODevice)obj).DeviceId;
             }
+            else if (obj.GetType().Equals(typeof(ISODeviceElement)))
+            {
+                return ((ISODeviceElement)obj).DeviceElementId;
+            }
             else if (obj.GetType().Equals(typeof(ISOFarm)))
             {
                 return ((ISOFarm)obj).FarmId;
@@ -112,6 +116,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 ((ISODevice)obj).DeviceId = id;
             }
+            else if (obj.GetType().Equals(typeof(ISODeviceElement)))
+            {
+                ((ISODeviceElement)obj).DeviceElementId = id;
+            }
             else if (obj.GetType().Equals(typeof(ISOFarm)))
             {
                 ((ISOFarm)obj).FarmId = id;
@@ -165,13 +173,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
-        private readonly string _name;
+        public string Name { get; private set; }
         private readonly Dictionary<int, object> _ids;
         private int _nextId;
         private int _nextTmpId = NextTmpBase;
         public IdList(string name)
         {
-            _name = name;
+            Name = name;
             _nextId = 1;
             _ids = new Dictionary<int, object>();
         }
@@ -187,7 +195,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
-                id = BuildID(_name, _nextId);
+                id = BuildID(Name, _nextId);
                 _ids.Add(_nextId, obj);
                 SetId(obj, id);
                 _nextId++;
@@ -260,7 +268,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         public object FindObject(string idString)
         {
             var id = int.Parse(idString.Substring(3));
-            return _ids[id];
+            try
+            {
+                return _ids[id];
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -279,10 +294,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 if (entry.Key >= NextTmpBase)
                 {
-                    var id = BuildID(_name, _nextId);
+                    var id = BuildID(Name, _nextId);
                     SetId(entry.Value, id);
                     tempItems.Add(_nextId, entry.Value);
-                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + _name + " without ID found. Assigning " + id));
+                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
                 }
             }
 
