@@ -20,7 +20,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(totalInEffectiveTime, (uint)4531 /*Close to 75.5 minutes*/);
 
             //Testing Task Maximum
-            Assert.IsTrue(isoxml.Data.Task[0].TryGetMaximum(0x43, 0, out uint maximum));
+            Assert.IsTrue(isoxml.Data.Task[0].TryGetMaximum(0x43, 0, out var maximum));
             Assert.AreEqual(maximum, (uint)12000);
         }
 
