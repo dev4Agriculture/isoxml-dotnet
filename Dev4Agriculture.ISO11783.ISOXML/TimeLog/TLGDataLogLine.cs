@@ -264,7 +264,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public uint Get(int index)
+        public uint Get(uint index)
         {
             return Entries[index].Value;
         }

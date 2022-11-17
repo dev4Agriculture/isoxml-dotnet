@@ -10,11 +10,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         public void CanCalculateTotals()
         {
             var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
-            Console.WriteLine("Number of messages: " + isoxml.Messages.Count);
-            foreach (var entry in isoxml.Messages)
-            {
-                Console.WriteLine("T: " + entry.Type.ToString() + " MSG: " + entry.Title);
-            }
             //Testing LifeTime Totals
             Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x114, 0, out var totalFuelLifeTime, TLGTotalAlgorithmType.LIFETIME));
             Assert.AreEqual(totalFuelLifeTime, 1294 / 0.5);
@@ -29,6 +24,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(maximum, (uint)12000);
         }
 
+        [TestMethod]
+        public void CanReadTaskExtract()
+        {
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
+            //Testing LifeTime Totals
+            var entries = isoxml.Data.Task[0].GetMergedTaskExtract(0x0043, -1);
+            var filledEntries = isoxml.Data.Task[0].GetMergedTaskExtract(0x0043, -1, "", true);
+            Assert.AreEqual(entries.Data.Count, 2);
+            Assert.AreEqual(filledEntries.Data.Count, 4677);
+        }
     }
 }
 
