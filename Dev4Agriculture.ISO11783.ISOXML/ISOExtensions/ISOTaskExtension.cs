@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
@@ -21,14 +22,50 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
-        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, ushort det)
+        /// <summary>
+        /// A function to extract all Positions + Times + One Value for a specific DDI in a Specific DeviceElement; In a list of Lists; one per TimeLog
+        /// </summary>
+        /// <param name="ddi"> The DDI; see isobus.net</param>
+        /// <param name="det"> The DeviceElement. E.g. "DET-1" would be -1; "DET1" would be 1</param>
+        /// <param name="name">An optional designator</param>
+        /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
+        /// <returns> A List of Points with Time and Value</returns>
+        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             foreach (var tlg in TimeLogs)
             {
-                extracts.Add(ISOTLGExtract.FromTimeLog(tlg, ddi, det));
+                extracts.Add(ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines));
             }
             return extracts;
+        }
+
+
+        /// <summary>
+        /// A function to extract all Positions + Times + One Value for a specific DDI in a Specific DeviceElement; Merged as one List
+        /// </summary>
+        /// <param name="ddi"> The DDI; see isobus.net</param>
+        /// <param name="det"> The DeviceElement. E.g. "DET-1" would be -1; "DET1" would be 1</param>
+        /// <param name="name">An optional designator</param>
+        /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
+        /// <returns> A List of Points with Time and Value</returns>
+        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        {
+            var extracts = new List<ISOTLGExtract>();
+            var lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE;
+            foreach (var tlg in TimeLogs)
+            {
+                var entry = ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines, lastValue);
+                if (fillLines && entry.Data.Count > 0)
+                {
+                    lastValue = entry.Data.Last().DDIValue;
+                }
+                extracts.Add(entry);
+            }
+            var merge = new List<ISOTLGExtractPoint>();
+            extracts.ForEach(entry => merge.AddRange(entry.Data));
+            var result = new ISOTLGExtract(ddi, det, name, merge);
+            return result;
         }
 
 

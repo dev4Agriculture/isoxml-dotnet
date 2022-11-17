@@ -77,10 +77,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         public void AddObjectWithOwnId(ref object obj, string id)
         {
             var result = IdLists.TryGetValue(obj.GetType(), out var idList);
-            if (idList != null)
-            {
-                idList.AddId(id, ref obj);
-            }
+            idList?.AddId(id, ref obj);
         }
 
         /// <summary>

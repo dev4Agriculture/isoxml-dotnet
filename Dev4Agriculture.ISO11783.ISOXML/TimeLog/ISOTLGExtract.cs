@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -46,7 +47,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtractPoint
     {
-        public static readonly uint TLG_VALUE_FOR_NO_VALUE = 0xFFFFFFFF;
+        public const uint TLG_VALUE_FOR_NO_VALUE = 0xFFFFFFFF;
 
         public DateTime TimeStamp { get; private set; }
         public TLGGPSInfo GPS { get; private set; }
@@ -71,6 +72,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         has
                 );
         }
+
+        internal static ISOTLGExtractPoint FromTLGDataLogLineWithGivenValue(TLGDataLogLine line, uint lastValue)
+        {
+            return new ISOTLGExtractPoint(
+                        DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
+                        TLGGPSInfo.FromTLGDataLogLine(line),
+                        lastValue,
+                        true
+                );
+        }
     }
 
     public class ISOTLGExtract
@@ -88,18 +99,56 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             Data = data;
         }
 
-        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, ushort det = 0, string name = "")
+        /// <summary>
+        /// Extracts a TimeLogExtract that includes Positions, Times and Values for one specific DDI.
+        /// If filling is enabled, those entries without a value are added with the latest known value
+        /// </summary>
+        /// <param name="timeLog"> The TimeLog to extract from</param>
+        /// <param name="ddi"> The DDI to search; see isobus.net</param>
+        /// <param name="det"> The DeviceElementIndex. E.g. if the ID is "DET-1", det is -1. For "DET1", it is 1</param>
+        /// <param name="name"> An optional name to describe the values</param>
+        /// <param name="fillLines"> Default false: If set to true, those point+time-Entries that don't include the value are filled with the latest known value</param>
+        /// <param name="lastValue"> Default set to "NO VALUE": The last known Value. This should *only* be used if the call for this function
+        /// is part of loop for multiple TimeLogs. In case there are no values recorded for this TimeLog, this ensures that there are Entries created anyway</param>
+        /// <returns></returns>
+        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, short det = 0, string name = "", bool fillLines = false, uint lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
         {
 
             var entries = new List<ISOTLGExtractPoint>();
             if (timeLog.Header.TryGetDDIIndex(ddi, det, out var index))
             {
+                //Find the first existing value for the rare case that no value was there at the beginning
+                if (fillLines && lastValue == ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+                {
+                    foreach (var entry in timeLog.Entries)
+                    {
+                        if (entry.Has(index))
+                        {
+                            lastValue = entry.Get(index);
+                            break;
+                        }
+                    }
+                }
                 foreach (var entry in timeLog.Entries)
                 {
                     if (entry.Has(index))
                     {
-                        entries.Add(ISOTLGExtractPoint.FromTLGDataLogLine(entry, index));
+                        var point = ISOTLGExtractPoint.FromTLGDataLogLine(entry, index);
+                        lastValue = point.DDIValue;
+                        entries.Add(point);
                     }
+                    else if (fillLines && lastValue != ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+                    {
+                        var point = ISOTLGExtractPoint.FromTLGDataLogLineWithGivenValue(entry, lastValue);
+                        entries.Add(point);
+                    }
+                }
+            }
+            else if (fillLines && lastValue != 0)
+            {
+                foreach (var entry in timeLog.Entries)
+                {
+                    entries.Add(ISOTLGExtractPoint.FromTLGDataLogLineWithGivenValue(entry, lastValue));
                 }
             }
 

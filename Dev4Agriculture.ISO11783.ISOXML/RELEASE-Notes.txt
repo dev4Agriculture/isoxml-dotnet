@@ -9,3 +9,5 @@ V0.7.1.1
   - Add DefaultDataLogTrigger-Function for Tasks
 V0.7.2.1
   - Add DeviceElement to IDList Table
+V0.7.3.1
+  - Add Functionality to get TimeLog Extracts for Positions where a specific value was not recorded. Relevant and important e.g. for values recorded "onChange"
