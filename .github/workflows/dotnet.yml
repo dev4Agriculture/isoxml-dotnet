@@ -17,11 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v2
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Linux
-      run: dotnet build --no-restore   
+      run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
   buildWindows:
