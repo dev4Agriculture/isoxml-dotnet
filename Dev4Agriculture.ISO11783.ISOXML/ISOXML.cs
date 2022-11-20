@@ -475,7 +475,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return AsyncTask.Task.Run(() => Save());
         }
 
-
+        /*
         public static ISOXML ParseFromXMLString(string xmlString)
         {
             var isoxml = new ISOXML("")
@@ -485,6 +485,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.InitExtensionData();
             return isoxml;
         }
+        */
 
     }
 }

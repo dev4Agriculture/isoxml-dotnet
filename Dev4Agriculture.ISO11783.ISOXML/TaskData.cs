@@ -123,6 +123,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxmlSerializer.Serialize(taskData, path);
         }
 
+        /*
         public static ISO11783TaskDataFile FromParsedElement(string elementString)
         {
             var xmlDoc = new XmlDocument();
@@ -211,5 +212,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             return taskData;
         }
+        */
     }
 }
