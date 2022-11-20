@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.IO;
+//using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -62,6 +64,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(wsm.DeviceClass, DeviceClass.SecondarySoilTillage);
 
         }
+
+
+        [TestMethod]
+        public void CanLoadJustDeviceDescripton()
+        {
+            var path = "./testdata/devices/DeviceOnly.xml";
+            var text = File.ReadAllText(path);
+            var result = ISOXML.ParseFromXMLString(text);
+            Assert.AreEqual(result.Messages.Count, 0);
+            Assert.AreEqual(result.Data.Device.Count, 1);
+            var dvc = result.Data.Device[0];
+            Assert.AreEqual(dvc.DeviceElement.Count, 15);
+        }
+
     }
 }
 

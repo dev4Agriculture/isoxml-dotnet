@@ -123,5 +123,95 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxmlSerializer.Serialize(taskData, path);
         }
 
+
+        public static ISO11783TaskDataFile FromParsedElement(string elementString)
+        {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(elementString);
+            var element = IsoxmlSerializer.Deserialize(xmlDoc);
+            if (element is ISO11783TaskDataFile file)
+            {
+                return file;
+            }
+
+            //If the object is not a whole ISOXML TaskData, we return an TaskDataFile that has one element added
+            var taskData = new ISO11783TaskDataFile();
+            var type = element.GetType();
+            if (type == typeof(ISOAttachedFile))
+            {
+                taskData.AttachedFile.Add((ISOAttachedFile)element);
+            }
+            else if (type == typeof(ISOBaseStation))
+            {
+                taskData.BaseStation.Add((ISOBaseStation)element);
+            }
+            else if (type == typeof(ISOCodedCommentGroup))
+            {
+                taskData.CodedCommentGroup.Add((ISOCodedCommentGroup)element);
+            }
+            else if (type == typeof(ISOCodedComment))
+            {
+                taskData.CodedComment.Add((ISOCodedComment)element);
+            }
+            else if (type == typeof(ISOColourLegend))
+            {
+                taskData.ColourLegend.Add((ISOColourLegend)element);
+            }
+            else if (type == typeof(ISOCropType))
+            {
+                taskData.CropType.Add((ISOCropType)element);
+            }
+            else if (type == typeof(ISOCulturalPractice))
+            {
+                taskData.CulturalPractice.Add((ISOCulturalPractice)element);
+            }
+            else if (type == typeof(ISOCustomer))
+            {
+                taskData.Customer.Add((ISOCustomer)element);
+            }
+            else if (type == typeof(ISODevice))
+            {
+                taskData.Device.Add((ISODevice)element);
+            }
+            else if (type == typeof(ISOFarm))
+            {
+                taskData.Farm.Add((ISOFarm)element);
+            }
+            else if (type == typeof(ISOOperationTechnique))
+            {
+                taskData.OperationTechnique.Add((ISOOperationTechnique)element);
+            }
+            else if (type == typeof(ISOPartfield))
+            {
+                taskData.Partfield.Add((ISOPartfield)element);
+            }
+            else if (type == typeof(ISOProduct))
+            {
+                taskData.Product.Add((ISOProduct)element);
+            }
+            else if (type == typeof(ISOProductGroup))
+            {
+                taskData.ProductGroup.Add((ISOProductGroup)element);
+            }
+            else if (type == typeof(ISOTask))
+            {
+                taskData.Task.Add((ISOTask)element);
+            }
+            else if (type == typeof(ISOWorker))
+            {
+                taskData.Worker.Add((ISOWorker)element);
+            }
+            else if (type == typeof(ISOCustomer))
+            {
+                taskData.Customer.Add((ISOCustomer)element);
+            }
+            else if (type == typeof(ISOCustomer))
+            {
+                taskData.Customer.Add((ISOCustomer)element);
+            }
+
+            return taskData;
+        }
+        
     }
 }
