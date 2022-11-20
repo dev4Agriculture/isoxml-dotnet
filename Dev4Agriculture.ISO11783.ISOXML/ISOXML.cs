@@ -229,6 +229,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// Generate a grid that can afterwards be assigned to a task and filled with data
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="layers"></param>
+        /// <returns></returns>
         public ISOGrid GenerateGrid(ISOGridType type, uint width, uint height, byte layers)
         {
             var grid = new ISOGrid()
@@ -246,13 +254,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
+        /// <summary>
+        /// Return a Grid from the List of Grids
+        /// </summary>
+        /// <param name="iSOGrid"></param>
+        /// <returns></returns>
         public ISOGridFile GetGridFile(ISOGrid iSOGrid)
         {
             return Grids[iSOGrid.Filename];
         }
 
 
-
+        /// <summary>
+        /// Counts the available valid TimeLogs
+        /// </summary>
+        /// <returns></returns>
         public int CountValidTimeLogs()
         {
             var counts = 0;
@@ -370,6 +386,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         }
 
+        /// <summary>
+        /// Load all binary Data for an ISOXML DataSet async 
+        /// </summary>
+        /// <returns></returns>
         public AsyncTask.Task LoadBinaryDataAsync()
         {
             var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
@@ -446,9 +466,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// Save all ISOXML relevant files async
+        /// </summary>
+        /// <returns></returns>
         public AsyncTask.Task SaveAsync()
         {
             return AsyncTask.Task.Run(() => Save());
         }
+
+
+        public static ISOXML ParseFromXMLString(string xmlString)
+        {
+            var isoxml = new ISOXML("")
+            {
+                Data = TaskData.FromParsedElement(xmlString)
+            };
+            isoxml.InitExtensionData();
+            return isoxml;
+        }
+
     }
 }
