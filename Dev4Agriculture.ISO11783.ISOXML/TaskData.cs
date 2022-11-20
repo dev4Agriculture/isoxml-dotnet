@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
