@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="testdata\devices\DeviceOnly.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="testdata\devices\DeviceOnly.xml" />
     <None Remove="testdata\devices\Device_Description_Unit.xml" />
     <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />

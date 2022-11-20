@@ -64,7 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
         }
 
-        /*
+        
         [TestMethod]
         public void CanLoadJustDeviceDescripton()
         {
@@ -76,7 +76,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             var dvc = result.Data.Device[0];
             Assert.AreEqual(dvc.DeviceElement.Count, 15);
         }
-        */
+        
     }
 }
 
