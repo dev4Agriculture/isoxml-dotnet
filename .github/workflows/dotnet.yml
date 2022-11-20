@@ -22,6 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build Linux
       run: dotnet build --no-restore
+      with:
+        vs-version: '17.2.0'
+        
     - name: Test
       run: dotnet test --no-build --verbosity normal
   buildWindows:
