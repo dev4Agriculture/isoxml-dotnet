@@ -144,6 +144,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Hdop = header.DefaultValues.Hdop;
             }
 
+            if (header.GpsOptions.NumberOfSatellites)
+            {
+                if (file.Position + 1 >= file.Length)
+                {
+                    return TLGDataLogReadResults.FILE_END;
+                }
+                NumberOfSatellites = binaryReader.ReadByte();
+            }
+            else if (header.DefaultValueOptions.NumberOfSatellites)
+            {
+                NumberOfSatellites = header.DefaultValues.NumberOfSatellites;
+            }
+
+
             if (header.GpsOptions.GpsUTCTime)
             {
                 if (file.Position + 4 >= file.Length)
@@ -232,6 +246,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             if (header.GpsOptions.Hdop)
             {
                 binaryWriter.Write(Hdop);
+            }
+
+            if (header.GpsOptions.NumberOfSatellites)
+            {
+                binaryWriter.Write(NumberOfSatellites);
             }
 
             if (header.GpsOptions.GpsUTCTime)
