@@ -13,3 +13,5 @@ V0.7.3.1
   - Add Functionality to get TimeLog Extracts for Positions where a specific value was not recorded. Relevant and important e.g. for values recorded "onChange"
 V0.7.4.1
   - Add functionality to read an XML String to an ISOXML Object, no matter if it's a fully qualified ISO11783_TaskDataFile or a Coding Data Element.
+V0.7.4.2
+  - HasDDIValue supported unsigned DET numbers only, making it impossible to check it for DeviceElements that were created in the MICS
