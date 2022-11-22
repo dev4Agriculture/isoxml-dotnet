@@ -3,7 +3,7 @@ ISOXML is an agricultural data format to create Task Descriptions and record mac
 ISOXML is standardized in ISO11783-10.
 
 # Developers and Maintainers
-![Logo](https://github.com/dev4Agriculture/isoxml-dotnet/tree/main/.github/workflows/badge.svg)
+![Logo](https://raw.githubusercontent.com/dev4Agriculture/isoxml-dotnet/main/.github/workflows/badge.svg)
 
 Dev4Agriculture is specialized in agricultural data analysis. We love to make farming software work.
 
