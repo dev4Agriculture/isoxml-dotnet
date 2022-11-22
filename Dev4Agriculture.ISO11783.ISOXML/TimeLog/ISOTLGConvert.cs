@@ -27,44 +27,44 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
             if (header.GpsOptions.PosStatus)
             {
-                text += PosStatus;
+                text += PosStatus + ";";
             }
 
 
             if (header.GpsOptions.Pdop)
             {
-                text += Pdop;
+                text += Pdop + ";";
             }
 
             if (header.GpsOptions.Hdop)
             {
-                text += Hdop;
+                text += Hdop + ";";
             }
 
             if (header.GpsOptions.NumberOfSatellites)
             {
-                text += NumberOfSatellites;
+                text += NumberOfSatellites + ";";
             }
 
 
             if (header.GpsOptions.GpsUTCTime)
             {
-                text += GpsUTCTime;
+                text += GpsUTCTime + ";";
             }
 
             if (header.GpsOptions.GpsUTCDate)
             {
-                text += GpsUTCDate;
+                text += GpsUTCDate + ";";
             }
 
 
             foreach (var ddi in header.Ddis)
             {
-                text += ";";
                 if (Entries[ddi.Index].IsSet)
                 {
                     text += Entries[ddi.Index].Value;
                 }
+                text += ";";
             }
             return text;
         }
