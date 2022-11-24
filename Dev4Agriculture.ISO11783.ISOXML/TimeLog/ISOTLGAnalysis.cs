@@ -148,7 +148,7 @@
             }
             else
             {
-                int lastValue = 0;
+                var lastValue = 0;
                 var isStarted = false;
                 totalValue = 0;
                 foreach (var entry in Entries)
