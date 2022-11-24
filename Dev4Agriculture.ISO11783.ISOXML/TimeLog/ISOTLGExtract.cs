@@ -47,14 +47,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtractPoint
     {
-        public const uint TLG_VALUE_FOR_NO_VALUE = 0xFFFFFFFF;
+        public const int TLG_VALUE_FOR_NO_VALUE = unchecked((int)0xFFFFFFFF);//Is -1 but needs to be set like this to ensure no mixup with uint
 
         public DateTime TimeStamp { get; private set; }
         public TLGGPSInfo GPS { get; private set; }
-        public uint DDIValue { get; private set; }
+        public int DDIValue { get; private set; }
         public bool HasValue { get; private set; }
 
-        private ISOTLGExtractPoint(DateTime timeStamp, TLGGPSInfo gps, uint ddiValue, bool hasValue)
+        private ISOTLGExtractPoint(DateTime timeStamp, TLGGPSInfo gps, int ddiValue, bool hasValue)
         {
             TimeStamp = timeStamp;
             GPS = gps;
@@ -73,7 +73,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 );
         }
 
-        internal static ISOTLGExtractPoint FromTLGDataLogLineWithGivenValue(TLGDataLogLine line, uint lastValue)
+        internal static ISOTLGExtractPoint FromTLGDataLogLineWithGivenValue(TLGDataLogLine line, int lastValue)
         {
             return new ISOTLGExtractPoint(
                         DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
@@ -111,7 +111,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <param name="lastValue"> Default set to "NO VALUE": The last known Value. This should *only* be used if the call for this function
         /// is part of loop for multiple TimeLogs. In case there are no values recorded for this TimeLog, this ensures that there are Entries created anyway</param>
         /// <returns></returns>
-        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, short det = 0, string name = "", bool fillLines = false, uint lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, short det = 0, string name = "", bool fillLines = false, int lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
         {
 
             var entries = new List<ISOTLGExtractPoint>();

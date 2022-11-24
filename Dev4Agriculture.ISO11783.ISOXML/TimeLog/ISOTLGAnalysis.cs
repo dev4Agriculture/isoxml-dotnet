@@ -11,7 +11,7 @@
         private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
 
 
-        public bool TryGetMaximum(int ddi, int deviceElement, out uint maximum)
+        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -33,7 +33,7 @@
             return true;
         }
 
-        public bool TryGetMinimum(int ddi, int deviceElement, out uint minimum)
+        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -58,7 +58,7 @@
 
 
 
-        public bool TryGetFirstValue(int ddi, int deviceElement, out uint firstValue)
+        public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -82,7 +82,7 @@
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out uint lastValue)
+        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -117,7 +117,7 @@
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out uint totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -148,7 +148,7 @@
             }
             else
             {
-                uint lastValue = 0;
+                var lastValue = 0;
                 var isStarted = false;
                 totalValue = 0;
                 foreach (var entry in Entries)
