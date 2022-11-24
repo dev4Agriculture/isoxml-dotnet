@@ -91,9 +91,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
 
-        public bool TryGetMaximum(int ddi, int deviceElement, out uint maximum)
+        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
         {
-            maximum = 0;
+            maximum = int.MinValue;
             var found = false;
             foreach (var tlg in TimeLogs)
             {
@@ -109,9 +109,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
         }
 
-        public bool TryGetMinimum(int ddi, int deviceElement, out uint minimum)
+        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
         {
-            minimum = uint.MaxValue;
+            minimum = int.MaxValue;
             var found = false;
             foreach (var tlg in TimeLogs)
             {
@@ -144,7 +144,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out uint lastValue)
+        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
@@ -168,7 +168,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out uint totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
             var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)

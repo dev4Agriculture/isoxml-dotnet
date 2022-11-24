@@ -212,6 +212,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             return taskData;
         }
-        
+
     }
 }
