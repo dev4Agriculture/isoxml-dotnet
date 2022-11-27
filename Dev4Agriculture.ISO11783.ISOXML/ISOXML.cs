@@ -514,6 +514,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         //p.136
                         pAlloc.TransferMode = ISOTransferMode.Emptying;
                     }
+                    UpdateAllocationStamp(pAlloc.ASP);
+                }
+
+                foreach (var item in task.WorkerAllocation)
+                {
+                    UpdateAllocationStamp(item.AllocationStamp);
+                }
+
+                foreach (var time in task.Time)
+                {
+                    time.Start = new DateTime(time.Start.Ticks, DateTimeKind.Unspecified);
+                    if (time.StopValueSpecified)
+                    {
+                        time.Stop = new DateTime(time.StopValue.Ticks, DateTimeKind.Unspecified);
+                    }
                 }
             }
 
@@ -543,7 +558,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             point.PointId = null;
                             point.PointHorizontalAccuracy = null;
                             point.PointVerticalAccuracy = null;
-                            //REMARK DR: If we have a filename, we need to load the PointFile and convert it into Points. 
                             point.Filename = null;
                             point.Filelength = null;
                         }
@@ -565,7 +579,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     polygon.PolygonId = null;
                 }
             }
-
 
             //REMARK FW: There is an inofficial definition on how to handle Product Mixtures in V3. Should be implemented here
             foreach (var product in Data.Product)
@@ -629,10 +642,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     foreach (var item in device.DeviceProcessData)
                     {
-                        if (item.DeviceProcessDataProperty == 4)//REMARK DR: This is BitEncoded, so we need to check if the BIT representing 4 is set, not if the Value is 4. you can just unset the bit representing 4
-                        {
-                            item.DeviceProcessDataProperty = 1; // p.99
-                        }
+                        //REMARK DR: This is BitEncoded, so we need to check if the BIT representing 4 is set, not if the Value is 4. you can just unset the bit representing 4
+                        var x = BitConverter.GetBytes(item.DeviceProcessDataProperty);
+                        var forthbit = x.ElementAt(4);
+                        forthbit = 0;
+                        item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(x); // p.99
                     }
                 }
             }
@@ -649,6 +663,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     //p.139
                     productGroup.ProductGroupType = null;
+                }
+            }
+
+            static void UpdateAllocationStamp(ISOAllocationStamp stamp)
+            {
+                stamp.Start = new DateTime(stamp.Start.Ticks, DateTimeKind.Unspecified);
+                if (stamp.StopValueSpecified)
+                {
+                    stamp.Stop = new DateTime(stamp.StopValue.Ticks, DateTimeKind.Unspecified);
                 }
             }
         }
