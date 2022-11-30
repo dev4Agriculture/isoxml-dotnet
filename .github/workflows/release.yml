@@ -9,10 +9,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Verify commit exists in origin/main
-      run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-        git branch --remote --contains | grep origin/main
+    # - name: Verify commit exists in origin/main
+    #   run: |
+    #     git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+    #     git branch --remote --contains | grep origin/main
     - name: Set VERSION variable from tag
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     - name: Build
@@ -25,4 +25,3 @@ jobs:
       run: dotnet nuget push Dev4Agriculture.ISOXML.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_TOKEN}
       env:
         GITHUB_TOKEN: ${{ secrets.NUGET_TOKEN }}
-        
