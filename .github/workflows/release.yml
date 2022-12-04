@@ -24,4 +24,4 @@ jobs:
     - name: Push
       run: dotnet nuget push Dev4Agriculture.ISO11783.ISOXML.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_TOKEN}
       env:
-        GITHUB_TOKEN: ${{ secrets.NUGET_TOKEN }}
+        GITHUB_TOKEN: oy2lnf47siqmz3o6tbuqa2nssarxskuebos5rjq746uplq
