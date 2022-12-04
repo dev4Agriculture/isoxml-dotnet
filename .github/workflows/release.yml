@@ -22,6 +22,6 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
     - name: Push
-      run: dotnet nuget push /home/runner/work/isoxml-dotnet/isoxml-dotnet/Dev4Agriculture.ISOXML.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_TOKEN}
+      run: dotnet nuget push Dev4Agriculture.ISO11783.ISOXML.${VERSION}.nupkg --source https://nuget.pkg.github.com/dev4agriculture/index.json --api-key ${GITHUB_TOKEN}
       env:
         GITHUB_TOKEN: ${{ secrets.NUGET_TOKEN }}
