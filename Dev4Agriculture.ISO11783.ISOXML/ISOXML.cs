@@ -13,19 +13,50 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
     {
+        /// <summary>
+        /// The List of all available Grids (Prescription Maps) within the ISOXML File
+        /// </summary>
         public Dictionary<string, ISOGridFile> Grids { get; private set; }
+
+        /// <summary>
+        /// TimeLogs include Times, Positions and MachineData
+        /// </summary>
         public Dictionary<string, ISOTLG> TimeLogs { get; private set; }
 
         private uint _maxGridIndex = 0;
+
+        /// <summary>
+        /// Data includes the coding data and its subelements from the TaskData.xml. E.g. Tasks, Customers, Products
+        /// </summary>
         public ISO11783TaskDataFile Data { get; private set; }
+
+        /// <summary>
+        /// The path to the folder from where the TaskData was loaded and where it should be stored
+        /// </summary>
         public string FolderPath { get; private set; }
+
+        /// <summary>
+        /// Loading of an ISOXML TaskDataSet might cause multiple issues. ISOXML.net intends to load data as good as possible, any error or warning is reflected in those messages
+        /// </summary>
         public List<ResultMessage> Messages { get; private set; }
+
+        /// <summary>
+        /// CodingData like Tasks, Partfields and customers has IDs like CTR1, TSK-1, PFD1. These elements are linked within other Objects. The ID-Table provides a list of all such IDs.
+        /// It is automatically filled on load of a TaskSet
+        /// </summary>
         public IdTable IdTable { get; private set; }
+
+        /// <summary>
+        /// In case of an ISOXML V4 file, there can be a LinkList assigned to link ISOXML-wide unique IDs like "CTR1" (Customer 1) to FMIS Wide unique IDs like a UUID
+        /// </summary>
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
 
 
+        /// <summary>
+        /// The Major version of ISOXML which reflects the used standard: 3 or 4
+        /// </summary>
         public ISO11783TaskDataFileVersionMajor VersionMajor
         {
             get => Data.VersionMajor;
@@ -38,6 +69,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
         }
+
+        /// <summary>
+        /// The Minor version of the ISOXML which reflects the used Schema; see https://www.isobus.net/isobus/file/supportingDocuments
+        /// It's adviced to use the latest minor version available
+        /// </summary>
         public ISO11783TaskDataFileVersionMinor VersionMinor
         {
             get => Data.VersionMinor;
@@ -51,7 +87,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-
+        /// <summary>
+        ///  The name of your company if the software you're building shall create TaskData to send to the terminal
+        /// </summary>
         public string ManagementSoftwareManufacturer
         {
             get => Data.ManagementSoftwareManufacturer;
@@ -65,6 +103,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// The software version of your software. We advice a unique id that reflects the whole setup for support reasons
+        /// </summary>
         public string ManagementSoftwareVersion
         {
             get => Data.ManagementSoftwareVersion;
@@ -78,6 +120,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// The name of your company if the software you build shall run on a terminal
+        /// </summary>
         public string TaskControllerManufacturer
         {
             get => Data.TaskControllerManufacturer;
@@ -91,6 +137,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// The software version of your software. We advice a unique id that reflects the whole setup for support reasons
+        /// </summary>
         public string TaskControllerVersion
         {
             get => Data.TaskControllerVersion;
@@ -104,6 +153,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// The DataTransferOrign marks if the DataSet comes from a FarmingSoftware or from a TaskController
+        /// </summary>
         public ISO11783TaskDataFileDataTransferOrigin DataTransferOrigin
         {
             get => Data.DataTransferOrigin;
@@ -169,6 +221,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
+        /// <summary>
+        /// Sets the folder path for all further operations like e.g. save. It is the full Path, so in normal Case it should end with /TASKDATA
+        /// </summary>
+        /// <param name="folderPath"></param>
         public void SetFolderPath(string folderPath)
         {
             FolderPath = folderPath;
@@ -476,6 +532,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
+        /// <summary>
+        /// Parse ISOXML or parts of an ISOXML from a String and generates an ISOXML Object. This can either be a full ISO11783_TaskData or a CodingData-Element
+        /// Coding Data are all such elements that are direct children of the ISO11783_TaskData; e.g. Customer, Task, Partfield...
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
         public static ISOXML ParseFromXMLString(string xmlString)
         {
             var isoxml = new ISOXML("")
