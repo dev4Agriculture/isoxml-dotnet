@@ -8,6 +8,7 @@ public static class Program
 
     public static void Main()
     {
+
         var isoxml = ISOXML.Create("C:/out");
 
         var customer = new ISOCustomer
@@ -151,7 +152,6 @@ public static class Program
 
         isoxml.Save();
         var isoxml2 = ISOXML.Load("C:/out");
-
     }
 
 }
