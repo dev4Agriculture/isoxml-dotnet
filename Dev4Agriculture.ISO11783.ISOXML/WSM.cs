@@ -47,7 +47,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public long SerialNo { get; set; }
 
 
-        private byte[] _toArray()
+        private byte[] ToByteArray()
         {
             var array = new byte[8];
 
@@ -67,7 +67,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
         public byte[] ToArray()
         {
-            var array = _toArray();
+            var array = ToByteArray();
             Array.Reverse(array);
             return array;
 
@@ -75,7 +75,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public override string ToString()
         {
-            var array = _toArray();
+            var array = ToByteArray();
 
             var workingSetMasterName = "";
             for (byte a = 0; a < 8; a++)
@@ -89,7 +89,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return workingSetMasterName;
         }
 
-        public void WSMFromArray(byte[] array)
+        private void FillFromArray(byte[] array)
         {
             SelfConfigurable = (array[7] & 0xFF & 128) == 128;
             IndustryGroup = ((array[7] & 0xFF) >> 4) & 0x7;
@@ -149,13 +149,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     }
                 }
             }
-            WSMFromArray(array);
+            FillFromArray(array);
         }
 
         public WSM(byte[] array)
         {
             Array.Reverse(array);
-            WSMFromArray(array);
+            FillFromArray(array);
         }
     }
 }
