@@ -37,7 +37,7 @@ isoxml.net is published as a nuget package here: https://www.nuget.org/packages/
 
 ## Classes
 
-![DataStructures in the ISOXML.net Library](docs/drawings/DataStructures.png)
+![DataStructures in the ISOXML.net Library](https://raw.githubusercontent.com/dev4Agriculture/isoxml-dotnet/main/docs/drawings/DataStructures.png)
 
 ### ISOXML
 
