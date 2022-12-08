@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {

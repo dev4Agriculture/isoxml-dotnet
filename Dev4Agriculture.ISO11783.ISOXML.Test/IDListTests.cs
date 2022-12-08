@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
-using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -20,31 +20,56 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         {
             switch (obj)
             {
-                case ISOBaseStation baseStation: return baseStation.BaseStationId;
-                case ISOCodedComment codedComment: return codedComment.CodedCommentId;
-                case ISOCodedCommentGroup codedCommentGroup: return codedCommentGroup.CodedCommentGroupId;
-                case ISOCodedCommentListValue codedCommentListValue: return codedCommentListValue.CodedCommentListValueId;
-                case ISOColourLegend colourLegend: return colourLegend.ColourLegendId;
-                case ISOCropType cropType: return cropType.CropTypeId;
-                case ISOCropVariety cropVariety: return cropVariety.CropVarietyId;
-                case ISOCulturalPractice culturalPractice: return culturalPractice.CulturalPracticeId;
-                case ISOCustomer customer: return customer.CustomerId;
-                case ISODevice device: return device.DeviceId;
-                case ISODeviceElement deviceElement: return deviceElement.DeviceElementId;
-                case ISOFarm farm: return farm.FarmId;
-                case ISOGuidanceGroup guidanceGroup: return guidanceGroup.GuidanceGroupId;
-                case ISOLineString lineString: return lineString.LineStringId;
-                case ISOOperationTechnique operationTechnique: return operationTechnique.OperationTechniqueId;
-                case ISOPartfield partfield: return partfield.PartfieldId;
-                case ISOProduct product: return product.ProductId;
-                case ISOProductGroup productGroup: return productGroup.ProductGroupId;
-                case ISOPoint point: return point.PointId;
-                case ISOPolygon polygon: return polygon.PolygonId;
-                case ISOTask task: return task.TaskId;
-                case ISOValuePresentation valuePresentation: return valuePresentation.ValuePresentationId;
-                case ISOWorker worker: return worker.WorkerId;
-                case ISOLinkGroup iSOLinkGroup: return iSOLinkGroup.LinkGroupId;
-                default: return null;
+                case ISOBaseStation baseStation:
+                    return baseStation.BaseStationId;
+                case ISOCodedComment codedComment:
+                    return codedComment.CodedCommentId;
+                case ISOCodedCommentGroup codedCommentGroup:
+                    return codedCommentGroup.CodedCommentGroupId;
+                case ISOCodedCommentListValue codedCommentListValue:
+                    return codedCommentListValue.CodedCommentListValueId;
+                case ISOColourLegend colourLegend:
+                    return colourLegend.ColourLegendId;
+                case ISOCropType cropType:
+                    return cropType.CropTypeId;
+                case ISOCropVariety cropVariety:
+                    return cropVariety.CropVarietyId;
+                case ISOCulturalPractice culturalPractice:
+                    return culturalPractice.CulturalPracticeId;
+                case ISOCustomer customer:
+                    return customer.CustomerId;
+                case ISODevice device:
+                    return device.DeviceId;
+                case ISODeviceElement deviceElement:
+                    return deviceElement.DeviceElementId;
+                case ISOFarm farm:
+                    return farm.FarmId;
+                case ISOGuidanceGroup guidanceGroup:
+                    return guidanceGroup.GuidanceGroupId;
+                case ISOLineString lineString:
+                    return lineString.LineStringId;
+                case ISOOperationTechnique operationTechnique:
+                    return operationTechnique.OperationTechniqueId;
+                case ISOPartfield partfield:
+                    return partfield.PartfieldId;
+                case ISOProduct product:
+                    return product.ProductId;
+                case ISOProductGroup productGroup:
+                    return productGroup.ProductGroupId;
+                case ISOPoint point:
+                    return point.PointId;
+                case ISOPolygon polygon:
+                    return polygon.PolygonId;
+                case ISOTask task:
+                    return task.TaskId;
+                case ISOValuePresentation valuePresentation:
+                    return valuePresentation.ValuePresentationId;
+                case ISOWorker worker:
+                    return worker.WorkerId;
+                case ISOLinkGroup iSOLinkGroup:
+                    return iSOLinkGroup.LinkGroupId;
+                default:
+                    return null;
             }
         }
 
