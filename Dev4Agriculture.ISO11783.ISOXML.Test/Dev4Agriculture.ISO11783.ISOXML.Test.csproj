@@ -53,6 +53,7 @@
     <Folder Include="testdata\Grid\Type1_Invalid\" />
     <Folder Include="testdata\Grid\Type2\" />
     <Folder Include="testdata\Grid\Type1\" />
+    <Folder Include="testdata\IDList\Valid\" />
     <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
     <Folder Include="testdata\LinkList\ValidLinkList\" />
     <Folder Include="testdata\TimeLogs\BrokenTimeLogs\" />

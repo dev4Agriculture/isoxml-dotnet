@@ -1,4 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+﻿using System.ComponentModel;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -59,6 +61,47 @@ public class IDListTests
 
     }
 
+    [TestMethod]
+    public void CanGenerateAndStoreIDs()
+    {
+        var firstPath = "./testdata/IDList/Valid";
+        var secondPath = "./testdata/IDList/Valid/Export";
+        var isoxml = ISOXML.Load(firstPath);
+        Assert.AreEqual(isoxml.Messages.Count, 0);
+        Assert.IsTrue(isoxml.IdTable.FindById("CTP3") is ISOCropType);
+        Assert.AreEqual(isoxml.IdTable.FindById("FRM32"), null);
+
+        var variety = new ISOCropVariety()
+        {
+            CropVarietyDesignator = "Test"
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(variety);
+        isoxml.Data.CropType[0].CropVariety.Add(variety);
+
+        var commentListValue = new ISOCodedCommentListValue()
+        {
+            CodedCommentListValueDesignator = "Test Comment Designator",
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(commentListValue);
+
+        var codedComment = new ISOCodedComment()
+        {
+            CodedCommentDesignator = "Test"
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(codedComment);
+
+        codedComment.CodedCommentListValue.Add(commentListValue);
+
+        isoxml.Data.CodedComment.Add(codedComment);
+
+        isoxml.SetFolderPath(secondPath);
+        isoxml.Save();
+
+
+        var check = ISOXML.Load(secondPath);
+        Assert.AreEqual(isoxml.Messages.Count, 0);
+        Assert.IsTrue(isoxml.IdTable.FindById("CCL1") is ISOCodedCommentListValue);
+    }
 
     [TestMethod]
     public void CanGenerateIdsForDeviceElement()
