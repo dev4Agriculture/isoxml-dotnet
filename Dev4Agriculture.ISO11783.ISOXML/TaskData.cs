@@ -201,15 +201,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 taskData.Worker.Add((ISOWorker)element);
             }
-            else if (type == typeof(ISOCustomer))
+            else if (type == typeof(ISOValuePresentation))
             {
-                taskData.Customer.Add((ISOCustomer)element);
+                taskData.ValuePresentation.Add((ISOValuePresentation)element);
             }
-            else if (type == typeof(ISOCustomer))
-            {
-                taskData.Customer.Add((ISOCustomer)element);
-            }
-
             return taskData;
         }
 
