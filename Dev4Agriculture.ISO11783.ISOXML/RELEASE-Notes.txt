@@ -25,3 +25,5 @@ v0.9.0.0
   - FIX: WorkingSetMasterName WSM required reversing of the ByteArray when reading Data from the ISODevice.WorkingSetMasterName
 v0.9.0.1
   - FIX: Added missing Elements to the IDListTable; e.g. CodedCommentListValue could not be assigned with an ID.
+v0.9.0.2
+  - FIX: Loading of Layers for GridType 2 was invalid

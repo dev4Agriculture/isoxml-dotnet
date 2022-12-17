@@ -484,7 +484,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     byte layers = 0;
                     foreach (var tzn in task.TreatmentZone)
                     {
-                        if (grid.TreatmentZoneCode == tzn.TreatmentZoneCode)
+                        if (grid.TreatmentZoneCodeValue == tzn.TreatmentZoneCode)
                         {
                             layers = (byte)tzn.ProcessDataVariable.Count;
                             break;
