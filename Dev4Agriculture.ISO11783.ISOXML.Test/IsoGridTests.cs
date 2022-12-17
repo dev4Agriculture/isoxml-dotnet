@@ -15,6 +15,7 @@ public class IsoGridTests
         Assert.IsNotNull(result);
         Assert.IsNotNull(result.Data);
         Assert.AreEqual(1, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
     }
 
     [TestMethod]
@@ -25,6 +26,7 @@ public class IsoGridTests
         Assert.IsNotNull(result);
         Assert.IsNotNull(result.Data);
         Assert.AreEqual(1, result.Grids.Count);
+        Assert.AreEqual(3, result.Grids["GRD00001"].Layers);
 
     }
 
