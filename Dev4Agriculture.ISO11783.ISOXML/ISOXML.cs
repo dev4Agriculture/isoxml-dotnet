@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -271,6 +273,31 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.InitExtensionData();
 
             return isoxml;
+        }
+
+        /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static ISOXML Load(Stream stream, bool loadBinData = true)
+        {
+            var path = Path.GetTempPath();
+            using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Read))
+            {
+                var fileNames = archive.Entries.Select(e => e.FullName).ToList();
+                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidDataException("Archive has incorrect data included!");
+                }
+
+                var folderName = fileNames.First().Substring(0, fileNames.First().IndexOf('/'));
+                archive.ExtractToDirectory(path, true);
+                path = Path.Combine(path, folderName);
+            }
+
+            return Load(path, loadBinData);
         }
 
         /// <summary>

@@ -39,6 +39,8 @@
     <None Remove="testdata\TLG00002.xml" />
     <None Remove="testdata\TLG00003.bin" />
     <None Remove="testdata\TLG00003.xml" />
+    <None Remove="testdata\Type1\GRD00001.BIN" />
+    <None Remove="testdata\Type1\TASKDATA.XML" />
   </ItemGroup>
 
   <ItemGroup>
