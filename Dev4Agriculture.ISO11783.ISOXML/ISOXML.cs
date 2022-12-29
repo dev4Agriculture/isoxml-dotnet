@@ -9,9 +9,7 @@ using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-//Alias Definitions
 
-using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
@@ -500,9 +498,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// Load all binary Data for an ISOXML DataSet async 
         /// </summary>
         /// <returns></returns>
-        public AsyncTask.Task LoadBinaryDataAsync()
+        public Task LoadBinaryDataAsync()
         {
-            var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
+            var waiter = Task.Run(() => LoadBinaryData());
             return waiter;
         }
 
@@ -580,9 +578,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// Save all ISOXML relevant files async
         /// </summary>
         /// <returns></returns>
-        public AsyncTask.Task SaveAsync()
+        public Task SaveAsync()
         {
-            return AsyncTask.Task.Run(() => Save());
+            return Task.Run(() => Save());
         }
 
 
