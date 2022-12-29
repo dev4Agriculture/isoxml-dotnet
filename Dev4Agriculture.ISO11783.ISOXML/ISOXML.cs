@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-//Alias Definitions
 
-using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
@@ -274,6 +275,57 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
+        {
+            var path = Path.GetTempPath();
+            ResultMessage archiveWarning = null;
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+            {
+                var fileNames = archive.Entries.Select(e => e.FullName).ToList();
+                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidDataException("Archive has incorrect data included!");
+                }
+
+                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                {
+                    archiveWarning = new ResultMessage(ResultMessageType.Warning, "Archive contains more tham one TASKDATA.XML file. Only the first one is loaded.");
+                }
+
+                var folderName = fileNames.First().Substring(0, fileNames.First().IndexOf('/'));
+                archive.ExtractToDirectory(path, true);
+                path = Path.Combine(path, folderName);
+            }
+
+            var res = Load(path, loadBinData);
+
+            if (archiveWarning != null)
+            {
+                res.Messages.Add(archiveWarning);
+            }
+
+            Directory.Delete(path, true);
+
+            return res;
+        }
+
+        /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object asynchronously
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static async Task<ISOXML> LoadFromArchiveAsync(Stream stream, bool loadBinData = true)
+        {
+            return await Task.Run(() => LoadFromArchive(stream, loadBinData));
+        }
+
+        /// <summary>
         /// Initialize all such elements that extend the pure ISOXML Functionality in the ISOExtensions Folder
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
@@ -358,9 +410,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="path"></param>
         /// <param name="loadBinData"></param>
         /// <returns></returns>
-        public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
+        public static async Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task.Run(() => Load(path, loadBinData));
+            return await Task.Run(() => Load(path, loadBinData));
         }
 
         /// <summary>
@@ -446,9 +498,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// Load all binary Data for an ISOXML DataSet async 
         /// </summary>
         /// <returns></returns>
-        public AsyncTask.Task LoadBinaryDataAsync()
+        public Task LoadBinaryDataAsync()
         {
-            var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
+            var waiter = Task.Run(() => LoadBinaryData());
             return waiter;
         }
 
@@ -526,9 +578,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// Save all ISOXML relevant files async
         /// </summary>
         /// <returns></returns>
-        public AsyncTask.Task SaveAsync()
+        public Task SaveAsync()
         {
-            return AsyncTask.Task.Run(() => Save());
+            return Task.Run(() => Save());
         }
 
 
