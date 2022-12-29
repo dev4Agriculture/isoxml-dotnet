@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
-    <PackageReference Include="coverlet.collector" Version="3.0.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="testdata\devices\DeviceOnly.xml" />
     <None Remove="testdata\devices\Device_Description_Unit.xml" />
     <None Remove="testdata\Grid\Type2_Invalid\GRD00001.BIN" />
     <None Remove="testdata\Grid\Type2_Invalid\TASKDATA.XML" />
@@ -35,6 +39,8 @@
     <None Remove="testdata\TLG00002.xml" />
     <None Remove="testdata\TLG00003.bin" />
     <None Remove="testdata\TLG00003.xml" />
+    <None Remove="testdata\Type1\GRD00001.BIN" />
+    <None Remove="testdata\Type1\TASKDATA.XML" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +55,7 @@
     <Folder Include="testdata\Grid\Type1_Invalid\" />
     <Folder Include="testdata\Grid\Type2\" />
     <Folder Include="testdata\Grid\Type1\" />
+    <Folder Include="testdata\IDList\Valid\" />
     <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
     <Folder Include="testdata\LinkList\ValidLinkList\" />
     <Folder Include="testdata\TimeLogs\BrokenTimeLogs\" />

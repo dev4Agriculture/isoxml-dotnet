@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
@@ -11,10 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public List<ISOTLG> TimeLogs = new List<ISOTLG>();
 
-        [XmlIgnore]
-        private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
-
-        internal void initTimeLogList(Dictionary<string, ISOTLG> timeLogs)
+        internal void InitTimeLogList(Dictionary<string, ISOTLG> timeLogs)
         {
             foreach (var tlg in TimeLog)
             {
@@ -25,14 +22,50 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
-        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, ushort det)
+        /// <summary>
+        /// A function to extract all Positions + Times + One Value for a specific DDI in a Specific DeviceElement; In a list of Lists; one per TimeLog
+        /// </summary>
+        /// <param name="ddi"> The DDI; see isobus.net</param>
+        /// <param name="det"> The DeviceElement. E.g. "DET-1" would be -1; "DET1" would be 1</param>
+        /// <param name="name">An optional designator</param>
+        /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
+        /// <returns> A List of Points with Time and Value</returns>
+        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             foreach (var tlg in TimeLogs)
             {
-                extracts.Add(ISOTLGExtract.FromTimeLog(tlg, ddi, det));
+                extracts.Add(ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines));
             }
             return extracts;
+        }
+
+
+        /// <summary>
+        /// A function to extract all Positions + Times + One Value for a specific DDI in a Specific DeviceElement; Merged as one List
+        /// </summary>
+        /// <param name="ddi"> The DDI; see isobus.net</param>
+        /// <param name="det"> The DeviceElement. E.g. "DET-1" would be -1; "DET1" would be 1</param>
+        /// <param name="name">An optional designator</param>
+        /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
+        /// <returns> A List of Points with Time and Value</returns>
+        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        {
+            var extracts = new List<ISOTLGExtract>();
+            var lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE;
+            foreach (var tlg in TimeLogs)
+            {
+                var entry = ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines, lastValue);
+                if (fillLines && entry.Data.Count > 0)
+                {
+                    lastValue = entry.Data.Last().DDIValue;
+                }
+                extracts.Add(entry);
+            }
+            var merge = new List<ISOTLGExtractPoint>();
+            extracts.ForEach(entry => merge.AddRange(entry.Data));
+            var result = new ISOTLGExtract(ddi, det, name, merge);
+            return result;
         }
 
 
@@ -45,7 +78,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             DataLogTrigger.Add(new ISODataLogTrigger()
             {
-                DataLogDDI = BitConverter.GetBytes((ushort)0xDFFF),
+                DataLogDDI = Utils.FormatDDI(0xDFFF),
                 DataLogMethod = (byte)(TriggerMethods.OnTime
                 | TriggerMethods.OnDistance
                 | TriggerMethods.ThresholdLimits
@@ -58,9 +91,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
 
-        public bool TryGetMaximum(int ddi, int deviceElement, out uint maximum)
+        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
         {
-            maximum = 0;
+            maximum = int.MinValue;
             var found = false;
             foreach (var tlg in TimeLogs)
             {
@@ -76,9 +109,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
         }
 
-        public bool TryGetMinimum(int ddi, int deviceElement, out uint minimum)
+        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
         {
-            minimum = uint.MaxValue;
+            minimum = int.MaxValue;
             var found = false;
             foreach (var tlg in TimeLogs)
             {
@@ -111,9 +144,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out uint lastValue)
+        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
         {
-            for (int index = TimeLogs.Count - 1; index >= 0; index--)
+            for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
                 if (TimeLogs[index].TryGetLastValue(ddi, deviceElement, out lastValue))
                 {
@@ -135,12 +168,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out uint totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
-            bool found = false;
+            var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
             {
-                for (int index = TimeLogs.Count - 1; index >= 0; index--)
+                for (var index = TimeLogs.Count - 1; index >= 0; index--)
                 {
                     if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
                     {

@@ -402,7 +402,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
         }
 
-        public bool HasDDI(ushort ddi, ushort det = 0)
+        public bool HasDDI(ushort ddi, short det = 0)
         {
             foreach (var entry in this.Ddis)
             {

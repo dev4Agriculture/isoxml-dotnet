@@ -18,67 +18,59 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <returns></returns>
         public static string FindId(object obj)
         {
-            if (obj.GetType().Equals(typeof(ISOBaseStation)))
+            switch (obj)
             {
-                return ((ISOBaseStation)obj).BaseStationId;
+                case ISOBaseStation baseStation:
+                    return baseStation.BaseStationId;
+                case ISOCodedComment codedComment:
+                    return codedComment.CodedCommentId;
+                case ISOCodedCommentGroup codedCommentGroup:
+                    return codedCommentGroup.CodedCommentGroupId;
+                case ISOCodedCommentListValue codedCommentListValue:
+                    return codedCommentListValue.CodedCommentListValueId;
+                case ISOColourLegend colourLegend:
+                    return colourLegend.ColourLegendId;
+                case ISOCropType cropType:
+                    return cropType.CropTypeId;
+                case ISOCropVariety cropVariety:
+                    return cropVariety.CropVarietyId;
+                case ISOCulturalPractice culturalPractice:
+                    return culturalPractice.CulturalPracticeId;
+                case ISOCustomer customer:
+                    return customer.CustomerId;
+                case ISODevice device:
+                    return device.DeviceId;
+                case ISODeviceElement deviceElement:
+                    return deviceElement.DeviceElementId;
+                case ISOFarm farm:
+                    return farm.FarmId;
+                case ISOGuidanceGroup guidanceGroup:
+                    return guidanceGroup.GuidanceGroupId;
+                case ISOLineString lineString:
+                    return lineString.LineStringId;
+                case ISOOperationTechnique operationTechnique:
+                    return operationTechnique.OperationTechniqueId;
+                case ISOPartfield partfield:
+                    return partfield.PartfieldId;
+                case ISOProduct product:
+                    return product.ProductId;
+                case ISOProductGroup productGroup:
+                    return productGroup.ProductGroupId;
+                case ISOPoint point:
+                    return point.PointId;
+                case ISOPolygon polygon:
+                    return polygon.PolygonId;
+                case ISOTask task:
+                    return task.TaskId;
+                case ISOValuePresentation valuePresentation:
+                    return valuePresentation.ValuePresentationId;
+                case ISOWorker worker:
+                    return worker.WorkerId;
+                case ISOLinkGroup iSOLinkGroup:
+                    return iSOLinkGroup.LinkGroupId;
+                default:
+                    return null;
             }
-            else if (obj.GetType().Equals(typeof(ISOCodedComment)))
-            {
-                return ((ISOCodedComment)obj).CodedCommentId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup)))
-            {
-                return ((ISOCodedCommentGroup)obj).CodedCommentGroupId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCropType)))
-            {
-                return ((ISOCropType)obj).CropTypeId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCulturalPractice)))
-            {
-                return ((ISOCulturalPractice)obj).CulturalPracticeId;
-            }
-            else if (obj.GetType().Equals(typeof(ISODevice)))
-            {
-                return ((ISODevice)obj).DeviceId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOFarm)))
-            {
-                return ((ISOFarm)obj).FarmId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOOperationTechnique)))
-            {
-                return ((ISOOperationTechnique)obj).OperationTechniqueId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOPartfield)))
-            {
-                return ((ISOPartfield)obj).PartfieldId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOProduct)))
-            {
-                return ((ISOProduct)obj).ProductId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOTask)))
-            {
-                return ((ISOTask)obj).TaskId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOValuePresentation)))
-            {
-                return ((ISOValuePresentation)obj).ValuePresentationId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOWorker)))
-            {
-                return ((ISOWorker)obj).WorkerId;
-            }
-            else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
-            {
-                return ((ISOLinkGroup)obj).LinkGroupId;
-            }
-            else
-            {
-                return null;
-            }
-
         }
 
         /// <summary>
@@ -88,65 +80,80 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <param name="id">The ID to set</param>
         public static void SetId(object obj, string id)
         {
-            if (obj.GetType().Equals(typeof(ISOBaseStation)))
+            switch (obj)
             {
-                ((ISOBaseStation)obj).BaseStationId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCodedComment)))
-            {
-                ((ISOCodedComment)obj).CodedCommentId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCodedCommentGroup)))
-            {
-                ((ISOCodedCommentGroup)obj).CodedCommentGroupId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCropType)))
-            {
-                ((ISOCropType)obj).CropTypeId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOCulturalPractice)))
-            {
-                ((ISOCulturalPractice)obj).CulturalPracticeId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISODevice)))
-            {
-                ((ISODevice)obj).DeviceId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOFarm)))
-            {
-                ((ISOFarm)obj).FarmId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOOperationTechnique)))
-            {
-                ((ISOOperationTechnique)obj).OperationTechniqueId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOPartfield)))
-            {
-                ((ISOPartfield)obj).PartfieldId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOProduct)))
-            {
-                ((ISOProduct)obj).ProductId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOTask)))
-            {
-                ((ISOTask)obj).TaskId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOValuePresentation)))
-            {
-                ((ISOValuePresentation)obj).ValuePresentationId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOWorker)))
-            {
-                ((ISOWorker)obj).WorkerId = id;
-            }
-            else if (obj.GetType().Equals(typeof(ISOLinkGroup)))
-            {
-                ((ISOLinkGroup)obj).LinkGroupId = id;
-            }
-            else
-            {
-                //TODO if it's another Object we need an error handling
+                case ISOBaseStation baseStation:
+                    baseStation.BaseStationId = id;
+                    break;
+                case ISOCodedComment codedComment:
+                    codedComment.CodedCommentId = id;
+                    break;
+                case ISOCodedCommentGroup codedCommentGroup:
+                    codedCommentGroup.CodedCommentGroupId = id;
+                    break;
+                case ISOCodedCommentListValue codedCommentListValue:
+                    codedCommentListValue.CodedCommentListValueId = id;
+                    break;
+                case ISOColourLegend colourLegend:
+                    colourLegend.ColourLegendId = id;
+                    break;
+                case ISOCropType cropType:
+                    cropType.CropTypeId = id;
+                    break;
+                case ISOCropVariety cropVariety:
+                    cropVariety.CropVarietyId = id;
+                    break;
+                case ISOCulturalPractice culturalPractice:
+                    culturalPractice.CulturalPracticeId = id;
+                    break;
+                case ISOCustomer customer:
+                    customer.CustomerId = id;
+                    break;
+                case ISODevice device:
+                    device.DeviceId = id;
+                    break;
+                case ISODeviceElement deviceElement:
+                    deviceElement.DeviceElementId = id;
+                    break;
+                case ISOFarm farm:
+                    farm.FarmId = id;
+                    break;
+                case ISOGuidanceGroup guidanceGroup:
+                    guidanceGroup.GuidanceGroupId = id;
+                    break;
+                case ISOLineString lineString:
+                    lineString.LineStringId = id;
+                    break;
+                case ISOOperationTechnique operationTechnique:
+                    operationTechnique.OperationTechniqueId = id;
+                    break;
+                case ISOPartfield partfield:
+                    partfield.PartfieldId = id;
+                    break;
+                case ISOProduct product:
+                    product.ProductId = id;
+                    break;
+                case ISOProductGroup productGroup:
+                    productGroup.ProductGroupId = id;
+                    break;
+                case ISOPoint point:
+                    point.PointId = id;
+                    break;
+                case ISOPolygon polygon:
+                    polygon.PolygonId = id;
+                    break;
+                case ISOTask task:
+                    task.TaskId = id;
+                    break;
+                case ISOValuePresentation valuePresentation:
+                    valuePresentation.ValuePresentationId = id;
+                    break;
+                case ISOWorker worker:
+                    worker.WorkerId = id;
+                    break;
+                case ISOLinkGroup linkGroup:
+                    linkGroup.LinkGroupId = id;
+                    break;
             }
         }
 
@@ -165,13 +172,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
-        private readonly string _name;
+        public string Name { get; private set; }
         private readonly Dictionary<int, object> _ids;
         private int _nextId;
         private int _nextTmpId = NextTmpBase;
         public IdList(string name)
         {
-            _name = name;
+            Name = name;
             _nextId = 1;
             _ids = new Dictionary<int, object>();
         }
@@ -187,7 +194,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
-                id = BuildID(_name, _nextId);
+                id = BuildID(Name, _nextId);
                 _ids.Add(_nextId, obj);
                 SetId(obj, id);
                 _nextId++;
@@ -260,7 +267,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         public object FindObject(string idString)
         {
             var id = int.Parse(idString.Substring(3));
-            return _ids[id];
+            try
+            {
+                return _ids[id];
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -279,10 +293,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 if (entry.Key >= NextTmpBase)
                 {
-                    var id = BuildID(_name, _nextId);
+                    var id = BuildID(Name, _nextId);
                     SetId(entry.Value, id);
                     tempItems.Add(_nextId, entry.Value);
-                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + _name + " without ID found. Assigning " + id));
+                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
                 }
             }
 
