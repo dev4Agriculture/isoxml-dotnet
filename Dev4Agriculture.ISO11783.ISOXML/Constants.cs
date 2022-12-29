@@ -4,6 +4,6 @@
     {
         //TODO It's more save to move this Element to a common class. It's found in Generator and DotnetCore Library
         public static string ISOXMLClassName = "Dev4Agriculture.ISO11783.ISOXML";
-        public static string Version = "V0.9.0.2";//Currently unused; Just for the commit
+        public static string Version = "V0.9.1.0";//Currently unused; Just for the commit
     }
 }
