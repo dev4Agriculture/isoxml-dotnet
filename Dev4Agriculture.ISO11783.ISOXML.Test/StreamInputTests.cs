@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -13,11 +14,28 @@ public class StreamInputTests
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
-            result = ISOXML.Load(stream);
+            result = ISOXML.LoadFromArchive(stream);
         }
 
         Assert.IsNotNull(result);
         Assert.IsNotNull(result.Data);
+        Assert.AreEqual(1, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+    }
+
+    [TestMethod]
+    public void LoadZipFileWithMultiplyTaskdatXML()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiplyTaskdataXML.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(1, result.Messages.Count);
         Assert.AreEqual(1, result.Grids.Count);
         Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
     }
@@ -29,7 +47,23 @@ public class StreamInputTests
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
-            result = ISOXML.Load(stream);
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(0, result.Messages.Count);
+        Assert.IsTrue(result.HasLinkList);
+    }
+    
+    [TestMethod]
+    public async Task CanLoadValidZipStreamValidLinkListAsync()
+    {
+        var filePath = "./testdata/LoadFromStream/ValidLinkList.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = await ISOXML.LoadFromArchiveAsync(stream);
         }
 
         Assert.IsNotNull(result);
@@ -42,10 +76,13 @@ public class StreamInputTests
     public void ThrowExceptionIfNoTaskDataFile()
     {
         var filePath = "./testdata/LoadFromStream/InvalidArchive.zip";
-        ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
-            Assert.ThrowsException<InvalidDataException>(() => ISOXML.Load(stream));
+            Assert.ThrowsException<InvalidDataException>(() => ISOXML.LoadFromArchive(stream));
+        }
+        using (var stream = File.OpenRead(filePath))
+        {
+            Assert.ThrowsExceptionAsync<InvalidDataException>(async () => await ISOXML.LoadFromArchiveAsync(stream));
         }
     }
 }

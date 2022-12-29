@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -281,10 +282,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="stream">zip file stream</param>
         /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
         /// <returns></returns>
-        public static ISOXML Load(Stream stream, bool loadBinData = true)
+        public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
         {
             var path = Path.GetTempPath();
-            using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Read))
+            ResultMessage archiveWarning = null;
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 var fileNames = archive.Entries.Select(e => e.FullName).ToList();
                 if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
@@ -292,12 +294,37 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     throw new InvalidDataException("Archive has incorrect data included!");
                 }
 
+                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                {
+                    archiveWarning = new ResultMessage(ResultMessageType.Warning, "Archive contains more tham one TASKDATA.XML file. Only the first one is loaded.");
+                }
+
                 var folderName = fileNames.First().Substring(0, fileNames.First().IndexOf('/'));
                 archive.ExtractToDirectory(path, true);
                 path = Path.Combine(path, folderName);
             }
 
-            return Load(path, loadBinData);
+            var res = Load(path, loadBinData);
+
+            if (archiveWarning != null)
+            {
+                res.Messages.Add(archiveWarning);
+            }
+
+            Directory.Delete(path, true);
+
+            return res;
+        }
+
+        /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object asynchronously
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static async Task<ISOXML> LoadFromArchiveAsync(Stream stream, bool loadBinData = true)
+        {
+            return await Task.Run(() => LoadFromArchive(stream, loadBinData));
         }
 
         /// <summary>
@@ -385,9 +412,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="path"></param>
         /// <param name="loadBinData"></param>
         /// <returns></returns>
-        public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
+        public static async Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task.Run(() => Load(path, loadBinData));
+            return await Task.Run(() => Load(path, loadBinData));
         }
 
         /// <summary>
