@@ -10,7 +10,7 @@ public class StreamInputTests
     [TestMethod]
     public void CanLoadValidZipStreamWithGrids()
     {
-        var filePath = "./testdata/LoadFromStream/Zipped_Task.zip";
+        var filePath = "./testdata/LoadFromStream/ZippedTask.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {

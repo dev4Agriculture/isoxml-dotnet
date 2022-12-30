@@ -282,7 +282,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
         {
-            var path = Path.GetTempPath();
+            var path = Path.Combine(Path.GetTempPath(), "isoxmltmp");
             ResultMessage archiveWarning = null;
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
@@ -296,10 +296,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     archiveWarning = new ResultMessage(ResultMessageType.Warning, "Archive contains more tham one TASKDATA.XML file. Only the first one is loaded.");
                 }
-
-                var folderName = fileNames.First().Substring(0, fileNames.First().IndexOf('/'));
                 archive.ExtractToDirectory(path, true);
-                path = Path.Combine(path, folderName);
             }
 
             var res = Load(path, loadBinData);
