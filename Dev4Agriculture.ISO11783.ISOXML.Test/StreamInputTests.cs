@@ -24,6 +24,22 @@ public class StreamInputTests
     }
 
     [TestMethod]
+    public void CanLoadValidZipStreamWithGridsFromSubFolder()
+    {
+        var filePath = "./testdata/LoadFromStream/ZippedTaskWithSubFolder.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(1, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+    }
+
+    [TestMethod]
     public void LoadZipFileWithMultiplyTaskdatXML()
     {
         var filePath = "./testdata/LoadFromStream/MultiplyTaskdataXML.zip";
