@@ -27,7 +27,7 @@ public class StreamInputTests
     [TestMethod]
     public void CanLoadValidZipFromSubfolderStreamWithGrids()
     {
-        var filePath = "./testdata/LoadFromStream/ZippedTaskWithSubfolder.zip";
+        var filePath = "./testdata/LoadFromStream/ZippedTaskWithSubFolder.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
@@ -43,7 +43,7 @@ public class StreamInputTests
     [TestMethod]
     public void LoadFromZipWithMultipleExternalFilesInSubfolder()
     {
-        var filePath = "./testdata/LoadFromStream/MultipleExternalsSubfolder.zip";
+        var filePath = "./testdata/LoadFromStream/MultipleExternalsSubFolder.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
