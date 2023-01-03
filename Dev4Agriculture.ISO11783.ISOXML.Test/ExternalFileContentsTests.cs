@@ -55,8 +55,6 @@ public class ExternalFileContentsTests
         Assert.AreEqual(0, result.Messages.Count);
     }
 
-
-
     [TestMethod]
     public void TaskDataWithMissingExternalFilesIsRecognized()
     {

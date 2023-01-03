@@ -38,6 +38,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
+            foreach (var subdir in Directory.GetDirectories(root))
+            {
+                foreach (var file in Directory.GetFiles(Path.Combine(root, subdir)))
+                {
+                    if (file.ToLower().EndsWith(fileName))
+                    {
+                        path = file;
+                        return true;
+                    }
+                }
+            }
+
             path = "";
             return false;
         }
