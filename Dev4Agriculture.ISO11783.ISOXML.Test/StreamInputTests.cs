@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,7 +11,7 @@ public class StreamInputTests
     [TestMethod]
     public void CanLoadValidZipStreamWithGrids()
     {
-        var filePath = "./testdata/LoadFromStream/Zipped_Task.zip";
+        var filePath = "./testdata/LoadFromStream/ZippedTask.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
@@ -21,6 +22,56 @@ public class StreamInputTests
         Assert.IsNotNull(result.Data);
         Assert.AreEqual(1, result.Grids.Count);
         Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+    }
+
+    [TestMethod]
+    public void CanLoadValidZipFromSubfolderStreamWithGrids()
+    {
+        var filePath = "./testdata/LoadFromStream/ZippedTaskWithSubFolder.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(1, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+    }
+
+    [TestMethod]
+    public void LoadFromZipWithMultipleExternalFilesInSubfolder()
+    {
+        var filePath = "./testdata/LoadFromStream/MultipleExternalsSubFolder.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Data.Farm.Count);
+        Assert.AreEqual(3, result.Data.Customer.Count);
+        Assert.AreEqual(3, result.Data.Task.Count);
+        Assert.AreEqual(0, result.Messages.Count);
+    }
+
+    [TestMethod]
+    public void LoadFromZipWithMultipleExternalFiles()
+    {
+        var filePath = "./testdata/LoadFromStream/MultipleExternals.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Data.Farm.Count);
+        Assert.AreEqual(3, result.Data.Customer.Count);
+        Assert.AreEqual(3, result.Data.Task.Count);
+        Assert.AreEqual(0, result.Messages.Count);
     }
 
     [TestMethod]

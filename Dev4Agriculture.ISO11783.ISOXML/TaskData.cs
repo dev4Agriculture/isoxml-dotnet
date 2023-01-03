@@ -20,7 +20,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return path;
         }
 
-
         public static ResultWithMessages<ISO11783TaskDataFile> ParseTaskData(string isoxmlString, string path)
         {
             ISO11783TaskDataFile taskData = null;
@@ -88,9 +87,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public static ResultWithMessages<ISO11783TaskDataFile> LoadTaskData(string path)
         {
             var text = "";
+            var filePath = "";
             if (!File.Exists(path))
             {
-                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out var filePath))
+                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out filePath))
                 {
                     return new ResultWithMessages<ISO11783TaskDataFile>(
                         new ISO11783TaskDataFile(),
@@ -108,7 +108,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             }
 
-            return ParseTaskData(text, path);
+            return ParseTaskData(text, !string.IsNullOrWhiteSpace(filePath) ? filePath : path);
         }
 
 
