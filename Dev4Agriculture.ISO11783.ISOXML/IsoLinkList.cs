@@ -216,7 +216,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             if (path.ToUpper().EndsWith(".XML") == false)
             {
-                path = Path.Combine(path.ToString(), "LINKLIST.xml");
+                path = Path.Combine(path.ToString(), "LINKLIST.XML");
             }
             return path;
         }
