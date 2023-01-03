@@ -33,5 +33,6 @@ v0.9.1.1
   OUTDATED, do not use
 v0.9.1.2
   -FIX: Did not properly read files from subfolders when reading zipfile stream
+  -FIX: Wrong casing of LINKLIST.xml. Must be LINKLIST.XML
 
 
