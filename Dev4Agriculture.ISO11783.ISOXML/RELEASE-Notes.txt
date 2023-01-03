@@ -27,3 +27,11 @@ v0.9.0.1
   - FIX: Added missing Elements to the IDListTable; e.g. CodedCommentListValue could not be assigned with an ID.
 v0.9.0.2
   - FIX: Loading of Layers for GridType 2 was invalid
+v0.9.1.0
+  + ADD: Function to ReadTaskData from Zipfile Stream
+v0.9.1.1
+  OUTDATED, do not use
+v0.9.1.2
+  -FIX: Did not properly read files from subfolders when reading zipfile stream
+
+
