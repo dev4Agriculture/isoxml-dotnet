@@ -5,6 +5,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Examples;
 
 public static class Program
 {
+    public static void CreateEmptyTaskSet(string path)
+    {
+        var isoxml = ISOXML.Create(path);
+        isoxml.Save();
+    }
+
     /// <summary>
     /// An example on how to create a TaskData that includes a Grid and a Field Boundary
     /// </summary>
@@ -208,12 +214,12 @@ public static class Program
         var path = Console.ReadLine();
         if (path is string and not "")
         {
+            CreateEmptyTaskSet(path);
             CreateGrid(Path.Combine(path, "grid"));
             CreateTaskDataWithCodingData(Path.Combine(path, "CodingDataTaskData"));
         }
 
         ReadManufacturer();
-
 
     }
 

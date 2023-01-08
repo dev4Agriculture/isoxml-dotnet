@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -16,6 +17,63 @@ public class IsoGridTests
         Assert.IsNotNull(result.Data);
         Assert.AreEqual(1, result.Grids.Count);
         Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+    }
+
+
+    [TestMethod]
+    public void CanCreateAndSaveGridType2()
+    {
+        var path_out = "./out/gridType1";
+        var gridName = "GRD00001";
+        uint rows = 20;
+        uint columns = 10;
+        var isoxml = ISOXML.Create(path_out);
+        var task = new ISOTask()
+        {
+            TaskDesignator = "TestGrid",
+            TaskStatus = ISOTaskStatus.Planned
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
+
+
+        var grid = task.CreateGrid(new ISOGrid()
+        {
+            Filename = gridName,
+            GridCellEastSize = 0.0001,
+            GridCellNorthSize = 0.0001,
+            GridMaximumColumn = columns,
+            GridMaximumRow = rows,
+            GridType = ISOGridType.gridtype2,
+            TreatmentZoneCode = 1
+        },
+        new[] {
+            new ISOGridLayer(1, "DET-1")
+        });
+
+        isoxml.Grids.Add(gridName, grid);
+
+        task.AddDefaultGridValues(0, 1);
+
+        for (uint row = 0; row < rows; row++)
+        {
+            for (uint column = 0; column < columns; column++)
+            {
+                grid.SetValue(column, row, row);
+            }
+        }
+
+        isoxml.Data.Task.Add(task);
+
+
+        isoxml.Save();
+        var filePath = Path.Combine(path_out, gridName + ".bin");
+        Assert.IsTrue(File.Exists(filePath));
+        var info = new FileInfo(filePath);
+        Assert.AreEqual(info.Length, 20 * 10 * 4);
+        var isoXML_Loaded = ISOXML.Load(path_out);
+        Assert.AreEqual(isoXML_Loaded.Data.Task.Count, 1);
+        Assert.AreEqual(isoXML_Loaded.Grids[ isoXML_Loaded.Data.Task[0].Grid[0].Filename].GetValue(8, 5, 0), (uint)5);
+
     }
 
     [TestMethod]

@@ -74,6 +74,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return TimeLogs.Count;
         }
 
+
+        /// <summary>
+        /// Adds the Element <DLT A="DFFF" B="31"/>
+        /// This tells the TaskController to track all data received from the DefaultSet of any device during task operation
+        /// </summary>
         public void AddDefaultDataLogTrigger()
         {
             DataLogTrigger.Add(new ISODataLogTrigger()
@@ -84,13 +89,66 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 | TriggerMethods.ThresholdLimits
                 | TriggerMethods.OnChange
                 | TriggerMethods.Total)
-
             });
         }
 
 
+        public void AddDefaultGridValues(uint ddi, uint value, string det = "")
+        {
+            var pdv = new ISOProcessDataVariable()
+            {
+                ProcessDataDDI = Utils.FormatDDI(ddi),
+                DeviceElementIdRef = det ?? null,
+                ProcessDataValue = value
+
+            };
+
+            var tzn = new ISOTreatmentZone()
+            {
+                TreatmentZoneCode = 0,
+                TreatmentZoneDesignator = "Default"
+            };
+
+            tzn.ProcessDataVariable.Add(pdv);
+
+            DefaultTreatmentZoneCodeValue = 0;
+            PositionLostTreatmentZoneCode = 0;
+            OutOfFieldTreatmentZoneCode = 0;
+
+        }
+
+        public ISOGridFile CreateGrid(ISOGrid grid, ISOGridLayer[] gridLayers)
+        {
+            Grid.Add(grid);
+            var gridFile = ISOGridFile.Create(grid, (byte)gridLayers.Length);
+            var tzn = new ISOTreatmentZone()
+            {
+                TreatmentZoneCode = grid.TreatmentZoneCodeValue,
+                TreatmentZoneDesignator = "Data"
+            };
+            foreach(var layer in gridLayers)
+            {
+                var pdv = new ISOProcessDataVariable()
+                {
+                    DeviceElementIdRef = layer.Det,
+                    ProcessDataDDI = Utils.FormatDDI(layer.Ddi)
+                };
+                tzn.ProcessDataVariable.Add(pdv);
+            }
+            TreatmentZone.Add(tzn);
+            return gridFile;
+        }
+
+        //=====================================================    Analysis    ==================================================================================//
 
 
+        /// <summary>
+        /// Try to get the maximum value for a specific combination of DDI and  deviceElement from a Task
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="maximum"> The variable that shall receive the result</param>
+        /// <returns> True if a maximum value could be identified</returns>
         public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
         {
             maximum = int.MinValue;
@@ -109,6 +167,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
         }
 
+        /// <summary>
+        /// Try to get the minimum value for a specific combination of DDI and  deviceElement from a Task
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="minimum"> The variable that shall receive the result</param>
+        /// <returns> True if a minimum value could be identified</returns>
         public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
         {
             minimum = int.MaxValue;
@@ -129,7 +194,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
 
-
+        /// <summary>
+        /// Try to get the first available value for a specific combination of DDI and  deviceElement from a Task
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="first"> The variable that shall receive the result</param>
+        /// <returns> True if a first value could be identified, False if this value doesn't exist in the Task</returns>
         public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
         {
             foreach (var tlg in TimeLogs)
@@ -144,6 +215,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        /// <summary>
+        /// Try to get the last available value for a specific combination of DDI and  deviceElement from a Task
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="last"> The variable that shall receive the result</param>
+        /// <returns> True if a last value could be identified, False if this value doesn't exist in the Task</returns>
         public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)

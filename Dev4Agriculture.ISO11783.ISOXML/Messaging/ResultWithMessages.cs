@@ -7,7 +7,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
     {
         public void AddError(ResultMessageCode code, params ResultDetail[] details)
         {
-           Add(ResultMessage.Error(code, details));
+            Add(ResultMessage.Error(code, details));
         }
 
         public void AddWarning(ResultMessageCode code, params ResultDetail[] details)
@@ -18,6 +18,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         {
             Add(ResultMessage.Info(code, details));
         }
+
+        public int CountInfos()
+        {
+            return this.Count(entry => entry.Type == ResultMessageType.Info);
+        }
+
+        public bool HasInfos()
+        {
+            return CountInfos() > 0;
+        }
+
+        public int CountErrors()
+        {
+            return this.Count(entry => entry.Type == ResultMessageType.Error);
+        }
+
+        public bool HasErrors()
+        {
+            return CountErrors() > 0;
+        }
+
+
+        public int CountWarnings()
+        {
+            return this.Count(entry => entry.Type == ResultMessageType.Warning);
+        }
+
+        public bool HasWarnings()
+        {
+            return CountWarnings() > 0;
+        }
+
     }
 
     public class ResultWithMessages<ResultType> where ResultType : class
@@ -114,36 +146,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
                 );
         }
 
-
-        public int CountInfos()
-        {
-            return Messages.Count(entry => entry.Type == ResultMessageType.Info);
-        }
-
-        public bool HasInfos()
-        {
-            return CountInfos() > 0;
-        }
-
-        public int CountErrors()
-        {
-            return Messages.Count(entry => entry.Type == ResultMessageType.Error);
-        }
-
-        public bool HasErrors()
-        {
-            return CountErrors() > 0;
-        }
-
-
-        public int CountWarnings()
-        {
-            return Messages.Count(entry => entry.Type == ResultMessageType.Warning);
-        }
-
-        public bool HasWarnings()
-        {
-            return CountWarnings() > 0;
-        }
     }
 }

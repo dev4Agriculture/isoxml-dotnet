@@ -1,11 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
+    public struct ISOGridLayer
+    {
+        public uint Ddi;
+        public string Det;
+
+        public ISOGridLayer(uint ddi, string det = "")
+        {
+            Ddi = ddi;
+            Det = det;
+        }
+    }
+
     public class ISOGridFile
     {
 
@@ -263,12 +274,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="row"></param>
         /// <param name="value"></param>
         /// <param name="layer"></param>
-        /// <returns></returns>
-        public int SetValue(uint column, uint row, uint value, uint layer = 0)
+        /// <returns>True if the value could be set, false otherwise</returns>
+        public bool SetValue(uint column, uint row, uint value, uint layer = 0)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height)
             {
-                return 0;
+                return false;
             }
 
             switch (Type)
@@ -276,19 +287,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 case ISOGridType.gridtype1:
                     if (value < 0 || value > 255)
                     {
-                        return 0;
+                        return false;
                     }
                     _datat1[row, column] = (byte)value;
-                    return 1;
+                    return true;
                 case ISOGridType.gridtype2:
                     if (layer < 0 || layer >= Layers)
                     {
-                        return 0;
+                        return false;
                     }
                     _datat2[layer, row, column] = value;
-                    return 1;
+                    return true;
                 default:
-                    return 0;
+                    return false;
             }
         }
 
@@ -301,7 +312,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="layer"></param>
         /// <returns></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public uint GetValue(uint column, uint row, uint layer)
+        public uint GetValue(uint column, uint row, uint layer = 0)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height)
             {
