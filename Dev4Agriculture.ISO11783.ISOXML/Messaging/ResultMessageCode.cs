@@ -40,7 +40,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         LinkListWrongRootElement = 700
     }
 
-    public enum MessageDetailType
+    public enum ResultDetailType
     {
         MDTString,
         MDTFile,
@@ -51,9 +51,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
 
     public struct ResultDetail
     {
-        public MessageDetailType MessageDetailType;
+        public ResultDetailType MessageDetailType;
         public string Value;
-        private ResultDetail(MessageDetailType messageDetailType, string value)
+        private ResultDetail(ResultDetailType messageDetailType, string value)
         {
             MessageDetailType = messageDetailType;
             Value = value;
@@ -61,28 +61,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
 
         public static ResultDetail FromString(string detail)
         {
-            return new ResultDetail(MessageDetailType.MDTString, detail);
+            return new ResultDetail(ResultDetailType.MDTString, detail);
         }
 
 
         public static ResultDetail FromFile(string detail)
         {
-            return new ResultDetail(MessageDetailType.MDTFile, detail);
+            return new ResultDetail(ResultDetailType.MDTFile, detail);
         }
 
         public static ResultDetail FromPath(string detail)
         {
-            return new ResultDetail(MessageDetailType.MDTPath, detail);
+            return new ResultDetail(ResultDetailType.MDTPath, detail);
         }
 
         public static ResultDetail FromNumber(long number)
         {
-            return new ResultDetail(MessageDetailType.MDTString, number.ToString());
+            return new ResultDetail(ResultDetailType.MDTString, number.ToString());
         }
 
         public static ResultDetail FromFloat(double number)
         {
-            return new ResultDetail(MessageDetailType.MDTString, number.ToString());
+            return new ResultDetail(ResultDetailType.MDTString, number.ToString());
         }
 
     }
