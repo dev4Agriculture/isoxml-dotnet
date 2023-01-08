@@ -217,30 +217,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             if (maxLengthAttr != null && !maxLengthAttr.IsValid(value))
             {
                 _result.AddWarning(ResultMessageCode.XSDAttributeValueTooLong,
-                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(attrValue),
                     ResultDetail.FromNumber(maxLengthAttr.Length),
-                    ResultDetail.FromString(isoxmlNodeId),
-                    ResultDetail.FromString(attrValue)
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(isoxmlNodeId)
                 );
             }
 
             if (minLengthAttr != null && !minLengthAttr.IsValid(value))
             {
                 _result.AddWarning(ResultMessageCode.XSDAttributeValueTooShort,
-                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(attrValue),
                     ResultDetail.FromNumber(minLengthAttr.Length),
-                    ResultDetail.FromString(isoxmlNodeId),
-                    ResultDetail.FromString(attrValue)
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(isoxmlNodeId)
                 );
             }
 
             if (regexAttr != null && !regexAttr.IsValid(attrValue))
             {
                 _result.AddWarning(ResultMessageCode.XSDAttributeRegExMissmatch,
-                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(attrValue),
                     ResultDetail.FromString(regexAttr.Pattern),
-                    ResultDetail.FromString(isoxmlNodeId),
-                    ResultDetail.FromString(attrValue)
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(isoxmlNodeId)
                 );
             }
         }
@@ -343,8 +343,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     {
                         _result.AddWarning(ResultMessageCode.XSDEnumUnknown,
                             ResultDetail.FromString(attr.Value),
-                            ResultDetail.FromString(isoxmlNodeId),
-                            ResultDetail.FromString(property.Name)
+                            ResultDetail.FromString(property.Name),
+                            ResultDetail.FromString(isoxmlNodeId)
                         );
                         continue;
                     }
@@ -364,10 +364,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     {
                         _result.AddWarning(ResultMessageCode.XSDAttributeParsing,
                             ResultDetail.FromString(attr.Value),
-                            ResultDetail.FromString(isoxmlNodeId),
-                            ResultDetail.FromString(property.Name),
                             ResultDetail.FromString(e.GetType().ToString()),
-                            ResultDetail.FromString(e.Message)
+                            ResultDetail.FromString(e.Message),
+                            ResultDetail.FromString(property.Name),
+                            ResultDetail.FromString(isoxmlNodeId)
                             );
                     }
                 }
@@ -451,7 +451,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                 default:
                     _result.AddError(ResultMessageCode.XSDElementInvalid,
                         ResultDetail.FromString(node.NodeType.ToString()),
-                        ResultDetail.FromString(node.OuterXml));
+                        ResultDetail.FromString(node.Value));
                     return null;
 
             }

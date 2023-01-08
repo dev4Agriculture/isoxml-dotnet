@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -39,11 +38,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         externalDoc.LoadXml(extContent);
                         MergeExternalContent(xmlDoc, externalDoc);
                     }
-                    catch (FileNotFoundException ex)
+                    catch (FileNotFoundException)
                     {
                         result.AddError(ResultMessageCode.FileNotFound,
-                            ResultDetail.FromString(element.Attributes["A"].Value),
-                            ResultDetail.FromString(ex.Message));
+                            ResultDetail.FromString(element.Attributes["A"].Value));
                     }
                     catch (IOException ex)
                     {
@@ -101,8 +99,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         new ISO11783TaskDataFile(),
                         ResultMessage.Error(
                             ResultMessageCode.FileNotFound,
-                            ResultDetail.FromPath(path),
-                            ResultDetail.FromString("Not found")
+                            ResultDetail.FromPath(path)
                             )
                         );
                 }
@@ -167,14 +164,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     break;
                 case ISOCropType el:
                     taskData.CropType.Add(el);
-                break;
+                    break;
                 case ISOCulturalPractice el:
                     taskData.CulturalPractice.Add(el);
-                break;
-                 case ISOCustomer el:
+                    break;
+                case ISOCustomer el:
                     taskData.Customer.Add(el);
-                break;
-                  case ISODevice el:
+                    break;
+                case ISODevice el:
                     taskData.Device.Add(el);
                     break;
                 case ISOFarm el:

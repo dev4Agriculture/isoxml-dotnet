@@ -115,8 +115,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 result.AddError(
                     ResultMessageCode.FileNotFound,
-                    ResultDetail.FromPath(filePath),
-                    ResultDetail.FromString("Not found")
+                    ResultDetail.FromPath(filePath)
                     );
             }
             result.SetResult(grid);

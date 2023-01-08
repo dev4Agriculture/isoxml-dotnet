@@ -382,8 +382,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             else
             {
                 result.AddError(ResultMessageCode.FileNotFound,
-                    ResultDetail.FromString(name),
-                    ResultDetail.FromString("Not found")
+                    ResultDetail.FromString(name)
                     );
                 return result;
             }

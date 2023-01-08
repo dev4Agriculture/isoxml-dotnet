@@ -262,6 +262,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 result.AddError(
                     ResultMessageCode.XMLParsingError,
+                    ResultDetail.FromPath(path),
                     ResultDetail.FromString(ex.Message)
                     );
             }
@@ -280,8 +281,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 var result = new ResultWithMessages<IsoLinkList>();
                 result.AddError(
                     ResultMessageCode.FileNotFound,
-                    ResultDetail.FromFile(fileName),
-                    ResultDetail.FromString("LinkList not found")
+                    ResultDetail.FromFile(fileName)
                     );
                 result.SetResult(new IsoLinkList());
                 return result;
