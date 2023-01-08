@@ -98,7 +98,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             else
             {
                 messages.AddError(ResultMessageCode.FileNotFound,
-                    ResultDetail.FromString(BinName + ".BIN")
+                    ResultDetail.FromString(BinName),
+                    ResultDetail.FromString("Not found")
                     );
                 Loaded = TLGStatus.ERROR;
 

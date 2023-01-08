@@ -278,8 +278,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
                 var result = new ResultWithMessages<IsoLinkList>();
-                result.AddError(ResultMessageCode.FileNotFound,
-                    ResultDetail.FromFile(fileName));
+                result.AddError(
+                    ResultMessageCode.FileNotFound,
+                    ResultDetail.FromFile(fileName),
+                    ResultDetail.FromString("LinkList not found")
+                    );
                 result.SetResult(new IsoLinkList());
                 return result;
             }

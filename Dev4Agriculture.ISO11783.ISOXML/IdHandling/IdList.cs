@@ -296,7 +296,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
                     var id = BuildID(Name, _nextId);
                     SetId(entry.Value, id);
                     tempItems.Add(_nextId, entry.Value);
-                    result.AddWarning( ResultMessageCode.MissingId ,
+                    result.AddWarning(ResultMessageCode.MissingId,
                         ResultDetail.FromString(Name),
                         ResultDetail.FromString("Assigning " + id)
                         );

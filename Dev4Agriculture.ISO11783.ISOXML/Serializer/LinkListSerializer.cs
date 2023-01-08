@@ -66,13 +66,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             {
                 index++;
                 parsed = ParseNode(xml.ChildNodes[index], $"{xml.ChildNodes[index].Name}[0]");
-                if (parsed is ISO11783LinkListFile)
+                if (parsed is ISO11783LinkListFile file)
                 {
-                    _result.SetResult((ISO11783LinkListFile)parsed);
+                    _result.SetResult(file);
                     break;
                 }
             }
-            if( parsed == null)
+            if (parsed == null)
             {
                 _result.AddError(ResultMessageCode.LinkListWrongRootElement);
             }
@@ -211,7 +211,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                 _result.AddWarning(ResultMessageCode.XSDAttributeValueRange,
                     ResultDetail.FromString(property.Name),
                     ResultDetail.FromString(rangeAttr.Minimum.ToString()),
-                    ResultDetail.FromString( rangeAttr.Maximum.ToString()),
+                    ResultDetail.FromString(rangeAttr.Maximum.ToString()),
                     ResultDetail.FromString(linkListNodeId),
                     ResultDetail.FromString(value.ToString())
                 );

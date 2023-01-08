@@ -37,7 +37,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         public ResultWithMessages(ResultType result, ResultMessage onlyOneMessage)
         {
             Result = result;
-            Messages = (ResultMessageList)new List<ResultMessage>
+            Messages = new ResultMessageList()
             {
                 onlyOneMessage
             };

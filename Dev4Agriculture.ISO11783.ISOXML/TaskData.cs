@@ -101,7 +101,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         new ISO11783TaskDataFile(),
                         ResultMessage.Error(
                             ResultMessageCode.FileNotFound,
-                            ResultDetail.FromPath(path)
+                            ResultDetail.FromPath(path),
+                            ResultDetail.FromString("Not found")
                             )
                         );
                 }

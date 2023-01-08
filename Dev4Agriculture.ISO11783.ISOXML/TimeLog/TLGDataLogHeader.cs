@@ -383,7 +383,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 result.AddError(ResultMessageCode.FileNotFound,
                     ResultDetail.FromString(name),
-                    ResultDetail.FromPath(path));
+                    ResultDetail.FromString("Not found")
+                    );
                 return result;
             }
         }

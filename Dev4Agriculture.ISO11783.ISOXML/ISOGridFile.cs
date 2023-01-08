@@ -99,7 +99,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         else
                         {
-                            result.AddError(ResultMessageCode.GRIDFileSizeMissmatch, ResultDetail.FromPath(filePath));
+                            result.AddError(
+                                ResultMessageCode.GRIDFileSizeMissmatch,
+                                ResultDetail.FromPath(filePath)
+                                );
                         }
 
                         break;
@@ -110,7 +113,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else
             {
-                result.AddError(ResultMessageCode.FileNotFound, ResultDetail.FromPath(filePath));
+                result.AddError(
+                    ResultMessageCode.FileNotFound,
+                    ResultDetail.FromPath(filePath),
+                    ResultDetail.FromString("Not found")
+                    );
             }
             result.SetResult(grid);
             return result;

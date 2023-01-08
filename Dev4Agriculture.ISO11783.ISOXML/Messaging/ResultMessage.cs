@@ -21,7 +21,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
             {
                 return message;
             }
-            for (var index = 1; index < Details.Length; index++)
+            for (var index = 1; index <= Details.Length; index++)
             {
                 message = message.Replace($"%{index}", Details[index - 1].Value);
             }
@@ -36,7 +36,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
                     Code == ResultMessageCode.FileSizeMissmatch ? "FileSize of %1 doesn't match; Is %2 but should be %3 Bytes" :
                     Code == ResultMessageCode.FileNotFound ? "File could not be found: %1; Message: %2" :
                     Code == ResultMessageCode.FileAccessImpossible ? "File could not be accessed: %1; Message: %2" :
-                    Code == ResultMessageCode.XMLParsingError ? "XML Parsing Error in %1" :
+                    Code == ResultMessageCode.XMLParsingError ? "XML Parsing Error in %1, Details:" :
                     Code == ResultMessageCode.XMLWrongElement ? "Wrong XML Element Type found in %1" :
                     Code == ResultMessageCode.XMLTextIn ? "Found Text Element in XML, this is invalid in %1" :
                     Code == ResultMessageCode.XMLInvalidElement ? "Found invalid Element %1" :
