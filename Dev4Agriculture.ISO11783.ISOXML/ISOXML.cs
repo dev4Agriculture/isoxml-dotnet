@@ -39,7 +39,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <summary>
         /// Loading of an ISOXML TaskDataSet might cause multiple issues. ISOXML.net intends to load data as good as possible, any error or warning is reflected in those messages
         /// </summary>
-        public List<ResultMessage> Messages { get; private set; }
+        public ResultMessageList Messages { get; private set; }
 
         /// <summary>
         /// CodingData like Tasks, Partfields and customers has IDs like CTR1, TSK-1, PFD1. These elements are linked within other Objects. The ID-Table provides a list of all such IDs.
@@ -188,7 +188,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Grids = new Dictionary<string, ISOGridFile>();
             TimeLogs = new Dictionary<string, ISOTLG>();
             FolderPath = path;
-            Messages = new List<ResultMessage>();
+            Messages = new ResultMessageList();
             IdTable = new IdTable();
             LinkList = null;
             HasLinkList = false;
@@ -294,7 +294,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
                 if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
                 {
-                    archiveWarning = new ResultMessage(ResultMessageType.Warning, "Archive contains more tham one TASKDATA.XML file. Only the first one is loaded.");
+                    archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
                 }
                 archive.ExtractToDirectory(path, true);
             }
@@ -589,9 +589,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static ISOXML ParseFromXMLString(string xmlString)
         {
+            var taskData = TaskData.FromParsedElement(xmlString);
             var isoxml = new ISOXML("")
             {
-                Data = TaskData.FromParsedElement(xmlString)
+                Data = taskData.Result,
+                Messages = taskData.Messages
             };
             isoxml.InitExtensionData();
             return isoxml;

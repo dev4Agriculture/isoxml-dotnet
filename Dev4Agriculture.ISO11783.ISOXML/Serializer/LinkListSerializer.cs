@@ -46,30 +46,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         private readonly Assembly _linkListAssembly;
 
-        public List<ResultMessage> Messages { get; private set; }
+        private ResultWithMessages<ISO11783LinkListFile> _result = new ResultWithMessages<ISO11783LinkListFile>();
 
         public LinkListSerializer()
         {
-            Messages = new List<ResultMessage>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             _linkListAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
 
         }
 
-        public object Deserialize(XmlDocument xml)
+        public ResultWithMessages<ISO11783LinkListFile> Deserialize(XmlDocument xml)
         {
-            Messages.Clear();
+            _result = new ResultWithMessages<ISO11783LinkListFile>();
             var keepCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            object result = null;
+            object parsed = null;
             var index = -1;
-            while (result == null && index < xml.ChildNodes.Count)
+            while (parsed == null && index < xml.ChildNodes.Count)
             {
                 index++;
-                result = ParseNode(xml.ChildNodes[index], $"{xml.ChildNodes[index].Name}[0]");
+                parsed = ParseNode(xml.ChildNodes[index], $"{xml.ChildNodes[index].Name}[0]");
+                if (parsed is ISO11783LinkListFile file)
+                {
+                    _result.SetResult(file);
+                    break;
+                }
+            }
+            if (parsed == null)
+            {
+                _result.AddError(ResultMessageCode.LinkListWrongRootElement);
             }
             Thread.CurrentThread.CurrentCulture = keepCulture;
-            return result;
+            return _result;
         }
 
         public void Serialize(ISO11783LinkListFile taskData, string path)
@@ -191,10 +199,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             property.SetValue(obj, value);
         }
 
-        private void AddMessage(ResultMessageType type, string message)
-        {
-            Messages.Add(new ResultMessage(type, message));
-        }
 
         private void ValidateProperty(PropertyInfo property, object value, string attrValue, string linkListNodeId)
         {
@@ -204,33 +208,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             var regexAttr = property.GetCustomAttribute<System.ComponentModel.DataAnnotations.RegularExpressionAttribute>();
             if (rangeAttr != null && !rangeAttr.IsValid(value))
             {
-                AddMessage(
-                    ResultMessageType.Warning,
-                    $"The field {property.Name} must be between {rangeAttr.Minimum} and {rangeAttr.Maximum} (path: {linkListNodeId}; value: {value})"
+                _result.AddWarning(ResultMessageCode.XSDAttributeValueRange,
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(rangeAttr.Minimum.ToString()),
+                    ResultDetail.FromString(rangeAttr.Maximum.ToString()),
+                    ResultDetail.FromString(linkListNodeId),
+                    ResultDetail.FromString(value.ToString())
                 );
             }
 
             if (maxLengthAttr != null && !maxLengthAttr.IsValid(value))
             {
-                AddMessage(
-                    ResultMessageType.Warning,
-                    $"The field {property.Name} has length more than {maxLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
+                _result.AddWarning(ResultMessageCode.XSDAttributeValueTooLong,
+                    ResultDetail.FromString(attrValue),
+                    ResultDetail.FromNumber(maxLengthAttr.Length),
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(linkListNodeId)
                 );
             }
 
             if (minLengthAttr != null && !minLengthAttr.IsValid(value))
             {
-                AddMessage(
-                    ResultMessageType.Warning,
-                    $"The field {property.Name} has length less than {minLengthAttr.Length} (path: {linkListNodeId}; value: {attrValue})"
+                _result.AddWarning(ResultMessageCode.XSDAttributeValueTooShort,
+                    ResultDetail.FromString(attrValue),
+                    ResultDetail.FromNumber(minLengthAttr.Length),
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(linkListNodeId)
                 );
             }
 
             if (regexAttr != null && !regexAttr.IsValid(attrValue))
             {
-                AddMessage(
-                    ResultMessageType.Warning,
-                    $"The field {property.Name} doesn't match regular expression {regexAttr.Pattern} (path: {linkListNodeId}; value: {attrValue})"
+                _result.AddWarning(ResultMessageCode.XSDAttributeRegExMissmatch,
+                    ResultDetail.FromString(attrValue),
+                    ResultDetail.FromString(regexAttr.Pattern),
+                    ResultDetail.FromString(property.Name),
+                    ResultDetail.FromString(linkListNodeId)
                 );
             }
         }
@@ -243,10 +256,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
                 if (required && property.GetValue(obj) == null)
                 {
-                    AddMessage(
-                        ResultMessageType.Warning,
-                        $"Missing required property {property.Name} (path: {linkListNodeId})"
-                    );
+                    _result.AddWarning(ResultMessageCode.XSDAttributeRequired,
+                       ResultDetail.FromString(property.Name),
+                       ResultDetail.FromString(linkListNodeId));
                 }
             }
         }
@@ -264,26 +276,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         private object ParseCDATA(XmlNode node)
         {
-            AddMessage(ResultMessageType.Error, "LinkList includes CDATA-Element which is not allowed: " + node.OuterXml);
+            _result.AddError(ResultMessageCode.XMLWrongElement, ResultDetail.FromString(node.OuterXml));
             return null;
         }
 
         private object ParseEntity(XmlNode node)
         {
-            AddMessage(ResultMessageType.Error, "LinkList includes Entity-Element which is not allowed: " + node.OuterXml);
+            _result.AddError(ResultMessageCode.XMLWrongElement, ResultDetail.FromString(node.OuterXml));
             return null;
         }
 
         private object ParseComment(XmlNode node)
         {
-            AddMessage(ResultMessageType.Warning, "Comment found: " + node.InnerText);
+            _result.AddWarning(ResultMessageCode.XMLCommentFound, ResultDetail.FromString(node.InnerText));
             return null;
         }
 
 
         private object ParseText(XmlNode node)
         {
-            AddMessage(ResultMessageType.Error, "LinkList includes Text-Element which is not allowed: " + node.InnerText);
+            _result.AddError(ResultMessageCode.XMLTextIn, ResultDetail.FromString(node.InnerText));
             return null;
         }
 
@@ -293,10 +305,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             if (type == null)
             {
                 var isRoot = string.IsNullOrEmpty(linkListNodeId);
-                AddMessage(
-                    isRoot ? ResultMessageType.Error : ResultMessageType.Warning,
-                    $"Unknown XML element {node.Name} (path: {linkListNodeId})"
-                );
+                if (isRoot)
+                {
+                    _result.AddError(ResultMessageCode.XSDAttributeUnknown,
+                        ResultDetail.FromString(node.Name),
+                        ResultDetail.FromString(linkListNodeId));
+                }
+                else
+                {
+                    _result.AddWarning(ResultMessageCode.XSDAttributeUnknown,
+                        ResultDetail.FromString(node.Name),
+                        ResultDetail.FromString(linkListNodeId));
+
+                }
                 return null;
             }
             var obj = Activator.CreateInstance(type);
@@ -311,10 +332,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     if (!attr.Name.Equals("xmlns:xsi") && !attr.Name.Equals("xmlns:xsd"))
                     {
 
-                        AddMessage(
-                            ResultMessageType.Warning,
-                            $"Unknown XML attribute {attr.Name} (path: {linkListNodeId})"
-                        );
+                        _result.AddWarning(ResultMessageCode.XSDAttributeUnknown,
+                        ResultDetail.FromString(attr.Name),
+                        ResultDetail.FromString(linkListNodeId));
                     }
                     continue;
                 }
@@ -325,9 +345,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
                     if (enumValue == null)
                     {
-                        AddMessage(
-                            ResultMessageType.Warning,
-                            $"Unknown enum value {attr.Value} (path: {linkListNodeId}; property: {property.Name})"
+                        _result.AddWarning(ResultMessageCode.XSDEnumUnknown,
+                            ResultDetail.FromString(attr.Value),
+                            ResultDetail.FromString(property.Name),
+                            ResultDetail.FromString(linkListNodeId)
                         );
                         continue;
                     }
@@ -345,10 +366,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     }
                     catch (Exception e)
                     {
-                        AddMessage(
-                            ResultMessageType.Warning,
-                            $"Cannot parse value {attr.Value} (path: {linkListNodeId}; property: {property.Name}), Error: {e.GetType()} Message:{e.Message}"
-                        );
+                        _result.AddWarning(ResultMessageCode.XSDAttributeParsing,
+                            ResultDetail.FromString(attr.Value),
+                            ResultDetail.FromString(e.GetType().ToString()),
+                            ResultDetail.FromString(e.Message),
+                            ResultDetail.FromString(property.Name),
+                            ResultDetail.FromString(linkListNodeId)
+                            );
                     }
                 }
             }
@@ -377,10 +401,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     var property = GetPropertyByElementName(type, name);
                     if (property == null)
                     {
-                        AddMessage(
-                            ResultMessageType.Warning,
-                            $"Elements of type {name} can't be children of element {node.Name} (path: {linkListNodeId})"
-                        );
+                        _result.AddWarning(ResultMessageCode.XSDElementWrongChild,
+                            ResultDetail.FromString(name),
+                            ResultDetail.FromString(node.Name),
+                            ResultDetail.FromString(linkListNodeId));
                         continue;
                     }
 
@@ -429,7 +453,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                 case XmlNodeType.Notation:
                 case XmlNodeType.ProcessingInstruction:
                 default:
-                    AddMessage(ResultMessageType.Error, $"Found invalid Element in XML. Type: {node.NodeType}, Content: {node.OuterXml}");
+                    _result.AddError(ResultMessageCode.XSDElementInvalid,
+                        ResultDetail.FromString(node.NodeType.ToString()),
+                        ResultDetail.FromString(node.Value));
                     return null;
 
             }

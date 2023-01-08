@@ -70,6 +70,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             _linkListContent = linkListContent;
             _groupIds = new IdList("LGP");
+            foreach (var group in linkListContent.LinkGroup)
+            {
+                _groupIds.ReadObject(group);
+            }
         }
 
         internal IsoLinkList()
@@ -245,37 +249,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 throw new ArgumentNullException(nameof(path));
             }
 
-            ISO11783LinkListFile linkListContent = null;
-            var messages = new List<ResultMessage>();
+            ResultWithMessages<ISO11783LinkListFile> linkListContent = null;
+            var result = new ResultWithMessages<IsoLinkList>();
             try
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
-                linkListContent = (ISO11783LinkListFile)LinkListSerializer.Deserialize(xmlDoc);
+                linkListContent = LinkListSerializer.Deserialize(xmlDoc);
 
-                messages.AddRange(LinkListSerializer.Messages);
             }
             catch (Exception ex)
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, ex.Message));
+                result.AddError(
+                    ResultMessageCode.XMLParsingError,
+                    ResultDetail.FromPath(path),
+                    ResultDetail.FromString(ex.Message)
+                    );
             }
 
-            var linkList = new IsoLinkList(linkListContent);
-            foreach (var group in linkListContent.LinkGroup)
-            {
-                linkList._groupIds.ReadObject(group);
-            }
-            messages.AddRange(linkList._groupIds.CleanListFromTempEntries());
-            return new ResultWithMessages<IsoLinkList>(linkList, messages);
+            var linkList = new IsoLinkList(linkListContent.Result);
+
+            result.AddMessages(linkList._groupIds.CleanListFromTempEntries());
+            result.SetResult(linkList);
+            return result;
         }
 
         internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
-            var messages = new List<ResultMessage>();
             if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, fileName + " not found!"));
-                return new ResultWithMessages<IsoLinkList>(new IsoLinkList(), messages);
+                var result = new ResultWithMessages<IsoLinkList>();
+                result.AddError(
+                    ResultMessageCode.FileNotFound,
+                    ResultDetail.FromFile(fileName)
+                    );
+                result.SetResult(new IsoLinkList());
+                return result;
             }
             else
             {

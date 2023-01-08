@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
@@ -340,6 +341,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal static ResultWithMessages<TLGDataLogHeader> Load(string path, string name)
         {
+            var result = new ResultWithMessages<TLGDataLogHeader>();
             if (Utils.AdjustFileNameToIgnoreCasing(path, name, out var filePath))
             {
                 var xmlDocument = new XmlDocument();
@@ -348,28 +350,41 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     xmlDocument.Load(filePath);
                     var tlgHeader = new TLGDataLogHeader();
                     tlgHeader.ReadElement(xmlDocument.DocumentElement);
+                    result.SetResult(tlgHeader);
                     return new ResultWithMessages<TLGDataLogHeader>(tlgHeader);
                 }
-                catch (Exception e)
+                catch (IOException ioException)
                 {
-                    return new ResultWithMessages<TLGDataLogHeader>(
-                        null,
-                        new ResultMessage(
-                            ResultMessageType.Error,
-                            "Could not read Header " + name + ", Exception: " + e.ToString()
-                            )
+                    result.AddError(ResultMessageCode.FileAccessImpossible,
+                        ResultDetail.FromString(name),
+                        ResultDetail.FromString(ioException.ToString())
                         );
+                    return result;
+                }
+                catch (XmlException xmlException)
+                {
+                    result.AddError(ResultMessageCode.XMLParsingError,
+                        ResultDetail.FromString(name),
+                        ResultDetail.FromString(xmlException.Message)
+                        );
+                    return result;
+
+                }
+                catch (Exception otherException)
+                {
+                    result.AddError(ResultMessageCode.Unknown,
+                        ResultDetail.FromString(name),
+                        ResultDetail.FromString(otherException.ToString())
+                        );
+                    return result;
                 }
             }
             else
             {
-                return new ResultWithMessages<TLGDataLogHeader>(
-                    null,
-                    new ResultMessage(
-                        ResultMessageType.Error,
-                        "File not found: " + name + " in " + path
-                        )
+                result.AddError(ResultMessageCode.FileNotFound,
+                    ResultDetail.FromString(name)
                     );
+                return result;
             }
         }
 

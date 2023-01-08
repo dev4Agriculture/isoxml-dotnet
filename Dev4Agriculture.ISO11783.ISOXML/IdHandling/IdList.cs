@@ -282,13 +282,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// that has a new, unique and valid Id assigned to itself; linked by this new Id as a key
         /// </summary>
         /// <returns>A list of Messages for each element that needed a new ID assigned</returns>
-        public List<ResultMessage> CleanListFromTempEntries()
+        public ResultMessageList CleanListFromTempEntries()
         {
             var tempItems = new Dictionary<int, object>();
 
 
             //First find all elements that currently are TEMP and generate an object with a proper id
-            var result = new List<ResultMessage>();
+            var result = new ResultMessageList();
             foreach (var entry in _ids)
             {
                 if (entry.Key >= NextTmpBase)
@@ -296,7 +296,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
                     var id = BuildID(Name, _nextId);
                     SetId(entry.Value, id);
                     tempItems.Add(_nextId, entry.Value);
-                    result.Add(new ResultMessage(ResultMessageType.Warning, "Object of Type " + Name + " without ID found. Assigning " + id));
+                    result.AddWarning(ResultMessageCode.MissingId,
+                        ResultDetail.FromString(Name),
+                        ResultDetail.FromString("Assigning " + id)
+                        );
                 }
             }
 

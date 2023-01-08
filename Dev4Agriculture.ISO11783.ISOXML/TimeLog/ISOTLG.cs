@@ -74,7 +74,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-        private List<ResultMessage> LoadData()
+        private ResultMessageList LoadData()
         {
             var headerResult = TLGDataLogHeader.Load(Path, XmlName);
             if (headerResult.Result == null)
@@ -97,7 +97,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
             else
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "Missing TimeLog Binary File " + BinName));
+                messages.AddError(ResultMessageCode.FileNotFound,
+                    ResultDetail.FromString(BinName)
+                    );
                 Loaded = TLGStatus.ERROR;
 
             }
@@ -143,9 +145,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        private List<ResultMessage> ReadBinaryData(FileStream binaryFile, TLGDataLogHeader header)
+        private ResultMessageList ReadBinaryData(FileStream binaryFile, TLGDataLogHeader header)
         {
-            var messages = new List<ResultMessage>();
+            var messages = new ResultMessageList();
             var binaryReader = new BinaryReader(binaryFile);
             ushort lastDate = 0;
             long dataLineBeginIndex;
@@ -167,31 +169,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         quitReading = true;
                         break;
                     case TLGDataLogReadResults.INVALID_DATA:
-                        messages.Add(new ResultMessage(ResultMessageType.Error,
-                                    "We found invalid Data. File: " + Name + " Position: " + binaryFile.Position + " of " + binaryFile.Length
-                                    ));
+                        var cause = "";
+                        var index = binaryFile.Position;
                         if (lastDate == 0)
                         {
-                            Console.WriteLine("ERROR: No valid StartDate found");
+                            cause = "No valid StartDate found";
                             quitReading = true;
                         }
                         else if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDataLineBeginIndex, lastDate) == false)
                         {
                             quitReading = true;
-                            Console.WriteLine("Could not find point for reEntry");
+                            cause = "Could not find point for reEntry";
                         }
+                        messages.AddError(ResultMessageCode.BINInvalidData,
+                            ResultDetail.FromString(Name),
+                            ResultDetail.FromNumber(index),
+                            ResultDetail.FromNumber(binaryFile.Length),
+                            ResultDetail.FromString(cause)
+                            );
+
                         break;
                     case TLGDataLogReadResults.MORE_DATA_THAN_IN_HEADER:
-                        messages.Add(
-                            new ResultMessage(
-                                ResultMessageType.Error,
-                                "There were more binary data linked in the binary file than exist in the header")
-                            );
+                        index = binaryFile.Position;
+                        var solution = "";
                         if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDataLineBeginIndex, lastDate) == false)
                         {
                             quitReading = true;
-                            Console.WriteLine("Could not find point for reEntry");
+                            solution = "DataLoss, could not find point for reEntry";
+                        } else
+                        {
+                            solution = $"Reentry at  {binaryFile.Position}";
                         }
+                        messages.AddError(ResultMessageCode.BINInvalidNumberOfDataInRow,
+                                ResultDetail.FromString(Name),
+                                ResultDetail.FromNumber(binaryFile.Position),
+                                ResultDetail.FromString(solution)
+                            );
                         break;
                     case TLGDataLogReadResults.FILE_END:
                         quitReading = true;
@@ -240,6 +253,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             catch (Exception e)
             {
                 Console.WriteLine("Could not open file " + storagePath + "; canceling to write: " + e.ToString());
+                throw e;
             }
         }
 

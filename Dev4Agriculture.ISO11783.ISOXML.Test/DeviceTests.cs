@@ -20,6 +20,8 @@ public class DeviceTests
             Console.WriteLine(msg.Title);
         });
         Assert.IsNotNull(result.Data);
+        Assert.AreEqual(result.Data.Device.Count, 1);
+        Assert.AreEqual(result.Data.Device[0].DeviceElement.Count, 15);
         Assert.AreEqual(0, result.Messages.Count);
 
     }

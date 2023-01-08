@@ -209,9 +209,11 @@ public static class Program
         if (path is string and not "")
         {
             CreateGrid(Path.Combine(path, "grid"));
+            CreateTaskDataWithCodingData(Path.Combine(path, "CodingDataTaskData"));
         }
 
         ReadManufacturer();
+
 
     }
 
