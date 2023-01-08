@@ -99,8 +99,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     return new ResultWithMessages<ISO11783TaskDataFile>(
                         new ISO11783TaskDataFile(),
-                        new ResultMessage(
-                            ResultMessageType.Error,
+                        ResultMessage.Error(
                             ResultMessageCode.FileNotFound,
                             ResultDetail.FromPath(path)
                             )
