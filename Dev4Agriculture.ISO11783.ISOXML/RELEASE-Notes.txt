@@ -34,5 +34,7 @@ v0.9.1.1
 v0.9.1.2
   -FIX: Did not properly read files from subfolders when reading zipfile stream
   -FIX: Wrong casing of LINKLIST.xml. Must be LINKLIST.XML
+v0.10.0.0
+  +ADD: Add DetailsField and CodeField to ResultMessages
 
 

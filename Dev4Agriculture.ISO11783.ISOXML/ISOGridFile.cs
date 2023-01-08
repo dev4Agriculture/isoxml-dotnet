@@ -42,7 +42,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static ResultWithMessages<ISOGridFile> Load(string baseFolder, string name, uint width, uint height, ISOGridType type, byte layers)
         {
-            var messages = new List<ResultMessage>();
+            var result = new ResultWithMessages<ISOGridFile>();
             ISOGridFile grid = null;
             if (Utils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".BIN", out var filePath))
             {
@@ -72,7 +72,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         else
                         {
-                            messages.Add(new ResultMessage(ResultMessageType.Error, "FileSize of Grid doesn't match: " + filePath));
+                            result.AddError(ResultMessageCode.GRIDFileSizeMissmatch, ResultDetail.FromPath(filePath));
                         }
                         break;
                     case ISOGridType.gridtype2:
@@ -99,7 +99,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         else
                         {
-                            messages.Add(new ResultMessage(ResultMessageType.Error, "FileSize of Grid doesn't match: " + filePath));
+                            result.AddError(ResultMessageCode.GRIDFileSizeMissmatch, ResultDetail.FromPath(filePath));
                         }
 
                         break;
@@ -110,12 +110,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "Could not find Grid File: " + filePath));
+                result.AddError(ResultMessageCode.FileNotFound, ResultDetail.FromPath(filePath));
             }
-            return new ResultWithMessages<ISOGridFile>(grid)
-            {
-                Messages = messages
-            };
+            result.SetResult(grid);
+            return result;
         }
 
         internal static string GenerateName(uint gridIndex)

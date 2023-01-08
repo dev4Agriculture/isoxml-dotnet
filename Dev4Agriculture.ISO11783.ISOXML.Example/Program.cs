@@ -213,6 +213,8 @@ public static class Program
 
         ReadManufacturer();
 
+        CreateTaskDataWithCodingData(Path.Combine(path, "CodingDataTaskData"));
+
     }
 
 }

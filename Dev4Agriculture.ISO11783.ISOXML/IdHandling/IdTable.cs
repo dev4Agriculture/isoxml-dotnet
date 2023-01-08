@@ -102,9 +102,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
-        public List<ResultMessage> CleanListFromTempEntries()
+        public ResultMessageList CleanListFromTempEntries()
         {
-            var result = new List<ResultMessage>();
+            var result = new ResultMessageList();
 
             foreach (var entry in IdLists)
             {
