@@ -606,16 +606,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     task.GuidanceAllocation.Clear();
                 }
 
-                //Time doesn't have a timezone included in a V3. But it also don't have it in our implementation.
-                foreach (var time in task.Time)
-                {
-                    if (time.Type == ISOType2.PoweredDown)
-                    {
-                        //p.146
-                        time.Type = ISOType2.Clearing;
-                    }
-
-                }
                 //described on p.75
                 if (task.ControlAssignmentSpecified)
                 {
@@ -660,8 +650,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     UpdateAllocationStamp(item.AllocationStamp);
                 }
 
+                //Time doesn't have a timezone included in a V3. But it also don't have it in our implementation.
                 foreach (var time in task.Time)
                 {
+                    if (time.Type == ISOType2.PoweredDown)
+                    {
+                        //p.146
+                        time.Type = ISOType2.Clearing;
+                    }
+
                     time.Start = new DateTime(time.Start.Ticks, DateTimeKind.Unspecified);
                     if (time.StopValueSpecified)
                     {
