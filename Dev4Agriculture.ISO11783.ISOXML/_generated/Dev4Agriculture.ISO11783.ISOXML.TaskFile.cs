@@ -7246,6 +7246,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         
         /// <summary>
         /// </summary>
+        [System.Xml.Serialization.XmlEnumAttribute("4")]
+        Version4,
+        
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
         Version2,
         
@@ -7253,11 +7258,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
         Version3,
-        
-        /// <summary>
-        /// </summary>
-        [System.Xml.Serialization.XmlEnumAttribute("4")]
-        Version4,
     }
     
     /// <summary>

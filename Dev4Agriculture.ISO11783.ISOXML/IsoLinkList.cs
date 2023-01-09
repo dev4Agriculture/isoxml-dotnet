@@ -88,12 +88,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 TaskControllerVersion = "unknown",
                 TaskControllerManufacturer = "unknown",
                 FileVersion = "1",
-                VersionMajor = ISO11783LinkListFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
+                VersionMajor = ISO11783LinkListFileVersionMajor.Version4,
                 VersionMinor = ISO11783LinkListFileVersionMinor.Item3
             };
             _groupIds = new IdList("LGP");
         }
-
 
         public string GetID(string uuid)
         {
