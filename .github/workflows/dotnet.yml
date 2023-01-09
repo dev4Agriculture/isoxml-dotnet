@@ -1,8 +1,6 @@
 name: .NET
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -17,7 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version:  ${{ matrix.dotnet-version }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Linux
@@ -34,7 +34,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version:  ${{ matrix.dotnet-version }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Windows
@@ -51,7 +53,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version:  ${{ matrix.dotnet-version }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Mac

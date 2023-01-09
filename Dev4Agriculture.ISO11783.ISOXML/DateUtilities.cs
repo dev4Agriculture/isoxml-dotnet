@@ -16,8 +16,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             milliSeconds /= 1000;
             var seconds = milliSeconds % 60;
-            var minutes = (milliSeconds / 60) % 60;
-            var hours = (milliSeconds / (60 * 60));
+            var minutes = milliSeconds / 60 % 60;
+            var hours = milliSeconds / (60 * 60);
             var timeString = hours.ToString() + ":" + minutes.ToString() + ":" + seconds.ToString();
 
             return timeString;

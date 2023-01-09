@@ -15,20 +15,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             AddList("BSN", typeof(ISOBaseStation));
             AddList("CCT", typeof(ISOCodedComment));
             AddList("CCG", typeof(ISOCodedCommentGroup));
+            AddList("CCL", typeof(ISOCodedCommentListValue));
+            AddList("CLG", typeof(ISOColourLegend));
             AddList("CTP", typeof(ISOCropType));
+            AddList("CVT", typeof(ISOCropVariety));
             AddList("CPC", typeof(ISOCulturalPractice));
             AddList("CTR", typeof(ISOCustomer));
             AddList("DVC", typeof(ISODevice));
+            AddList("DET", typeof(ISODeviceElement));
             AddList("FRM", typeof(ISOFarm));
+            AddList("GGP", typeof(ISOGuidanceGroup));
+            AddList("LSG", typeof(ISOLineString));
             AddList("OTQ", typeof(ISOOperationTechnique));
             AddList("PFD", typeof(ISOPartfield));
             AddList("PDT", typeof(ISOProduct));
             AddList("PGP", typeof(ISOProductGroup));
-            AddList("TSK", typeof(ISOTask));
-            AddList("VPN", typeof(ISOValuePresentation));
             AddList("PNT", typeof(ISOPoint));
             AddList("PLN", typeof(ISOPolygon));
-            AddList("LSG", typeof(ISOLineString));
+            AddList("TSK", typeof(ISOTask));
+            AddList("VPN", typeof(ISOValuePresentation));
             AddList("WKR", typeof(ISOWorker));
         }
 
@@ -76,10 +81,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         public void AddObjectWithOwnId(ref object obj, string id)
         {
             var result = IdLists.TryGetValue(obj.GetType(), out var idList);
-            if (idList != null)
-            {
-                idList.AddId(id, ref obj);
-            }
+            idList?.AddId(id, ref obj);
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         {
             foreach (var list in IdLists)
             {
-                if (list.Key.Equals(id.Substring(0, 3)))
+                if (list.Value.Name.Equals(id.Substring(0, 3)))
                 {
                     return list.Value.FindObject(id);
                 }
@@ -100,9 +102,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
-        public List<ResultMessage> CleanListFromTempEntries()
+        public ResultMessageList CleanListFromTempEntries()
         {
-            var result = new List<ResultMessage>();
+            var result = new ResultMessageList();
 
             foreach (var entry in IdLists)
             {

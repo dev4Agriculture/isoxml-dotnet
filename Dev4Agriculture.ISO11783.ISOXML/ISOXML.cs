@@ -1,31 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-//Alias Definitions
 
-using AsyncTask = System.Threading.Tasks;//Used for Task as this is a duplicate word with ISOXML Task.
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
     {
+        /// <summary>
+        /// The List of all available Grids (Prescription Maps) within the ISOXML File
+        /// </summary>
         public Dictionary<string, ISOGridFile> Grids { get; private set; }
+
+        /// <summary>
+        /// TimeLogs include Times, Positions and MachineData
+        /// </summary>
         public Dictionary<string, ISOTLG> TimeLogs { get; private set; }
 
         private uint _maxGridIndex = 0;
+
+        /// <summary>
+        /// Data includes the coding data and its subelements from the TaskData.xml. E.g. Tasks, Customers, Products
+        /// </summary>
         public ISO11783TaskDataFile Data { get; private set; }
+
+        /// <summary>
+        /// The path to the folder from where the TaskData was loaded and where it should be stored
+        /// </summary>
         public string FolderPath { get; private set; }
-        public List<ResultMessage> Messages { get; private set; }
+
+        /// <summary>
+        /// Loading of an ISOXML TaskDataSet might cause multiple issues. ISOXML.net intends to load data as good as possible, any error or warning is reflected in those messages
+        /// </summary>
+        public ResultMessageList Messages { get; private set; }
+
+        /// <summary>
+        /// CodingData like Tasks, Partfields and customers has IDs like CTR1, TSK-1, PFD1. These elements are linked within other Objects. The ID-Table provides a list of all such IDs.
+        /// It is automatically filled on load of a TaskSet
+        /// </summary>
         public IdTable IdTable { get; private set; }
+
+        /// <summary>
+        /// In case of an ISOXML V4 file, there can be a LinkList assigned to link ISOXML-wide unique IDs like "CTR1" (Customer 1) to FMIS Wide unique IDs like a UUID
+        /// </summary>
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
 
+
+        /// <summary>
+        /// The Major version of ISOXML which reflects the used standard: 3 or 4
+        /// </summary>
         public ISO11783TaskDataFileVersionMajor VersionMajor
         {
             get => Data.VersionMajor;
@@ -39,6 +71,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// The Minor version of the ISOXML which reflects the used Schema; see https://www.isobus.net/isobus/file/supportingDocuments
+        /// It's adviced to use the latest minor version available
+        /// </summary>
         public ISO11783TaskDataFileVersionMinor VersionMinor
         {
             get => Data.VersionMinor;
@@ -52,6 +88,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        ///  The name of your company if the software you're building shall create TaskData to send to the terminal
+        /// </summary>
         public string ManagementSoftwareManufacturer
         {
             get => Data.ManagementSoftwareManufacturer;
@@ -65,6 +104,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// The software version of your software. We advice a unique id that reflects the whole setup for support reasons
+        /// </summary>
         public string ManagementSoftwareVersion
         {
             get => Data.ManagementSoftwareVersion;
@@ -78,6 +121,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// The name of your company if the software you build shall run on a terminal
+        /// </summary>
         public string TaskControllerManufacturer
         {
             get => Data.TaskControllerManufacturer;
@@ -91,6 +138,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// The software version of your software. We advice a unique id that reflects the whole setup for support reasons
+        /// </summary>
         public string TaskControllerVersion
         {
             get => Data.TaskControllerVersion;
@@ -104,6 +154,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// The DataTransferOrign marks if the DataSet comes from a FarmingSoftware or from a TaskController
+        /// </summary>
         public ISO11783TaskDataFileDataTransferOrigin DataTransferOrigin
         {
             get => Data.DataTransferOrigin;
@@ -134,7 +187,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Grids = new Dictionary<string, ISOGridFile>();
             TimeLogs = new Dictionary<string, ISOTLG>();
             FolderPath = path;
-            Messages = new List<ResultMessage>();
+            Messages = new ResultMessageList();
             IdTable = new IdTable();
             LinkList = null;
             HasLinkList = false;
@@ -172,6 +225,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// Sets the folder path for all further operations like e.g. save. It is the full Path, so in normal Case it should end with /TASKDATA
+        /// </summary>
+        /// <param name="folderPath"></param>
         public void SetFolderPath(string folderPath)
         {
             FolderPath = folderPath;
@@ -220,6 +278,54 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
+        {
+            var path = Path.Combine(Path.GetTempPath(), "isoxmltmp");
+            ResultMessage archiveWarning = null;
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+            {
+                var fileNames = archive.Entries.Select(e => e.FullName).ToList();
+                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidDataException("Archive has incorrect data included!");
+                }
+
+                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                {
+                    archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
+                }
+                archive.ExtractToDirectory(path, true);
+            }
+
+            var res = Load(path, loadBinData);
+
+            if (archiveWarning != null)
+            {
+                res.Messages.Add(archiveWarning);
+            }
+
+            Directory.Delete(path, true);
+
+            return res;
+        }
+
+        /// <summary>
+        /// Load an ISOXML TaskSet and return an ISOXML Object asynchronously
+        /// </summary>
+        /// <param name="stream">zip file stream</param>
+        /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
+        /// <returns></returns>
+        public static async Task<ISOXML> LoadFromArchiveAsync(Stream stream, bool loadBinData = true)
+        {
+            return await Task.Run(() => LoadFromArchive(stream, loadBinData));
+        }
+
+        /// <summary>
         /// Initialize all such elements that extend the pure ISOXML Functionality in the ISOExtensions Folder
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
@@ -227,10 +333,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             foreach (var task in Data.Task)
             {
-                task.initTimeLogList(TimeLogs);
+                task.InitTimeLogList(TimeLogs);
             }
         }
 
+        /// <summary>
+        /// Generate a grid that can afterwards be assigned to a task and filled with data
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="layers"></param>
+        /// <returns></returns>
         public ISOGrid GenerateGrid(ISOGridType type, uint width, uint height, byte layers)
         {
             var grid = new ISOGrid()
@@ -247,14 +361,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return grid;
         }
 
+
+        /// <summary>
+        /// Return a Grid from the List of Grids
+        /// </summary>
+        /// <param name="iSOGrid"></param>
+        /// <returns></returns>
         public ISOGridFile GetGridFile(ISOGrid iSOGrid)
         {
             return Grids[iSOGrid.Filename];
         }
 
+
+        /// <summary>
+        /// Counts the available valid TimeLogs
+        /// </summary>
+        /// <returns></returns>
         public int CountValidTimeLogs()
         {
-            int counts = 0;
+            var counts = 0;
             foreach (var tlg in TimeLogs)
             {
                 if (tlg.Value.Loaded == TLGStatus.LOADED)
@@ -283,9 +408,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="path"></param>
         /// <param name="loadBinData"></param>
         /// <returns></returns>
-        public static async AsyncTask.Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
+        public static async Task<ISOXML> LoadAsync(string path, bool loadBinData = true)
         {
-            return await AsyncTask.Task.Run(() => Load(path, loadBinData));
+            return await Task.Run(() => Load(path, loadBinData));
         }
 
         /// <summary>
@@ -366,9 +491,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         }
 
-        public AsyncTask.Task LoadBinaryDataAsync()
+        /// <summary>
+        /// Load all binary Data for an ISOXML DataSet async 
+        /// </summary>
+        /// <returns></returns>
+        public Task LoadBinaryDataAsync()
         {
-            var waiter = AsyncTask.Task.Run(() => LoadBinaryData());
+            var waiter = Task.Run(() => LoadBinaryData());
             return waiter;
         }
 
@@ -403,7 +532,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     byte layers = 0;
                     foreach (var tzn in task.TreatmentZone)
                     {
-                        if (grid.TreatmentZoneCode == tzn.TreatmentZoneCode)
+                        if (grid.TreatmentZoneCodeValue == tzn.TreatmentZoneCode)
                         {
                             layers = (byte)tzn.ProcessDataVariable.Count;
                             break;
@@ -445,6 +574,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// Save all ISOXML relevant files async
+        /// </summary>
+        /// <returns></returns>
+        public Task SaveAsync()
+        {
+            return Task.Run(() => Save());
+        }
+
         private void UpdateDataForV3()
         {
             //change taskStatus template and Canceled
@@ -471,7 +609,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 //Time doesn't have a timezone included in a V3. But it also don't have it in our implementation.
                 foreach (var time in task.Time)
                 {
-                    if(time.Type == ISOType2.PoweredDown)
+                    if (time.Type == ISOType2.PoweredDown)
                     {
                         //p.146
                         time.Type = ISOType2.Clearing;
@@ -489,7 +627,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     foreach (var trZone in task.TreatmentZone)
                     {
-                        if(trZone.ProcessDataVariable.Count > 1)
+                        if (trZone.ProcessDataVariable.Count > 1)
                         {
                             //leave only one element
                             //p.148
@@ -509,7 +647,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
                 foreach (var pAlloc in task.ProductAllocation)
                 {
-                    if(pAlloc.TransferMode.HasValue && pAlloc.TransferMode == ISOTransferMode.Remainder)
+                    if (pAlloc.TransferMode.HasValue && pAlloc.TransferMode == ISOTransferMode.Remainder)
                     {
                         //p.136
                         pAlloc.TransferMode = ISOTransferMode.Emptying;
@@ -572,7 +710,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 foreach (var polygon in partfield.PolygonnonTreatmentZoneonly)
                 {
                     //p.125
-                    if(polygon.PolygonType > ISOPolygonType.Other)
+                    if (polygon.PolygonType > ISOPolygonType.Other)
                     {
                         polygon.PolygonType = ISOPolygonType.Other;
                     }
@@ -676,9 +814,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-        public AsyncTask.Task SaveAsync()
+        /// <summary>
+        /// Parse ISOXML or parts of an ISOXML from a String and generates an ISOXML Object. This can either be a full ISO11783_TaskData or a CodingData-Element
+        /// Coding Data are all such elements that are direct children of the ISO11783_TaskData; e.g. Customer, Task, Partfield...
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
+        public static ISOXML ParseFromXMLString(string xmlString)
         {
-            return AsyncTask.Task.Run(() => Save());
+            var taskData = TaskData.FromParsedElement(xmlString);
+            var isoxml = new ISOXML("")
+            {
+                Data = taskData.Result,
+                Messages = taskData.Messages
+            };
+            isoxml.InitExtensionData();
+            return isoxml;
         }
     }
 }

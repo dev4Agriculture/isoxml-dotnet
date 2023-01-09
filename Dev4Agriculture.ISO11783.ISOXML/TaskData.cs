@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -20,11 +19,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return path;
         }
 
-
         public static ResultWithMessages<ISO11783TaskDataFile> ParseTaskData(string isoxmlString, string path)
         {
-            ISO11783TaskDataFile taskData = null;
-            var messages = new List<ResultMessage>();
+            var result = new ResultWithMessages<ISO11783TaskDataFile>();
             try
             {
                 var xmlDoc = new XmlDocument();
@@ -41,28 +38,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         externalDoc.LoadXml(extContent);
                         MergeExternalContent(xmlDoc, externalDoc);
                     }
-                    catch (FileNotFoundException ex)
+                    catch (FileNotFoundException)
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing: " + element.Attributes["A"].Value + ", message: " + ex.Message));
+                        result.AddError(ResultMessageCode.FileNotFound,
+                            ResultDetail.FromString(element.Attributes["A"].Value));
                     }
                     catch (IOException ex)
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file missing or inaccessible: " + element.Attributes["A"].Value + ", message: " + ex.Message));
+                        result.AddError(ResultMessageCode.FileAccessImpossible,
+                            ResultDetail.FromString(element.Attributes["A"].Value),
+                            ResultDetail.FromString(ex.Message));
                     }
                     catch (Exception ex)
                     {
-                        messages.Add(new ResultMessage(ResultMessageType.Error, "External file invalid: " + element.Attributes["A"].Value + ", message: " + ex.Message));
+                        result.AddError(ResultMessageCode.FileInvalid,
+                            ResultDetail.FromString(element.Attributes["A"].Value),
+                            ResultDetail.FromString(ex.Message));
                     }
                 }
-                taskData = (ISO11783TaskDataFile)IsoxmlSerializer.Deserialize(xmlDoc);
-
-                messages.AddRange(IsoxmlSerializer.Messages);
+                var deserialized = IsoxmlSerializer.Deserialize(xmlDoc);
+                result.AddMessages(deserialized.Messages);
+                result.SetResult((ISO11783TaskDataFile)deserialized.Result);
             }
             catch (Exception ex)
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, ex.Message));
+                result.AddError(ResultMessageCode.Unknown, ResultDetail.FromString(ex.Message));
             }
-            return new ResultWithMessages<ISO11783TaskDataFile>(taskData, messages);
+            return result;
         }
 
         private static XmlDocument MergeExternalContent(XmlDocument taskData, XmlDocument externalFile)
@@ -88,15 +90,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public static ResultWithMessages<ISO11783TaskDataFile> LoadTaskData(string path)
         {
             var text = "";
+            var filePath = "";
             if (!File.Exists(path))
             {
-                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out var filePath))
+                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out filePath))
                 {
                     return new ResultWithMessages<ISO11783TaskDataFile>(
                         new ISO11783TaskDataFile(),
-                        new ResultMessage(
-                            ResultMessageType.Error,
-                            "TASKDATA.XML not found in " + path
+                        ResultMessage.Error(
+                            ResultMessageCode.FileNotFound,
+                            ResultDetail.FromPath(path)
                             )
                         );
                 }
@@ -108,7 +111,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             }
 
-            return ParseTaskData(text, path);
+            return ParseTaskData(text, !string.IsNullOrWhiteSpace(filePath) ? filePath : path);
         }
 
 
@@ -121,6 +124,83 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             path = FixTaskDataPath(path);
             var isoxmlSerializer = new IsoxmlSerializer();
             isoxmlSerializer.Serialize(taskData, path);
+        }
+
+
+        public static ResultWithMessages<ISO11783TaskDataFile> FromParsedElement(string elementString)
+        {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(elementString);
+            var element = IsoxmlSerializer.Deserialize(xmlDoc);
+            var result = new ResultWithMessages<ISO11783TaskDataFile>()
+            {
+                Messages = element.Messages
+            };
+            if (element.Result is ISO11783TaskDataFile file)
+            {
+                result.SetResult((ISO11783TaskDataFile)element.Result);
+                return result;
+            }
+
+            //If the object is not a whole ISOXML TaskData, we return an TaskDataFile that has one element added
+            var taskData = new ISO11783TaskDataFile();
+            switch (element.Result)
+            {
+                case ISOAttachedFile el:
+                    taskData.AttachedFile.Add(el);
+                    break;
+                case ISOBaseStation el:
+                    taskData.BaseStation.Add(el);
+                    break;
+                case ISOCodedCommentGroup el:
+
+                    taskData.CodedCommentGroup.Add(el);
+                    break;
+                case ISOCodedComment el:
+                    taskData.CodedComment.Add(el);
+                    break;
+                case ISOColourLegend el:
+                    taskData.ColourLegend.Add(el);
+                    break;
+                case ISOCropType el:
+                    taskData.CropType.Add(el);
+                    break;
+                case ISOCulturalPractice el:
+                    taskData.CulturalPractice.Add(el);
+                    break;
+                case ISOCustomer el:
+                    taskData.Customer.Add(el);
+                    break;
+                case ISODevice el:
+                    taskData.Device.Add(el);
+                    break;
+                case ISOFarm el:
+                    taskData.Farm.Add(el);
+                    break;
+                case ISOOperationTechnique el:
+                    taskData.OperationTechnique.Add(el);
+                    break;
+                case ISOPartfield el:
+                    taskData.Partfield.Add(el);
+                    break;
+                case ISOProduct el:
+                    taskData.Product.Add(el);
+                    break;
+                case ISOProductGroup el:
+                    taskData.ProductGroup.Add(el);
+                    break;
+                case ISOTask el:
+                    taskData.Task.Add(el);
+                    break;
+                case ISOValuePresentation el:
+                    taskData.ValuePresentation.Add(el);
+                    break;
+                case ISOWorker el:
+                    taskData.Worker.Add(el);
+                    break;
+            }
+            result.SetResult(taskData);
+            return result;
         }
 
     }

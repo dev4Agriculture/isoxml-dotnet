@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
 		README.md = README.md
-		release.yml = release.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev4Agriculture.ISO11783.ISOXML", "Dev4Agriculture.ISO11783.ISOXML\Dev4Agriculture.ISO11783.ISOXML.csproj", "{90BE7915-7AE6-4F88-B935-8869C1DFD810}"

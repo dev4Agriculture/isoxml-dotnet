@@ -9,14 +9,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     public class ISOGridFile
     {
 
-        public uint Width;
-        public uint Height;
-        public byte Layers;//Only for Type2
+        public uint Width { get; private set; }
+        public uint Height { get; private set; }
+        public byte Layers { get; private set; }
         private byte[,] _datat1;
         private uint[,,] _datat2;
         public string Name;
-        public ISOGridType Type;
-        public bool Loaded;
+        public ISOGridType Type { get; private set; }
+        public bool Loaded { get; private set; }
 
         private ISOGridFile(ISOGridType type)
         {
@@ -28,9 +28,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Type = type;
         }
 
+
+        /// <summary>
+        /// Load a Grid from a folder. This is normally directly called in ISOXML.Load;
+        /// the function is only public for edge cases.
+        /// </summary>
+        /// <param name="baseFolder"></param>
+        /// <param name="name"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="type"></param>
+        /// <param name="layers"></param>
+        /// <returns></returns>
         public static ResultWithMessages<ISOGridFile> Load(string baseFolder, string name, uint width, uint height, ISOGridType type, byte layers)
         {
-            var messages = new List<ResultMessage>();
+            var result = new ResultWithMessages<ISOGridFile>();
             ISOGridFile grid = null;
             if (Utils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".BIN", out var filePath))
             {
@@ -60,7 +72,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         else
                         {
-                            messages.Add(new ResultMessage(ResultMessageType.Error, "FileSize of Grid doesn't match: " + filePath));
+                            result.AddError(ResultMessageCode.GRIDFileSizeMissmatch, ResultDetail.FromPath(filePath));
                         }
                         break;
                     case ISOGridType.gridtype2:
@@ -87,7 +99,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         else
                         {
-                            messages.Add(new ResultMessage(ResultMessageType.Error, "FileSize of Grid doesn't match: " + filePath));
+                            result.AddError(
+                                ResultMessageCode.GRIDFileSizeMissmatch,
+                                ResultDetail.FromPath(filePath)
+                                );
                         }
 
                         break;
@@ -98,12 +113,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             else
             {
-                messages.Add(new ResultMessage(ResultMessageType.Error, "Could not find Grid File: " + filePath));
+                result.AddError(
+                    ResultMessageCode.FileNotFound,
+                    ResultDetail.FromPath(filePath)
+                    );
             }
-            return new ResultWithMessages<ISOGridFile>(grid)
-            {
-                Messages = messages
-            };
+            result.SetResult(grid);
+            return result;
         }
 
         internal static string GenerateName(uint gridIndex)
@@ -111,6 +127,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return "GRD" + gridIndex.ToString().PadLeft(5, '0');
         }
 
+        /// <summary>
+        /// Create a new GridFile from an ISOGrid-Structure.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="layers"></param>
+        /// <returns></returns>
         public static ISOGridFile Create(ISOGrid grid, byte layers = 1)
         {
             var gridFile = new ISOGridFile(grid.GridType);
@@ -120,6 +142,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return gridFile;
         }
 
+        /// <summary>
+        /// Stores the given Grid into the given Path. The Path shall be the filePath including the full filename.
+        /// e.g. "C://data/GRD00001.bin
+        /// </summary>
+        /// <param name="path"></param>
         public void Save(string path)
         {
             var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
@@ -153,7 +180,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             fs.Close();
         }
 
-
+        /// <summary>
+        /// Exports the Grid to a CSV file; Column-Delimiter is ";"
+        /// </summary>
+        /// <param name="storagePath"></param>
         public void SaveCSV(string storagePath)
         {
             try
@@ -203,6 +233,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+        /// <summary>
+        /// Init or reinit a Grid to set its 3 dimensions
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="layers"></param>
         public void Init(uint width, uint height, byte layers)
         {
             Width = width;
@@ -219,6 +255,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// Set the value at a specific field of the Grid.
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// <param name="value"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
         public int SetValue(uint column, uint row, uint value, uint layer = 0)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height)
@@ -247,6 +292,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
+
+        /// <summary>
+        /// Read a value from a specific cell in the Grid
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public uint GetValue(uint column, uint row, uint layer)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height)

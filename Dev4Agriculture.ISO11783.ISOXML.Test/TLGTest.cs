@@ -94,7 +94,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
             //Testing Totals
             Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
-            Assert.AreEqual(totalYield, (uint)242461);
+            Assert.AreEqual(totalYield, 242461);
         }
     }
 }
