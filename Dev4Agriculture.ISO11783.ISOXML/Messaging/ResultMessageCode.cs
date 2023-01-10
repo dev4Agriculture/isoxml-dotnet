@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
+﻿namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
 {
     public enum ResultMessageCode
     {
@@ -37,7 +33,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         BINInvalidData = 500,
         BINInvalidNumberOfDataInRow,
         GRIDFileSizeMissmatch = 600,
-        LinkListWrongRootElement = 700
+        LinkListWrongRootElement = 700,
+        LocalizationLabelBroken = 800,
+        LocalizationLabelTooShort,
+        LocalizationLabelWrongReservedValue,
+        ClientNameBroken = 900,
+        ClientNameTooShort,
+        ClientNameDeviceClassInvalid,
+        ClientNameManufacturerInvalid
     }
 
     public enum ResultDetailType
@@ -46,7 +49,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
         MDTFile,
         MDTPath,
         MDTNumber,
-        MDTDouble
+        MDTDouble,
+        MDTId
     }
 
     public struct ResultDetail
@@ -85,6 +89,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
             return new ResultDetail(ResultDetailType.MDTString, number.ToString());
         }
 
+
+        public static ResultDetail FromId(string id)
+        {
+            return new ResultDetail(ResultDetailType.MDTId, id);
+        }
     }
 
 

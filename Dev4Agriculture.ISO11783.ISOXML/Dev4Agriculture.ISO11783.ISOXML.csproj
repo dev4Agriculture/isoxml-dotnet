@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Dev4Agriculture.ISO11783.ISOXML</RootNamespace>
-	  <Version>0.10.0</Version>
+	  <Version>0.11.0</Version>
     <Company>dev4Agriculture</Company>
     <Title>ISOXML DotNet Library</Title>
-    <Authors>Frank Wiebeler, Alexander Parshin</Authors>
+    <Authors>Frank Wiebeler, Alexander Parshin, Dima Robuliak</Authors>
     <Description>This library provides access to agricultural data in ISO11783-10 TaskController compatible ISOXML Files</Description>
     <Copyright>Copyright 2022 by dev4Agriculture</Copyright>
     <PackageProjectUrl>https://github.com/dev4Agriculture/isoxml-dotnet</PackageProjectUrl>
@@ -15,13 +15,14 @@
     <RepositoryUrl>https://github.com/dev4Agriculture/isoxml-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>isoxml;agriculture;iso11783;taskcontroller;taskdata.xml;taskdata</PackageTags>
-    <AssemblyVersion>0.10.0</AssemblyVersion>
-    <FileVersion>0.10.0</FileVersion>
+    <PackageTags>isoxml;agriculture;iso11783;taskcontroller;taskdata.xml;taskdata;smart-farming;farming</PackageTags>
+    <AssemblyVersion>0.11.0</AssemblyVersion>
+    <FileVersion>0.11.0</FileVersion>
     <PackageReleaseNotes>Add DefaultDataLogTrigger</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 

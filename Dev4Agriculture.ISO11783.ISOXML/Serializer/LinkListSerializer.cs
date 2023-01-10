@@ -212,7 +212,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     ResultDetail.FromString(property.Name),
                     ResultDetail.FromString(rangeAttr.Minimum.ToString()),
                     ResultDetail.FromString(rangeAttr.Maximum.ToString()),
-                    ResultDetail.FromString(linkListNodeId),
+                    ResultDetail.FromId(linkListNodeId),
                     ResultDetail.FromString(value.ToString())
                 );
             }
@@ -223,7 +223,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     ResultDetail.FromString(attrValue),
                     ResultDetail.FromNumber(maxLengthAttr.Length),
                     ResultDetail.FromString(property.Name),
-                    ResultDetail.FromString(linkListNodeId)
+                    ResultDetail.FromId(linkListNodeId)
                 );
             }
 
@@ -233,7 +233,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     ResultDetail.FromString(attrValue),
                     ResultDetail.FromNumber(minLengthAttr.Length),
                     ResultDetail.FromString(property.Name),
-                    ResultDetail.FromString(linkListNodeId)
+                    ResultDetail.FromId(linkListNodeId)
                 );
             }
 
@@ -243,7 +243,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     ResultDetail.FromString(attrValue),
                     ResultDetail.FromString(regexAttr.Pattern),
                     ResultDetail.FromString(property.Name),
-                    ResultDetail.FromString(linkListNodeId)
+                    ResultDetail.FromId(linkListNodeId)
                 );
             }
         }
@@ -258,7 +258,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                 {
                     _result.AddWarning(ResultMessageCode.XSDAttributeRequired,
                        ResultDetail.FromString(property.Name),
-                       ResultDetail.FromString(linkListNodeId));
+                       ResultDetail.FromId(linkListNodeId));
                 }
             }
         }
@@ -309,13 +309,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                 {
                     _result.AddError(ResultMessageCode.XSDAttributeUnknown,
                         ResultDetail.FromString(node.Name),
-                        ResultDetail.FromString(linkListNodeId));
+                        ResultDetail.FromId(linkListNodeId));
                 }
                 else
                 {
                     _result.AddWarning(ResultMessageCode.XSDAttributeUnknown,
                         ResultDetail.FromString(node.Name),
-                        ResultDetail.FromString(linkListNodeId));
+                        ResultDetail.FromId(linkListNodeId));
 
                 }
                 return null;
@@ -334,7 +334,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
                         _result.AddWarning(ResultMessageCode.XSDAttributeUnknown,
                         ResultDetail.FromString(attr.Name),
-                        ResultDetail.FromString(linkListNodeId));
+                        ResultDetail.FromId(linkListNodeId));
                     }
                     continue;
                 }
@@ -348,7 +348,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                         _result.AddWarning(ResultMessageCode.XSDEnumUnknown,
                             ResultDetail.FromString(attr.Value),
                             ResultDetail.FromString(property.Name),
-                            ResultDetail.FromString(linkListNodeId)
+                            ResultDetail.FromId(linkListNodeId)
                         );
                         continue;
                     }
@@ -371,7 +371,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                             ResultDetail.FromString(e.GetType().ToString()),
                             ResultDetail.FromString(e.Message),
                             ResultDetail.FromString(property.Name),
-                            ResultDetail.FromString(linkListNodeId)
+                            ResultDetail.FromId(linkListNodeId)
                             );
                     }
                 }
@@ -404,7 +404,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                         _result.AddWarning(ResultMessageCode.XSDElementWrongChild,
                             ResultDetail.FromString(name),
                             ResultDetail.FromString(node.Name),
-                            ResultDetail.FromString(linkListNodeId));
+                            ResultDetail.FromId(linkListNodeId));
                         continue;
                     }
 

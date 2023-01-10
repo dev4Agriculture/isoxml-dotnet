@@ -80,8 +80,14 @@
                     Code == ResultMessageCode.BINInvalidData ? "Invalid Data found in Binary File %1; Position %2 of %3; Cause: %4" :
                     Code == ResultMessageCode.BINInvalidNumberOfDataInRow ? "There were more binary data linked in the binary file than exist in the header. File: %1, Position: %2, Solution: %3" :
                     Code == ResultMessageCode.GRIDFileSizeMissmatch ? "FileSize of Grid doesn't match: %1" :
-                    Code == ResultMessageCode.MissingId ? "There is no ID defined in %1. Solution: %2" :
+                    Code == ResultMessageCode.MissingId ? "There is no ID defined in %1. Assigning: %2" :
                     Code == ResultMessageCode.LinkListWrongRootElement ? "Wrong root element in LinkList.XML" :
+                    Code == ResultMessageCode.LocalizationLabelBroken ? "LocalizationLabel broken in Device %1 : %2; Message: %3" :
+                    Code == ResultMessageCode.LocalizationLabelTooShort ? "LocalizationLabel too Short in Device %1: %2; Message: %3" :
+                    Code == ResultMessageCode.LocalizationLabelWrongReservedValue ? "Byte 7 of the localisation label shall always be 0xFF but is %1" :
+                    Code == ResultMessageCode.ClientNameTooShort ? "Client Name invalid in Device %1: %2; Message: %3" :
+                    Code == ResultMessageCode.ClientNameBroken ? "Client Name broken in Device %1: %2; Message: %3" :
+                    Code == ResultMessageCode.ClientNameDeviceClassInvalid ? "Invalid DeviceClass %1 in ClientName: %2" :
                     "Other");
             private set
             {
