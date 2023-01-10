@@ -11,7 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public LocalizationLabel LocalizationLabelParsed { get; private set; }
 
         [XmlIgnore]
-        public WSM ClientNameParsed { get; private set; }
+        public ClientName ClientNameParsed { get; private set; }
 
 
         public ResultMessageList Analyse()
@@ -47,7 +47,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             try
             {
-                ClientNameParsed = new WSM(ClientNAME);
+                ClientNameParsed = new ClientName(ClientNAME);
                 resultMessageList.AddRange(ClientNameParsed.Validate());
             }
             catch (IndexOutOfRangeException indexException)

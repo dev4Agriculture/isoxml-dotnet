@@ -86,8 +86,8 @@ This is an Application, Seeding or Prescription Map
 **Important**: Both Grids should be acessed through the Functions GetValue/SetValue only!
  
 
-## WSM
-An analysis class to Analyse WorkingSetMasterNames
+## ClientName
+An analysis class to Analyse WorkingSetMasterNames/ClientNames
 
 The WorkingSetMasterName, also known as ClientName is the Unique Identifier for a machine in the ISOXML world.(Actually it's "nearly unique" only :-/)
 

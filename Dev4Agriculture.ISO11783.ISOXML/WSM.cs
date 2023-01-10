@@ -37,7 +37,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         Reserved = 27
     }
 
-    public class WSM
+    public class ClientName
     {
 
         public static int DeviceClassMin = Enum.GetValues(typeof(DeviceClass)).Cast<int>().Min();
@@ -130,7 +130,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        public WSM()
+        public ClientName()
         {
             SelfConfigurable = false;
             IndustryGroup = 2;
@@ -143,7 +143,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             EcuInstance = 0;
         }
 
-        public WSM(string input)
+        public ClientName(string input)
         {
             input = input.Replace(" ", "");
             input = input.ToUpper();
@@ -182,7 +182,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             FillFromArray(array);
         }
 
-        public WSM(byte[] array)
+        public ClientName(byte[] array)
         {
             array = array.Reverse().ToArray();
             FillFromArray(array);

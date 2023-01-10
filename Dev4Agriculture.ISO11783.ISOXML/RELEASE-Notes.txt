@@ -36,5 +36,9 @@ v0.9.1.2
   -FIX: Wrong casing of LINKLIST.xml. Must be LINKLIST.XML
 v0.10.0.0
   +ADD: Add DetailsField and CodeField to ResultMessages
+v0.11.0.0
+  +ADD: Analysis of LocalizationLabel
+  +ADD: Extend WSM capabilities
+  =CHG: Rename WSM to ClientName
 
 
