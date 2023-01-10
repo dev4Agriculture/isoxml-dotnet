@@ -332,6 +332,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 task.InitTimeLogList(TimeLogs);
             }
+
+            foreach (var device in Data.Device)
+            {
+                Messages.AddRange(device.Analyse());
+            }
         }
 
         /// <summary>

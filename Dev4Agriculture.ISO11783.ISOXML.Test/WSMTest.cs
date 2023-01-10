@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
@@ -24,5 +25,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(wsm.ManufacturerCode, 111);
             Assert.AreEqual(wsm.DeviceClass, DeviceClass.Harvesters);
         }
+
+
+        [TestMethod]
+        public void CanThrowErrors()
+        {
+            Assert.ThrowsException<ClientNameTooLongException>(() => new WSM("abcdefdafdaffaefafeaefafaffaefaefef"));
+            Assert.ThrowsException<ClientNameTooShortException>(() => new WSM("abcd"));
+        }
+
     }
 }
