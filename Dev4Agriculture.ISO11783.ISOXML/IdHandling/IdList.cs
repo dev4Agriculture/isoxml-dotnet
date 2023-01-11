@@ -298,7 +298,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
                     tempItems.Add(_nextId, entry.Value);
                     result.AddWarning(ResultMessageCode.MissingId,
                         ResultDetail.FromString(Name),
-                        ResultDetail.FromString("Assigning " + id)
+                        ResultDetail.FromId(id)
                         );
                 }
             }

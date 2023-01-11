@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
+using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -31,14 +34,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         UtilityVehicles = 24,
         FeederMixer = 25,
         SlurryApplicators = 26,
+        Reserved = 27
     }
 
-    public class WSM
+    public class ClientName
     {
+
+        public static int DeviceClassMin = Enum.GetValues(typeof(DeviceClass)).Cast<int>().Min();
+        public static int DeviceClassMax = Enum.GetValues(typeof(DeviceClass)).Cast<int>().Max();
         private static readonly string[] Letters = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
         public bool SelfConfigurable { get; set; }
         public int IndustryGroup { get; set; }
-        public DeviceClass DeviceClass { get; set; }
+
+        private int _deviceClassRaw;
+        public DeviceClass DeviceClass
+        {
+            get
+            {
+                if (_deviceClassRaw <= DeviceClassMin)
+                {
+                    return DeviceClass.NonSpecificSystem;
+                }
+                else if (_deviceClassRaw >= DeviceClassMax)
+                {
+                    return DeviceClass.Reserved;
+                }
+                else
+                {
+                    return (DeviceClass)_deviceClassRaw;
+                }
+            }
+            set => _deviceClassRaw = (byte)value;
+        }
         public int DeviceClassInstance { get; set; }
         public int ManufacturerCode { get; set; }
         public int Function { get; set; }
@@ -58,7 +85,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             array[3] = (byte)((ManufacturerCode) >> 3 & 0xFF);
             array[4] = (byte)(EcuInstance + (FunctionInstance << 3));
             array[5] = (byte)Function;
-            array[6] = (byte)((int)DeviceClass << 1);
+            array[6] = (byte)(_deviceClassRaw << 1);
             array[7] = (byte)(IndustryGroup << 4);
             array[7] += (byte)((SelfConfigurable ? 1 : 0) << 7);
             array[7] += (byte)DeviceClassInstance;
@@ -93,7 +120,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             SelfConfigurable = (array[7] & 0xFF & 128) == 128;
             IndustryGroup = ((array[7] & 0xFF) >> 4) & 0x7;
-            DeviceClass = (DeviceClass)((array[6] & 0xFF) >> 1);
+            _deviceClassRaw = (array[6] & 0xFF) >> 1;
             DeviceClassInstance = array[7] & 0xFF & 0xF;
             ManufacturerCode = ((array[3] & 0xFF) << 3) | ((array[2] & 0xFF) >> 5);
             Function = array[5] & 0xFF;
@@ -103,7 +130,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        public WSM()
+        public ClientName()
         {
             SelfConfigurable = false;
             IndustryGroup = 2;
@@ -116,13 +143,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             EcuInstance = 0;
         }
 
-        public WSM(string input)
+        public ClientName(string input)
         {
             input = input.Replace(" ", "");
             input = input.ToUpper();
-            if (input.Length != 16)
+            if (input.Length < 16)
             {
-                throw new Exception("WSM is invalid");
+                throw new ClientNameTooShortException();
+            } else if ( input.Length > 16)
+            {
+                throw new ClientNameTooLongException();
             }
 
             var array = new byte[8];
@@ -152,10 +182,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             FillFromArray(array);
         }
 
-        public WSM(byte[] array)
+        public ClientName(byte[] array)
         {
-            Array.Reverse(array);
+            array = array.Reverse().ToArray();
             FillFromArray(array);
+        }
+
+
+        public ResultMessageList Validate()
+        {
+            var list = new ResultMessageList();
+            if (_deviceClassRaw < DeviceClassMin || _deviceClassRaw > DeviceClassMax)
+            {
+                list.AddWarning(ResultMessageCode.ClientNameDeviceClassInvalid, ResultDetail.FromNumber(_deviceClassRaw), ResultDetail.FromString(ToString()));
+            }
+            return list;
         }
     }
 }

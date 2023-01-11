@@ -46,13 +46,13 @@ public class DeviceTests
     }
 
     [TestMethod]
-    public void CanSetDeviceNameFromWSM()
+    public void CanSetDeviceNameFromClientName()
     {
-        var path_out = "./out/dvc/wsm";
+        var path_out = "./out/dvc/clientName";
         var result = ISOXML.Create(path_out);
         result.Data.Device.Add(new TaskFile.ISODevice());
         result.IdTable.AddObjectAndAssignIdIfNone(result.Data.Device[0]);
-        var clientName = new WSM()
+        var clientName = new ClientName()
         {
             ManufacturerCode = 339,
             DeviceClass = DeviceClass.SecondarySoilTillage
@@ -61,9 +61,9 @@ public class DeviceTests
         result.SetFolderPath(path_out);
         result.Save();
         result = ISOXML.Load(path_out);
-        var wsm = new WSM(result.Data.Device[0].ClientNAME);
-        Assert.AreEqual(wsm.ManufacturerCode, 339);
-        Assert.AreEqual(wsm.DeviceClass, DeviceClass.SecondarySoilTillage);
+        var clientName_Compare = new ClientName(result.Data.Device[0].ClientNAME);
+        Assert.AreEqual(clientName_Compare.ManufacturerCode, 339);
+        Assert.AreEqual(clientName_Compare.DeviceClass, DeviceClass.SecondarySoilTillage);
 
     }
 
