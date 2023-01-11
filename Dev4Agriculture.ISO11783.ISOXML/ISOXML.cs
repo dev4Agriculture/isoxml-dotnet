@@ -626,7 +626,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         {
                             //leave only one element
                             //p.148
-                            trZone.ProcessDataVariable.ToList().RemoveRange(1, trZone.ProcessDataVariable.Count - 1);
+                            var firstDataVar = trZone.ProcessDataVariable.First();
+                            trZone.ProcessDataVariable.Clear();
+                            trZone.ProcessDataVariable.Add(firstDataVar);
                         }
 
                         //p.129
@@ -635,7 +637,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
                         if (trZone.PolygonTreatmentZoneonly.Count > 1)
                         {
-                            trZone.PolygonTreatmentZoneonly.ToList().RemoveRange(1, trZone.PolygonTreatmentZoneonly.Count - 1);
+                            var firstPoly = trZone.PolygonTreatmentZoneonly.First();
+                            trZone.PolygonTreatmentZoneonly.Clear();
+                            trZone.PolygonTreatmentZoneonly.Add(firstPoly);
                         }
                     }
                 }
