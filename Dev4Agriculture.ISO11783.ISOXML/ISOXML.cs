@@ -198,11 +198,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void AddLinkList()
         {
-            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
-            {
-                throw new Exception("LinkList can be included started from Version 4");
-            }
-
             if (HasLinkList == false)
             {
                 LinkList = new IsoLinkList()
@@ -563,12 +558,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void Save()
         {
-            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
-            {
-                UpdateDataForV3();
-            }
-
-            TaskData.SaveTaskData(Data, FolderPath);
             if (HasLinkList)
             {
                 LinkList.SaveLinkList(FolderPath);
@@ -577,6 +566,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".BIN"));
             }
+
+            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
+            {
+                UpdateDataForV3();
+            }
+            TaskData.SaveTaskData(Data, FolderPath);
         }
 
         /// <summary>
@@ -590,7 +585,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private void UpdateDataForV3()
         {
-            //change taskStatus template and Canceled
             foreach (var task in Data.Task)
             {
                 switch (task.TaskStatus)
@@ -606,12 +600,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
                 if (task.GuidanceAllocationSpecified)
                 {
-                    //clear GuidanceAllocation and GuidanceShift
                     //p.142
                     task.GuidanceAllocation.Clear();
                 }
 
-                //described on p.75
+                //p.75
                 if (task.ControlAssignmentSpecified)
                 {
                     //p.142
@@ -624,7 +617,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         if (trZone.ProcessDataVariable.Count > 1)
                         {
-                            //leave only one element
                             //p.148
                             var firstDataVar = trZone.ProcessDataVariable.First();
                             trZone.ProcessDataVariable.Clear();
@@ -659,7 +651,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     UpdateAllocationStamp(item.AllocationStamp);
                 }
 
-                //Time doesn't have a timezone included in a V3. But it also don't have it in our implementation.
                 foreach (var time in task.Time)
                 {
                     if (time.Type == ISOType2.PoweredDown)
@@ -680,7 +671,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 if (partfield.GuidanceGroupSpecified)
                 {
-                    //clear GuidanceGroups and GuidancePatterns
                     partfield.GuidanceGroup.Clear();
                 }
 
@@ -724,7 +714,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            //REMARK FW: There is an inofficial definition on how to handle Product Mixtures in V3. Should be implemented here
             foreach (var product in Data.Product)
             {
                 if (product.ProductRelationSpecified)
@@ -746,20 +735,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             }
 
-            //remove attached files
             if (Data.AttachedFileSpecified)
             {
                 Data.AttachedFile.Clear();
 
-                //TODO: make sure it is correct way
-                //REMARK: Don't just delete the structure; we need another way to store the LinkList File in our Own Database.
                 LinkList = null;
                 HasLinkList = false;
             }
-            //Data.Device "Number of Extended Structure Label bytes" property is not presented in our xsd file (p.46 of the PDF)
-            //REMARK DR: The StructureLabel is in DVC.F. The Extended StructueLabel just makes this one longer. While in Version 3 you must have 7 bytes, you can have 7-39 bytes in V4. In case of V3
-            //          just cut at the beginning so that 7 bytes are left
-            //REMARK FW: There is one ByteArray that switched its Order between V3 & V4 FW to check which ones those are
+
             if (Data.BaseStationSpecified)
             {
                 Data.BaseStation.Clear();
@@ -784,13 +767,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 foreach (var device in Data.Device)
                 {
+                    if (device.DeviceStructureLabel.Length > 7)
+                    {
+                        device.DeviceStructureLabel = device.DeviceStructureLabel.Take(7).ToArray();
+                    }
+
                     foreach (var item in device.DeviceProcessData)
                     {
-                        //REMARK DR: This is BitEncoded, so we need to check if the BIT representing 4 is set, not if the Value is 4. you can just unset the bit representing 4
-                        var x = BitConverter.GetBytes(item.DeviceProcessDataProperty);
-                        var forthbit = x.ElementAt(4);
+                        var propAsByteArray = BitConverter.GetBytes(item.DeviceProcessDataProperty);
+                        var forthbit = propAsByteArray.ElementAt(4);
                         forthbit = 0;
-                        item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(x); // p.99
+                        item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray); // p.99
                     }
                 }
             }

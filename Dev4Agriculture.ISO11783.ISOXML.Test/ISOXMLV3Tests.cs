@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -33,38 +32,11 @@ public class ISOXMLV3Tests
     }
 
     [TestMethod]
-    public void ThrowsExceptionWhenAddLinkListForV3File()
-    {
-        var isoxml = ISOXML.Load("./testdata/isoxmlv3/valid");
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
-        Assert.ThrowsException<Exception>(() => isoxml.AddLinkList());
-    }
-
-    [TestMethod]
     public void UpdateTaskTimeAccordingToDocs()
     {
         var path = "./out/isoxmlv3/validtask";
-        var taskName = "Taskv3";
-        var isoxml = ISOXML.Create(path);
-        var startTaskTime = new DateTime(2022, 12, 25, 10, 30, 0, DateTimeKind.Utc);
-        var stopTaskTime = new DateTime(2022, 12, 25, 11, 30, 0, DateTimeKind.Utc);
-
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
-
-        var task = new ISOTask()
-        {
-            TaskDesignator = taskName,
-            TaskStatus = ISOTaskStatus.Template,
-        };
-
-        task.Time.Add(new ISOTime() { Start = startTaskTime, Stop = stopTaskTime, Type = ISOType2.PoweredDown });
-
-        Assert.AreEqual(task.Time.FirstOrDefault().Start, startTaskTime);
-        Assert.AreEqual(task.Time.FirstOrDefault().Stop, stopTaskTime);
-
-        isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
-        isoxml.Data.Task.Add(task);
-        isoxml.Save();
+        DateTime startTaskTime, stopTaskTime;
+        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version3, out startTaskTime, out stopTaskTime);
 
         var check = ISOXML.Load(path);
         Assert.IsTrue(check != null);
@@ -80,13 +52,90 @@ public class ISOXMLV3Tests
     }
 
     [TestMethod]
+    public void TaskTimeLoadsCorrectlyForV4()
+    {
+        var path = "./out/isoxmlv3/validtask";
+        DateTime startTaskTime, stopTaskTime;
+        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version4, out startTaskTime, out stopTaskTime);
+
+        var check = ISOXML.Load(path);
+        Assert.IsTrue(check != null);
+        Assert.AreEqual(check.Messages.Count, 0);
+        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version4);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskTime = check.Data.Task.FirstOrDefault()?.Time?.FirstOrDefault();
+        Assert.IsNotNull(taskTime);
+        Assert.AreEqual(startTaskTime, taskTime.Start);
+        Assert.AreEqual(stopTaskTime, taskTime.StopValue);
+        Assert.AreEqual(ISOType2.PoweredDown, taskTime.Type);
+    }
+
+    private static void CreateTaskWithTimes(string path, ISO11783TaskDataFileVersionMajor version, out DateTime startTaskTime, out DateTime stopTaskTime)
+    {
+        //TODO: tamezones loading still to discuss
+        var taskName = "Taskv3";
+        var isoxml = ISOXML.Create(path);
+        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        startTaskTime = TimeZoneInfo.ConvertTime(new DateTime(2022, 12, 25, 10, 30, 0), timeZone);
+        stopTaskTime = TimeZoneInfo.ConvertTime(new DateTime(2022, 12, 25, 11, 30, 0), timeZone);
+        isoxml.VersionMajor = version;
+
+        var task = new ISOTask()
+        {
+            TaskDesignator = taskName,
+            TaskStatus = ISOTaskStatus.Template,
+        };
+
+        task.Time.Add(new ISOTime() { Start = startTaskTime, Stop = stopTaskTime, Type = ISOType2.PoweredDown });
+
+        Assert.AreEqual(task.Time.FirstOrDefault().Start, startTaskTime);
+        Assert.AreEqual(task.Time.FirstOrDefault().Stop, stopTaskTime);
+
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
+        isoxml.Data.Task.Add(task);
+        isoxml.Save();
+    }
+
+    [TestMethod]
     public void UpdateTaskGuidanceAllocationAndControlAssignment()
     {
         var path = "./out/isoxmlv3/validtask";
+        CreateTaskWithGuidanceAllocations(path, ISO11783TaskDataFileVersionMajor.Version3);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check != null);
+        Assert.AreEqual(0, check.Messages.Count);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsFalse(taskLoaded.GuidanceAllocationSpecified);
+        Assert.IsFalse(taskLoaded.ControlAssignmentSpecified);
+    }
+
+    [TestMethod]
+    public void TaskGuidanceAllocationAndControlAssignmentCorrectForV4()
+    {
+        var path = "./out/isoxmlv3/validtask";
+        CreateTaskWithGuidanceAllocations(path, ISO11783TaskDataFileVersionMajor.Version4);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsTrue(taskLoaded.GuidanceAllocationSpecified);
+        Assert.IsTrue(taskLoaded.ControlAssignmentSpecified);
+    }
+
+    private static void CreateTaskWithGuidanceAllocations(string path, ISO11783TaskDataFileVersionMajor version)
+    {
         var taskName = "TaskGuidance";
         var isoxml = ISOXML.Create(path);
 
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.VersionMajor = version;
 
         var task = new ISOTask()
         {
@@ -102,26 +151,51 @@ public class ISOXMLV3Tests
         isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
         isoxml.Data.Task.Add(task);
         isoxml.Save();
-
-        var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.AreEqual(check.Messages.Count, 0);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
-
-        Assert.IsNotNull(check.Data.Task);
-        var taskLoaded = check.Data.Task.First();
-        Assert.IsFalse(taskLoaded.GuidanceAllocationSpecified);
-        Assert.IsFalse(taskLoaded.ControlAssignmentSpecified);
     }
 
     [TestMethod]
     public void UpdateTaskTreatmentZone()
     {
         var path = "./out/isoxmlv3/validtask";
+        CreateTaskTreatmentZone(path, ISO11783TaskDataFileVersionMajor.Version3);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsTrue(taskLoaded.TreatmentZoneSpecified);
+        var loadedTrZone = taskLoaded.TreatmentZone.First();
+        Assert.AreEqual(1, loadedTrZone.ProcessDataVariable.Count);
+        Assert.IsNull(loadedTrZone.ProcessDataVariable.First().ActualCulturalPracticeValue);
+        Assert.IsNull(loadedTrZone.ProcessDataVariable.First().ElementTypeInstanceValue);
+    }
+
+    [TestMethod]
+    public void TaskTreatmentZone_CorrectForV4()
+    {
+        var path = "./out/isoxmlv3/validtask";
+        CreateTaskTreatmentZone(path, ISO11783TaskDataFileVersionMajor.Version4);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsTrue(taskLoaded.TreatmentZoneSpecified);
+        var loadedTrZone = taskLoaded.TreatmentZone.First();
+        Assert.AreEqual(2, loadedTrZone.ProcessDataVariable.Count);
+        Assert.IsNotNull(loadedTrZone.ProcessDataVariable.First().ActualCulturalPracticeValue);
+        Assert.IsNotNull(loadedTrZone.ProcessDataVariable.First().ElementTypeInstanceValue);
+    }
+
+    private static void CreateTaskTreatmentZone(string path, ISO11783TaskDataFileVersionMajor version)
+    {
         var taskName = "TaskTreatmentZone";
         var isoxml = ISOXML.Create(path);
-
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.VersionMajor = version;
 
         var task = new ISOTask()
         {
@@ -139,28 +213,50 @@ public class ISOXMLV3Tests
         isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
         isoxml.Data.Task.Add(task);
         isoxml.Save();
-
-        var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
-
-        Assert.IsNotNull(check.Data.Task);
-        var taskLoaded = check.Data.Task.First();
-        Assert.IsTrue(taskLoaded.TreatmentZoneSpecified);
-        var loadedTrZone = taskLoaded.TreatmentZone.First();
-        Assert.AreEqual(1, loadedTrZone.ProcessDataVariable.Count);
-        Assert.IsNull(loadedTrZone.ProcessDataVariable.First().ActualCulturalPracticeValue);
-        Assert.IsNull(loadedTrZone.ProcessDataVariable.First().ElementTypeInstanceValue);
     }
 
     [TestMethod]
     public void UpdateTaskProductAllocation()
     {
         var path = "./out/isoxmlv3/validtask";
+        var startTime = CreatetaskProductAllocation(path, ISO11783TaskDataFileVersionMajor.Version3);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
+        var loadedPAlloc = taskLoaded.ProductAllocation.First();
+        Assert.AreEqual(ISOTransferMode.Emptying, loadedPAlloc.TransferModeValue);
+        Assert.AreEqual(loadedPAlloc.ASP.Start, new DateTime(startTime.Ticks, DateTimeKind.Unspecified));
+    }
+
+    [TestMethod]
+    public void TaskProductAllocation_CorrectForV4()
+    {
+        var path = "./out/isoxmlv3/validtask";
+        var startTime = CreatetaskProductAllocation(path, ISO11783TaskDataFileVersionMajor.Version4);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
+
+        Assert.IsNotNull(check.Data.Task);
+        var taskLoaded = check.Data.Task.First();
+        Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
+        var loadedPAlloc = taskLoaded.ProductAllocation.First();
+        Assert.AreEqual(ISOTransferMode.Remainder, loadedPAlloc.TransferMode);
+        Assert.AreEqual(loadedPAlloc.ASP.Start, startTime);
+    }
+
+    private static DateTime CreatetaskProductAllocation(string path, ISO11783TaskDataFileVersionMajor version)
+    {
         var taskName = "ProductAllocation";
         var isoxml = ISOXML.Create(path);
 
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.VersionMajor = version;
         var startTime = new DateTime(2022, 1, 12, 10, 30, 0, DateTimeKind.Utc);
 
         var task = new ISOTask()
@@ -184,26 +280,53 @@ public class ISOXMLV3Tests
         isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
         isoxml.Data.Task.Add(task);
         isoxml.Save();
-
-        var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
-
-        Assert.IsNotNull(check.Data.Task);
-        var taskLoaded = check.Data.Task.First();
-        Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
-        var loadedPAlloc = taskLoaded.ProductAllocation.First();
-        Assert.AreEqual(ISOTransferMode.Emptying, loadedPAlloc.TransferModeValue);
-        Assert.AreEqual(loadedPAlloc.ASP.Start, new DateTime(startTime.Ticks, DateTimeKind.Unspecified));
+        return startTime;
     }
 
     [TestMethod]
     public void UpdatePartfields()
     {
         var path = "./out/isoxmlv3/validPfd";
-        var isoxml = ISOXML.Create(path);
+        CreatePartfields(path, ISO11783TaskDataFileVersionMajor.Version3);
 
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+
+        Assert.IsTrue(check.Data.PartfieldSpecified);
+        var pfLoaded = check.Data.Partfield.First();
+        Assert.IsFalse(pfLoaded.GuidanceGroupSpecified);
+        var loadedLineStr = pfLoaded.LineString.First();
+        Assert.AreEqual(ISOLineStringType.Flag, loadedLineStr.LineStringType);
+        Assert.AreEqual(1, loadedLineStr.Point.Count);
+        Assert.IsNull(loadedLineStr.Point.First().PointId);
+        Assert.IsNull(loadedLineStr.Point.First().Filename);
+    }
+
+    [TestMethod]
+    public void Partfields_CorrectForV4()
+    {
+        var path = "./out/isoxmlv3/validPfd";
+        CreatePartfields(path, ISO11783TaskDataFileVersionMajor.Version4);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
+
+        Assert.IsTrue(check.Data.PartfieldSpecified);
+        var pfLoaded = check.Data.Partfield.First();
+        Assert.IsFalse(pfLoaded.GuidanceGroupSpecified);
+        var loadedLineStr = pfLoaded.LineString.First();
+        Assert.AreEqual(ISOLineStringType.Obstacle, loadedLineStr.LineStringType);
+        Assert.AreEqual(2, loadedLineStr.Point.Count);
+        Assert.IsNotNull(loadedLineStr.Point.First().PointId);
+        Assert.IsNotNull(loadedLineStr.Point.First().Filename);
+    }
+
+    private static void CreatePartfields(string path, ISO11783TaskDataFileVersionMajor version)
+    {
+        var isoxml = ISOXML.Create(path);
+        isoxml.VersionMajor = version;
 
         var partfield = new ISOPartfield()
         {
@@ -219,27 +342,52 @@ public class ISOXMLV3Tests
         isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield);
         isoxml.Data.Partfield.Add(partfield);
         isoxml.Save();
-
-        var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
-
-        Assert.IsTrue(check.Data.PartfieldSpecified);
-        var pfLoaded = check.Data.Partfield.First();
-        Assert.IsFalse(pfLoaded.GuidanceGroupSpecified);
-        var loadedLineStr = pfLoaded.LineString.First();
-        Assert.AreEqual(ISOLineStringType.Flag, loadedLineStr.LineStringType);
-        Assert.AreEqual(1, loadedLineStr.Point.Count);
-        Assert.IsNull(loadedLineStr.Point.First().PointId);
-        Assert.IsNull(loadedLineStr.Point.First().Filename);
     }
 
     [TestMethod]
     public void UpdateProducts()
     {
         var path = "./out/isoxmlv3/validPdt";
+        CreateProducts(path, ISO11783TaskDataFileVersionMajor.Version3);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+
+        Assert.IsTrue(check.Data.ProductSpecified);
+        var pdtLoaded = check.Data.Product.First();
+        Assert.IsFalse(pdtLoaded.ProductRelationSpecified);
+        Assert.IsNull(pdtLoaded.ProductType);
+        Assert.IsNull(pdtLoaded.MixtureRecipeQuantity);
+        Assert.IsNull(pdtLoaded.DensityMassPerVolume);
+        Assert.IsNull(pdtLoaded.DensityMassPerCount);
+        Assert.IsNull(pdtLoaded.DensityVolumePerCount);
+    }
+
+    [TestMethod]
+    public void Products_CorrectForV4()
+    {
+        var path = "./out/isoxmlv3/validPdt";
+        CreateProducts(path, ISO11783TaskDataFileVersionMajor.Version4);
+
+        var check = ISOXML.Load(path);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
+
+        Assert.IsTrue(check.Data.ProductSpecified);
+        var pdtLoaded = check.Data.Product.First();
+        Assert.IsTrue(pdtLoaded.ProductRelationSpecified);
+        Assert.AreEqual(ISOProductType.SingleDefault, pdtLoaded.ProductType);
+        Assert.AreEqual(200, pdtLoaded.MixtureRecipeQuantity);
+        Assert.AreEqual(2, pdtLoaded.DensityMassPerVolume);
+        Assert.AreEqual(1, pdtLoaded.DensityMassPerCount);
+        Assert.AreEqual(200, pdtLoaded.DensityVolumePerCount);
+    }
+
+    private static void CreateProducts(string path, ISO11783TaskDataFileVersionMajor version)
+    {
         var isoxml = ISOXML.Create(path);
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.VersionMajor = version;
 
         var product = new ISOProduct()
         {
@@ -255,18 +403,5 @@ public class ISOXMLV3Tests
         isoxml.IdTable.AddObjectAndAssignIdIfNone(product);
         isoxml.Data.Product.Add(product);
         isoxml.Save();
-
-        var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
-
-        Assert.IsTrue(check.Data.ProductSpecified);
-        var pdtLoaded = check.Data.Product.First();
-        Assert.IsFalse(pdtLoaded.ProductRelationSpecified);
-        Assert.IsNull(pdtLoaded.ProductType);
-        Assert.IsNull(pdtLoaded.MixtureRecipeQuantity);
-        Assert.IsNull(pdtLoaded.DensityMassPerVolume);
-        Assert.IsNull(pdtLoaded.DensityMassPerCount);
-        Assert.IsNull(pdtLoaded.DensityVolumePerCount);
     }
 }
