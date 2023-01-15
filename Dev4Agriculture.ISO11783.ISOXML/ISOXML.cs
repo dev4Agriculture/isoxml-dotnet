@@ -558,6 +558,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void Save()
         {
+            if (!Directory.Exists(FolderPath))
+            {
+                Directory.CreateDirectory(FolderPath);
+            }
+
+
             if (HasLinkList)
             {
                 LinkList.SaveLinkList(FolderPath);
