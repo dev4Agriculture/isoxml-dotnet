@@ -375,9 +375,9 @@ public class ISOXMLV3Tests
         Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
 
         Assert.IsTrue(check.Data.ProductSpecified);
-        var pdtLoaded = check.Data.Product.First();
+        var pdtLoaded = check.Data.Product[2];
         Assert.IsTrue(pdtLoaded.ProductRelationSpecified);
-        Assert.AreEqual(ISOProductType.SingleDefault, pdtLoaded.ProductType);
+        Assert.AreEqual(ISOProductType.Mixture, pdtLoaded.ProductType);
         Assert.AreEqual(200, pdtLoaded.MixtureRecipeQuantity);
         Assert.AreEqual(2, pdtLoaded.DensityMassPerVolume);
         Assert.AreEqual(1, pdtLoaded.DensityMassPerCount);
@@ -389,20 +389,50 @@ public class ISOXMLV3Tests
         var isoxml = ISOXML.Create(path);
         isoxml.VersionMajor = version;
 
-        var product = new ISOProduct()
+        var water = new ISOProduct()
         {
-            ProductDesignator = "test",
-            ProductType = ISOProductType.SingleDefault,
+            ProductDesignator = "Water",
+            ProductType = ISOProductType.SingleDefault
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(water);
+        isoxml.Data.Product.Add(water);
+
+        var medium = new ISOProduct()
+        {
+            ProductDesignator = "Korn Kali",
+            ProductType = ISOProductType.SingleDefault
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(medium);
+        isoxml.Data.Product.Add(medium);
+
+
+        var productMix = new ISOProduct()
+        {
+            ProductDesignator = "TankMix",
+            ProductType = ISOProductType.Mixture,
             MixtureRecipeQuantity = 200,
             DensityMassPerVolume = 2,
             DensityMassPerCount = 1,
             DensityVolumePerCount = 200
         };
 
-        isoxml.IdTable.AddObjectAndAssignIdIfNone(product);
-        product.ProductRelation.Add(new ISOProductRelation() { ProductIdRef = product.ProductId });
+        productMix.ProductRelation.Add(
+                    new ISOProductRelation()
+                    {
+                        ProductIdRef = water.ProductId,
+                        QuantityValue = 50
+                    }
+                  );
+        productMix.ProductRelation.Add(
+                    new ISOProductRelation()
+                    {
+                        ProductIdRef = medium.ProductId,
+                        QuantityValue = 50
+                    }
+                  );
 
-        isoxml.Data.Product.Add(product);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(productMix);
+        isoxml.Data.Product.Add(productMix);
         isoxml.Save();
     }
 }
