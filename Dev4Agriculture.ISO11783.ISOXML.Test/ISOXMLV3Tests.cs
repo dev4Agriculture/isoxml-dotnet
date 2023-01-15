@@ -26,9 +26,9 @@ public class ISOXMLV3Tests
         isoxml.Save();
 
         var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.AreEqual(check.Messages.Count, 0);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(0, check.Messages.Count);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
     }
 
     [TestMethod]
@@ -39,15 +39,15 @@ public class ISOXMLV3Tests
         CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version3, out startTaskTime, out stopTaskTime);
 
         var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.AreEqual(check.Messages.Count, 0);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version3);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(0, check.Messages.Count);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
 
         Assert.IsNotNull(check.Data.Task);
         var taskTime = check.Data.Task.FirstOrDefault()?.Time?.FirstOrDefault();
         Assert.IsNotNull(taskTime);
         Assert.AreEqual(taskTime.Start, new DateTime(startTaskTime.Ticks, DateTimeKind.Unspecified));
-        Assert.AreEqual(taskTime.StopValue, new DateTime(stopTaskTime.Ticks, DateTimeKind.Unspecified));
+        Assert.AreEqual(taskTime.Stop, new DateTime(stopTaskTime.Ticks, DateTimeKind.Unspecified));
         Assert.AreEqual(taskTime.Type, ISOType2.Clearing);
     }
 
@@ -59,21 +59,21 @@ public class ISOXMLV3Tests
         CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version4, out startTaskTime, out stopTaskTime);
 
         var check = ISOXML.Load(path);
-        Assert.IsTrue(check != null);
-        Assert.AreEqual(check.Messages.Count, 0);
-        Assert.IsTrue(check.VersionMajor == ISO11783TaskDataFileVersionMajor.Version4);
+        Assert.IsNotNull(check);
+        Assert.AreEqual(0, check.Messages.Count);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version4, check.VersionMajor);
 
         Assert.IsNotNull(check.Data.Task);
         var taskTime = check.Data.Task.FirstOrDefault()?.Time?.FirstOrDefault();
         Assert.IsNotNull(taskTime);
         Assert.AreEqual(startTaskTime, taskTime.Start);
-        Assert.AreEqual(stopTaskTime, taskTime.StopValue);
+        Assert.AreEqual(stopTaskTime, taskTime.Stop);
         Assert.AreEqual(ISOType2.PoweredDown, taskTime.Type);
     }
 
     private static void CreateTaskWithTimes(string path, ISO11783TaskDataFileVersionMajor version, out DateTime startTaskTime, out DateTime stopTaskTime)
     {
-        //TODO: tamezones loading still to discuss
+        //TODO: timezones loading still to discuss
         var taskName = "Taskv3";
         var isoxml = ISOXML.Create(path);
         var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
@@ -104,7 +104,7 @@ public class ISOXMLV3Tests
         CreateTaskWithGuidanceAllocations(path, ISO11783TaskDataFileVersionMajor.Version3);
 
         var check = ISOXML.Load(path);
-        Assert.IsNotNull(check != null);
+        Assert.IsNotNull(check);
         Assert.AreEqual(0, check.Messages.Count);
         Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
 
@@ -229,8 +229,8 @@ public class ISOXMLV3Tests
         var taskLoaded = check.Data.Task.First();
         Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
         var loadedPAlloc = taskLoaded.ProductAllocation.First();
-        Assert.AreEqual(ISOTransferMode.Emptying, loadedPAlloc.TransferModeValue);
-        Assert.AreEqual(loadedPAlloc.ASP.Start, new DateTime(startTime.Ticks, DateTimeKind.Unspecified));
+        Assert.AreEqual(ISOTransferMode.Emptying, loadedPAlloc.TransferMode);
+        Assert.AreEqual(new DateTime(startTime.Ticks, DateTimeKind.Unspecified), loadedPAlloc.ASP.Start);
     }
 
     [TestMethod]
@@ -248,7 +248,7 @@ public class ISOXMLV3Tests
         Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
         var loadedPAlloc = taskLoaded.ProductAllocation.First();
         Assert.AreEqual(ISOTransferMode.Remainder, loadedPAlloc.TransferMode);
-        Assert.AreEqual(loadedPAlloc.ASP.Start, startTime);
+        Assert.AreEqual(startTime, loadedPAlloc.ASP.Start);
     }
 
     private static DateTime CreatetaskProductAllocation(string path, ISO11783TaskDataFileVersionMajor version)
@@ -257,7 +257,7 @@ public class ISOXMLV3Tests
         var isoxml = ISOXML.Create(path);
 
         isoxml.VersionMajor = version;
-        var startTime = new DateTime(2022, 1, 12, 10, 30, 0, DateTimeKind.Utc);
+        var startTime = new DateTime(2022, 1, 12, 10, 30, 0, DateTimeKind.Local);
 
         var task = new ISOTask()
         {
@@ -315,7 +315,7 @@ public class ISOXMLV3Tests
 
         Assert.IsTrue(check.Data.PartfieldSpecified);
         var pfLoaded = check.Data.Partfield.First();
-        Assert.IsFalse(pfLoaded.GuidanceGroupSpecified);
+        Assert.IsTrue(pfLoaded.GuidanceGroupSpecified);
         var loadedLineStr = pfLoaded.LineString.First();
         Assert.AreEqual(ISOLineStringType.Obstacle, loadedLineStr.LineStringType);
         Assert.AreEqual(2, loadedLineStr.Point.Count);
@@ -398,9 +398,10 @@ public class ISOXMLV3Tests
             DensityMassPerCount = 1,
             DensityVolumePerCount = 200
         };
-        product.ProductRelation.Add(new ISOProductRelation() { ProductIdRef = "tst" });
 
         isoxml.IdTable.AddObjectAndAssignIdIfNone(product);
+        product.ProductRelation.Add(new ISOProductRelation() { ProductIdRef = product.ProductId });
+
         isoxml.Data.Product.Add(product);
         isoxml.Save();
     }

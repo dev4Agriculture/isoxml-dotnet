@@ -25,7 +25,6 @@ internal class Program
         var generator = new Generator()
         {
             OutputFolder = OutFolder,
-            // GenerateNullables = true,
             NamespaceProvider = namespaceProvider,
             NamingProvider = namingProvider,
             MemberVisitor = ISOXMLMemberVisitor.Visit,
