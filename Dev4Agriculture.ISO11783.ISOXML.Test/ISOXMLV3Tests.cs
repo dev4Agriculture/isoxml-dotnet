@@ -35,8 +35,7 @@ public class ISOXMLV3Tests
     public void UpdateTaskTimeAccordingToDocs()
     {
         var path = "./out/isoxmlv3/validtask";
-        DateTime startTaskTime, stopTaskTime;
-        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version3, out startTaskTime, out stopTaskTime);
+        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version3, out var startTaskTime, out var stopTaskTime);
 
         var check = ISOXML.Load(path);
         Assert.IsNotNull(check);
@@ -55,8 +54,7 @@ public class ISOXMLV3Tests
     public void TaskTimeLoadsCorrectlyForV4()
     {
         var path = "./out/isoxmlv3/validtask";
-        DateTime startTaskTime, stopTaskTime;
-        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version4, out startTaskTime, out stopTaskTime);
+        CreateTaskWithTimes(path, ISO11783TaskDataFileVersionMajor.Version4, out var startTaskTime, out var stopTaskTime);
 
         var check = ISOXML.Load(path);
         Assert.IsNotNull(check);
@@ -204,8 +202,8 @@ public class ISOXMLV3Tests
         };
 
         var trZone = new ISOTreatmentZone() { TreatmentZoneDesignator = "test" };
-        trZone.ProcessDataVariable.Add(new ISOProcessDataVariable() { DeviceElementIdRef = "test1", ActualCulturalPracticeValue = (long)300, ElementTypeInstanceValue = (long)222 });
-        trZone.ProcessDataVariable.Add(new ISOProcessDataVariable() { DeviceElementIdRef = "test23", ActualCulturalPracticeValue = (long)3, ElementTypeInstanceValue = (long)2 });
+        trZone.ProcessDataVariable.Add(new ISOProcessDataVariable() { DeviceElementIdRef = "test1", ActualCulturalPracticeValue = 300, ElementTypeInstanceValue = 222 });
+        trZone.ProcessDataVariable.Add(new ISOProcessDataVariable() { DeviceElementIdRef = "test23", ActualCulturalPracticeValue = 3, ElementTypeInstanceValue = 2 });
         task.TreatmentZone.Add(trZone);
 
         Assert.IsTrue(task.TreatmentZoneSpecified);
@@ -392,7 +390,7 @@ public class ISOXMLV3Tests
         var water = new ISOProduct()
         {
             ProductDesignator = "Water",
-            ProductType = ISOProductType.SingleDefault
+            ProductType = ISOProductType.Single
         };
         isoxml.IdTable.AddObjectAndAssignIdIfNone(water);
         isoxml.Data.Product.Add(water);
@@ -400,7 +398,7 @@ public class ISOXMLV3Tests
         var medium = new ISOProduct()
         {
             ProductDesignator = "Korn Kali",
-            ProductType = ISOProductType.SingleDefault
+            ProductType = ISOProductType.Single
         };
         isoxml.IdTable.AddObjectAndAssignIdIfNone(medium);
         isoxml.Data.Product.Add(medium);
