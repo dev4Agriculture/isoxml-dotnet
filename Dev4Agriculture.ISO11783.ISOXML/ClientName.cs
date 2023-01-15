@@ -150,7 +150,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             if (input.Length < 16)
             {
                 throw new ClientNameTooShortException();
-            } else if ( input.Length > 16)
+            }
+            else if (input.Length > 16)
             {
                 throw new ClientNameTooLongException();
             }

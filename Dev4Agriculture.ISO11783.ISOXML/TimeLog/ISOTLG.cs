@@ -196,7 +196,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         {
                             quitReading = true;
                             solution = "DataLoss, could not find point for reEntry";
-                        } else
+                        }
+                        else
                         {
                             solution = $"Reentry at  {binaryFile.Position}";
                         }
