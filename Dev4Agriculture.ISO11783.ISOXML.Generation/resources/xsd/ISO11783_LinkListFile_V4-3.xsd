@@ -5,7 +5,7 @@
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
 				ISO 11783 Link List File
-            </xs:documentation>
+			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -23,7 +23,7 @@
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the second edition published as a Final Draft International Standard
+									Version 4
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
@@ -32,11 +32,11 @@
 			</xs:attribute>
 			<xs:attribute name="VersionMinor" use="required">
 				<xs:simpleType>
-                    <xs:annotation>
-                        <xs:documentation xml:lang="en">
-                            All minor versions up to 3 of the XML schema for this major version
-                        </xs:documentation>
-                    </xs:annotation>
+					<xs:annotation>
+						<xs:documentation xml:lang="en">
+							All minor versions up to 3 of the XML schema for this major version
+						</xs:documentation>
+					</xs:annotation>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="0"/>
 						<xs:enumeration value="1"/>

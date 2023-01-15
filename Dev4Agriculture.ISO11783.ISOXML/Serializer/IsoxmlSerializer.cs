@@ -350,6 +350,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     }
 
                     property.SetValue(obj, Enum.Parse(property.PropertyType, enumValue));
+                    if (property.Name.EndsWith("Value"))
+                    {
+                        var propToSet = type.GetProperty(property.Name.Substring(0, property.Name.LastIndexOf("Value")));
+                        propToSet?.SetValue(obj, Enum.Parse(property.PropertyType, enumValue));
+                    }
                 }
                 else
                 {
@@ -358,6 +363,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     {
                         var convertedAttr = convertor(attr.Value);
                         property.SetValue(obj, convertedAttr);
+                        if (property.Name.EndsWith("Value"))
+                        {
+                            var propToSet = type.GetProperty(property.Name.Substring(0, property.Name.LastIndexOf("Value")));
+                            propToSet?.SetValue(obj, convertedAttr);
+                        }
                         ValidateProperty(property, convertedAttr, attr.Value, isoxmlNodeId);
                     }
                     catch (Exception e)
@@ -455,11 +465,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
                     return null;
 
             }
-
-
-
         }
-
-
     }
 }

@@ -59,7 +59,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ISO11783LinkListFileVersionMajor _versionMajor = Dev4Agriculture.ISO11783.ISOXML.LinkListFile.ISO11783LinkListFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard;
+        private ISO11783LinkListFileVersionMajor _versionMajor = Dev4Agriculture.ISO11783.ISOXML.LinkListFile.ISO11783LinkListFileVersionMajor.Version4;
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("VersionMajor")]
@@ -266,7 +266,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
+        Version4,
     }
     
     /// <summary>

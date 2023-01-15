@@ -69,7 +69,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public LocalizationLabel(byte[] data)
         {
-            if( data == null || data.Length < 7)
+            if (data == null || data.Length < 7)
             {
                 throw new LocalizationLabelInvalidException();
             }
@@ -117,10 +117,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public ResultMessageList Validate()
         {
             var list = new ResultMessageList();
-            if(Reserved != 0xFF)
+            if (Reserved == 0xFF)
             {
-                list.AddWarning(ResultMessageCode.LocalizationLabelWrongReservedValue, ResultDetail.FromNumber(Reserved));
+                return list;
             }
+            list.AddWarning(ResultMessageCode.LocalizationLabelWrongReservedValue, ResultDetail.FromNumber(Reserved));
 
             return list;
         }

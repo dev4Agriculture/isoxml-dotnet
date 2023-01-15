@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
@@ -9,15 +8,12 @@ using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
-
-
     public class IsoLinkList
     {
         private static readonly LinkListSerializer LinkListSerializer = new LinkListSerializer();
 
         private readonly ISO11783LinkListFile _linkListContent;
         private readonly IdList _groupIds;
-
 
         public ISO11783LinkListFileVersionMajor VersionMajor
         {
@@ -35,7 +31,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             get => _linkListContent.ManagementSoftwareManufacturer;
             set => _linkListContent.ManagementSoftwareManufacturer = value;
         }
-
 
         public string ManagementSoftwareVersion
         {
@@ -88,12 +83,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 TaskControllerVersion = "unknown",
                 TaskControllerManufacturer = "unknown",
                 FileVersion = "1",
-                VersionMajor = ISO11783LinkListFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
+                VersionMajor = ISO11783LinkListFileVersionMajor.Version4,
                 VersionMinor = ISO11783LinkListFileVersionMinor.Item3
             };
             _groupIds = new IdList("LGP");
         }
-
 
         public string GetID(string uuid)
         {
@@ -124,7 +118,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             return null;
         }
-
 
         /// <summary>
         /// Adds a Link to the Linklist or overwrites a link of the same type
@@ -211,10 +204,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             });
             groupToAdd.LinkGroupId = _groupIds.AddObjectAndAssignIdIfNone(groupToAdd);
             _linkListContent.LinkGroup.Add(groupToAdd);
-
         }
-
-
 
         internal static string FixLinkListPath(string path)
         {
@@ -225,11 +215,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return path;
         }
 
-
-
-
-
-
         internal void SaveLinkList(string path)
         {
             if (!Directory.Exists(path))
@@ -239,8 +224,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             path = FixLinkListPath(path);
             LinkListSerializer.Serialize(_linkListContent, path);
         }
-
-
 
         internal static ResultWithMessages<IsoLinkList> ParseLinkList(string isoxmlString, string path)
         {
@@ -256,7 +239,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
                 linkListContent = LinkListSerializer.Deserialize(xmlDoc);
-
             }
             catch (Exception ex)
             {
@@ -291,9 +273,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 var text = File.ReadAllText(linkListPath.ToString());
                 return ParseLinkList(text, path);
             }
-
         }
-
-
     }
 }

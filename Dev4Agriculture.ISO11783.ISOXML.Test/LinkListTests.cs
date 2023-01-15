@@ -53,7 +53,7 @@ public class LinkListTests
 
         var isoxml = ISOXML.Create("./out/coredata_withlinkList/");
         isoxml.AddLinkList();
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard;
+        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version4;
         isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item3;
         isoxml.ManagementSoftwareManufacturer = "dev4Agriculture";
         isoxml.ManagementSoftwareVersion = "1234";
@@ -83,7 +83,7 @@ public class LinkListTests
     {
 
         var isoxml = ISOXML.Create("./out/coredata_withlinkList/");
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard;
+        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version4;
         isoxml.VersionMinor = ISO11783TaskDataFileVersionMinor.Item3;
         isoxml.ManagementSoftwareManufacturer = "dev4Agriculture";
         isoxml.ManagementSoftwareVersion = "1234";

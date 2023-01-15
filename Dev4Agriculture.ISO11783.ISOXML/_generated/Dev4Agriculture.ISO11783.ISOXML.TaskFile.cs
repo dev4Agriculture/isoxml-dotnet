@@ -4945,7 +4945,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        SingleLeftParenthesisdefaultRightParenthesis,
+        Single,
         
         /// <summary>
         /// </summary>
@@ -7050,7 +7050,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ISO11783TaskDataFileVersionMajor _versionMajor = Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISO11783TaskDataFileVersionMajor.TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard;
+        private ISO11783TaskDataFileVersionMajor _versionMajor = Dev4Agriculture.ISO11783.ISOXML.TaskFile.ISO11783TaskDataFileVersionMajor.Version4;
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("VersionMajor")]
@@ -7247,7 +7247,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        TheversionofthesecondeditionpublishedasaFinalDraftInternationalStandard,
+        Version4,
+        
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        Version2,
+        
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlEnumAttribute("3")]
+        Version3,
     }
     
     /// <summary>

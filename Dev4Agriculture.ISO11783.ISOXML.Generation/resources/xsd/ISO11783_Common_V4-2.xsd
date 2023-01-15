@@ -3870,7 +3870,7 @@
 						<xs:enumeration value="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									Single (default)
+									Single
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>

@@ -7,7 +7,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Messaging
     {
         public void AddError(ResultMessageCode code, params ResultDetail[] details)
         {
-           Add(ResultMessage.Error(code, details));
+            Add(ResultMessage.Error(code, details));
         }
 
         public void AddWarning(ResultMessageCode code, params ResultDetail[] details)
