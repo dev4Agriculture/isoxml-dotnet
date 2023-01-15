@@ -66,8 +66,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             Path = path;
             Loaded = TLGStatus.INITIAL;
             Name = System.IO.Path.GetFileNameWithoutExtension(name);
-            BinName = Name + ".BIN";
-            XmlName = Name + ".XML";
+            BinName = Name + ".bin";
+            XmlName = Name + ".xml";
             Header = new TLGDataLogHeader();
             Entries = new List<TLGDataLogLine>();
         }
@@ -223,7 +223,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal void SaveTLG(string storagePath)
         {
-            var filePath = storagePath + Name + ".BIN";
+            var filePath = storagePath + Name + ".bin";
             try
             {
                 var file = File.Create(filePath);

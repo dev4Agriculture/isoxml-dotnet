@@ -76,8 +76,8 @@ public class IsoGridTests
         }
         isoxml.Save();
 
-        Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
-        var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
+        Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".bin")));
+        var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".bin"));
         Assert.AreEqual(data.Length, (int)(grid.Width * grid.Height * grid.Layers * sizeof(uint)));
 
     }
@@ -103,8 +103,8 @@ public class IsoGridTests
         }
         result.Save();
 
-        Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".BIN")));
-        var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".BIN"));
+        Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".bin")));
+        var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".bin"));
         Assert.AreEqual(data.Length, (byte)(grid.Width * grid.Height));
 
     }

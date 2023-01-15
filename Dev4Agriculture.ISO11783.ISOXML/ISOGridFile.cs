@@ -44,7 +44,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var result = new ResultWithMessages<ISOGridFile>();
             ISOGridFile grid = null;
-            if (Utils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".BIN", out var filePath))
+            if (Utils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".bin", out var filePath))
             {
                 grid = new ISOGridFile(type);
 

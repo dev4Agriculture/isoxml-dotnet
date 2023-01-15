@@ -564,7 +564,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
             foreach (var entry in Grids)
             {
-                entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".BIN"));
+                entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".bin"));
             }
 
             if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
