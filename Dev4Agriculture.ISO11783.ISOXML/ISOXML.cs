@@ -280,7 +280,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
         {
-            var path = Path.Combine(Path.GetTempPath(), "isoxmltmp");
+            var id = Guid.NewGuid().ToString();
+            var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {

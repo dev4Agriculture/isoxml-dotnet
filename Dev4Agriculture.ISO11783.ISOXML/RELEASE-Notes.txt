@@ -42,5 +42,7 @@ v0.11.0.0
   =CHG: Rename WSM to ClientName
 v0.12.0
   +ADD: Add support to export ISOXML V3
+v0.12.0.1
+  -FIX: Zip-Archives were always unpacked to same TEMP-Folder, which avoids parallel processes
 
 
