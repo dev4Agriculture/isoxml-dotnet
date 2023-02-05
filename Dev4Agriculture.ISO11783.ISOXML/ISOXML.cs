@@ -573,6 +573,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 entry.Value.Save(Path.Combine(FolderPath, entry.Key + ".bin"));
             }
+            foreach (var entry in TimeLogs)
+            {
+                entry.Value.SaveTLG(FolderPath);
+            }
 
             if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
             {
@@ -782,9 +786,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     foreach (var item in device.DeviceProcessData)
                     {
                         var propAsByteArray = BitConverter.GetBytes(item.DeviceProcessDataProperty);
-                        var forthbit = propAsByteArray.ElementAt(4);
-                        forthbit = 0;
-                        item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray); // p.99
+                        if (propAsByteArray.Length >= 3)
+                        {
+                            var thirdbit = propAsByteArray.ElementAt(3);
+                            thirdbit = 0;
+                            item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray); // p.99
+                        }
                     }
                 }
             }

@@ -96,5 +96,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
             Assert.AreEqual(totalYield, 242461);
         }
+
+
+        [TestMethod]
+        public void CanStoreTimeLogs()
+        {
+            var path_in = "./testdata/TimeLogs/ValidTimeLogs";
+            var path_out = "./out/timelogs/save/";
+            var isoxml = ISOXML.Load(path_in);
+            var count = isoxml.TimeLogs["TLG00001"].Entries.Count;
+            isoxml.SetFolderPath(path_out);
+            isoxml.TimeLogs["TLG00001"].Entries.Add(new TLGDataLogLine(0)
+            {
+                GpsUTCDate= 0,
+                GpsUTCTime= 0,
+                PosEast = 52,
+                PosNorth = 7
+            });
+            isoxml.Save();
+            var loaded = ISOXML.Load(path_out);
+            Assert.AreEqual(count + 1, isoxml.TimeLogs["TLG00001"].Entries.Count);
+        }
     }
 }

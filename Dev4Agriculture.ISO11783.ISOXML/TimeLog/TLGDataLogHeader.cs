@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -427,6 +431,76 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
             }
             return false;
+        }
+
+        internal class DLVWriter
+        {
+            public string ProcessDataDDI { get; set; }
+            public string ProcessDataValue { get; set; }
+            public string DeviceElementIdRef { get; set; }
+            public uint DataLogPGN { get; set; }
+            public uint DataLogPGNStartBit { get; set; }
+            public uint DataLogPGNStopBit { get; set; }
+            public int Index;
+        }
+
+        internal void Save(string tlgPath)
+        {
+            var ddiList = new List<DLVWriter>();
+            foreach(var dlv in Pgns)
+            {
+                var entry = new DLVWriter()
+                {
+                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI((uint)DDILIST.DDI_PGN)),
+                    DataLogPGN = dlv.DataLogPGN,
+                    DataLogPGNStartBit = dlv.StartBit,
+                    DataLogPGNStopBit = dlv.StopBit,
+                    Index = dlv.Index
+                };
+                ddiList.Add(entry);
+            }
+
+            foreach (var dlv in Ddis)
+            {
+                var entry = new DLVWriter()
+                {
+                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI(dlv.Ddi)),
+                    ProcessDataValue = "",
+                    DeviceElementIdRef = "DET" + dlv.DeviceElement,
+                    Index = dlv.Index
+                };
+                ddiList.Add(entry);
+            }
+
+            ddiList = ddiList.OrderBy(entry => entry.Index).ToList();
+
+            var doc = new XDocument(
+                    new XDeclaration("1.0", "UTF-8","yes"),
+                    new XElement("TIM", new XAttribute("A", ""), new XAttribute("D", "4"),
+                        new XElement("PTN",
+                            GpsOptions.PosNorth ? new XAttribute("A", "") : null,
+                            GpsOptions.PosEast ? new XAttribute("B", "") : null,
+                            GpsOptions.PosUp ? new XAttribute("C", "") : null,
+                            GpsOptions.PosStatus ? new XAttribute("D", "") : new XAttribute("D","15"),//TODO it is to be checked if 15 is a good default value
+                            GpsOptions.Pdop ? new XAttribute("E", "") : null,
+                            GpsOptions.Hdop ? new XAttribute("F", "") : null,
+                            GpsOptions.NumberOfSatellites ? new XAttribute("G", "") : null,
+                            GpsOptions.GpsUTCTime ? new XAttribute("H", "") : null,
+                            GpsOptions.GpsUTCDate ? new XAttribute("I", "") : null
+                           ),
+                            from dlv in ddiList
+                            select new XElement("DLV",
+                                new XAttribute("A", dlv.ProcessDataDDI),
+                                new XAttribute("B", ""),
+                                new XAttribute("C", dlv.DeviceElementIdRef),
+                                dlv.DataLogPGN != 0 ? new XAttribute("D", dlv.DataLogPGN) : null,
+                                dlv.DataLogPGN != 0 ? new XAttribute("E", dlv.DataLogPGNStartBit) : null,
+                                dlv.DataLogPGN != 0 ? new XAttribute("F", dlv.DataLogPGNStopBit) : null
+                            )
+    )
+);
+
+            doc.Save(tlgPath);
         }
     }
 }

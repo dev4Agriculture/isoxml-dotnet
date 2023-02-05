@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
-    public enum DDILIST : ushort
-    {
-        DDI_PGN = 57342,
-        DDI_DefaultDataLogTrigger = 0xDFFF
-    }
+
 
     public enum GPSQuality : byte
     {
@@ -56,14 +53,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public string Name;
         public string BinName { get; private set; }
         public string XmlName { get; private set; }
-        public string Path;
+        public string FolderPath;
         public TLGStatus Loaded { get; private set; }
         public TLGDataLogHeader Header { get; private set; }
         public readonly List<TLGDataLogLine> Entries;
 
         private ISOTLG(string name, string path)
         {
-            Path = path;
+            FolderPath = path;
             Loaded = TLGStatus.INITIAL;
             Name = System.IO.Path.GetFileNameWithoutExtension(name);
             BinName = Name + ".bin";
@@ -76,7 +73,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         private ResultMessageList LoadData()
         {
-            var headerResult = TLGDataLogHeader.Load(Path, XmlName);
+            var headerResult = TLGDataLogHeader.Load(FolderPath, XmlName);
             if (headerResult.Result == null)
             {
                 Loaded = TLGStatus.ERROR;
@@ -88,7 +85,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-            if (Utils.AdjustFileNameToIgnoreCasing(Path, BinName, out var binPath))
+            if (Utils.AdjustFileNameToIgnoreCasing(FolderPath, BinName, out var binPath))
             {
                 var binaryFile = File.Open(binPath, FileMode.Open);
                 messages.AddRange(ReadBinaryData(binaryFile, Header));
@@ -143,7 +140,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
             binaryFile.Close();
         }
-
 
         private ResultMessageList ReadBinaryData(FileStream binaryFile, TLGDataLogHeader header)
         {
@@ -223,11 +219,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         internal void SaveTLG(string storagePath)
         {
-            var filePath = storagePath + Name + ".bin";
+            var filePath = Path.Combine(storagePath, Name);
             try
             {
-                var file = File.Create(filePath);
+                var file = File.Create(filePath + ".bin");
                 WriteBinaryData(file, Header);
+                Header.Save(filePath + ".xml");
             }
             catch (Exception e)
             {
