@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -380,6 +381,38 @@ public class ISOXMLV3Tests
         Assert.AreEqual(2, pdtLoaded.DensityMassPerVolume);
         Assert.AreEqual(1, pdtLoaded.DensityMassPerCount);
         Assert.AreEqual(200, pdtLoaded.DensityVolumePerCount);
+    }
+
+    [TestMethod]
+    public void LinkListVersion_CorrectForV3()
+    {
+        var path = "./out/isoxmlv3/validLinkList";
+
+        var isoxml = ISOXML.Create(path);
+        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.AddLinkList();
+        isoxml.Save();
+
+        var check = ISOXML.Load(path);
+        check.LoadExternalLinkList(path);
+        Assert.IsNotNull(check);
+        Assert.IsNotNull(check.LinkList);
+        Assert.AreEqual(ISO11783LinkListFileVersionMajor.Version3, check.LinkList.VersionMajor);
+        Assert.AreEqual(ISO11783TaskDataFileVersionMajor.Version3, check.VersionMajor);
+    }
+
+    [TestMethod]
+    public void LinkListExists_after_saveV3()
+    {
+        var path = "./out/isoxmlv3/validLinkList";
+
+        var isoxml = ISOXML.Create(path);
+        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.AddLinkList();
+        isoxml.Save();
+
+        Assert.IsTrue(isoxml.Data.AttachedFileSpecified);
+        Assert.IsTrue(isoxml.HasLinkList);
     }
 
     private static void CreateProducts(string path, ISO11783TaskDataFileVersionMajor version)

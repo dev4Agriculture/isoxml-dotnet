@@ -9,6 +9,7 @@ using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
+using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -53,7 +54,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
-
+        private const string _defaultLinkListFileName = "LINKLIST.XML";
 
         /// <summary>
         /// The Major version of ISOXML which reflects the used standard: 3 or 4
@@ -213,7 +214,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Data.AttachedFile.Add(new ISOAttachedFile()
                 {
                     FileType = 1,
-                    FilenameWithExtension = "LINKLIST.XML",
+                    FilenameWithExtension = _defaultLinkListFileName,
                     ManufacturerGLN = ""
                 });
                 HasLinkList = true;
@@ -319,6 +320,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public static async Task<ISOXML> LoadFromArchiveAsync(Stream stream, bool loadBinData = true)
         {
             return await Task.Run(() => LoadFromArchive(stream, loadBinData));
+        }
+
+        /// <summary>
+        /// Load LinkList from external .xml file
+        /// </summary>
+        /// <param name="path">Path to the LinkList file</param>
+        /// <param name="fileName">Default value is "LINKLIST.XML"</param>
+        public void LoadExternalLinkList(string path, string fileName = _defaultLinkListFileName)
+        {
+            var resultLinkList = IsoLinkList.LoadLinkList(path, fileName);
+            LinkList = resultLinkList.Result;
+            Messages.AddRange(resultLinkList.Messages);
+            HasLinkList = true;
         }
 
         /// <summary>
@@ -564,7 +578,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Directory.CreateDirectory(FolderPath);
             }
 
-
             if (HasLinkList)
             {
                 LinkList.SaveLinkList(FolderPath);
@@ -580,9 +593,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
             {
-                UpdateDataForV3();
+                var datav3 = UpdateDataForV3();
+                TaskData.SaveTaskData(datav3, FolderPath);
             }
-            TaskData.SaveTaskData(Data, FolderPath);
+            else
+            {
+                TaskData.SaveTaskData(Data, FolderPath);
+            }
+        }
+
+        /// <summary>
+        /// Saves a LinkList into a separate folder, if needed for Version3 or lower.
+        /// </summary>
+        /// <param name="path">Path where to save LinkList</param>
+        public void SaveLinkList(string path)
+        {
+            if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
+            {
+                LinkList.SaveLinkList(path);
+            }
         }
 
         /// <summary>
@@ -594,9 +623,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return Task.Run(() => Save());
         }
 
-        private void UpdateDataForV3()
+        private ISO11783TaskDataFile UpdateDataForV3()
         {
-            foreach (var task in Data.Task)
+            var clonedData = CloneDeep(Data);
+
+            foreach (var task in clonedData.Task)
             {
                 switch (task.TaskStatus)
                 {
@@ -678,7 +709,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            foreach (var partfield in Data.Partfield)
+            foreach (var partfield in clonedData.Partfield)
             {
                 if (partfield.GuidanceGroupSpecified)
                 {
@@ -725,7 +756,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            foreach (var product in Data.Product)
+            foreach (var product in clonedData.Product)
             {
                 if (product.ProductRelationSpecified)
                 {
@@ -740,28 +771,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 product.DensityVolumePerCount = null;
             }
 
-            if (Data.TaskControllerCapabilitiesSpecified)
+            if (clonedData.TaskControllerCapabilitiesSpecified)
             {
-                Data.TaskControllerCapabilities.Clear();
-
+                clonedData.TaskControllerCapabilities.Clear();
             }
 
-            if (Data.AttachedFileSpecified)
+            if (clonedData.AttachedFileSpecified)
             {
-                Data.AttachedFile.Clear();
+                clonedData.AttachedFile.Clear();
 
                 LinkList = null;
                 HasLinkList = false;
             }
 
-            if (Data.BaseStationSpecified)
+            if (clonedData.BaseStationSpecified)
             {
-                Data.BaseStation.Clear();
+                clonedData.BaseStation.Clear();
             }
 
-            if (Data.CropTypeSpecified)
+            if (clonedData.CropTypeSpecified)
             {
-                foreach (var crop in Data.CropType)
+                foreach (var crop in clonedData.CropType)
                 {
                     crop.ProductGroupIdRef = null; //p.87
                     if (crop.CropVarietySpecified)
@@ -774,9 +804,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            if (Data.DeviceSpecified)
+            if (clonedData.DeviceSpecified)
             {
-                foreach (var device in Data.Device)
+                foreach (var device in clonedData.Device)
                 {
                     if (device.DeviceStructureLabel.Length > 7)
                     {
@@ -796,15 +826,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            Data.lang = null; //p.115
-            if (Data.TaskControllerCapabilitiesSpecified)
+            clonedData.lang = null; //p.115
+            if (clonedData.TaskControllerCapabilitiesSpecified)
             {
-                Data.TaskControllerCapabilities.Clear();//p.116, p.143
+                clonedData.TaskControllerCapabilities.Clear();//p.116, p.143
             }
 
-            if (Data.ProductGroupSpecified)
+            if (clonedData.ProductGroupSpecified)
             {
-                foreach (var productGroup in Data.ProductGroup)
+                foreach (var productGroup in clonedData.ProductGroup)
                 {
                     //p.139
                     productGroup.ProductGroupType = null;
@@ -819,6 +849,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     stamp.Stop = new DateTime(stamp.StopValue.Ticks, DateTimeKind.Unspecified);
                 }
             }
+
+            static ISO11783TaskDataFile CloneDeep(ISO11783TaskDataFile source)
+            {
+                var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+                return JsonConvert.DeserializeObject<ISO11783TaskDataFile>(JsonConvert.SerializeObject(source), deserializeSettings);
+            }
+
+            return clonedData;
         }
 
         /// <summary>

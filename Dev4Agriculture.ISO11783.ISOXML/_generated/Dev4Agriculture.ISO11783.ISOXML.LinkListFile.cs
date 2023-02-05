@@ -267,6 +267,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.LinkListFile
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
         Version4,
+        
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        Version2,
+        
+        /// <summary>
+        /// </summary>
+        [System.Xml.Serialization.XmlEnumAttribute("3")]
+        Version3,
     }
     
     /// <summary>
