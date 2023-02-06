@@ -402,17 +402,35 @@ public class ISOXMLV3Tests
     }
 
     [TestMethod]
-    public void LinkListExists_after_saveV3()
+    public void LinkListExists_AfterSaveV3()
     {
-        var path = "./out/isoxmlv3/validLinkList";
+        var path = "./out/isoxmlv3/validLinkListAfterSave";
+
+        var isoxml = ISOXML.Create(path);
+        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
+        isoxml.AddLinkList();
+
+        Assert.IsTrue(isoxml.HasLinkList);
+        isoxml.Save();
+
+        Assert.IsTrue(isoxml.Data.AttachedFileSpecified);
+        Assert.IsTrue(isoxml.HasLinkList);
+    }
+
+    [TestMethod]
+    public void NoLinkList_AfterLoadV3()
+    {
+        var path = "./out/isoxmlv3/linkListAfterLoad";
 
         var isoxml = ISOXML.Create(path);
         isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
         isoxml.AddLinkList();
         isoxml.Save();
 
-        Assert.IsTrue(isoxml.Data.AttachedFileSpecified);
-        Assert.IsTrue(isoxml.HasLinkList);
+        var check = ISOXML.Load(path);
+
+        Assert.IsFalse(check.Data.AttachedFileSpecified);
+        Assert.IsFalse(check.HasLinkList);
     }
 
     private static void CreateProducts(string path, ISO11783TaskDataFileVersionMajor version)

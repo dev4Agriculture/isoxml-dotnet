@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Newtonsoft.Json;
@@ -625,7 +626,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private ISO11783TaskDataFile UpdateDataForV3()
         {
-            var clonedData = CloneDeep(Data);
+            var isoxmlSerializer = new IsoxmlSerializer();
+            var clonedData = isoxmlSerializer.DeepClone(Data);
 
             foreach (var task in clonedData.Task)
             {
@@ -779,9 +781,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             if (clonedData.AttachedFileSpecified)
             {
                 clonedData.AttachedFile.Clear();
-
-                LinkList = null;
-                HasLinkList = false;
             }
 
             if (clonedData.BaseStationSpecified)
@@ -848,12 +847,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     stamp.Stop = new DateTime(stamp.StopValue.Ticks, DateTimeKind.Unspecified);
                 }
-            }
-
-            static ISO11783TaskDataFile CloneDeep(ISO11783TaskDataFile source)
-            {
-                var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                return JsonConvert.DeserializeObject<ISO11783TaskDataFile>(JsonConvert.SerializeObject(source), deserializeSettings);
             }
 
             return clonedData;
