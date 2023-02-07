@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -78,7 +79,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             return _result;
         }
 
-
         public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
@@ -86,6 +86,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
             ser.Serialize(xmlWriter, taskData);
         }
+
+        public ISO11783TaskDataFile DeepClone(ISO11783TaskDataFile taskData)
+        {
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
+            var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
+            using (var stream = new MemoryStream())
+            {
+                using (var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
+                {
+                    ser.Serialize(xmlWriter, taskData);
+                    var xmlDoc = new XmlDocument();
+                    stream.Position = 0;
+                    xmlDoc.Load(stream);
+                    var copiedTask = Deserialize(xmlDoc);
+                    return (ISO11783TaskDataFile)copiedTask.Result;
+                }
+            }
+        }
+
         // mainly for debugging
         public HashSet<string> GetAllAttrTypes()
         {

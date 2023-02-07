@@ -47,5 +47,6 @@ v0.12.0.1
 v0.13.0.0
   +ADD: Save TimeLogXMLs
   -FIX: Wrong BitEncoding when storing in V3
-
-
+v0.13.0.1
+  +ADD: Load LinkList from .XML file separately, Save LinkLink into a separate LinkList file if needed. (for v3 or lower)
+  +FIX: Resolve inconsistensies between TaskFile and LinkList VersionMajor values

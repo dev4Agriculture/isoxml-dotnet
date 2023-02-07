@@ -20,13 +20,27 @@
 			<xs:attribute name="VersionMajor" use="required" fixed="4">
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
-						<xs:enumeration value="4">
-							<xs:annotation>
-								<xs:documentation xml:lang="en">
-									Version 4
-								</xs:documentation>
-							</xs:annotation>
-						</xs:enumeration>
+                        <xs:enumeration value="4">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Version 4
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="2">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Version 2
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="3">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Version 3
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
