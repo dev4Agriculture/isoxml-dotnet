@@ -216,7 +216,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     FileType = 1,
                     FilenameWithExtension = _defaultLinkListFileName,
-                    ManufacturerGLN = ""
+                    ManufacturerGLN = "",
+                    Preserve = ISOPreserve.PreserveonTaskControllerandsendbacktoFMIS
                 });
                 HasLinkList = true;
             }
