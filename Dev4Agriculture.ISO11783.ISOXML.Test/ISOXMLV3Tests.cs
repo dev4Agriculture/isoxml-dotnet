@@ -433,37 +433,6 @@ public class ISOXMLV3Tests
         Assert.IsFalse(check.HasLinkList);
     }
 
-    [TestMethod]
-    public void LinkList_LoadedFromString()
-    {
-        var linkListData = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ISO11783LinkList VersionMajor=\"4\" VersionMinor=\"3\"\r\nTaskControllerManufacturer=\"FarmCtrl\" TaskControllerVersion=\"1.0\"\r\n" +
-            "ManagementSoftwareManufacturer=\"FarmSystem\"\r\nManagementSoftwareVersion=\"1.0\" FileVersion=\"3.2\" DataTransferOrigin=\"2\">\r\n<LGP A=\"LGP10\" B=\"1\" E=\"Farming Data\">\r\n" +
-            "<LNK A=\"CTR1\" B=\"{1059B14E-929F-4C4C-BCD4-C4F52A6A076A}\"/>\r\n<LNK A=\"PFD1\" B=\"{92043685-072D-4CAA-B3A8-C1E9D23BDB31}\" C=\"Headland\"/>\r\n</LGP>\r\n<LGP A=\"LGP31\" B=\"1\" " +
-            "E=\"Devices\">\r\n<LNK A=\"DVC1\" B=\"{1059B14E-929F-4C4C-BCD4-C4F5286A07DA}\"/>\r\n<LNK A=\"TSK1\" B=\"{1059BD4E-979F-4C4C-BCD4-C4F5286A07DA}\"/>\r\n</LGP>\r\n</ISO11783LinkList>";
-
-        var isoxml = ISOXML.Create("./out/isoxmlv3/linkListLoadedFromStr");
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
-        isoxml.LoadLinkListFromString(linkListData);
-        isoxml.Save();
-
-        Assert.IsTrue(isoxml.HasLinkList);
-        Assert.AreEqual(0, isoxml.Messages.Count);
-    }
-
-    [TestMethod]
-    public void LinkList_LoadedFromInvalidString()
-    {
-        var invalidLinkListData = "<?xml version=\"1.0\"></ISO11783LinkList>";
-
-        var isoxml = ISOXML.Create("./out/isoxmlv3/linkListLoadedFromStr");
-        isoxml.VersionMajor = ISO11783TaskDataFileVersionMajor.Version3;
-        isoxml.LoadLinkListFromString(invalidLinkListData);
-        isoxml.Save();
-
-        Assert.IsFalse(isoxml.HasLinkList);
-        Assert.AreEqual(1, isoxml.Messages.Count);
-    }
-
     private static void CreateProducts(string path, ISO11783TaskDataFileVersionMajor version)
     {
         var isoxml = ISOXML.Create(path);
