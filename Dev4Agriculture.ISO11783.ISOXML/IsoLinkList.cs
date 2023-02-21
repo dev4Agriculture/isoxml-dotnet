@@ -225,13 +225,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             LinkListSerializer.Serialize(_linkListContent, path);
         }
 
-        internal static ResultWithMessages<IsoLinkList> ParseLinkList(string isoxmlString, string path)
+        internal static ResultWithMessages<IsoLinkList> ParseLinkList(string isoxmlString)
         {
-            if (path is null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
             ResultWithMessages<ISO11783LinkListFile> linkListContent = null;
             var result = new ResultWithMessages<IsoLinkList>();
             try
@@ -239,20 +234,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(isoxmlString);
                 linkListContent = LinkListSerializer.Deserialize(xmlDoc);
+
+                var linkList = new IsoLinkList(linkListContent.Result);
+
+                result.AddMessages(linkList._groupIds.CleanListFromTempEntries());
+                result.SetResult(linkList);
             }
             catch (Exception ex)
             {
                 result.AddError(
                     ResultMessageCode.XMLParsingError,
-                    ResultDetail.FromPath(path),
                     ResultDetail.FromString(ex.Message)
                     );
             }
 
-            var linkList = new IsoLinkList(linkListContent.Result);
-
-            result.AddMessages(linkList._groupIds.CleanListFromTempEntries());
-            result.SetResult(linkList);
             return result;
         }
 
@@ -271,7 +266,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             else
             {
                 var text = File.ReadAllText(linkListPath.ToString());
-                return ParseLinkList(text, path);
+                return ParseLinkList(text);
             }
         }
     }

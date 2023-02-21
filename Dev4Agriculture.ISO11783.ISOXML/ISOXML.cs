@@ -338,6 +338,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
+        /// Load LinkList from xml-formatted string
+        /// </summary>
+        /// <param name="linkList">xml-formatted linklist string data</param>
+        public void LoadLinkListFromString(string linkList)
+        {
+            var resultLinkList = IsoLinkList.ParseLinkList(linkList);
+
+            Messages.AddRange(resultLinkList.Messages);
+            if (resultLinkList.Result != null)
+            {
+                LinkList = resultLinkList.Result;
+                HasLinkList = true;
+            }
+        }
+
+        /// <summary>
         /// Initialize all such elements that extend the pure ISOXML Functionality in the ISOExtensions Folder
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
