@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -16,11 +17,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 
     public class TaskDDIEntry
     {
-        public string DeviceElement;
+        public string DeviceElementId;
         public DDIValueType Type;
+        public uint DDI;
+        public int DeviceElementNo()
+        {
+            return int.Parse(DeviceElementId.Substring(3));
+        }
     }
 
-
+    /// <summary>
+    /// This class provides several functions to analyse tasks and devices with device specific information
+    /// </summary>
     public class ISODeviceAnalysis
     {
         private ISOXML _isoxml;
@@ -29,14 +37,139 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             _isoxml = isoxml;
         }
 
+        public ISODevice GetDevice(string deviceElementId)
+        {
+            return _isoxml.Data.Device.First(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == deviceElementId));
+        }
+
+        public ISODeviceElement GetDeviceElement(string deviceElementId)
+        {
+            return _isoxml.Data.Device.SelectMany(dvc => dvc.DeviceElement).FirstOrDefault(det => det.DeviceElementId == deviceElementId);
+        }
+
+
+        /// <summary>
+        /// Find the full DeviceProcessData-Element; e.g. to read the Triggermethods
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null) {
+            if ( entry.Type != DDIValueType.ProcessData)
+            {
+                return null;
+            }
+            device ??= GetDevice(entry.DeviceElementId);
+            var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
+                .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
+            return
+                device.DeviceProcessData.First(dpd =>
+                    Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == entry.DDI &&
+                    dorList.Contains(dpd.DeviceProcessDataObjectId)
+                );
+        }
+
+        /// <summary>
+        /// Get the full DeviceProperty to read e.g. the Value
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        public ISODeviceProperty GetDeviceProperty(TaskDDIEntry entry, ISODevice device = null)
+        {
+            if (entry.Type != DDIValueType.Property)
+            {
+                return null;
+            }
+
+            device ??= GetDevice(entry.DeviceElementId);
+            var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
+                .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
+
+            return device.DeviceProperty.First(dpd =>
+                Utils.ConvertDDI(dpd.DevicePropertyDDI) == entry.DDI &&
+                dorList.Contains(dpd.DevicePropertyObjectId)
+            );
+        }
+
+
+        /// <summary>
+        /// Get the Name of a DDI as shown in the DeviceDescription
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        public string GetDeviceDataDesignator(TaskDDIEntry entry)
+        {
+            switch (entry.Type)
+            {
+                case DDIValueType.ProcessData:
+                    return GetDeviceProcessData(entry).DeviceProcessDataDesignator;
+
+
+                case DDIValueType.Property:
+                    return GetDeviceProperty(entry).DevicePropertyDesignator;
+
+                default:
+                    return "";
+            }
+        }
+
+        /// <summary>
+        /// Get the DeviceValuePresentation to convert values more conveniently
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <returns></returns>
+        public ISODeviceValuePresentation GetDeviceValuePresentation(TaskDDIEntry entry)
+        {
+            var device = GetDevice(entry.DeviceElementId);
+            switch (entry.Type)
+            {
+                case DDIValueType.ProcessData:
+                    var dpd = GetDeviceProcessData(entry);
+                    if (dpd.DeviceValuePresentationObjectIdValueSpecified)
+                    {
+                        return device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpd.DeviceValuePresentationObjectId);
+                    }
+                    break;
+
+
+                case DDIValueType.Property:
+                    var dpt = GetDeviceProperty(entry);
+                    if (dpt.DeviceValuePresentationObjectIdValueSpecified)
+                    {
+                        return device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpt.DeviceValuePresentationObjectId);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            return new ISODeviceValuePresentation()
+            {
+                Scale = 1,
+                Offset = 0,
+                UnitDesignator = ""
+            };
+        }
+
+        /// <summary>
+        /// One of the most common issues used to be to find the Correct DeviceElement that was mentioned in a Task
+        /// This function returns a list of possible DETs. If it's more than 1 DET, a filter for Device- or DeviceElementType helps to find the wanted one
+        /// </summary>
+        /// <param name="isoTask"></param>
+        /// <param name="ddi"></param>
+        /// <returns></returns>
         public List<TaskDDIEntry> FindDeviceElementsForDDI(ISOTask isoTask, uint ddi)
         {
             var processData = isoTask.TimeLogs.ToList().SelectMany(entry => entry.Header.Ddis)
                         .Where(dlv => dlv.Ddi == ddi)  //Find DataLogValues with DDI; those list the DET as well
                         .Select(dlvEntry => new TaskDDIEntry()
                         {
-                            DeviceElement = "DET" + dlvEntry.DeviceElement,
-                            Type = DDIValueType.ProcessData
+                            DeviceElementId = "DET" + dlvEntry.DeviceElement,
+                            Type = DDIValueType.ProcessData,
+                            DDI =ddi
+
                         }).ToList();
 
 
@@ -62,10 +195,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                             //Now, if this DOR links our DPT from the machine in the Task, we found an entry to add
                             .Where( det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
                             .Select(det => new TaskDDIEntry()
-                                   {
-                                       DeviceElement = det.DeviceElementId,
-                                       Type = DDIValueType.Property
-                                    }).ToList()
+                            {
+                                DeviceElementId = det.DeviceElementId,
+                                Type = DDIValueType.Property,
+                                DDI =ddi
+                            }).ToList()
                            ).ToList()
                     ).ToList();
 

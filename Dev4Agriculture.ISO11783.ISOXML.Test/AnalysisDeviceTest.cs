@@ -15,15 +15,18 @@ public class AnalysisDeviceTest
     {
         var isoxml = ISOXML.Load("testdata/TimeLogs/ValidTimeLogs");
 
-        var Analysis = new ISODeviceAnalysis(isoxml);
+        var analysis = new ISODeviceAnalysis(isoxml);
         var task = isoxml.Data.Task[0];
-        var possibleDeviceElements = Analysis.FindDeviceElementsForDDI(task, 119);
+        var possibleDeviceElements = analysis.FindDeviceElementsForDDI(task, 119);
         Assert.AreEqual(possibleDeviceElements.Count, 1);
         Assert.AreEqual(possibleDeviceElements[0].Type, DDIValueType.ProcessData);
+        Assert.AreEqual(analysis.GetDeviceValuePresentation(possibleDeviceElements[0]).UnitDesignator, "min");
 
-        possibleDeviceElements = Analysis.FindDeviceElementsForDDI(task, 179 /*ActualCulturalPractice*/);
+        possibleDeviceElements = analysis.FindDeviceElementsForDDI(task, 179 /*ActualCulturalPractice*/);
         Assert.AreEqual(possibleDeviceElements.Count, 1);
-        Assert.AreEqual(possibleDeviceElements[0].DeviceElement, "DET-2");
+        Assert.AreEqual(possibleDeviceElements[0].DeviceElementId, "DET-2");
+        Assert.AreEqual(possibleDeviceElements[0].DeviceElementNo(), -2);
+        Assert.AreEqual(analysis.GetDeviceDataDesignator(possibleDeviceElements[0]), "BearbeitungsArt");
 
     }
 
