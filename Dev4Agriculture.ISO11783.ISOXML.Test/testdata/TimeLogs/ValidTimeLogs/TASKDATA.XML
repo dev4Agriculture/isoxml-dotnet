@@ -984,7 +984,11 @@
             <DOR A="46"/>
                 
         </DET>
-            
+        
+        <DET A="DET-2" B="2" C="1" D="Function" E="2" F="1">
+            <DOR A="110"/>
+        </DET>
+
         <DPD A="19" B="0043" C="1" D="8" E="Aktuelle Arbeitsbreite" F="3"/>
             
         <DPD A="20" B="0054" C="1" D="1" E="Ertrag pro Flaeche" F="4"/>
@@ -1040,6 +1044,8 @@
         <DPD A="45" B="EAE2" C="3" D="24" E="Motorstunden" F="18"/>
             
         <DPD A="46" B="DFFF" C="1" D="31" E="default logging" F="2"/>
+
+        <DPT A="110" B="00B3" C="11" D="BearbeitungsArt" />
             
         <DVP A="2" B="0" C="1" D="0" E=" "/>
             

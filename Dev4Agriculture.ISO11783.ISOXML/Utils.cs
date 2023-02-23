@@ -21,6 +21,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return byteArray;
         }
 
+
+        public static ushort ConvertDDI(byte[] entry) => BitConverter.ToUInt16(entry.Reverse().ToArray());
+
+
         public static bool AdjustFileNameToIgnoreCasing(string root, string fileName, out string path)
         {
 

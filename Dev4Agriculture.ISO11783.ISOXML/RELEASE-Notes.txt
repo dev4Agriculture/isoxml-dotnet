@@ -54,3 +54,5 @@ v0.13.1
   +ADD: Store LinkList seperately, used e.g. in case of exporting a V3 TaskSet
 v0.13.1.1
   -FIX: LinkList was not marked as a file to be preserved and returned to FMIS
+v0.13.3
+  +ADD: Analysis to find DeviceElements Relevant for specific DDIs in a Task

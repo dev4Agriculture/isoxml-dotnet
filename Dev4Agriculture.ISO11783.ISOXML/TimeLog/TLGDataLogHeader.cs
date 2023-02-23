@@ -447,7 +447,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         internal void Save(string tlgPath)
         {
             var ddiList = new List<DLVWriter>();
-            foreach(var dlv in Pgns)
+            foreach (var dlv in Pgns)
             {
                 var entry = new DLVWriter()
                 {
@@ -475,13 +475,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             ddiList = ddiList.OrderBy(entry => entry.Index).ToList();
 
             var doc = new XDocument(
-                    new XDeclaration("1.0", "UTF-8","yes"),
+                    new XDeclaration("1.0", "UTF-8", "yes"),
                     new XElement("TIM", new XAttribute("A", ""), new XAttribute("D", "4"),
                         new XElement("PTN",
                             GpsOptions.PosNorth ? new XAttribute("A", "") : null,
                             GpsOptions.PosEast ? new XAttribute("B", "") : null,
                             GpsOptions.PosUp ? new XAttribute("C", "") : null,
-                            GpsOptions.PosStatus ? new XAttribute("D", "") : new XAttribute("D","15"),//TODO it is to be checked if 15 is a good default value
+                            GpsOptions.PosStatus ? new XAttribute("D", "") : new XAttribute("D", "15"),//TODO it is to be checked if 15 is a good default value
                             GpsOptions.Pdop ? new XAttribute("E", "") : null,
                             GpsOptions.Hdop ? new XAttribute("F", "") : null,
                             GpsOptions.NumberOfSatellites ? new XAttribute("G", "") : null,
