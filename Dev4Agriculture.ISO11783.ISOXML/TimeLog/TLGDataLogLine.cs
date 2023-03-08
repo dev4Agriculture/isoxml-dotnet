@@ -12,7 +12,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         FILE_END
     }
 
-    public class TLGDataLogEntry
+    public struct TLGDataLogEntry
     {
         public bool IsSet;
         public int Value;
