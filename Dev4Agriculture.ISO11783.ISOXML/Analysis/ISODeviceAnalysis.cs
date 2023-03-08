@@ -168,7 +168,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                         {
                             DeviceElementId = "DET" + dlvEntry.DeviceElement,
                             Type = DDIValueType.ProcessData,
-                            DDI =ddi
                             DDI = ddi
                         }).ToList();
 

@@ -25,12 +25,12 @@ public static class Program
             LineStringType = ISOLineStringType.PolygonExterior
         };
 
-        var north = (decimal)52.2;
-        var south = (decimal)52.3;
-        var west = (decimal)7.2;
-        var east = (decimal)7.4;
-        var west2 = (decimal)7.25;
-        var east2 = (decimal)7.35;
+        var north = (decimal)52.22;
+        var south = (decimal)52.23;
+        var west = (decimal)7.22;
+        var east = (decimal)7.24;
+        var west2 = (decimal)7.225;
+        var east2 = (decimal)7.235;
 
         lineString.Point.Add(new ISOPoint()
         {
