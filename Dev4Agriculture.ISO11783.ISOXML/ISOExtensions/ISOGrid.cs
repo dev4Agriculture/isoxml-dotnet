@@ -10,7 +10,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public ISOGridFile gridFile { private get; set; }
 
-        public uint GetSetpointValue(decimal latitude, decimal longitude, uint layer = 0)
+        public uint GetSetpointValue(decimal longitude, decimal latitude,uint layer = 0)
         {
             decimal maxNorth = this.GridMinimumNorthPosition + (decimal)(this.GridMaximumRow * this.GridCellNorthSize);
             decimal maxEast = this.GridMinimumEastPosition + (decimal)(this.GridMaximumColumn* this.GridCellEastSize);
