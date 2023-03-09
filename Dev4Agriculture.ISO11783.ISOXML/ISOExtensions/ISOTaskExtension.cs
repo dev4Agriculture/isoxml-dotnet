@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -74,6 +75,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return TimeLogs.Count;
         }
 
+        /// <summary>
+        /// The DefaultDataLogTrigger forces Terminals to request the DefaultSet from machines.
+        /// This leads to receiving as many data as the machine thinks is smart. and useful.
+        /// </summary>
         public void AddDefaultDataLogTrigger()
         {
             DataLogTrigger.Add(new ISODataLogTrigger()
@@ -90,7 +95,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
 
-
+        /// <summary>
+        /// Get the maximum available Value (Raw Value!) from a Task and a specific DeviceElement.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="maximum"> An OUT-Variable that receives the maximum value</param>
+        /// <returns>True if any value could be found</returns>
         public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
         {
             maximum = int.MinValue;
@@ -109,6 +120,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
         }
 
+
+        /// <summary>
+        /// Get the minimum available Value (Raw Value!) from a Task and a specific DeviceElement.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="minimum"> An OUT-Variable that receives the minimum value</param>
+        /// <returns>True if any value could be found</returns>
         public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
         {
             minimum = int.MaxValue;
@@ -130,6 +149,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
 
+        /// <summary>
+        /// Get the first available Value (Raw Value!) from a Task and a specific DeviceElement.
+        /// This is useful specifically for onChange values as some (older) TaskControllers do not write such value by default
+        /// On start of a Task but only if it changes.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="firstValue"> An OUT-Variable that receives the first available value</param>
+        /// <returns>True if any value could be found</returns>
         public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
         {
             foreach (var tlg in TimeLogs)
@@ -196,7 +224,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
 
         }
-
-
     }
 }
