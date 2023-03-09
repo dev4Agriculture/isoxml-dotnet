@@ -81,7 +81,7 @@ public class IsoGridTests
         var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".bin"));
         Assert.AreEqual(data.Length, (int)(grid.Width * grid.Height * grid.Layers * sizeof(uint)));
 
-        var isoxml2 = ISOXML.Load(path);
+        var isoxml2 = ISOXML.Load(outPath);
         var gridLoaded = isoxml2.Grids.First().Value;
         Assert.AreEqual(gridLoaded.Width, grid.Width);
         Assert.AreEqual(gridLoaded.Height, grid.Height);

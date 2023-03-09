@@ -53,7 +53,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 switch (grid.Type)
                 {
                     case ISOGridType.gridtype1:
-                        grid._datat1 = new byte[grid.Layers,grid.Height, grid.Width];
+                        grid._datat1 = new byte[grid.Height, grid.Width, grid.Layers];
                         if (grid.Width * grid.Height == binaryFileStream.Length)
                         {
 
@@ -67,7 +67,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                     {
                                         for(var l = 0; l < grid.Layers; l++)
                                         {
-                                            grid._datat1[l, y, x] = buffer[x*grid.Layers + l];
+                                            grid._datat1[y, x, l] = buffer[x*grid.Layers + l];
                                         }
                                     }
                                 }
@@ -79,7 +79,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         break;
                     case ISOGridType.gridtype2:
-                        grid._datat2 = new uint[grid.Layers, grid.Height, grid.Width];
+                        grid._datat2 = new uint[grid.Height, grid.Width, grid.Layers];
                         if (grid.Layers * grid.Width * grid.Height * sizeof(uint) == binaryFileStream.Length)
                         {
                             for (var y = 0; y < grid.Height; y++)
@@ -92,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                     {
                                         for (var l = 0; l < layers; l++)
                                         {
-                                            grid._datat2[l, y, x] = BitConverter.ToUInt32(buffer, (x * grid.Layers + l) * 4);
+                                            grid._datat2[y, x, l] = BitConverter.ToUInt32(buffer, (x * grid.Layers + l) * 4);
                                         }
                                     }
                                 }
@@ -161,7 +161,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         {
                             for(var l = 0; l < Layers; l++)
                             {
-                                bw.Write(_datat1[l, y, x]);
+                                bw.Write(_datat1[y, x, l]);
                             }
                         }
                     }
@@ -174,7 +174,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         {
                             for (var l = 0; l < Layers; l++)
                             {
-                                bw.Write(_datat2[l, y, x]);
+                                bw.Write(_datat2[y, x, l]);
                             }
                         }
                     }
@@ -205,7 +205,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                 var dataLineText = "";
                                 for (var x = 0; x < Width; x++)
                                 {
-                                    dataLineText = dataLineText + _datat1[l, Height - 1 - y, x] + ";";
+                                    dataLineText = dataLineText + _datat1[Height - 1 - y, x, l] + ";";
                                 }
                                 streamWriter.WriteLine(dataLineText);
                                 streamWriter.Flush();
@@ -217,7 +217,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                 var dataLineText = "";
                                 for (var x = 0; x < Width; x++)
                                 {
-                                    dataLineText = dataLineText + _datat2[l, Height - 1 - y, x] + ";";
+                                    dataLineText = dataLineText + _datat2[Height - 1 - y, x, l] + ";";
                                 }
                                 streamWriter.WriteLine(dataLineText);
                                 streamWriter.Flush();
@@ -252,10 +252,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             switch (Type)
             {
                 case ISOGridType.gridtype1:
-                    _datat1 = new byte[layers, height, width];
+                    _datat1 = new byte[height, width, layers];
                     break;
                 case ISOGridType.gridtype2:
-                    _datat2 = new uint[layers, height, width];
+                    _datat2 = new uint[height, width, layers];
                     break;
             }
         }
@@ -283,10 +283,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         return 0;
                     }
-                    _datat1[layer, row, column] = (byte)value;
+                    _datat1[row, column, layer] = (byte)value;
                     return 1;
                 case ISOGridType.gridtype2:
-                    _datat2[layer, row, column] = value;
+                    _datat2[row, column, layer] = value;
                     return 1;
                 default:
                     return 0;
@@ -312,9 +312,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             switch (Type)
             {
                 case ISOGridType.gridtype1:
-                    return _datat1[layer,row, column];
+                    return _datat1[row, column, layer];
                 case ISOGridType.gridtype2:
-                    return _datat2[layer, row, column];
+                    return _datat2[row, column, layer];
                 default:
                     throw new IndexOutOfRangeException();
             }
