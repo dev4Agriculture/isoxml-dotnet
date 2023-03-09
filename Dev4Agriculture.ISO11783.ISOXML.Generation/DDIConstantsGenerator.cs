@@ -18,10 +18,16 @@ public static class DDIConstantsGenerator
         public string DDIName;
         public ushort DDIValue;
         public string Definition;
+        public string Unit;
+        public float Resolution;
     };
 
     public static Regex rgx = new Regex("[^a-zA-Z0-9_]");
     public static TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+
+    private const string DDIEntryText = "\n     public class DDIEntry\n     {\n        public int Id;\n        public string Name;\n        public string Description;\n        public string Unit;\n        public float Resolution;\n     }\n";
+
+    private const string DDIDictionaryText = "\n     public class DDIInfo\n     {\n         public static readonly Dictionary<DDIList, DDIEntry> DDICollection = new Dictionary<DDIList, DDIEntry>\n         {\n";
 
     public static string FormatDDIName(List<string> parts)
     {
@@ -36,9 +42,8 @@ public static class DDIConstantsGenerator
                 ddiName += part+" ";
             }
         }
-        ddiName = ddiName.Replace("__", "_");
-        ddiName = ddiName.Replace("-", "_");
-        ddiName = ddiName.Replace("²", "_2").Replace("³", "_3");
+
+        ddiName = FormatSymbols(ddiName);
         ddiName = textInfo.ToTitleCase(ddiName);
         ddiName = rgx.Replace(ddiName, " ");
         ddiName = ddiName.Replace(" ", "");
@@ -50,13 +55,13 @@ public static class DDIConstantsGenerator
 
     }
 
-    //Yes, we could use the SourceGenerator. This way it feels just a bit more convenient to me :) 
+    //Yes, we could use the SourceGenerator. This way it feels just a bit more convenient to me :)
     public static void Generate(string source)
     {
         var lines = File.ReadAllText(source).Split("\n").Select(entry => entry.Replace("\r",""));
         var entities = new List<DDIEntry>();
         var curEntity = new DDIEntry();
-        
+
         foreach (var line in lines)
         {
             if (line.Contains(':'))
@@ -80,6 +85,20 @@ public static class DDIConstantsGenerator
                         curEntity.DDIName = FormatDDIName(ddiNameList);
 
                         break;
+                    //data example: Maximum Application Rate specified as distance: e.g. seed spacing of a precision seeder
+                    case "Definition":
+                        curEntity.Definition = arguments.Replace("\"", "\\\"");
+                        break;
+                    //data example: mm³/m² - Capacity per area unit
+                    case "Unit":
+                        var unitData = arguments.Split(" - ").FirstOrDefault();
+                        curEntity.Unit = FormatSymbols(unitData.Trim());
+                        break;
+                    //data example:  1
+                    case "Resolution":
+                        if (float.TryParse(arguments.Trim(), out var result))
+                            curEntity.Resolution = result;
+                        break;
                     default:
                         break;
 
@@ -87,17 +106,30 @@ public static class DDIConstantsGenerator
             }
         }
 
-        var enText = "namespace de.dev4Agriculture.ISOXML.DDI{\n" +
+        var enText = "using System.Collections.Generic; \n\n" +
+                     "namespace de.dev4Agriculture.ISOXML.DDI{\n" +
                      "    public enum DDIList\n{\n";
         foreach (var entry in entities)
         {
             enText += "        " + entry.DDIName + " = 0x" + entry.DDIValue.ToString("X4") + ",\n";
         }
-
-
-
-        enText += "    }\n}\n";
+        enText += "    }\n" + DDIEntryText;
+        enText += DDIDictionaryText;
+        foreach (var entity in entities)
+        {
+            enText += $"\n             {{DDIList.{entity.DDIName}, new DDIEntry{{Id = {entity.DDIValue}, Name = \"{entity.DDIName}\", Description = \"{entity.Definition}\"" +
+                      $", Resolution = {entity.Resolution}, Unit = \"{entity.Unit}\"}} }},";
+        }
+        enText += "\n         };\n     }\n}\n";
         File.WriteAllText("../../../../Dev4Agriculture.ISO11783.ISOXML/_generated/DDIList.cs", enText);
+    }
+
+    private static string FormatSymbols(string text)
+    {
+        text = text.Replace("__", "_");
+        text = text.Replace("-", "_");
+        text = text.Replace("²", "_2").Replace("³", "_3");
+        return text;
     }
 
 }
