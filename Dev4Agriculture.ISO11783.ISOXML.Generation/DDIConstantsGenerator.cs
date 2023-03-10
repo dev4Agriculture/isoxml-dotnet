@@ -87,7 +87,7 @@ public static class DDIConstantsGenerator
                         break;
                     //data example: Maximum Application Rate specified as distance: e.g. seed spacing of a precision seeder
                     case "Definition":
-                        curEntity.Definition = arguments.Replace("\"", "\\\"");
+                        curEntity.Definition = arguments.Replace("\"", "\\\"").Trim();
                         break;
                     //data example: mm³/m² - Capacity per area unit
                     case "Unit":
