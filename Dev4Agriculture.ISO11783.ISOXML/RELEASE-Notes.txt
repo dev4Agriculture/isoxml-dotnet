@@ -1,4 +1,4 @@
-﻿V0.5.0.1
+﻿﻿V0.5.0.1
   - WSM can now handle upper and lower case
   - Adjusted Namings and Values of the DeviceClass enum to fit the definition in https://isobus.net 
 V0.6.0.1
@@ -61,3 +61,5 @@ v014.1
 v0.14.2
   +ADD: Some functions to read the GridValue at a specific Geoposition, find out if a point is within a field and get the bounds of this field
   +ADD: Functions to Generate TimeLogs
+v0.14.2.1
+  -FIX: MultiLayer Grids were broken

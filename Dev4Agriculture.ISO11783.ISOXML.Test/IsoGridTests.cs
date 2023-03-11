@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -70,7 +71,7 @@ public class IsoGridTests
             {
                 for (uint x = 0; x < grid.Width; x++)
                 {
-                    grid.SetValue(y, x, y, l);
+                    grid.SetValue(x, y, y, l);
                 }
             }
         }
@@ -79,6 +80,22 @@ public class IsoGridTests
         Assert.IsTrue(File.Exists(Path.Combine(outPath, gridFileName + ".bin")));
         var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".bin"));
         Assert.AreEqual(data.Length, (int)(grid.Width * grid.Height * grid.Layers * sizeof(uint)));
+
+        var isoxml2 = ISOXML.Load(outPath);
+        var gridLoaded = isoxml2.Grids.First().Value;
+        Assert.AreEqual(gridLoaded.Width, grid.Width);
+        Assert.AreEqual(gridLoaded.Height, grid.Height);
+        Assert.AreEqual(gridLoaded.Layers, grid.Layers);
+        for (uint l = 0; l < grid.Layers; l++)
+        {
+            for (uint y = 0; y < grid.Height; y++)
+            {
+                for (uint x = 0; x < grid.Width; x++)
+                {
+                    Assert.AreEqual(grid.GetValue(y, x, l), gridLoaded.GetValue(y, x, l));
+                }
+            }
+        }
 
     }
 
