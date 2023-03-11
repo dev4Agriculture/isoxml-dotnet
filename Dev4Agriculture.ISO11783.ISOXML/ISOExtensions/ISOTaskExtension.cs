@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
@@ -83,7 +84,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             DataLogTrigger.Add(new ISODataLogTrigger()
             {
-                DataLogDDI = Utils.FormatDDI(0xDFFF),
+                DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
                 DataLogMethod = (byte)(TriggerMethods.OnTime
                 | TriggerMethods.OnDistance
                 | TriggerMethods.ThresholdLimits

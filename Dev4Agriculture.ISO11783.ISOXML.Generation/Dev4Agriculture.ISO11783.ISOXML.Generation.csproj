@@ -14,13 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="resources\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>  
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resources\txt\" />
   </ItemGroup>  
 
 </Project>

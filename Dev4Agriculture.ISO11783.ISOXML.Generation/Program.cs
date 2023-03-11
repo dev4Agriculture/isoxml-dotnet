@@ -36,13 +36,8 @@ internal class Program
     }
 
 
-    public static void Main(string[] args)
+    public static void GenerateFromXSDs(string[] args)
     {
-        if (args is null)
-        {
-            throw new System.ArgumentNullException(nameof(args));
-        }
-
         var folder = "./resources/xsd/";
 
         ProcessNamespace(new List<string>() {
@@ -67,6 +62,26 @@ internal class Program
         {
             File.Copy(file, DestinationFolder + Path.GetFileName(file));
         }
+
+    }
+
+    public static void GenerateFromDDIList(string[] args)
+    {
+        DDIConstantsGenerator.Generate("./resources/txt/ddiExport.txt");
+    }
+
+
+    public static void Main(string[] args)
+    {
+        if (args is null)
+        {
+            throw new System.ArgumentNullException(nameof(args));
+        }
+
+
+        GenerateFromXSDs(args);
+        GenerateFromDDIList(args);
+        
 
     }
 }
