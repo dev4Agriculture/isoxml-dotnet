@@ -54,8 +54,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// <param name="entry"></param>
         /// <param name="device"></param>
         /// <returns></returns>
-        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null)
-        {
+        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null) {
             if (entry.Type != DDIValueType.ProcessData)
             {
                 return null;
@@ -170,7 +169,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                             DeviceElementId = "DET" + dlvEntry.DeviceElement,
                             Type = DDIValueType.ProcessData,
                             DDI = ddi
-
                         }).ToList();
 
 
@@ -194,7 +192,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     .SelectMany(dptObjectId =>
                             device.DeviceElement
                             //Now, if this DOR links our DPT from the machine in the Task, we found an entry to add
-                            .Where(det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
+                            .Where( det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
                             .Select(det => new TaskDDIEntry()
                             {
                                 DeviceElementId = det.DeviceElementId,
@@ -203,7 +201,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                             }).ToList()
                            ).ToList()
                     ).ToList();
-
             processData.AddRange(properties);
             return processData;
         }

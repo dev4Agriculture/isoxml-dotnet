@@ -25,10 +25,12 @@ public static class Program
             LineStringType = ISOLineStringType.PolygonExterior
         };
 
-        var north = (decimal)52.2;
-        var south = (decimal)52.3;
-        var west = (decimal)7.2;
-        var east = (decimal)7.4;
+        var north = (decimal)52.22;
+        var south = (decimal)52.23;
+        var west = (decimal)7.22;
+        var east = (decimal)7.24;
+        var west2 = (decimal)7.225;
+        var east2 = (decimal)7.235;
 
         lineString.Point.Add(new ISOPoint()
         {
@@ -41,14 +43,14 @@ public static class Program
         lineString.Point.Add(new ISOPoint()
         {
             PointNorth = south,
-            PointEast = west,
+            PointEast = west2,
             PointType = ISOPointType.other
         });
 
         lineString.Point.Add(new ISOPoint()
         {
             PointNorth = south,
-            PointEast = east,
+            PointEast = east2,
             PointType = ISOPointType.other
         });
 
@@ -86,7 +88,15 @@ public static class Program
         {
             for (uint gridRow = 0; gridRow < isoGrid.GridMaximumRow; gridRow++)
             {
-                grid.SetValue(gridRow, gridColumn, 5 + gridRow * 100);
+                var latitude = north + (decimal)(isoGrid.GridCellNorthSize * (gridRow+0.5));
+                var longitude = west + (decimal)(isoGrid.GridCellEastSize* (gridColumn+0.5));
+                if( partField.IsInField(longitude, latitude) )
+                {
+                    grid.SetValue(gridColumn, gridRow, 5 + gridRow * 100);
+                } else
+                {
+                    grid.SetValue(gridColumn, gridRow, 0);
+                }
             }
         }
 

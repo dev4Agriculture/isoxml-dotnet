@@ -6,6 +6,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -187,7 +188,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         break;
                     }
 
-                    if (ddi != (ushort)DDILIST.DDI_PGN)
+                    if (ddi != (ushort)DDIList.PGNBasedData)
                     {
                         var tLGDataDDIEntry = new TLGDataLogDDI
                         {
@@ -451,7 +452,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var entry = new DLVWriter()
                 {
-                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI((uint)DDILIST.DDI_PGN)),
+                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI((uint)DDIList.PGNBasedData)),
                     DataLogPGN = dlv.DataLogPGN,
                     DataLogPGNStartBit = dlv.StartBit,
                     DataLogPGNStopBit = dlv.StopBit,
@@ -501,6 +502,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 );
 
             doc.Save(tlgPath);
+        }
+
+        public void AddDataLogValue(TLGDataLogDDI tLGDataLogDDI)
+        {
+            this.Ddis.Add(tLGDataLogDDI);
+            this.MaximumNumberOfEntries = (byte)this.Ddis.Count;
         }
     }
 }

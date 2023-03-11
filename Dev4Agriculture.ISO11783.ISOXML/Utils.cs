@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -20,8 +21,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             byteArray[1] = longArray[0];
             return byteArray;
         }
-
-
+        
+        public static byte[] FormatDDI(DDIList value) => FormatDDI((uint)value);
         public static ushort ConvertDDI(byte[] entry) => BitConverter.ToUInt16(entry.Reverse().ToArray());
 
 

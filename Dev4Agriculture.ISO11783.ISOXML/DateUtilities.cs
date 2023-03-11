@@ -5,11 +5,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
     public class DateUtilities
     {
+        public static DateTime ISOXMLEpoch = new DateTime(1980, 1, 1, 0, 0, 0);
+
         private static readonly double MILLISECONDS_IN_DAY = 24.0 * 60 * 60 * 1000;
         public static readonly string DATE_FORMAT = "dd.MM.yyyy";
         public static string GetDateFromDaysSince1980(int daysSince1980)
         {
-            var date = new DateTime(1980, 1, 1).AddDays(daysSince1980);
+            var date = ISOXMLEpoch.AddDays(daysSince1980);
             return date.ToString(DATE_FORMAT);
         }
         public static string GetTimeFromMilliSeconds(uint milliSeconds)
@@ -26,7 +28,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public static DateTime GetDateTimeFromTimeLogInfos(int daysSince1980, uint milliSecondsSinceMidnight)
         {
-            return new DateTime(1980, 1, 1).AddDays(daysSince1980 + (milliSecondsSinceMidnight / MILLISECONDS_IN_DAY));
+            return ISOXMLEpoch.AddDays(daysSince1980 + (milliSecondsSinceMidnight / MILLISECONDS_IN_DAY));
+        }
+
+
+        public static uint GetMilliSecondsInDay(DateTime timeStamp) => (uint)timeStamp.TimeOfDay.TotalMilliseconds;
+        public static ushort GetDaysSince1980(DateTime dateTime)
+        {
+
+            return (ushort)dateTime.ToUniversalTime().Subtract(ISOXMLEpoch).TotalDays;
+
         }
 
     }
