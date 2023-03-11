@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+
 using Microsoft.CodeAnalysis;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Generation;
@@ -131,5 +132,4 @@ public static class DDIConstantsGenerator
         text = text.Replace("²", "_2").Replace("³", "_3");
         return text;
     }
-
 }

@@ -54,8 +54,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// <param name="entry"></param>
         /// <param name="device"></param>
         /// <returns></returns>
-        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null)
-        {
+        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null) {
             if (entry.Type != DDIValueType.ProcessData)
             {
                 return null;
