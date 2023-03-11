@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Generation;
@@ -22,8 +19,8 @@ public static class DDIConstantsGenerator
         public float Resolution;
     };
 
-    public static Regex rgx = new Regex("[^a-zA-Z0-9_]");
-    public static TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+    private static readonly Regex Rgx = new Regex("[^a-zA-Z0-9_]");
+    private static readonly TextInfo TextInfo = new CultureInfo("en-US", false).TextInfo;
 
     private const string DDIEntryText = "\n     public class DDIEntry\n     {\n        public int Id;\n        public string Name;\n        public string Description;\n        public string Unit;\n        public float Resolution;\n     }\n";
 
@@ -32,20 +29,20 @@ public static class DDIConstantsGenerator
     public static string FormatDDIName(List<string> parts)
     {
         var ddiName = "";
-        foreach( var part in parts )
+        foreach (var part in parts)
         {
             if(int.TryParse(part, out _))
             {
-                ddiName+= "_"+part+"_";
+                ddiName += "_" + part + "_";
             } else
             {
-                ddiName += part+" ";
+                ddiName += part + " ";
             }
         }
 
         ddiName = FormatSymbols(ddiName);
-        ddiName = textInfo.ToTitleCase(ddiName);
-        ddiName = rgx.Replace(ddiName, " ");
+        ddiName = TextInfo.ToTitleCase(ddiName);
+        ddiName = Rgx.Replace(ddiName, " ");
         ddiName = ddiName.Replace(" ", "");
         if (ddiName.EndsWith("_"))
         {
@@ -97,7 +94,10 @@ public static class DDIConstantsGenerator
                     //data example:  1
                     case "Resolution":
                         if (float.TryParse(arguments.Trim(), out var result))
+                        {
                             curEntity.Resolution = result;
+                        }
+
                         break;
                     default:
                         break;
