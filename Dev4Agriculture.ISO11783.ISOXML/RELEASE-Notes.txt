@@ -63,7 +63,7 @@ v0.14.2
   +ADD: Functions to Generate TimeLogs
 v0.14.2.1
   -FIX: MultiLayer Grids were broken
-v0.14.3
+v0.15.1
   +ADD: Functions to calculate the totals list of a given TimeLogs List
   -FIX: Change variable for DeviceElementId to int
   -FIX: Change variables for DDI to ushort
