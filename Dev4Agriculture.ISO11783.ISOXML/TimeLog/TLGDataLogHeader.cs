@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -211,7 +212,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         attribute = xmlNode.Attributes.GetNamedItem("C");
                         if (attribute != null && attribute.Value != "")
                         {
-                            tLGDataDDIEntry.DeviceElement = short.Parse(attribute.Value.Substring(3));
+                            tLGDataDDIEntry.DeviceElement = IdList.ToIntId(attribute.Value);
                         }
                         else
                         {
@@ -422,9 +423,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
         }
 
-        public bool HasDDI(ushort ddi, short det = 0)
+        public bool HasDDI(ushort ddi, int det = 0)
         {
-            foreach (var entry in this.Ddis)
+            foreach (var entry in Ddis)
             {
                 if ((entry.Ddi == ddi) && (entry.DeviceElement == det || det == 0))
                 {
@@ -452,7 +453,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var entry = new DLVWriter()
                 {
-                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI((uint)DDIList.PGNBasedData)),
+                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI(DDIList.PGNBasedData)),
                     DataLogPGN = dlv.DataLogPGN,
                     DataLogPGNStartBit = dlv.StartBit,
                     DataLogPGNStopBit = dlv.StopBit,

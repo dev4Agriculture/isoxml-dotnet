@@ -32,7 +32,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="name">An optional designator</param>
         /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
         /// <returns> A List of Points with Time and Value</returns>
-        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, int det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             foreach (var tlg in TimeLogs)
@@ -51,7 +51,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="name">An optional designator</param>
         /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
         /// <returns> A List of Points with Time and Value</returns>
-        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, int det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             var lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE;
@@ -103,7 +103,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement"></param>
         /// <param name="maximum"> An OUT-Variable that receives the maximum value</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
+        public bool TryGetMaximum(ushort ddi, int deviceElement, out int maximum)
         {
             maximum = int.MinValue;
             var found = false;
@@ -129,7 +129,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement"></param>
         /// <param name="minimum"> An OUT-Variable that receives the minimum value</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
+        public bool TryGetMinimum(ushort ddi, int deviceElement, out int minimum)
         {
             minimum = int.MaxValue;
             var found = false;
@@ -173,7 +173,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
+        public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
@@ -197,7 +197,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
             var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)

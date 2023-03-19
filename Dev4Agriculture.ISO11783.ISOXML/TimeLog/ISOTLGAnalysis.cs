@@ -1,4 +1,11 @@
-﻿namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+
+namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
 
     /// <summary>
@@ -11,7 +18,7 @@
         private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
 
 
-        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
+        public bool TryGetMaximum(ushort ddi, int deviceElement, out int maximum)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -33,7 +40,7 @@
             return true;
         }
 
-        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
+        public bool TryGetMinimum(ushort ddi, int deviceElement, out int minimum)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -58,7 +65,7 @@
 
 
 
-        public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
+        public bool TryGetFirstValue(ushort ddi, int deviceElement, out int firstValue)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -82,7 +89,7 @@
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
+        public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -117,7 +124,7 @@
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -194,7 +201,7 @@
         /// <param name="ddi"></param>
         /// <param name="deviceElement"></param>
         /// <returns></returns>
-        public DDIAvailabilityStatus GetDDIAvailabilityStatus(int ddi, int deviceElement)
+        public DDIAvailabilityStatus GetDDIAvailabilityStatus(ushort ddi, int deviceElement)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -211,6 +218,79 @@
             return DDIAvailabilityStatus.NO_VALUE;
         }
 
+
+        public List<ISODataLogValue> GetAllTotals(TLGTotalAlgorithmType totalAlgorithmType)
+        {
+            var list = new List<ISODataLogValue>();
+            foreach (var entry in Header.Ddis)
+            {
+                var dlv = new ISODataLogValue()
+                {
+                    ProcessDataDDI = Utils.FormatDDI(entry.Ddi),
+                    DeviceElementIdRef = IdList.BuildID("DET", entry.DeviceElement),
+                };
+                list.Add(dlv);
+            }
+
+            foreach (var entry in Header.Pgns)
+            {
+                var dlv = new ISODataLogValue()
+                {
+                    ProcessDataDDI = Utils.FormatDDI(DDIList.PGNBasedData),
+                    DeviceElementIdRef = "",
+                    DataLogPGN = entry.DataLogPGN,
+                    DataLogPGNStartBit = entry.StartBit,
+                    DataLogPGNStopBit = entry.StopBit
+                };
+                list.Add(dlv);
+            }
+
+            foreach (var entry in list)
+            {
+                if (TryGetTotalValue(
+                        Utils.ConvertDDI(entry.ProcessDataDDI),
+                        IdList.ToIntId(entry.DeviceElementIdRef),
+                        out var total, totalAlgorithmType)
+                    )
+                {
+                    entry.ProcessDataValue = total;
+                }
+            }
+
+            return list;
+        }
+
+
+        public ISOTime GetTimeElement()
+        {
+            var min = DateTime.MaxValue;
+            var max = DateTime.MinValue;
+            foreach (var entry in Entries)
+            {
+                var date = DateUtilities.GetDateTimeFromTimeLogInfos(entry.Date, entry.Time);
+                if (min.CompareTo(date) > 0)
+                {
+                    min = date;
+                }
+
+                if (max.CompareTo(date) < 0)
+                {
+                    max = date;
+                }
+            }
+
+            var dataLogValues = this.GetAllTotals(TLGTotalAlgorithmType.NO_RESETS);
+
+            var isoTime = new ISOTime()
+            {
+                Start = min,
+                Stop = max,
+                Type = ISOType2.Effective,
+            };
+            isoTime.DataLogValue.ToList().AddRange(dataLogValues);
+
+            return isoTime;
+        }
     }
 
 }

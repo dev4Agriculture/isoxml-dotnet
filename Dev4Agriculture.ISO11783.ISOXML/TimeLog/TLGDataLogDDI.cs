@@ -3,7 +3,7 @@
     public class TLGDataLogDDI
     {
         public byte Index;
-        public short DeviceElement;
+        public int DeviceElement;
         public ushort Ddi;
         public bool HasDefaultValue;
         public int DefaultValue;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -84,6 +86,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
             Assert.AreEqual(extract.Ddi, 148);
             Assert.AreEqual(extract.Data.Count, 560);
 
+        }
+
+        [TestMethod]
+        public void CanReadVeryHighDETNames()
+        {
+            var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
+            Assert.AreEqual(isoxml.Messages.Count, 0);
+            Assert.AreEqual(IdList.ToIntId(isoxml.Data.Device[0].DeviceElement[1].DeviceElementId), -123456789);
+            var isoDeviceAnalysis = new ISODeviceAnalysis(isoxml);
+            Assert.AreEqual(isoDeviceAnalysis.FindDeviceElementsForDDI(isoxml.Data.Task[0], Utils.ParseDDI("0043"))[0].DeviceElementNo(), -123456789);
         }
 
 

@@ -110,7 +110,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <param name="lastValue"> Default set to "NO VALUE": The last known Value. This should *only* be used if the call for this function
         /// is part of loop for multiple TimeLogs. In case there are no values recorded for this TimeLog, this ensures that there are Entries created anyway</param>
         /// <returns></returns>
-        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, short det = 0, string name = "", bool fillLines = false, int lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, int det = 0, string name = "", bool fillLines = false, int lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
         {
 
             var entries = new List<ISOTLGExtractPoint>();

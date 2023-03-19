@@ -926,9 +926,7 @@
     <DVC A="DVC-1" B="uqfOhjIQhhe7sA0" C="150200029-17 " D="A00086000DF95589" E="ZWpiaDX5Bn" F="38303030303131" G="FF000000406564">
             
         <DET A="DET-1" B="1" C="1" D="DeviceElement" E="0" F="0">
-                  
-            <DOR A="19"/>
-                  
+                                    
             <DOR A="20"/>
                   
             <DOR A="21"/>
@@ -985,7 +983,8 @@
                 
         </DET>
         
-        <DET A="DET-2" B="2" C="1" D="Function" E="2" F="1">
+        <DET A="DET-123456789" B="2" C="1" D="Function" E="2" F="1">
+            <DOR A="19"/>
             <DOR A="110"/>
         </DET>
 
