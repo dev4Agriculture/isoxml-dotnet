@@ -82,16 +82,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         public void AddDefaultDataLogTrigger()
         {
-            DataLogTrigger.Add(new ISODataLogTrigger()
+            if (!DataLogTrigger.Any(entry => Utils.ConvertDDI(entry.DataLogDDI) == (ushort)DDIList.RequestDefaultProcessData))
             {
-                DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
-                DataLogMethod = (byte)(TriggerMethods.OnTime
-                | TriggerMethods.OnDistance
-                | TriggerMethods.ThresholdLimits
-                | TriggerMethods.OnChange
-                | TriggerMethods.Total)
+                DataLogTrigger.Add(new ISODataLogTrigger()
+                {
+                    DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
+                    DataLogMethod = (byte)(TriggerMethods.OnTime
+                    | TriggerMethods.OnDistance
+                    | TriggerMethods.ThresholdLimits
+                    | TriggerMethods.OnChange
+                    | TriggerMethods.Total)
 
-            });
+                });
+            }
         }
 
 
