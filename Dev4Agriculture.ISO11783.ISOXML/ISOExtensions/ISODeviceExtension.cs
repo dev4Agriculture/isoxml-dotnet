@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
@@ -68,6 +71,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             return resultMessageList;
 
+        }
+
+
+        /// <summary>
+        /// Returns a list of all Combinations of DeviceProcessData + DeviceElement that reflects a Total.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<(ISODeviceElement, ISODeviceProcessData)> GetAllTotalsProcessData()
+        {
+            var result = new List<(ISODeviceElement, ISODeviceProcessData)>();
+
+            foreach (var (det, dpd) in from det in DeviceElement.ToList()
+                                       from dor in det.DeviceObjectReference
+                                       from dpd in DeviceProcessData
+                                       where dpd.DeviceProcessDataObjectId == dor.DeviceObjectId
+                                       where (dpd.IsTotal() &&
+                                             (Utils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort) DDIList.RequestDefaultProcessData)
+                                       select (det, dpd))
+            {
+                result.Add((det, dpd));
+            }
+
+            return result;
         }
 
     }

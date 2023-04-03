@@ -24,5 +24,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
     public partial class ISODeviceProcessData
     {
+
+        public bool IsTotal() => 0 != (DeviceProcessDataTriggerMethods & (byte)ISODeviceProcessDataTriggerMethodType.Total);
+        public bool IsOnChange() => 0 != (DeviceProcessDataTriggerMethods & (byte)ISODeviceProcessDataTriggerMethodType.OnChange);
+        public bool IsOnTime() => 0 != (DeviceProcessDataTriggerMethods & (byte)ISODeviceProcessDataTriggerMethodType.OnTime);
+        public bool IsOnDistance() => 0 != (DeviceProcessDataTriggerMethods & (byte)ISODeviceProcessDataTriggerMethodType.OnDistance);
+        public bool IsOnThreshold() => 0 != (DeviceProcessDataTriggerMethods & (byte)ISODeviceProcessDataTriggerMethodType.OnThreshold);
+        public bool IsLifeTimeTotal() => IsTotal() & ((DeviceProcessDataProperty & (byte)ISODeviceProcessDataPropertyType.Setable) == 0);
+
+
     }
 }

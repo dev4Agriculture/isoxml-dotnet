@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 //using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -78,6 +79,17 @@ public class DeviceTests
         Assert.AreEqual(result.Data.Device.Count, 1);
         var dvc = result.Data.Device[0];
         Assert.AreEqual(dvc.DeviceElement.Count, 15);
+    }
+
+
+
+
+    [TestMethod]
+    public void CanListTotals()
+    {
+        var path = "./testdata/devices/Device_Description_Unit.xml";
+        var result = ISOXML.Load(path);
+        Assert.AreEqual(6, result.Data.Device[0].GetAllTotalsProcessData().Count());
     }
 
 }

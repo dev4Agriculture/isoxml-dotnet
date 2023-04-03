@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
@@ -219,30 +218,35 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public List<ISODataLogValue> GetAllTotals(TLGTotalAlgorithmType totalAlgorithmType)
+
+        public List<ISODataLogValue> GenerateTotalsDataLogValues(TLGTotalAlgorithmType totalAlgorithmType, IEnumerable<ISODevice> devices)
         {
             var list = new List<ISODataLogValue>();
-            foreach (var entry in Header.Ddis)
+            var totals = devices.SelectMany(device => device.GetAllTotalsProcessData());
+            foreach (var (det, dpd) in totals)
             {
-                var dlv = new ISODataLogValue()
                 {
-                    ProcessDataDDI = Utils.FormatDDI(entry.Ddi),
-                    DeviceElementIdRef = IdList.BuildID("DET", entry.DeviceElement),
-                };
-                list.Add(dlv);
-            }
-
-            foreach (var entry in Header.Pgns)
-            {
-                var dlv = new ISODataLogValue()
-                {
-                    ProcessDataDDI = Utils.FormatDDI(DDIList.PGNBasedData),
-                    DeviceElementIdRef = "",
-                    DataLogPGN = entry.DataLogPGN,
-                    DataLogPGNStartBit = entry.StartBit,
-                    DataLogPGNStopBit = entry.StopBit
-                };
-                list.Add(dlv);
+                    var dlv = new ISODataLogValue()
+                    {
+                        ProcessDataDDI = dpd.DeviceProcessDataDDI,
+                        DeviceElementIdRef = det.DeviceElementId,
+                    };
+                    if (dpd.IsLifeTimeTotal())
+                    {
+                        if (TryGetLastValue(Utils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total))
+                        {
+                            dlv.ProcessDataValue = total;
+                        }
+                    }
+                    else if (dpd.IsTotal())
+                    {
+                        if (TryGetTotalValue(Utils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total, totalAlgorithmType))
+                        {
+                            dlv.ProcessDataValue = total;
+                        }
+                    }
+                    list.Add(dlv);
+                }
             }
 
             foreach (var entry in list)
@@ -261,7 +265,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public ISOTime GetTimeElement()
+        /// <summary>
+        /// Generates a Time-Element corresponding to the TimeLog Entry
+        /// The List of Devices is required to filter the TimeLog DDI-Entries for Totals and Lifetime Totals
+        /// </summary>
+        /// <param name="devices"></param>
+        /// <returns></returns>
+        public ISOTime GenerateTimeElement(IEnumerable<ISODevice> devices)
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
@@ -279,7 +289,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
             }
 
-            var dataLogValues = this.GetAllTotals(TLGTotalAlgorithmType.NO_RESETS);
+            var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
 
             var isoTime = new ISOTime()
             {
@@ -287,7 +297,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Stop = max,
                 Type = ISOType2.Effective,
             };
-            isoTime.DataLogValue.ToList().AddRange(dataLogValues);
+
+            foreach (var entry in dataLogValues)
+            {
+                isoTime.DataLogValue.Add(entry);
+            }
 
             return isoTime;
         }
