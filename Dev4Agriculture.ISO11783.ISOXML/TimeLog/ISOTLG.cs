@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
-using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -74,7 +71,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             FolderPath = path;
             Loaded = TLGStatus.INITIAL;
-            Name = System.IO.Path.GetFileNameWithoutExtension(name);
+            Name = Path.GetFileNameWithoutExtension(name);
             BinName = Name + ".bin";
             XmlName = Name + ".xml";
             Header = new TLGDataLogHeader();
@@ -276,14 +273,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return result;
         }
 
-        public static ISOTLG Generate(int index, string path, IEnumerable<ISODevice> devices)
+        public static ISOTLG Generate(int index, string path, TLGGPSOptions tlgGPSOptions = null)
         {
-            var tlg = new ISOTLG(index,path);
+            if( tlgGPSOptions == null)
+            {
+                tlgGPSOptions = new TLGGPSOptions
+                {
+                    PosEast = true,
+                    PosNorth = true,
+                    PosStatus = true
+                };
+            }
+
+            var tlg = new ISOTLG(index, path);
+            tlg.Header.GpsOptions = tlgGPSOptions;
 
             return tlg;
         }
 
-        public static int ConvertGPS(decimal pos) => Convert.ToInt32(pos * (int)TLG_GPS_FACTOR) ;
+        public static int ConvertGPS(decimal pos) => Convert.ToInt32(pos * (int)TLG_GPS_FACTOR);
 
     }
 }
