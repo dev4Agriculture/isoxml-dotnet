@@ -17,6 +17,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public ClientName ClientNameParsed { get; private set; }
 
 
+        /// <summary>
+        /// Convert all encoded data like ClientName & LocalizationLabel to readable structures
+        /// </summary>
+        /// <returns>A list of messages (Errors or Warnings) that showed up during the operation</returns>
         public ResultMessageList Analyse()
         {
             var resultMessageList = new ResultMessageList();
