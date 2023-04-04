@@ -181,8 +181,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="ddi"></param>
         /// <param name="deviceElement"></param>
         /// <param name="firstValue"> An OUT-Variable that receives the result</param>
-        /// <returns>True if any value could be found</returns>
-        public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue)
+        /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
+        /// <returns>True if any value was found</returns>
+        public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue, bool shallCheckTimeElements = true)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
@@ -191,10 +192,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     return true;
                 }
             }
-            var endTime = Time.Max(entry => entry.Start);
-            if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out lastValue))
+            if (shallCheckTimeElements)
             {
-                return true;
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out lastValue))
+                {
+                    return true;
+                }
             }
             lastValue = 0;
 
@@ -211,8 +215,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement">The Data Dictionary Identifier</param>
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
-        /// <returns></returns>
-        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
+        /// <returns>True if Value was found</returns>
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm, bool shallCheckTimeElements = true)
         {
             var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
@@ -225,10 +230,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     }
                 }
 
-                var endTime = Time.Max(entry => entry.Start);
-                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                if (shallCheckTimeElements)
                 {
-                    return true;
+                    var endTime = Time.Max(entry => entry.Start);
+                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    {
+                        return true;
+                    }
                 }
                 totalValue = 0;
             }
@@ -244,10 +252,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
             if (found == false)
             {
-                var endTime = Time.Max(entry => entry.Start);
-                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                if (shallCheckTimeElements)
                 {
-                    return true;
+                    var endTime = Time.Max(entry => entry.Start);
+                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    {
+                        return true;
+                    }
                 }
 
             }
