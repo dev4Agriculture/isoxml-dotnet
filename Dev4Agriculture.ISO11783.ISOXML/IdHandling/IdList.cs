@@ -233,7 +233,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             }
             else
             {
-                var nr = ToIntId( id );
+                var nr = ToIntId(id);
                 if (_ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
@@ -322,11 +322,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <summary>
         /// Get the Integer representation of the ISOXML ID; e.g. -3 for DET-3
         /// </summary>
-        /// <param name="ID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public static int ToIntId(string ID)
+        public static int ToIntId(string id)
         {
-            return int.Parse(ID.Substring(3));
+            return int.Parse(id.Substring(3));
         }
 
     }

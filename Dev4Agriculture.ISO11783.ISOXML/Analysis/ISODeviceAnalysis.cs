@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -32,7 +29,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     /// </summary>
     public class ISODeviceAnalysis
     {
-        private ISOXML _isoxml;
+        private readonly ISOXML _isoxml;
         public ISODeviceAnalysis(ISOXML isoxml)
         {
             _isoxml = isoxml;
@@ -194,7 +191,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     .SelectMany(dptObjectId =>
                             device.DeviceElement
                             //Now, if this DOR links our DPT from the machine in the Task, we found an entry to add
-                            .Where( det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
+                            .Where(det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
                             .Select(det => new TaskDDIEntry()
                             {
                                 DeviceElementId = det.DeviceElementId,

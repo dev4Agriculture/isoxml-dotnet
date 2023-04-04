@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
+﻿using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 

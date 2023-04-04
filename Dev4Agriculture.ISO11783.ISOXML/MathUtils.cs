@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -13,44 +11,44 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         // For two vectors in the X-Y plane, the result is a
         // vector with X and Y components 0 so the Z component
         // gives the vector's length and direction.
-        public static float CrossProductLength(float Ax, float Ay,
-            float Bx, float By, float Cx, float Cy)
+        public static float CrossProductLength(float ax, float ay,
+            float bx, float by, float cx, float cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            var bAx = ax - bx;
+            var bAy = ay - by;
+            var bCx = cx - bx;
+            var bCy = cy - by;
 
             // Calculate the Z coordinate of the cross product.
-            return (BAx * BCy - BAy * BCx);
+            return bAx * bCy - bAy * bCx;
         }
         // Return the dot product AB . BC.
         // Note that AB x BC = |AB| * |BC| * Cos(theta).
-        private static float DotProduct(float Ax, float Ay,
-            float Bx, float By, float Cx, float Cy)
+        private static float DotProduct(float ax, float ay,
+            float bx, float by, float cx, float cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            var bAx = ax - bx;
+            var bAy = ay - by;
+            var bCx = cx - bx;
+            var bCy = cy - by;
 
             // Calculate the dot product.
-            return (BAx * BCx + BAy * BCy);
+            return bAx * bCx + bAy * bCy;
         }
         // Return the angle ABC.
         // Return a value between PI and -PI.
         // Note that the value is the opposite of what you might
         // expect because Y coordinates increase downward.
-        public static float GetAngle(float Ax, float Ay,
-            float Bx, float By, float Cx, float Cy)
+        public static float GetAngle(float ax, float ay,
+            float bx, float by, float cx, float cy)
         {
             // Get the dot product.
-            float dot_product = DotProduct(Ax, Ay, Bx, By, Cx, Cy);
+            var dot_product = DotProduct(ax, ay, bx, by, cx, cy);
 
             // Get the cross product.
-            float cross_product = CrossProductLength(Ax, Ay, Bx, By, Cx, Cy);
+            var cross_product = CrossProductLength(ax, ay, bx, by, cx, cy);
 
             // Calculate the angle.
             return (float)Math.Atan2(cross_product, dot_product);

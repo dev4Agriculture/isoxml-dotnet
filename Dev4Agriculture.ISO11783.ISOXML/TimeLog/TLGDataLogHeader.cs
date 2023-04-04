@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -507,8 +505,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public void AddDataLogValue(TLGDataLogDDI tLGDataLogDDI)
         {
-            this.Ddis.Add(tLGDataLogDDI);
-            this.MaximumNumberOfEntries = (byte)this.Ddis.Count;
+            Ddis.Add(tLGDataLogDDI);
+            MaximumNumberOfEntries = (byte)Ddis.Count;
         }
     }
 }

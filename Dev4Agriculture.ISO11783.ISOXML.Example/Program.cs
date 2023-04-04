@@ -88,12 +88,13 @@ public static class Program
         {
             for (uint gridRow = 0; gridRow < isoGrid.GridMaximumRow; gridRow++)
             {
-                var latitude = north + (decimal)(isoGrid.GridCellNorthSize * (gridRow+0.5));
-                var longitude = west + (decimal)(isoGrid.GridCellEastSize* (gridColumn+0.5));
-                if( partField.IsInField(longitude, latitude) )
+                var latitude = north + (decimal)(isoGrid.GridCellNorthSize * (gridRow + 0.5));
+                var longitude = west + (decimal)(isoGrid.GridCellEastSize * (gridColumn + 0.5));
+                if (partField.IsInField(longitude, latitude))
                 {
                     grid.SetValue(gridColumn, gridRow, 5 + gridRow * 100);
-                } else
+                }
+                else
                 {
                     grid.SetValue(gridColumn, gridRow, 0);
                 }

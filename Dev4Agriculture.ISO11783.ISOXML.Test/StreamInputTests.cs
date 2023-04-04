@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -106,7 +105,7 @@ public class StreamInputTests
         Assert.AreEqual(0, result.Messages.Count);
         Assert.IsTrue(result.HasLinkList);
     }
-    
+
     [TestMethod]
     public async Task CanLoadValidZipStreamValidLinkListAsync()
     {

@@ -90,8 +90,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                                        from dor in det.DeviceObjectReference
                                        from dpd in DeviceProcessData
                                        where dpd.DeviceProcessDataObjectId == dor.DeviceObjectId
-                                       where (dpd.IsTotal() &&
-                                             (Utils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort) DDIList.RequestDefaultProcessData)
+                                       where dpd.IsTotal() &&
+                                             (Utils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort)DDIList.RequestDefaultProcessData)
                                        select (det, dpd))
             {
                 result.Add((det, dpd));

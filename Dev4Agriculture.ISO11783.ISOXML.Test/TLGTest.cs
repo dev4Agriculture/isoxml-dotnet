@@ -122,8 +122,8 @@ public class TLGTest
         isoxml.SetFolderPath(path_out);
         isoxml.TimeLogs["TLG00001"].Entries.Add(new TLGDataLogLine(0)
         {
-            GpsUTCDate= 0,
-            GpsUTCTime= 0,
+            GpsUTCDate = 0,
+            GpsUTCTime = 0,
             PosEast = 52,
             PosNorth = 7
         });
@@ -141,7 +141,7 @@ public class TLGTest
         var tim = isoxml.TimeLogs["TLG00001"].GenerateTimeElement(isoxml.Data.Device);
         Assert.IsNotNull(tim);
         Assert.AreEqual(11, tim.DataLogValue.Count);
-        Assert.AreEqual(1, tim.DataLogValue.Count( entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime));
+        Assert.AreEqual(1, tim.DataLogValue.Count(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime));
         Assert.AreEqual(48300, tim.DataLogValue.FirstOrDefault(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.TotalArea).ProcessDataValue);
     }
 }

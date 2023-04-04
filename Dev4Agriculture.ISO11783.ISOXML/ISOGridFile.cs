@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
@@ -65,9 +64,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                 {
                                     for (var x = 0; x < grid.Width; x++)
                                     {
-                                        for(var l = 0; l < grid.Layers; l++)
+                                        for (var l = 0; l < grid.Layers; l++)
                                         {
-                                            grid._datat1[y, x, l] = buffer[x*grid.Layers + l];
+                                            grid._datat1[y, x, l] = buffer[x * grid.Layers + l];
                                         }
                                     }
                                 }
@@ -159,7 +158,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     {
                         for (var x = 0; x < Width; x++)
                         {
-                            for(var l = 0; l < Layers; l++)
+                            for (var l = 0; l < Layers; l++)
                             {
                                 bw.Write(_datat1[y, x, l]);
                             }
@@ -192,9 +191,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             try
             {
-                for(var l=0; l<Layers; l++)
+                for (var l = 0; l < Layers; l++)
                 {
-                    var filePath = storagePath + Name + (Layers >1 ? "_" + l : "") + ".CSV";
+                    var filePath = storagePath + Name + (Layers > 1 ? "_" + l : "") + ".CSV";
                     var file = File.Create(filePath);
                     var streamWriter = new StreamWriter(file);
                     switch (Type)
@@ -271,7 +270,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <returns></returns>
         public int SetValue(uint column, uint row, uint value, uint layer = 0)
         {
-            if (column < 0 || column >= Width || row < 0 || row >= Height || layer <0 || layer >= Layers)
+            if (column < 0 || column >= Width || row < 0 || row >= Height || layer < 0 || layer >= Layers)
             {
                 return 0;
             }

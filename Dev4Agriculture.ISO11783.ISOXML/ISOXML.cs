@@ -10,7 +10,6 @@ using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {

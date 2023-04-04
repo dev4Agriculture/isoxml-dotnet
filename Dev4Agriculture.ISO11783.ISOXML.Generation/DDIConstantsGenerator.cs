@@ -11,6 +11,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Generation;
 
 public static class DDIConstantsGenerator
 {
+#pragma warning disable CA1051
     public struct DDIEntry
     {
         public string DDIName;
@@ -19,7 +20,7 @@ public static class DDIConstantsGenerator
         public string Unit;
         public float Resolution;
     };
-
+#pragma warning restore CA1051
     private static readonly Regex Rgx = new Regex("[^a-zA-Z0-9_]");
     private static readonly TextInfo TextInfo = new CultureInfo("en-US", false).TextInfo;
 
@@ -32,10 +33,11 @@ public static class DDIConstantsGenerator
         var ddiName = "";
         foreach (var part in parts)
         {
-            if(int.TryParse(part, out _))
+            if (int.TryParse(part, out _))
             {
                 ddiName += "_" + part + "_";
-            } else
+            }
+            else
             {
                 ddiName += part + " ";
             }
@@ -56,7 +58,7 @@ public static class DDIConstantsGenerator
     //Yes, we could use the SourceGenerator. This way it feels just a bit more convenient to me :)
     public static void Generate(string source)
     {
-        var lines = File.ReadAllText(source).Split("\n").Select(entry => entry.Replace("\r",""));
+        var lines = File.ReadAllText(source).Split("\n").Select(entry => entry.Replace("\r", ""));
         var entities = new List<DDIEntry>();
         var curEntity = new DDIEntry();
 
