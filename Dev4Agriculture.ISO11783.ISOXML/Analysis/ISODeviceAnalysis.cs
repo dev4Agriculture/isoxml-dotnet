@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -20,7 +17,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     {
         public string DeviceElementId;
         public DDIValueType Type;
-        public uint DDI;
+        public ushort DDI;
         public int DeviceElementNo()
         {
             return IdList.ToIntId(DeviceElementId);
@@ -162,7 +159,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// <param name="isoTask"></param>
         /// <param name="ddi"></param>
         /// <returns></returns>
-        public List<TaskDDIEntry> FindDeviceElementsForDDI(ISOTask isoTask, uint ddi)
+        public List<TaskDDIEntry> FindDeviceElementsForDDI(ISOTask isoTask, ushort ddi)
         {
             var processData = isoTask.TimeLogs.ToList().SelectMany(entry => entry.Header.Ddis)
                         .Where(dlv => dlv.Ddi == ddi)  //Find DataLogValues with DDI; those list the DET as well

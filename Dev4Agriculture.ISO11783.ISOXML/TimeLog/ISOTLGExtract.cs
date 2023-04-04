@@ -85,12 +85,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtract
     {
-        public readonly int Ddi;
+        public readonly ushort Ddi;
         public readonly int Det;
         public readonly string Name;
         public List<ISOTLGExtractPoint> Data { get; private set; }
 
-        public ISOTLGExtract(int ddi, int det, string name, List<ISOTLGExtractPoint> data)
+        public ISOTLGExtract(ushort ddi, int det, string name, List<ISOTLGExtractPoint> data)
         {
             Ddi = ddi;
             Det = det;

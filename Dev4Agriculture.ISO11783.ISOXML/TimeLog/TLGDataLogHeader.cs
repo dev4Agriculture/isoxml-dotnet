@@ -395,7 +395,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public int GetDDIIndex(int ddi, int detId)
+        public int GetDDIIndex(ushort ddi, int detId)
         {
             foreach (var entry in Ddis)
             {
@@ -408,7 +408,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return -1;
         }
 
-        public bool TryGetDDIIndex(int ddi, int detId, out uint index)
+        public bool TryGetDDIIndex(ushort ddi, int detId, out uint index)
         {
             var result = GetDDIIndex(ddi, detId);
             if (result != -1)

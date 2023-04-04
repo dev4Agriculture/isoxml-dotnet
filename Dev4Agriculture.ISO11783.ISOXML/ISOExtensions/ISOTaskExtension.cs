@@ -161,7 +161,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement"></param>
         /// <param name="firstValue"> An OUT-Variable that receives the result</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
+        public bool TryGetFirstValue(ushort ddi, int deviceElement, out int firstValue)
         {
             foreach (var tlg in TimeLogs)
             {
