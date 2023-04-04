@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
-using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -160,7 +159,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         /// <param name="ddi"></param>
         /// <param name="deviceElement"></param>
-        /// <param name="firstValue"> An OUT-Variable that receives the first available value</param>
+        /// <param name="firstValue"> An OUT-Variable that receives the result</param>
         /// <returns>True if any value could be found</returns>
         public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
         {
@@ -176,6 +175,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        /// <summary>
+        /// Get the last available Value (Raw Value!) from a Task and a specific DeviceElement.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="firstValue"> An OUT-Variable that receives the result</param>
+        /// <returns>True if any value could be found</returns>
         public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)
@@ -185,7 +191,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     return true;
                 }
             }
+            var endTime = Time.Max(entry => entry.Start);
+            if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out lastValue))
+            {
+                return true;
+            }
             lastValue = 0;
+
             return false;
         }
 
@@ -212,6 +224,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                         return true;
                     }
                 }
+
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                {
+                    return true;
+                }
+                totalValue = 0;
             }
 
             totalValue = 0;
@@ -223,7 +242,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     found = true;
                 }
             }
+            if (found == false)
+            {
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                {
+                    return true;
+                }
 
+            }
 
             return found;
 

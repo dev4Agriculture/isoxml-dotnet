@@ -1,0 +1,28 @@
+﻿using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+
+namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
+{
+    public partial class ISOTime
+    {
+        /// <summary>
+        /// Get the value for the defined combination of DDI + DeviceElement from a TIM-Element
+        /// </summary>
+        /// <param name="ddi">The DDI Number; see https://isobus.net</param>
+        /// <param name="deviceElement">The DeviceElementNumber</param>
+        /// <param name="lastValue">The OUT variable that receives the value</param>
+        /// <returns>True if a value was found</returns>
+        public bool TryGetDDIValue(ushort ddi, int deviceElement, out int lastValue)
+        {
+            var dlv = DataLogValue.ToList().First(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == ddi && IdList.ToIntId(entry.DeviceElementIdRef) == deviceElement)?.ProcessDataValue;
+            if (dlv != null)
+            {
+                lastValue = (int)dlv;
+                return true;
+            }
+            lastValue = 0;
+            return false;
+        }
+
+    }
+}
