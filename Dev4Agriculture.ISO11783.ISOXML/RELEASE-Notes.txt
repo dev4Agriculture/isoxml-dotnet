@@ -67,3 +67,5 @@ v0.15.1
   +ADD: Functions to calculate the totals list of a given TimeLogs List
   -FIX: Change variable for DeviceElementId to int
   -FIX: Change variables for DDI to ushort
+v0.15.2
+  +ADD: Take TIM-Elements into account when totals could not be found in TimeLog Files
