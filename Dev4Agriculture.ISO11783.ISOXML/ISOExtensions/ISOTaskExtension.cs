@@ -266,5 +266,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return found;
 
         }
+
+
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(IEnumerable<ISODevice> devices)
+        {
+            var list = new List<ISOTime>();
+
+            ISOTime lastTim = null;
+
+            foreach(var tlg in TimeLogs)
+            {
+                var tim = tlg.GenerateTimeElement(devices);
+                if (lastTim != null)
+                {
+                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim,devices);
+                }
+                list.Add(tim);
+                lastTim = tim;
+            }
+            return list;
+
+        }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+﻿using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -32,6 +34,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
             Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0xB7, detId, out var totalDryMass,TLGTotalAlgorithmType.NO_RESETS));
             Assert.AreEqual(totalDryMass, 2000);
+
+            var timeElements = isoxml.Data.Task[0].GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+            Assert.AreEqual(timeElements.Count, 3);
+            Assert.AreEqual(timeElements[2].DataLogValue.First(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.IneffectiveTotalTime).ProcessDataValue, 4531);
+            Assert.AreEqual(timeElements[2].DataLogValue.First(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.LifetimeTotalArea).ProcessDataValue, 561780);
         }
 
         [TestMethod]

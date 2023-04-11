@@ -1,10 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
     public partial class ISOTime
     {
+        internal static ISOTime CreateSummarizedTimeElement(ISOTime lastTim, ISOTime tim, IEnumerable<ISODevice> devices)
+        {
+            foreach(var dlv in tim.DataLogValue)
+            {
+                var compare = lastTim.DataLogValue.First(entry =>
+                                                            Utils.ConvertDDI(entry.ProcessDataDDI) == Utils.ConvertDDI(dlv.ProcessDataDDI) &&
+                                                            entry.DeviceElementIdRef == dlv.DeviceElementIdRef
+                                                        );
+                if (compare != null)
+                {
+                    dlv.ProcessDataValue += compare.ProcessDataValue;
+                }
+            }
+
+            return tim;
+        }
+
         /// <summary>
         /// Get the value for the defined combination of DDI + DeviceElement from a TIM-Element
         /// </summary>
