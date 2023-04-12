@@ -13,7 +13,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static byte[] FormatDDI(uint value)
+        public static byte[] FormatDDI(ushort value)
         {
             var longArray = BitConverter.GetBytes(value);
             var byteArray = new byte[2];
@@ -22,8 +22,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return byteArray;
         }
         
-        public static byte[] FormatDDI(DDIList value) => FormatDDI((uint)value);
+        public static byte[] FormatDDI(DDIList value) => FormatDDI((ushort)value);
         public static ushort ConvertDDI(byte[] entry) => BitConverter.ToUInt16(entry.Reverse().ToArray());
+        public static ushort ParseDDI(string entry) => Convert.ToUInt16(entry,16);
+
 
 
         public static bool AdjustFileNameToIgnoreCasing(string root, string fileName, out string path)

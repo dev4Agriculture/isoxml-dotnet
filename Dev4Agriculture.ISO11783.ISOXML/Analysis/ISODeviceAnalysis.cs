@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
-using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -19,10 +17,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     {
         public string DeviceElementId;
         public DDIValueType Type;
-        public uint DDI;
+        public ushort DDI;
         public int DeviceElementNo()
         {
-            return int.Parse(DeviceElementId.Substring(3));
+            return IdList.ToIntId(DeviceElementId);
         }
     }
 
@@ -54,7 +52,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// <param name="entry"></param>
         /// <param name="device"></param>
         /// <returns></returns>
-        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null) {
+        public ISODeviceProcessData GetDeviceProcessData(TaskDDIEntry entry, ISODevice device = null)
+        {
             if (entry.Type != DDIValueType.ProcessData)
             {
                 return null;
@@ -160,7 +159,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// <param name="isoTask"></param>
         /// <param name="ddi"></param>
         /// <returns></returns>
-        public List<TaskDDIEntry> FindDeviceElementsForDDI(ISOTask isoTask, uint ddi)
+        public List<TaskDDIEntry> FindDeviceElementsForDDI(ISOTask isoTask, ushort ddi)
         {
             var processData = isoTask.TimeLogs.ToList().SelectMany(entry => entry.Header.Ddis)
                         .Where(dlv => dlv.Ddi == ddi)  //Find DataLogValues with DDI; those list the DET as well
@@ -186,7 +185,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 //Now, go through the list of DeviceProperties and check, if our DDI is available there
                 .SelectMany(device => device.DeviceProperty
                     //Find the ObjectID for our DPT
-                    .Where(dpt => (Utils.ConvertDDI(dpt.DevicePropertyDDI) == ddi))
+                    .Where(dpt => Utils.ConvertDDI(dpt.DevicePropertyDDI) == ddi)
                     .Select(dpt => dpt.DevicePropertyObjectId)
                     //which is then linked in the DeviceObjectRelation(DOR) of a DET
                     .SelectMany(dptObjectId =>

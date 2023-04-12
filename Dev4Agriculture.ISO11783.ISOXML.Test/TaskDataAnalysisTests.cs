@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
@@ -15,12 +19,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
 
             //Testing Task Total
-            Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x78, 0, out var totalInEffectiveTime, TLGTotalAlgorithmType.NO_RESETS));
+            var analysis = new ISODeviceAnalysis(isoxml);
+            //We know it's all the same DET in this case, so we only call it once for all DDIs
+            var detList = analysis.FindDeviceElementsForDDI(isoxml.Data.Task[0], 0x0078);
+            var detId = IdList.ToIntId(detList[0].DeviceElementId);
+            Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x78, detId, out var totalInEffectiveTime, TLGTotalAlgorithmType.NO_RESETS))
+            ;
             Assert.AreEqual(totalInEffectiveTime, 4531 /*Close to 75.5 minutes*/);
 
             //Testing Task Maximum
-            Assert.IsTrue(isoxml.Data.Task[0].TryGetMaximum(0x43, 0, out var maximum));
+            Assert.IsTrue(isoxml.Data.Task[0].TryGetMaximum(0x43, detId, out var maximum));
             Assert.AreEqual(maximum, 12000);
+
+
+            Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0xB7, detId, out var totalDryMass,TLGTotalAlgorithmType.NO_RESETS));
+            Assert.AreEqual(totalDryMass, 2000);
+
+            var timeElements = isoxml.Data.Task[0].GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+            Assert.AreEqual(timeElements.Count, 3);
+            Assert.AreEqual(timeElements[2].DataLogValue.First(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.IneffectiveTotalTime).ProcessDataValue, 4531);
+            Assert.AreEqual(timeElements[2].DataLogValue.First(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.LifetimeTotalArea).ProcessDataValue, 561780);
         }
 
         [TestMethod]

@@ -1,532 +1,270 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ISO11783_TaskData DataTransferOrigin="2" ManagementSoftwareManufacturer="" ManagementSoftwareVersion="" TaskControllerManufacturer="KRONE Smart Connect" TaskControllerVersion="1.104.49.0" VersionMajor="4" VersionMinor="1">
-        
     <TSK A="TSK-1" B="XHgjMxqlpxVMCxjzwcxYKb4" G="4">
-                
         <DLT A="DFFF" B="31"/>
-                
         <TIM A="2022-01-02T17:30:50Z" B="2022-01-02T17:35:39Z" D="4">
-                        
             <DLV A="0094" B="1000" C="DET-1"/>
-                        
             <DLV A="0074" B="0" C="DET-1"/>
-                        
             <DLV A="0075" B="0" C="DET-1"/>
-                        
             <DLV A="0076" B="2539000" C="DET-1"/>
-                        
             <DLV A="0077" B="0" C="DET-1"/>
-                        
             <DLV A="0078" B="295" C="DET-1"/>
-                        
             <DLV A="0144" B="0" C="DET-1"/>
-                        
             <DLV A="01EC" B="2" C="DET-1"/>
-                        
             <DLV A="014F" B="0" C="DET-1"/>
-                        
             <DLV A="010F" B="561780" C="DET-1"/>
-                        
             <DLV A="0112" B="48600" C="DET-1"/>
-                        
             <DLV A="0113" B="126000" C="DET-1"/>
-                        
             <DLV A="0110" B="496028" C="DET-1"/>
-                        
             <DLV A="0111" B="393401" C="DET-1"/>
-                        
             <DLV A="0114" B="2518" C="DET-1"/>
-                        
             <DLV A="01ED" B="444" C="DET-1"/>
-                        
             <DLV A="0106" B="0" C="DET-1"/>
-                        
             <DLV A="EB6E" B="0" C="DET-1"/>
-                        
             <DLV A="0197" B="0" C="DET-1"/>
-                        
             <DLV A="EB6F" B="0" C="DET-1"/>
-                        
             <DLV A="EB7A" B="0" C="DET-1"/>
-                        
             <DLV A="EB70" B="0" C="DET-1"/>
-                        
             <DLV A="EB7B" B="0" C="DET-1"/>
-                        
             <DLV A="EB71" B="0" C="DET-1"/>
-                        
             <DLV A="EB7C" B="0" C="DET-1"/>
-                        
             <DLV A="EB72" B="0" C="DET-1"/>
-                        
             <DLV A="EB7D" B="0" C="DET-1"/>
-                        
             <DLV A="EB73" B="0" C="DET-1"/>
-                        
             <DLV A="EB7E" B="0" C="DET-1"/>
-                        
             <DLV A="EB74" B="0" C="DET-1"/>
-                        
             <DLV A="005A" B="0" C="DET-1"/>
-                        
             <DLV A="0079" B="509" C="DET-1"/>
-                    
         </TIM>
-                
         <TLG A="TLG00001" C="1"/>
-                
         <DAN A="A00E84000DF0E439" C="DVC-1">
-                        
             <ASP A="2022-01-02T17:30:20Z" B="2022-01-02T17:35:23Z" D="4"/>
-                    
         </DAN>
-                
         <TIM A="2022-01-02T17:35:50Z" B="2022-01-02T17:36:17Z" D="4"/>
-                
         <TLG A="TLG00002" C="1"/>
-                
         <TIM A="2022-01-02T17:37:35Z" B="2022-01-02T18:49:54Z" D="4">
-                        
             <DLV A="010F" B="561780" C="DET-1"/>
-                        
             <DLV A="0112" B="48600" C="DET-1"/>
-                        
             <DLV A="0113" B="130320" C="DET-1"/>
-                        
             <DLV A="0110" B="541588" C="DET-1"/>
-                        
             <DLV A="0111" B="438960" C="DET-1"/>
-                        
             <DLV A="0114" B="2588" C="DET-1"/>
-                        
             <DLV A="01ED" B="456" C="DET-1"/>
-                        
             <DLV A="0094" B="35000" C="DET-1"/>
-                        
             <DLV A="0074" B="0" C="DET-1"/>
-                        
             <DLV A="0075" B="0" C="DET-1"/>
-                        
             <DLV A="0076" B="47409000" C="DET-1"/>
-                        
             <DLV A="0077" B="0" C="DET-1"/>
-                        
             <DLV A="0078" B="4531" C="DET-1"/>
-                        
             <DLV A="0144" B="0" C="DET-1"/>
-                        
             <DLV A="01EC" B="25" C="DET-1"/>
-                        
             <DLV A="014F" B="0" C="DET-1"/>
-                        
             <DLV A="0106" B="0" C="DET-1"/>
-                        
             <DLV A="EB6E" B="0" C="DET-1"/>
-                        
             <DLV A="0197" B="0" C="DET-1"/>
-                        
             <DLV A="EB6F" B="0" C="DET-1"/>
-                        
             <DLV A="EB7A" B="0" C="DET-1"/>
-                        
             <DLV A="EB70" B="0" C="DET-1"/>
-                        
             <DLV A="EB7B" B="0" C="DET-1"/>
-                        
             <DLV A="EB71" B="0" C="DET-1"/>
-                        
             <DLV A="EB7C" B="0" C="DET-1"/>
-                        
             <DLV A="EB72" B="0" C="DET-1"/>
-                        
             <DLV A="EB7D" B="0" C="DET-1"/>
-                        
             <DLV A="EB73" B="0" C="DET-1"/>
-                        
             <DLV A="EB7E" B="0" C="DET-1"/>
-                        
             <DLV A="EB74" B="0" C="DET-1"/>
-                        
             <DLV A="005A" B="0" C="DET-1"/>
-                        
             <DLV A="0079" B="509" C="DET-1"/>
-                    
+            <DLV A="00B7" B="2000" C="DET-1"/>
         </TIM>
-                
         <TLG A="TLG00003" C="1"/>
-                
         <DAN A="A00E84000DF0E439" C="DVC-1">
-                        
             <ASP A="2022-01-02T17:37:37Z" B="2022-01-02T18:49:21Z" D="4"/>
-                    
         </DAN>
-            
     </TSK>
-        
     <DVC A="DVC-1" B="9U7sA5r dVr" C="D2515020063100029 000" D="A00E84000DF0E439" E="BBrOFZk" F="31382020204158" G="FF000000006564">
-                
         <DVP A="1000" B="0" C="0.001000000" D="1" E="mm"/>
-                
         <DVP A="1001" B="0" C="0.000016667" D="0" E="1/min"/>
-                
         <DVP A="1002" B="0" C="1.000000000" D="0" E="%"/>
-                
         <DVP A="1003" B="0" C="0.003600000" D="0" E="km/h"/>
-                
         <DVP A="1004" B="0" C="0.001000000" D="2" E="m"/>
-                
         <DVP A="1005" B="0" C="1.000000000" D="0"/>
-                
         <DVP A="1006" B="0" C="0.003600000" D="1" E="l/h"/>
-                
         <DVP A="1007" B="0" C="0.001000000" D="1" E="l"/>
-                
         <DVP A="1008" B="0" C="0.000100000" D="2" E="ha"/>
-                
         <DVP A="1009" B="0" C="0.000001000" D="2" E="km"/>
-                
         <DVP A="1010" B="0" C="0.016666699" D="1" E="min"/>
-                
         <DVP A="1011" B="0" C="0.000277778" D="1" E="h"/>
-                
         <DVP A="1012" B="0" C="0.050000001" D="1" E="h"/>
-                
         <DVP A="1013" B="0" C="0.000100000" D="1" E="ha"/>
-                
         <DVP A="1014" B="0" C="0.001000000" D="1" E="km"/>
-                
         <DVP A="1015" B="0" C="0.500000000" D="0" E="l"/>
-                
         <DVP A="1016" B="0" C="0.001000000" D="0" E="l"/>
-                
         <DVP A="1017" B="0" C="0.010000000" D="0" E="°C"/>
-                
         <DVP A="1018" B="0" C="0.100000001" D="1" E="h"/>
-                
         <DVP A="1019" B="0" C="0.000100000" D="1" E="%"/>
-                
         <DVP A="1020" B="0" C="0.000100000" D="0" E="%"/>
-                
         <DVP A="1021" B="0" C="0.000010000" D="1" E="t/ha"/>
-                
         <DVP A="1022" B="0" C="0.000003600" D="1" E="t/h"/>
-                
         <DVP A="1023" B="0" C="0.001000000" D="1" E="t"/>
-                
         <DVP A="1024" B="0" C="0.001000000" D="0" E="kg"/>
-                
         <DVP A="1025" B="-273150" C="0.001000000" D="0" E="°C"/>
-                
         <DVP A="1026" B="0" C="1.000000000" D="0" E="mm"/>
-                
         <DPT A="5000" B="00B3" C="9" D="Aktuelle Bearbeitungsart" E="1005"/>
-                
         <DPT A="5001" B="0190" C="1" D="Quelle Geschwindigkeitswert" E="1005"/>
-                
         <DPD A="10000" B="00B1" C="1" D="8" E="Aktuelle Schnittlänge" F="1000"/>
-                
         <DPD A="10001" B="01E4" C="1" D="1" E="Aktuelle Motordrehzahl" F="1001"/>
-                
         <DPD A="10002" B="01F6" C="1" D="8" E="Aktuelle Motorauslastung" F="1002"/>
-                
         <DPD A="10003" B="018D" C="1" D="8" E="Fahrgeschwindigkeit" F="1003"/>
-                
         <DPD A="10004" B="0147" C="1" D="1" E="Aktuelle Vorsatzdrehzahl" F="1001"/>
-                
         <DPD A="10005" B="014B" C="1" D="1" E="Aktuelle Trommeldrehzahl" F="1001"/>
-                
         <DPD A="10006" B="0043" C="1" D="8" E="Aktuelle Arbeitsbreite" F="1004"/>
-                
         <DPD A="10007" B="008D" C="1" D="8" E="Aktuelle Arbeitsstellung" F="1005"/>
-                
         <DPD A="10008" B="0095" C="1" D="8" E="Aktueller Kraftstoffverbrauch" F="1006"/>
-                
         <DPD A="10009" B="01E8" C="1" D="8" E="Harnstofffüllstand" F="1002"/>
-                
         <DPD A="10010" B="01EB" C="1" D="8" E="Kraftstofffüllstand" F="1002"/>
-                
         <DPD A="10011" B="EB32" C="1" D="8" E="Zyklen beim letzten Schleifen" F="1005"/>
-                
         <DPD A="10012" B="0094" C="3" D="17" E="Gesamtkraftstoffverbrauch" F="1007"/>
-                
         <DPD A="10013" B="0074" C="3" D="17" E="Gesamtfläche" F="1008"/>
-                
         <DPD A="10014" B="0075" C="3" D="17" E="Aktive Fahrstrecke" F="1009"/>
-                
         <DPD A="10015" B="0076" C="3" D="17" E="Inaktive Fahrstrecke" F="1009"/>
-                
         <DPD A="10016" B="0077" C="3" D="17" E="Aktive Arbeitszeit" F="1010"/>
-                
         <DPD A="10017" B="0078" C="3" D="17" E="Inaktive Arbeitszeit" F="1010"/>
-                
         <DPD A="10018" B="0144" C="3" D="17" E="Betriebsstunden Trommel" F="1011"/>
-                
         <DPD A="10019" B="01EC" C="3" D="17" E="Betriebsstunden Motor" F="1012"/>
-                
         <DPD A="10020" B="014F" C="3" D="17" E="Betriebsstunden Vorsatz" F="1011"/>
-                
         <DPD A="10021" B="014E" C="1" D="8" E="Zeit seit Messerschleifen" F="1011"/>
-                
         <DPD A="10022" B="010F" C="1" D="17" E="Gesamtfläche Lebenszeit" F="1013"/>
-                
         <DPD A="10023" B="0112" C="1" D="17" E="Aktive Lebenszeit" F="1011"/>
-                
         <DPD A="10024" B="0113" C="1" D="17" E="Inaktive Lebenszeit" F="1011"/>
-                
         <DPD A="10025" B="0110" C="1" D="17" E="Gesamtstrecke Lebenszeit" F="1014"/>
-                
         <DPD A="10026" B="0111" C="1" D="17" E="Inaktive Strecke Lebenszeit" F="1014"/>
-                
         <DPD A="10027" B="0114" C="1" D="17" E="Kraftstoffverbrauch Lebenszeit" F="1015"/>
-                
         <DPD A="10028" B="EAA6" C="1" D="8" E="Aktuelle Einzugsdrehzahl" F="1001"/>
-                
         <DPD A="10029" B="018A" C="1" D="8" E="Aktueller Tankinhalt" F="1016"/>
-                
         <DPD A="10030" B="018B" C="1" D="8" E="Tankinhalt Harnstoff" F="1016"/>
-                
         <DPD A="10031" B="EB0A" C="1" D="8" E="Ladelufttemperatur" F="1017"/>
-                
         <DPD A="10032" B="020E" C="1" D="8" E="Kühlmitteltemperatur" F="1017"/>
-                
         <DPD A="10033" B="DFFF" C="1" D="29" E="Standardwerte anfragen" F="1005"/>
-                
         <DPD A="10034" B="01ED" C="1" D="17" E="Betriebsstunden Motor Lebenszeit" F="1018"/>
-                
         <DPD A="10035" B="EF38" C="1" D="8" E="Erweiterter Arbeitsstatus" F="1005"/>
-                
         <DPD A="10036" B="01D8" C="3" D="8" E="Sollwert Schnittlänge" F="1000"/>
-                
         <DPD A="10037" B="0063" C="1" D="5" E="Aktuelle Feuchtigkeit" F="1019"/>
-                
         <DPD A="10038" B="0106" C="3" D="17" E="Mittelwert Feuchtigkeit" F="1019"/>
-                
         <DPD A="10039" B="EB6E" C="3" D="17" E="ProcessData1" F="1005"/>
-                
         <DPD A="10040" B="0196" C="1" D="8" E="Aktueller Proteingehalt" F="1020"/>
-                
         <DPD A="10041" B="0197" C="3" D="24" E="Mittlerer Proteingehalt" F="1020"/>
-                
         <DPD A="10042" B="EB6F" C="3" D="17" E="ProcessData2" F="1005"/>
-                
         <DPD A="10043" B="EB84" C="1" D="1" E="Aktueller Stärkegehalt" F="1020"/>
-                
         <DPD A="10044" B="EB7A" C="3" D="17" E="Mittlerer Stärkegehalt" F="1020"/>
-                
         <DPD A="10045" B="EB70" C="3" D="17" E="ProcessData7" F="1005"/>
-                
         <DPD A="10046" B="EB85" C="1" D="1" E="Aktueller ADF-Gehalt" F="1020"/>
-                
         <DPD A="10047" B="EB7B" C="3" D="17" E="Mittlerer ADF-Gehalt" F="1020"/>
-                
         <DPD A="10048" B="EB71" C="3" D="17" E="ProcessData6" F="1005"/>
-                
         <DPD A="10049" B="EB86" C="1" D="1" E="Aktueller NDF-Gehalt" F="1020"/>
-                
         <DPD A="10050" B="EB7C" C="3" D="17" E="Mittlerer NDF-Gehalt" F="1020"/>
-                
         <DPD A="10051" B="EB72" C="3" D="17" E="ProcessData5" F="1005"/>
-                
         <DPD A="10052" B="EB87" C="1" D="1" E="Aktueller Rohasche-Gehalt" F="1020"/>
-                
         <DPD A="10053" B="EB7D" C="3" D="17" E="Mittlerer Rohaschegehalt" F="1020"/>
-                
         <DPD A="10054" B="EB73" C="3" D="17" E="ProcessData4" F="1005"/>
-                
         <DPD A="10055" B="EB88" C="1" D="1" E="Aktueller Rohfettgehalt" F="1020"/>
-                
         <DPD A="10056" B="EB7E" C="3" D="17" E="Mittlerer Fettgehalt" F="1020"/>
-                
         <DPD A="10057" B="EB74" C="3" D="17" E="ProcessData3" F="1005"/>
-                
         <DPD A="10058" B="0054" C="1" D="5" E="Ertrag pro Fläche" F="1021"/>
-                
         <DPD A="10059" B="0057" C="1" D="5" E="Ertrag pro Zeit" F="1022"/>
-                
         <DPD A="10060" B="005A" C="3" D="17" E="Gesamtertrag" F="1023"/>
-                
         <DPD A="10061" B="0079" C="3" D="24" E="Kalibrierfaktor CropControl" F="1005"/>
-                
         <DPD A="10062" B="EB96" C="1" D="8" E="CCProcessData3" F="1005"/>
-                
         <DPD A="10063" B="EB97" C="3" D="8" E="CCProcessData4" F="1005"/>
-                
         <DPD A="10064" B="EB98" C="1" D="8" E="CCProcessData6" F="1005"/>
-                
         <DPD A="10065" B="EBA0" C="1" D="8" E="Gewicht der aktuellen Messung" F="1024"/>
-                
         <DPD A="10066" B="EBA1" C="3" D="8" E="CCProcessData5" F="1024"/>
-                
         <DPD A="10067" B="EBA2" C="1" D="8" E="CCProcessData7" F="1024"/>
-                
         <DPD A="10068" B="0102" C="1" D="1" E="Temperatur HydraulikÖl" F="1025"/>
-                
         <DPD A="10069" B="0155" C="1" D="8" E="Sollabstand Corn Conditioner" F="1000"/>
-                
         <DPD A="10070" B="0086" C="1" D="8" E="X-Abstand Vorsatz" F="1026"/>
-                
         <DPD A="10071" B="0087" C="1" D="8" E="Y-Abstand Vorsatz" F="1026"/>
-                
         <DPD A="10072" B="015E" C="1" D="8" E="Funktionstyp Vorsatz" F="1005"/>
-                
+        <DPD A="10073" B="00B7" C="1" D="8" E="Yield Total Dry Mass" F="1023"/>
         <DET A="DET-1" B="1" C="1" D="Maschine" E="0" F="0">
-                        
             <DOR A="10000"/>
-                        
             <DOR A="10001"/>
-                        
             <DOR A="10002"/>
-                        
             <DOR A="10003"/>
-                        
             <DOR A="10004"/>
-                        
             <DOR A="10005"/>
-                        
             <DOR A="10006"/>
-                        
             <DOR A="10007"/>
-                        
             <DOR A="10008"/>
-                        
             <DOR A="10009"/>
-                        
             <DOR A="10010"/>
-                        
             <DOR A="10011"/>
-                        
             <DOR A="10012"/>
-                        
             <DOR A="10013"/>
-                        
             <DOR A="10014"/>
-                        
             <DOR A="10015"/>
-                        
             <DOR A="10016"/>
-                        
             <DOR A="10017"/>
-                        
             <DOR A="10018"/>
-                        
             <DOR A="10019"/>
-                        
             <DOR A="10020"/>
-                        
             <DOR A="10021"/>
-                        
             <DOR A="10022"/>
-                        
             <DOR A="10023"/>
-                        
             <DOR A="10024"/>
-                        
             <DOR A="10025"/>
-                        
             <DOR A="10026"/>
-                        
             <DOR A="10027"/>
-                        
             <DOR A="10028"/>
-                        
             <DOR A="10029"/>
-                        
             <DOR A="10030"/>
-                        
             <DOR A="10031"/>
-                        
             <DOR A="10032"/>
-                        
             <DOR A="10033"/>
-                        
             <DOR A="10034"/>
-                        
             <DOR A="10035"/>
-                        
             <DOR A="10036"/>
-                        
             <DOR A="10037"/>
-                        
             <DOR A="10038"/>
-                        
             <DOR A="10039"/>
-                        
             <DOR A="10040"/>
-                        
             <DOR A="10041"/>
-                        
             <DOR A="10042"/>
-                        
             <DOR A="10043"/>
-                        
             <DOR A="10044"/>
-                        
             <DOR A="10045"/>
-                        
             <DOR A="10046"/>
-                        
             <DOR A="10047"/>
-                        
             <DOR A="10048"/>
-                        
             <DOR A="10049"/>
-                        
             <DOR A="10050"/>
-                        
             <DOR A="10051"/>
-                        
             <DOR A="10052"/>
-                        
             <DOR A="10053"/>
-                        
             <DOR A="10054"/>
-                        
             <DOR A="10055"/>
-                        
             <DOR A="10056"/>
-                        
             <DOR A="10057"/>
-                        
             <DOR A="10058"/>
-                        
             <DOR A="10059"/>
-                        
             <DOR A="10060"/>
-                        
             <DOR A="10061"/>
-                        
             <DOR A="10062"/>
-                        
             <DOR A="10063"/>
-                        
             <DOR A="10064"/>
-                        
             <DOR A="10065"/>
-                        
             <DOR A="10066"/>
-                        
             <DOR A="10067"/>
-                        
             <DOR A="10068"/>
-                        
             <DOR A="10069"/>
-                        
+            <DOR A="10073"/>
             <DOR A="5000"/>
-                        
             <DOR A="5001"/>
-                    
         </DET>
-                
         <DET A="DET-2" B="2" C="2" E="1" F="0">
-                        
             <DOR A="10070"/>
-                        
             <DOR A="10071"/>
-                        
             <DOR A="10072"/>
-                    
         </DET>
-            
     </DVC>
-    
 </ISO11783_TaskData>

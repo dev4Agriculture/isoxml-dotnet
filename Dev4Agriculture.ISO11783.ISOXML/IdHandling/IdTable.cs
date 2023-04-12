@@ -45,6 +45,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 
         }
 
+        /// <summary>
+        /// Add an object to the list of Objects and create an ID such as CTR1 or CTR-1
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>Returns the generated ID as String</returns>
         public string AddObjectAndAssignIdIfNone(object obj)
         {
             var result = IdLists.TryGetValue(obj.GetType(), out var idList);
@@ -102,6 +107,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
+
+        /// <summary>
+        /// This function iterates through the ID List and replaces all Elements without a proper ID with one
+        /// that has a new, unique and valid Id assigned to itself; linked by this new Id as a key
+        /// </summary>
+        /// <returns>A list of Messages for each element that needed a new ID assigned</returns>
         public ResultMessageList CleanListFromTempEntries()
         {
             var result = new ResultMessageList();

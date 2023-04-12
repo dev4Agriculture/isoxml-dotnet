@@ -24,8 +24,8 @@ public class AnalysisDeviceTest
 
         possibleDeviceElements = analysis.FindDeviceElementsForDDI(task, 179 /*ActualCulturalPractice*/);
         Assert.AreEqual(possibleDeviceElements.Count, 1);
-        Assert.AreEqual(possibleDeviceElements[0].DeviceElementId, "DET-2");
-        Assert.AreEqual(possibleDeviceElements[0].DeviceElementNo(), -2);
+        Assert.AreEqual(possibleDeviceElements[0].DeviceElementId, "DET-123456789");
+        Assert.AreEqual(possibleDeviceElements[0].DeviceElementNo(), -123456789);
         Assert.AreEqual(analysis.GetDeviceDataDesignator(possibleDeviceElements[0]), "BearbeitungsArt");
 
     }

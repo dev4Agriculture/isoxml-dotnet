@@ -89,13 +89,13 @@
     <DPD A="8" B="0043" C="0" D="0" E="Ausschnitt Breite" F="35"/>
     <DPD A="9" B="0046" C="0" D="0" E="Maximale Breite" F="35"/>
     <DPD A="11" B="0074" C="2" D="25" E="Flache" F="36"/>
-    <DPD A="12" B="0075" C="2" D="25" E="Abstand EIN" F="38"/>
-    <DPD A="13" B="0076" C="2" D="25" E="Abstand AUS" F="38"/>
-    <DPD A="14" B="0077" C="2" D="25" E="Zeit EIN" F="39"/>
-    <DPD A="15" B="0078" C="2" D="25" E="Zeit AUS" F="39"/>
-    <DPD A="10" B="0052" C="2" D="25" E="Gesamtzahl" F="37"/>
-    <DPD A="25" B="0086" C="2" D="0" E="GPS Abstand X" F="35"/>
-    <DPD A="27" B="0087" C="0" D="0" E="GPS Abstand Y" F="35"/>
+    <DPD A="12" B="0075" C="2" D="7" E="Abstand EIN" F="38"/>
+    <DPD A="13" B="0076" C="2" D="7" E="Abstand AUS" F="38"/>
+    <DPD A="14" B="0077" C="2" D="7" E="Zeit EIN" F="39"/>
+    <DPD A="15" B="0078" C="2" D="7" E="Zeit AUS" F="39"/>
+    <DPD A="10" B="0052" C="2" D="7" E="Gesamtzahl" F="37"/>
+    <DPD A="25" B="0086" C="2" D="7" E="GPS Abstand X" F="35"/>
+    <DPD A="27" B="0087" C="0" D="7" E="GPS Abstand Y" F="35"/>
     <DPD A="16" B="008D" C="1" D="9" E="Arbeit EIN/AUS"/>
     <DPD A="32" B="009D" C="2" D="0" E="Anschluss-Typ"/>
     <DPD A="18" B="009E" C="2" D="9" E="Rezept-Steuerung Zustand"/>

@@ -176,6 +176,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         private readonly Dictionary<int, object> _ids;
         private int _nextId;
         private int _nextTmpId = NextTmpBase;
+
+
         public IdList(string name)
         {
             Name = name;
@@ -201,7 +203,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             }
             else
             {
-                var nr = int.Parse(id.Substring(3));
+                var nr = ToIntId(id);
                 if (_ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
@@ -233,7 +235,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             }
             else
             {
-                var nr = int.Parse(id.Substring(3));
+                var nr = ToIntId( id );
                 if (_ids.ContainsKey(nr))
                 {
                     throw new DuplicatedISOObjectException(id);
@@ -255,7 +257,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <exception cref="DuplicatedISOObjectException"></exception>
         public void AddId(string id, ref object obj)
         {
-            var nr = int.Parse(id.Substring(3));
+            var nr = ToIntId(id);
             if (_ids.ContainsKey(nr))
             {
                 throw new DuplicatedISOObjectException(id);
@@ -266,7 +268,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 
         public object FindObject(string idString)
         {
-            var id = int.Parse(idString.Substring(3));
+            var id = ToIntId(idString);
             try
             {
                 return _ids[id];
@@ -317,6 +319,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             }
             return result;
 
+        }
+
+        /// <summary>
+        /// Get the Integer representation of the ISOXML ID; e.g. -3 for DET-3
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public static int ToIntId(string ID)
+        {
+            return int.Parse(ID.Substring(3));
         }
 
     }

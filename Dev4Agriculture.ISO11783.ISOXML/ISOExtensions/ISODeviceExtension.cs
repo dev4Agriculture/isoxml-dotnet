@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 
@@ -14,6 +17,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public ClientName ClientNameParsed { get; private set; }
 
 
+        /// <summary>
+        /// Convert all encoded data like ClientName & LocalizationLabel to readable structures
+        /// </summary>
+        /// <returns>A list of messages (Errors or Warnings) that showed up during the operation</returns>
         public ResultMessageList Analyse()
         {
             var resultMessageList = new ResultMessageList();
@@ -68,6 +75,39 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             return resultMessageList;
 
+        }
+
+
+        /// <summary>
+        /// Returns a list of all Combinations of DeviceProcessData + DeviceElement that reflects a Total.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<(ISODeviceElement, ISODeviceProcessData)> GetAllTotalsProcessData()
+        {
+            var result = new List<(ISODeviceElement, ISODeviceProcessData)>();
+
+            foreach (var (det, dpd) in from det in DeviceElement.ToList()
+                                       from dor in det.DeviceObjectReference
+                                       from dpd in DeviceProcessData
+                                       where dpd.DeviceProcessDataObjectId == dor.DeviceObjectId
+                                       where dpd.IsTotal() &&
+                                             (Utils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort)DDIList.RequestDefaultProcessData)
+                                       select (det, dpd))
+            {
+                result.Add((det, dpd));
+            }
+
+            return result;
+        }
+
+        public bool IsTotal(ushort DDI)
+        {
+            return DeviceProcessData.First(entry => Utils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
+        }
+
+        public bool IsLifetimeTotal(ushort DDI)
+        {
+            return DeviceProcessData.First(entry => Utils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
         }
 
     }

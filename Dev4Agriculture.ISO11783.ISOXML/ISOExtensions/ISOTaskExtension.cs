@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
-using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -32,7 +31,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="name">An optional designator</param>
         /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
         /// <returns> A List of Points with Time and Value</returns>
-        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        public List<ISOTLGExtract> GetTaskExtract(ushort ddi, int det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             foreach (var tlg in TimeLogs)
@@ -51,7 +50,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="name">An optional designator</param>
         /// <param name="fillLines">An optional boolean. If true, all Positions and Times are used. In case a value is not present, the latest known value is used</param>
         /// <returns> A List of Points with Time and Value</returns>
-        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, short det, string name = "", bool fillLines = false)
+        public ISOTLGExtract GetMergedTaskExtract(ushort ddi, int det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
             var lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE;
@@ -82,16 +81,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         public void AddDefaultDataLogTrigger()
         {
-            DataLogTrigger.Add(new ISODataLogTrigger()
+            if (!DataLogTrigger.Any(entry => Utils.ConvertDDI(entry.DataLogDDI) == (ushort)DDIList.RequestDefaultProcessData))
             {
-                DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
-                DataLogMethod = (byte)(TriggerMethods.OnTime
-                | TriggerMethods.OnDistance
-                | TriggerMethods.ThresholdLimits
-                | TriggerMethods.OnChange
-                | TriggerMethods.Total)
+                DataLogTrigger.Add(new ISODataLogTrigger()
+                {
+                    DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
+                    DataLogMethod = (byte)(TriggerMethods.OnTime
+                    | TriggerMethods.OnDistance
+                    | TriggerMethods.ThresholdLimits
+                    | TriggerMethods.OnChange
+                    | TriggerMethods.Total)
 
-            });
+                });
+            }
         }
 
 
@@ -103,7 +105,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement"></param>
         /// <param name="maximum"> An OUT-Variable that receives the maximum value</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetMaximum(int ddi, int deviceElement, out int maximum)
+        public bool TryGetMaximum(ushort ddi, int deviceElement, out int maximum)
         {
             maximum = int.MinValue;
             var found = false;
@@ -129,7 +131,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement"></param>
         /// <param name="minimum"> An OUT-Variable that receives the minimum value</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetMinimum(int ddi, int deviceElement, out int minimum)
+        public bool TryGetMinimum(ushort ddi, int deviceElement, out int minimum)
         {
             minimum = int.MaxValue;
             var found = false;
@@ -157,9 +159,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         /// <param name="ddi"></param>
         /// <param name="deviceElement"></param>
-        /// <param name="firstValue"> An OUT-Variable that receives the first available value</param>
+        /// <param name="firstValue"> An OUT-Variable that receives the result</param>
         /// <returns>True if any value could be found</returns>
-        public bool TryGetFirstValue(int ddi, int deviceElement, out int firstValue)
+        public bool TryGetFirstValue(ushort ddi, int deviceElement, out int firstValue)
         {
             foreach (var tlg in TimeLogs)
             {
@@ -173,7 +175,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        public bool TryGetLastValue(int ddi, int deviceElement, out int lastValue)
+        /// <summary>
+        /// Get the last available Value (Raw Value!) from a Task and a specific DeviceElement.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="firstValue"> An OUT-Variable that receives the result</param>
+        /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
+        /// <returns>True if any value was found</returns>
+        public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue, bool shallCheckTimeElements = true)
         {
             for (var index = TimeLogs.Count - 1; index >= 0; index--)
             {
@@ -182,7 +192,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     return true;
                 }
             }
+            if (shallCheckTimeElements)
+            {
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out lastValue))
+                {
+                    return true;
+                }
+            }
             lastValue = 0;
+
             return false;
         }
 
@@ -196,8 +215,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="deviceElement">The Data Dictionary Identifier</param>
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
-        /// <returns></returns>
-        public bool TryGetTotalValue(int ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
+        /// <returns>True if Value was found</returns>
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm, bool shallCheckTimeElements = true)
         {
             var found = false;
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
@@ -209,6 +229,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                         return true;
                     }
                 }
+
+                if (shallCheckTimeElements)
+                {
+                    var endTime = Time.Max(entry => entry.Start);
+                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    {
+                        return true;
+                    }
+                }
+                totalValue = 0;
             }
 
             totalValue = 0;
@@ -220,10 +250,48 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     found = true;
                 }
             }
+            if (found == false)
+            {
+                if (shallCheckTimeElements)
+                {
+                    var endTime = Time.Max(entry => entry.Start);
+                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    {
+                        return true;
+                    }
+                }
 
+            }
 
             return found;
 
         }
+
+
+        /// <summary>
+        /// Create a list of TimeElements with DataLogValue-Elements for the given Task. Only used when the TimeLogs were created in code; normally the TIM-Element exists
+        /// </summary>
+        /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
+        /// <returns>List of TIM-Elements with DataLogValues</returns>
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(IEnumerable<ISODevice> devices)
+        {
+            var list = new List<ISOTime>();
+
+            ISOTime lastTim = null;
+
+            foreach(var tlg in TimeLogs)
+            {
+                var tim = tlg.GenerateTimeElement(devices);
+                if (lastTim != null)
+                {
+                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim,devices);
+                }
+                list.Add(tim);
+                lastTim = tim;
+            }
+            return list;
+
+        }
+
     }
 }
