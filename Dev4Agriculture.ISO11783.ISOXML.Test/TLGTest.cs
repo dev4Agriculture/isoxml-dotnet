@@ -144,4 +144,27 @@ public class TLGTest
         Assert.AreEqual(1, tim.DataLogValue.Count( entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime));
         Assert.AreEqual(48300, tim.DataLogValue.FirstOrDefault(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.TotalArea).ProcessDataValue);
     }
+
+    [TestMethod]
+    public void CanGenerateTIMElements()
+    {
+        var path = "./testdata/TimeLogs/Generated";
+        var pathOut = "./out/timelogs/generated";
+        var isoxml = ISOXML.Load(path);
+        foreach(var task in isoxml.Data.Task)
+        {
+           var timList = task.GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+           Assert.IsNotNull(timList);
+           Assert.AreEqual(timList.Count, 1);
+            foreach( var entry in timList)
+            {
+                task.Time.Add(entry);
+            }
+
+        }
+        isoxml.SetFolderPath(pathOut);
+        isoxml.Save();
+        var isoxml2 = ISOXML.Load(pathOut);
+        Assert.AreEqual(isoxml2.Messages.Count, 0);
+    }
 }
