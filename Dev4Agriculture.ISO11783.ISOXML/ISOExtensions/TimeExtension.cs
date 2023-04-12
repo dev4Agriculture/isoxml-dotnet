@@ -9,7 +9,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     {
         internal static ISOTime CreateSummarizedTimeElement(ISOTime lastTim, ISOTime tim, IEnumerable<ISODevice> devices)
         {
-            foreach(var dlv in tim.DataLogValue)
+            foreach (var dlv in tim.DataLogValue)
             {
                 var compare = lastTim.DataLogValue.First(entry =>
                                                             Utils.ConvertDDI(entry.ProcessDataDDI) == Utils.ConvertDDI(dlv.ProcessDataDDI) &&
@@ -17,7 +17,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                                                         );
                 if (compare != null)
                 {
-                    dlv.ProcessDataValue += compare.ProcessDataValue;
+                    var device = devices.First(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == dlv.DeviceElementIdRef));
+                    if (device.IsLifetimeTotal(Utils.ConvertDDI(dlv.ProcessDataDDI)))
+                    {
+                        dlv.ProcessDataValue = compare.ProcessDataValue;
+                    }else
+                    {
+                        dlv.ProcessDataValue += compare.ProcessDataValue;
+                    }
                 }
             }
 

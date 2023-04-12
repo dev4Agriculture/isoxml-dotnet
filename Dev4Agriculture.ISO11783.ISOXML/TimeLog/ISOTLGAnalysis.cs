@@ -285,18 +285,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
             }
 
-            foreach (var entry in list)
-            {
-                if (TryGetTotalValue(
-                        Utils.ConvertDDI(entry.ProcessDataDDI),
-                        IdList.ToIntId(entry.DeviceElementIdRef),
-                        out var total, totalAlgorithmType)
-                    )
-                {
-                    entry.ProcessDataValue = total;
-                }
-            }
-
             return list;
         }
 
