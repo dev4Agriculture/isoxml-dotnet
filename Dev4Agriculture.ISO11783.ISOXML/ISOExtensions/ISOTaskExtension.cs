@@ -268,6 +268,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        /// <summary>
+        /// Create a list of TimeElements with DataLogValue-Elements for the given Task. Only used when the TimeLogs were created in code; normally the TIM-Element exists
+        /// </summary>
+        /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
+        /// <returns>List of TIM-Elements with DataLogValues</returns>
         public List<ISOTime> GenerateTimeElementsFromTimeLogs(IEnumerable<ISODevice> devices)
         {
             var list = new List<ISOTime>();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 
