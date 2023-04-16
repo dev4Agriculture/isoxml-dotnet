@@ -19,8 +19,8 @@
         None = 0,
         OnTime = 1,
         OnDistance = 2,
-        OnChange = 4,
-        OnThreshold = 8,
+        OnThreshold = 4,
+        OnChange = 8,
         Total = 16
     }
 

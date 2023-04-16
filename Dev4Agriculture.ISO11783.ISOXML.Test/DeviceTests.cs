@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
 //using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -90,6 +91,17 @@ public class DeviceTests
         var path = "./testdata/devices/Device_Description_Unit.xml";
         var result = ISOXML.Load(path);
         Assert.AreEqual(6, result.Data.Device[0].GetAllTotalsProcessData().Count());
+    }
+
+    [TestMethod]
+    public void CanCheckTriggerMethods()
+    {
+        var path = "./testdata/devices/DeviceOnly.xml";
+        var text = File.ReadAllText(path);
+        var result = ISOXML.ParseFromXMLString(text);
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.ActualWorkState).IsOnChange());
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.SetpointCountPerAreaApplicationRate).IsOnTime());
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.TotalArea).IsTotal());
     }
 
 }
