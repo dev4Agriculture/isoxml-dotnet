@@ -44,7 +44,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         [TestMethod]
         public void CanHandleConstants()
         {
-            Assert.AreEqual(Constants.TLG_VALUE_FOR_NO_VALUE, -1);
+            Assert.AreEqual(Constants.TLG_VALUE_FOR_NO_VALUE, int.MinValue);
         }
 
     }
