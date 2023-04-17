@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" VersionMajor="4" VersionMinor="0" ManagementSoftwareManufacturer="unknown" ManagementSoftwareVersion="unknown" TaskControllerManufacturer="unknown" TaskControllerVersion="unknown" DataTransferOrigin="1">
+  <CTR A="CTR1" B="Miller" />
+  <PFD A="PFD1" C="My Field" D="0">
+    <PLN A="1">
+      <LSG A="1">
+        <PNT A="2" C="52.223" D="7.222" />
+        <PNT A="2" C="52.225" D="7.223" />
+        <PNT A="2" C="52.225" D="7.225" />
+        <PNT A="2" C="52.223" D="7.226" />
+        <PNT A="2" C="52.223" D="7.222" />
+      </LSG>
+    </PLN>
+  </PFD>
+  <TSK A="TSK1" B="Spraying" C="CTR1" E="PFD1" G="1" H="1" I="1" J="1">
+    <TZN A="1" B="OutOfField">
+      <PDV A="0006" B="0" E="VPN1" />
+    </TZN>
+    <TZN A="2" B="GridData">
+      <PDV A="0006" B="0" E="VPN1" />
+    </TZN>
+    <GRD A="52.223" B="7.222" C="0.0001" D="0.0002" E="20" F="20" G="GRD00001" I="2" J="2" />
+  </TSK>
+  <VPN A="VPN1" B="0" C="0.1" D="1" E="kg/ha" />
+</ISO11783_TaskData>

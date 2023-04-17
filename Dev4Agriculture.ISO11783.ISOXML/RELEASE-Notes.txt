@@ -71,3 +71,5 @@ v0.15.2
   +ADD: Take TIM-Elements into account when totals could not be found in TimeLog Files
 v0.15.2.1
   -FIX: MixUp in the Enum of Trigger Methods lead to mixUp between Thresholds and OnChange.
+v0.16.1
+  -FIX: GridFile values were unsigned and GetSetpointValue was problematic

@@ -13,7 +13,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public uint Height { get; private set; }
         public byte Layers { get; private set; }
         private byte[,,] _datat1;
-        private uint[,,] _datat2;
+        private int[,,] _datat2;
         public string Name;
         public ISOGridType Type { get; private set; }
         public bool Loaded { get; private set; }
@@ -21,7 +21,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         private ISOGridFile(ISOGridType type)
         {
             _datat1 = new byte[1, 1, 1];
-            _datat2 = new uint[1, 1, 1];
+            _datat2 = new int[1, 1, 1];
             Width = 1;
             Height = 1;
             Layers = 1;
@@ -79,7 +79,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         }
                         break;
                     case ISOGridType.gridtype2:
-                        grid._datat2 = new uint[grid.Height, grid.Width, grid.Layers];
+                        grid._datat2 = new int[grid.Height, grid.Width, grid.Layers];
                         if (grid.Layers * grid.Width * grid.Height * sizeof(uint) == binaryFileStream.Length)
                         {
                             for (var y = 0; y < grid.Height; y++)
@@ -92,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                     {
                                         for (var l = 0; l < layers; l++)
                                         {
-                                            grid._datat2[y, x, l] = BitConverter.ToUInt32(buffer, (x * grid.Layers + l) * 4);
+                                            grid._datat2[y, x, l] = BitConverter.ToInt32(buffer, (x * grid.Layers + l) * 4);
                                         }
                                     }
                                 }
@@ -255,7 +255,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     _datat1 = new byte[height, width, layers];
                     break;
                 case ISOGridType.gridtype2:
-                    _datat2 = new uint[height, width, layers];
+                    _datat2 = new int[height, width, layers];
                     break;
             }
         }
@@ -269,7 +269,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="value"></param>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public int SetValue(uint column, uint row, uint value, uint layer = 0)
+        public int SetValue(uint column, uint row, int value, uint layer = 0)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height || layer <0 || layer >= Layers)
             {
@@ -302,7 +302,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="layer"></param>
         /// <returns></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public uint GetValue(uint column, uint row, uint layer)
+        public int GetValue(uint column, uint row, uint layer)
         {
             if (column < 0 || column >= Width || row < 0 || row >= Height || layer < 0 || layer >= Layers)
             {

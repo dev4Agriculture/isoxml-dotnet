@@ -25,12 +25,12 @@ public static class Program
             LineStringType = ISOLineStringType.PolygonExterior
         };
 
-        var north = (decimal)52.22;
-        var south = (decimal)52.23;
-        var west = (decimal)7.22;
-        var east = (decimal)7.24;
-        var west2 = (decimal)7.225;
-        var east2 = (decimal)7.235;
+        var north = (decimal)52.223;
+        var south = (decimal)52.225;
+        var west =  (decimal)7.222;
+        var east =  (decimal)7.226;
+        var west2 = (decimal)7.223;
+        var east2 = (decimal)7.225;
 
         lineString.Point.Add(new ISOPoint()
         {
@@ -92,7 +92,7 @@ public static class Program
                 var longitude = west + (decimal)(isoGrid.GridCellEastSize* (gridColumn+0.5));
                 if( partField.IsInField(longitude, latitude) )
                 {
-                    grid.SetValue(gridColumn, gridRow, 5 + gridRow * 100);
+                    grid.SetValue(gridColumn, gridRow, 5 + (int)gridRow * 100);
                 } else
                 {
                     grid.SetValue(gridColumn, gridRow, 0);
@@ -145,8 +145,6 @@ public static class Program
         var task = new ISOTask()
         {
             TaskDesignator = "Spraying",
-            //Add TreatmentZones
-
             CustomerIdRef = ctrId,
             PartfieldIdRef = pfdId,
             DefaultTreatmentZoneCode = 1,

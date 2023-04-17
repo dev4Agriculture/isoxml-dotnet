@@ -52,6 +52,7 @@
     <Folder Include="testdata\ExternalFiles\MultipleExternals\" />
     <Folder Include="testdata\ExternalFiles\OneExternal\" />
     <Folder Include="testdata\ExternalFiles\NoExternals\" />
+    <Folder Include="testdata\Grid\Type2_ReadValue\" />
     <Folder Include="testdata\Grid\Type1_Invalid\" />
     <Folder Include="testdata\Grid\Type2\" />
     <Folder Include="testdata\Grid\Type1\" />
