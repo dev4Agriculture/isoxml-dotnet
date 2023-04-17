@@ -579,6 +579,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
                     var result = ISOGridFile.Load(FolderPath, grid.Filename, (uint)grid.GridMaximumColumn, (uint)grid.GridMaximumRow, grid.GridType, layers);
                     Grids.Add(task.Grid[0].Filename, result.Result);
+                    task.Grid[0].GridFile = result.Result;
                     Messages.AddRange(result.Messages);
                 }
             }

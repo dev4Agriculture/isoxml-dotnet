@@ -53,7 +53,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public ISOTLGExtract GetMergedTaskExtract(ushort ddi, int det, string name = "", bool fillLines = false)
         {
             var extracts = new List<ISOTLGExtract>();
-            var lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE;
+            var lastValue = Constants.TLG_VALUE_FOR_NO_VALUE;
             foreach (var tlg in TimeLogs)
             {
                 var entry = ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines, lastValue);
@@ -70,6 +70,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        /// <summary>
+        /// Return the number of available TimeLogs
+        /// </summary>
+        /// <returns></returns>
         public int CountTimeLogs()
         {
             return TimeLogs.Count;

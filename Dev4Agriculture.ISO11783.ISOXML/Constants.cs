@@ -1,10 +1,11 @@
 ﻿namespace Dev4Agriculture.ISO11783.ISOXML
 {
-    internal class Constants
+    public class Constants
     {
         //TODO It's more save to move this Element to a common class. It's found in Generator and DotnetCore Library
         public static string ISOXMLClassName = "Dev4Agriculture.ISO11783.ISOXML";
-        public static string Version = "V0.15.2.1";//Currently unused; Just for the commit
+        public static string Version = "V0.16.1";//Currently unused; Just for the commit
         public static string Author = "Frank Wiebeler, dev4Agriculture";
+        public const int TLG_VALUE_FOR_NO_VALUE = int.MinValue;
     }
 }

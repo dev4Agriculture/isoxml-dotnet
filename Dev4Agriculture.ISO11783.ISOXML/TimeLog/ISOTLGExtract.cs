@@ -46,8 +46,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     public class ISOTLGExtractPoint
     {
-        public const int TLG_VALUE_FOR_NO_VALUE = unchecked((int)0xFFFFFFFF);//Is -1 but needs to be set like this to ensure no mixup with uint
-
         public DateTime TimeStamp { get; private set; }
         public TLGGPSInfo GPS { get; private set; }
         public int DDIValue { get; private set; }
@@ -67,7 +65,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return new ISOTLGExtractPoint(
                         DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
                         TLGGPSInfo.FromTLGDataLogLine(line),
-                        has ? value : TLG_VALUE_FOR_NO_VALUE,
+                        has ? value : (int)Constants.TLG_VALUE_FOR_NO_VALUE,
                         has
                 );
         }
@@ -110,14 +108,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <param name="lastValue"> Default set to "NO VALUE": The last known Value. This should *only* be used if the call for this function
         /// is part of loop for multiple TimeLogs. In case there are no values recorded for this TimeLog, this ensures that there are Entries created anyway</param>
         /// <returns></returns>
-        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, int det = 0, string name = "", bool fillLines = false, int lastValue = ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+        public static ISOTLGExtract FromTimeLog(ISOTLG timeLog, ushort ddi, int det = 0, string name = "", bool fillLines = false, int lastValue = Constants.TLG_VALUE_FOR_NO_VALUE)
         {
 
             var entries = new List<ISOTLGExtractPoint>();
             if (timeLog.Header.TryGetDDIIndex(ddi, det, out var index))
             {
                 //Find the first existing value for the rare case that no value was there at the beginning
-                if (fillLines && lastValue == ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+                if (fillLines && lastValue == Constants.TLG_VALUE_FOR_NO_VALUE)
                 {
                     foreach (var entry in timeLog.Entries)
                     {
@@ -136,7 +134,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         lastValue = point.DDIValue;
                         entries.Add(point);
                     }
-                    else if (fillLines && lastValue != ISOTLGExtractPoint.TLG_VALUE_FOR_NO_VALUE)
+                    else if (fillLines && lastValue != Constants.TLG_VALUE_FOR_NO_VALUE)
                     {
                         var point = ISOTLGExtractPoint.FromTLGDataLogLineWithGivenValue(entry, lastValue);
                         entries.Add(point);

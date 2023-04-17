@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Dev4Agriculture.ISO11783.ISOXML;
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
 [TestClass]
@@ -71,7 +71,7 @@ public class IsoGridTests
             {
                 for (uint x = 0; x < grid.Width; x++)
                 {
-                    grid.SetValue(x, y, y, l);
+                    grid.SetValue(x, y, (int)y, l);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class IsoGridTests
             {
                 for (uint x = 0; x < grid.Width; x++)
                 {
-                    Assert.AreEqual(grid.GetValue(y, x, l), gridLoaded.GetValue(y, x, l));
+                    Assert.AreEqual(grid.GetValue(x, y, l), gridLoaded.GetValue(x, y, l));
                 }
             }
         }
@@ -115,7 +115,7 @@ public class IsoGridTests
         {
             for (uint x = 0; x < grid.Width; x++)
             {
-                grid.SetValue(y, x, y);
+                grid.SetValue(y, x, (int)y);
             }
         }
         result.Save();
@@ -124,6 +124,22 @@ public class IsoGridTests
         var data = File.ReadAllBytes(Path.Combine(outPath, gridFileName + ".bin"));
         Assert.AreEqual(data.Length, (byte)(grid.Width * grid.Height));
 
+    }
+
+    [TestMethod]
+    public void CanReadGridValue()
+    {
+        var isoxml = ISOXML.Load("./testdata/Grid/Type2_ReadValue");
+        var grid = isoxml.Data.Task[0].Grid[0];
+        var longitude = (decimal)7.2251319728;
+        var latitude = (decimal)52.2240239571;
+        var value = grid.GetSetpointValue(longitude, latitude);
+        Assert.AreEqual(value, 1005);
+        //Test Outside of Area
+        longitude = (decimal)8.22513197280;
+        latitude = (decimal)52.2240239571;
+        value = grid.GetSetpointValue(longitude, latitude);
+        Assert.AreEqual(value, Constants.TLG_VALUE_FOR_NO_VALUE);
     }
 
 }
