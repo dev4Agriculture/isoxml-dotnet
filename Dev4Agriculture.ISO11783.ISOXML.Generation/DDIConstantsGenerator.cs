@@ -17,13 +17,13 @@ public static class DDIConstantsGenerator
         public ushort DDIValue;
         public string Definition;
         public string Unit;
-        public float Resolution;
+        public string Resolution;
     };
 
     private static readonly Regex Rgx = new Regex("[^a-zA-Z0-9_]");
     private static readonly TextInfo TextInfo = new CultureInfo("en-US", false).TextInfo;
 
-    private const string DDIEntryText = "\n     public class DDIEntry\n     {\n        public int Id;\n        public string Name;\n        public string Description;\n        public string Unit;\n        public float Resolution;\n     }\n";
+    private const string DDIEntryText = "\n     public class DDIEntry\n     {\n        public int Id;\n        public string Name;\n        public string Description;\n        public string Unit;\n        public double Resolution;\n     }\n";
 
     private const string DDIDictionaryText = "\n     public class DDIInfo\n     {\n         public static readonly Dictionary<DDIList, DDIEntry> DDICollection = new Dictionary<DDIList, DDIEntry>\n         {\n";
 
@@ -94,11 +94,7 @@ public static class DDIConstantsGenerator
                         break;
                     //data example:  1
                     case "Resolution":
-                        if (float.TryParse(arguments.Trim(), out var result))
-                        {
-                            curEntity.Resolution = result;
-                        }
-
+                        curEntity.Resolution = arguments.Trim().Replace(",",".");
                         break;
                     default:
                         break;
