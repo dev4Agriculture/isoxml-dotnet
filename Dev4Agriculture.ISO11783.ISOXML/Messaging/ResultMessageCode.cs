@@ -15,6 +15,7 @@
         XMLInvalidElement,
         XMLCommentFound,
         XMLOtherFound,
+        XMLXFCNotFound,
         XSDAttributeValueRange = 200,
         XSDAttributeValueTooLong,
         XSDAttributeValueTooShort,
