@@ -68,7 +68,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         ///  Calculate area for field
         /// </summary>
         /// <returns>The Area in m^2</returns>
-        public double GetArea()
+        public double CalculateArea()
         {
             var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
             if (polygon == null)
@@ -89,9 +89,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return area;
         }
 
-        private double GetArea(ISOPoint[] data) => ComputeSignedArea(data);
+        private double GetArea(ISOPoint[] data) => ComputeArea(data);
 
-        private static double ComputeSignedArea(ISOPoint[] path) => Math.Abs(ComputeSignedArea(path, 6378137));
+        private static double ComputeArea(ISOPoint[] path) => Math.Abs(ComputeSignedArea(path, Constants.EarthRadiusInMeters));
 
         private static double ToRadians(decimal input) => (double)input / 180.0 * Math.PI;
 
