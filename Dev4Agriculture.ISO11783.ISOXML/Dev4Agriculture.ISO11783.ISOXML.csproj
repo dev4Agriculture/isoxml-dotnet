@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Dev4Agriculture.ISO11783.ISOXML</RootNamespace>
-    <Version>0.16.1</Version>
+    <Version>0.16.2</Version>
     <Company>dev4Agriculture</Company>
     <Title>ISOXML DotNet Library</Title>
     <Authors>Frank Wiebeler, Alexander Parshin, Dima Robuliak</Authors>
