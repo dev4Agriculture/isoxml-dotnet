@@ -59,11 +59,71 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
-
-
         public bool IsInField(decimal longitude,decimal latitude)
         {
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
+        
+        /// <summary>
+        ///  Calculate area for field
+        /// </summary>
+        /// <returns>The Area in m^2</returns>
+        public double GetArea()
+        {
+            var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
+            if (polygon == null)
+                return 0;
+            var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
+            if (exterior == null)
+                return 0;
+            var area = GetArea(exterior.Point.ToArray());
+
+            var interiorPolygons = polygon.LineString.Where(s => s.LineStringType == ISOLineStringType.PolygonInterior);
+            if (interiorPolygons.Any())
+            {
+                foreach (var interior in interiorPolygons)
+                {
+                    area -= GetArea(interior.Point.ToArray());
+                }
+            }
+            return area;
+        }
+
+        private double GetArea(ISOPoint[] data) => ComputeSignedArea(data);
+
+        private static double ComputeSignedArea(ISOPoint[] path) => Math.Abs(ComputeSignedArea(path, 6378137));
+
+        private static double ToRadians(decimal input) => (double)input / 180.0 * Math.PI;
+
+        private static double ComputeSignedArea(ISOPoint[] path, double radius)
+        {
+            var size = path.Length;
+            if (size < 3)
+            {
+                return 0;
+            }
+            double total = 0;
+            var prev = path[size - 1];
+            var prevTanLat = Math.Tan((Math.PI / 2 - ToRadians(prev.PointEast)) / 2);
+            var prevLng = ToRadians(prev.PointNorth);
+
+            foreach (var point in path)
+            {
+                var tanLat = Math.Tan((Math.PI / 2 - ToRadians(point.PointEast)) / 2);
+                var lng = ToRadians(point.PointNorth);
+                total += PolarTriangleArea(tanLat, lng, prevTanLat, prevLng);
+                prevTanLat = tanLat;
+                prevLng = lng;
+            }
+            return total * (radius * radius);
+        }
+
+        private static double PolarTriangleArea(double tan1, double lng1, double tan2, double lng2)
+        {
+            var deltaLng = lng1 - lng2;
+            var t = tan1 * tan2;
+            return 2 * Math.Atan2(t * Math.Sin(deltaLng), 1 + t * Math.Cos(deltaLng));
+        }
+
     }
 }
