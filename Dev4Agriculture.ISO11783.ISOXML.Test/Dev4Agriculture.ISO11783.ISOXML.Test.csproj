@@ -59,6 +59,7 @@
     <Folder Include="testdata\IDList\Valid\" />
     <Folder Include="testdata\LinkList\ToGenerateLinkList\" />
     <Folder Include="testdata\LinkList\ValidLinkList\" />
+    <Folder Include="testdata\Structure\InvalidXML\" />
     <Folder Include="testdata\TimeLogs\BrokenTimeLogs\" />
     <Folder Include="testdata\TimeLogs\MissingTimeLogs\" />
     <Folder Include="testdata\TimeLogs\ValidTimeLogs\" />
