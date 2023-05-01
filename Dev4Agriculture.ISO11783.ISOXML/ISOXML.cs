@@ -248,6 +248,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Messages = resultTaskData.Messages
             };
 
+            if (isoxml.Data == null)
+            {
+                return isoxml;
+            }
+
             if (isoxml.Data.AttachedFile != null)
             {
                 foreach (var file in isoxml.Data.AttachedFile)
