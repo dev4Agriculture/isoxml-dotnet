@@ -892,5 +892,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.InitExtensionData();
             return isoxml;
         }
+
+
+
+        /// <summary>
+        /// Convert any ISOXML Object back to an XML String
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string SerializeISOXMLElement(object obj)
+        {
+            var serializer = new IsoxmlSerializer();
+            try
+            {
+                return serializer.Serialize(obj);
+            } catch (Exception ex)
+            {
+                return "";
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
@@ -81,10 +82,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
+            //Create our own namespaces for the output
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+
+            //Add an empty namespace and empty value
+            ns.Add("", "");
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
             using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
-            ser.Serialize(xmlWriter, taskData);
+            ser.Serialize(xmlWriter, taskData, ns);
+        }
+
+        public string Serialize(object obj)
+        {
+            //Create our own namespaces for the output
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+
+            //Add an empty namespace and empty value
+            ns.Add("", "");
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8};
+            var ser = new XmlSerializer(obj.GetType());
+            var output = new StringWriterWithEncoding();
+            using var xmlWriter = XmlWriter.Create(output,xmlWriterSettings);
+            ser.Serialize(xmlWriter, obj,ns);
+            return output.ToString();
         }
 
         public ISO11783TaskDataFile DeepClone(ISO11783TaskDataFile taskData)
