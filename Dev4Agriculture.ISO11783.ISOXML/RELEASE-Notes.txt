@@ -80,3 +80,5 @@ v0.16.2.1
   -FIX: The resolution of the DDIs was wrong
 v0.16.2.2
   -FIX: When reading an invalid XML, the Load-Function threw an exception
+v0.16.3
+  +ADD: Convert any ISOXML Element to an XML String

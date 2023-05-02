@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -135,5 +137,20 @@ public class StreamInputTests
         {
             Assert.ThrowsExceptionAsync<InvalidDataException>(async () => await ISOXML.LoadFromArchiveAsync(stream));
         }
+    }
+
+    [TestMethod]
+    public void CanDeSerializeAndSerializeDeviceDescription()
+    {
+        var path = "./testdata/devices/DeviceOnly.xml";
+        var text = File.ReadAllText(path);
+        var result = ISOXML.ParseFromXMLString(text);
+        var serialized = ISOXML.SerializeISOXMLElement(result.Data.Device[0]);
+
+
+        var normalized1 = Regex.Replace(text, @"\s", string.Empty);
+        var normalized2 = Regex.Replace(serialized, @"\s", string.Empty);
+
+        Assert.IsTrue(String.Equals(normalized1,normalized2,StringComparison.OrdinalIgnoreCase));
     }
 }
