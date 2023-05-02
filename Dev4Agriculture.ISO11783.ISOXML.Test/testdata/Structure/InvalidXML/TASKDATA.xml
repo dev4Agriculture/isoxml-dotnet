@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ISO11783_TaskData VersionMajor="3" VersionMinor="1" MangagementSoftwaremanufacturer=" " ManagementSoftwareVersion=" " TaskControllerManufacturer="Trimble" TaskControllerVersion="6.20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation=" " DataTransferOrigin="2">
+<DVC A="DVC-90" B="RAUCH fertilizer spreader" C="02.10.09" D="a00a800825600000" E="<Aero Serial No.>" F="38353436313334" G="ff000000006e65">
+<DET A="DET-211" B="1" C="1" D="Fertilizer Spreader" E="0" F="0">
+<DOR A="13"/>
+</DET>
+<DPD A="13" B="dfff" C="0" D="31" E="Default data"/>
+</DVC>
+<TSK A="TSK-360" B="Ferti" C="CTR-125" D="FRM-125" E="PFD-360" G="2" H="0" I="0">
+</TSK>
+</ISO11783_TaskData>

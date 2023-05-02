@@ -78,4 +78,5 @@ v0.16.2
 v0.16.2.1
   -FIX: Found a DataSet with AFE-Elements as XFRs. Those are not officially supported but we shouldn't crash when we find them
   -FIX: The resolution of the DDIs was wrong
-
+v0.16.2.2
+  -FIX: When reading an invalid XML, the Load-Function threw an exception
