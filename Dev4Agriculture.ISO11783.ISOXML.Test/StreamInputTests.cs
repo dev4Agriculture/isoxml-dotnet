@@ -148,8 +148,8 @@ public class StreamInputTests
         var serialized = ISOXML.SerializeISOXMLElement(result.Data.Device[0]);
 
 
-        var normalized1 = Regex.Replace(text, @"\s", "");
-        var normalized2 = Regex.Replace(serialized, @"\s", "");
+        var normalized1 = Regex.Replace(text, @"\s", string.Empty);
+        var normalized2 = Regex.Replace(serialized, @"\s", string.Empty);
 
         Assert.IsTrue(String.Equals(normalized1,normalized2,StringComparison.OrdinalIgnoreCase));
     }
