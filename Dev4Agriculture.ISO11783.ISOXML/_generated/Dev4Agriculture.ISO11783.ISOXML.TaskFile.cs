@@ -7213,8 +7213,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(8)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(8)]
-        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(BSN|CCG|CCT|CLD|CPC|CTP|CTR|DVC|FRM|OTQ|PDT|PFD|PGP|TSK|VPN|WKR)[0-9][0-9][0-9][" +
-            "0-9][0-9]")]
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("(AFE|BSN|CCG|CCT|CLD|CPC|CTP|CTR|DVC|FRM|OTQ|PDT|PFD|PGP|TSK|VPN|WKR)[0-9][0-9][0" +
+            "-9][0-9][0-9]")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [System.Xml.Serialization.XmlAttributeAttribute("A")]
         public string Filename { get; set; }

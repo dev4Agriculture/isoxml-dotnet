@@ -7,5 +7,6 @@
         public static string Version = "V0.16.2.2";//Currently unused; Just for the commit
         public static string Author = "Frank Wiebeler, dev4Agriculture";
         public const int TLG_VALUE_FOR_NO_VALUE = int.MinValue;
+        public const double EarthRadiusInMeters = 6378137;
     }
 }

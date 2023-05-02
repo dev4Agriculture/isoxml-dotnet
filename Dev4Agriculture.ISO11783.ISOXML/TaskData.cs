@@ -36,7 +36,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         var extContent = File.ReadAllText(extPath.ToString());
                         var externalDoc = new XmlDocument();
                         externalDoc.LoadXml(extContent);
-                        MergeExternalContent(xmlDoc, externalDoc);
+                        var mergeResult = MergeExternalContent(xmlDoc, externalDoc);
+                        if(mergeResult.Messages.Count > 0)
+                        {
+                            result.Messages.AddRange(mergeResult.Messages);
+                        };
                     }
                     catch (FileNotFoundException)
                     {
@@ -67,18 +71,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return result;
         }
 
-        private static XmlDocument MergeExternalContent(XmlDocument taskData, XmlDocument externalFile)
+        private static ResultWithMessages<XmlDocument> MergeExternalContent(XmlDocument taskData, XmlDocument externalFile)
         {
             if (externalFile != null && taskData != null)
             {
-                var rootNode = externalFile.FirstChild;
+                var rootNode = externalFile.GetElementsByTagName("XFC").Item(0);
+                if (rootNode == null)
+                {
+                    var resultWithMessages = new ResultWithMessages<XmlDocument>(taskData);
+                    resultWithMessages.Messages.Add(ResultMessage.Error(ResultMessageCode.XMLXFCNotFound));
+                    return resultWithMessages;
+                }
                 foreach (XmlNode entry in rootNode.ChildNodes)
                 {
                     var imported = taskData.ImportNode(entry, true);
                     taskData.GetElementsByTagName("ISO11783_TaskData").Item(0).AppendChild(imported);
                 }
             }
-            return taskData;
+            return new ResultWithMessages<XmlDocument>(taskData);
 
         }
 

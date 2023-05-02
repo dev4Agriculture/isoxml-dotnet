@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -66,6 +67,20 @@ public class ExternalFileContentsTests
             Console.WriteLine(msg.Title);
         });
         Assert.AreNotEqual(0, result.Messages.Count);
+    }
+
+
+    [TestMethod]
+    public void CanReadAFE()
+    {
+        var filePath = "./testdata/ExternalFiles/AFE.zip";
+        using (var stream = File.OpenRead(filePath))
+        {
+            var isoxml = ISOXML.LoadFromArchive(stream);
+            Assert.IsNotNull(isoxml);
+            Assert.AreEqual(isoxml.Data.AttachedFile.Count, 1);
+            Assert.AreEqual(isoxml.Messages.Count, 0);
+        }
     }
 }
 
