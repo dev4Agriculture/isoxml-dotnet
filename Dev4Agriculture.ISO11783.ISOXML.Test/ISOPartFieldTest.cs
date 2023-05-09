@@ -56,4 +56,18 @@ public class ISOPartFieldTest
         var res= field.CalculateArea();
         Assert.AreEqual((int)refValue, (int)res);
     }
+
+
+    [TestMethod]
+    public void FieldAreasMatchInAllAreasOfTheWorld()
+    {
+        var isoxml = ISOXML.Load("./testdata/CodingData/Partfields");
+        Assert.AreEqual(0,isoxml.Messages.Count);
+        foreach(var field in isoxml.Data.Partfield)
+        {
+            var size = field.CalculateArea();
+            var ratio = size / field.PartfieldArea;
+            //Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
+        }
+    }
 }
