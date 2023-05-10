@@ -428,7 +428,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
-        EstLeftParenthesisDRRightParenthesismode,
+        EstDRmode,
         
         /// <summary>
         /// </summary>
@@ -490,7 +490,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        EffectiveLeftParenthesisRealizedRightParenthesis,
+        EffectiveRealized,
     }
     
     /// <summary>
@@ -4150,12 +4150,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
-        FromfirstpointLeftParenthesisARightParenthesisonly,
+        FromfirstpointAonly,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
-        FromlastpointLeftParenthesisBRightParenthesisonly,
+        FromlastpointBonly,
         
         /// <summary>
         /// </summary>
@@ -4202,7 +4202,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
-        EstLeftParenthesisDRRightParenthesismode,
+        EstDRmode,
         
         /// <summary>
         /// </summary>
@@ -5176,7 +5176,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        ProductGroupLeftParenthesisdefaultRightParenthesis,
+        ProductGroupdefault,
         
         /// <summary>
         /// </summary>
@@ -7176,12 +7176,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
-        TheversionoftheDISPeriod1LeftParenthesisfirstdraftinternationalstandardRightParenthesis,
+        TheversionoftheDISPeriod1firstdraftinternationalstandard,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        TheversionoftheFDISPeriod1LeftParenthesisfinaldraftinternationalstandardfirsteditionRightParenthesis,
+        TheversionoftheFDISPeriod1finaldraftinternationalstandardfirstedition,
         
         /// <summary>
         /// </summary>
@@ -7191,12 +7191,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
-        TheversionofthesecondeditionpublishedasadraftinternationalstandardLeftParenthesisE2PeriodDISRightParenthesis,
+        TheversionofthesecondeditionpublishedasadraftinternationalstandardE2PeriodDIS,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        TheversionofthesecondeditionpublishedasafinaldraftinternationalstandardLeftParenthesisE2PeriodFDISRightParenthesis,
+        TheversionofthesecondeditionpublishedasafinaldraftinternationalstandardE2PeriodFDIS,
     }
     
     /// <summary>

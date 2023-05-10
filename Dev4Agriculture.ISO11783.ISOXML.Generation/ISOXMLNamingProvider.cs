@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -13,6 +14,8 @@ internal class ISOXMLNamingProvider : NamingProvider
     public ISOXMLNamingProvider(NamingScheme scheme) : base(scheme)
     {
     }
+
+    private static string[] _enumWordsToRemove = { "LeftParenthesis", "RightParenthesis" };
 
     public override string AttributeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaAttribute xmlAttribute)
     {
@@ -58,7 +61,8 @@ internal class ISOXMLNamingProvider : NamingProvider
         if (documentations.Count > 0)
         {
             var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
-            return base.EnumMemberNameFromValue(enumName, name, xmlFacet);
+            var result =  base.EnumMemberNameFromValue(enumName, name, xmlFacet);
+            return _enumWordsToRemove.Aggregate(result, (current, word) => current.Replace(word, string.Empty));
         }
         return base.EnumMemberNameFromValue(enumName, value, xmlFacet);
     }
