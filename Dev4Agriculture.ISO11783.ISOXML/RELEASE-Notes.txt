@@ -83,5 +83,5 @@ v0.16.2.2
 v0.16.3
   +ADD: Convert any ISOXML Element to an XML String
 v0.17.0
-  +ADD: Removing extra words from enum naming
+  +ADD: Adjust CodeGeneration from Schema files to remove Parenthesis-Text
   +FIX: ISOPartField area calculation

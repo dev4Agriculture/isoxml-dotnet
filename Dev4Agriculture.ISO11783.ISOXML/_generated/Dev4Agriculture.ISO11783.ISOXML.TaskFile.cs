@@ -7176,27 +7176,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("0")]
-        TheversionoftheDISPeriod1firstdraftinternationalstandard,
+        Version0,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        TheversionoftheFDISPeriod1finaldraftinternationalstandardfirstedition,
+        Version1,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
-        TheversionoftheFDISPeriod2andthefirsteditionpublishedasaninternationalstandard,
+        Version2,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
-        TheversionofthesecondeditionpublishedasadraftinternationalstandardE2PeriodDIS,
+        Version3,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        TheversionofthesecondeditionpublishedasafinaldraftinternationalstandardE2PeriodFDIS,
+        Version4,
     }
     
     /// <summary>
