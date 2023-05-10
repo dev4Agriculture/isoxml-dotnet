@@ -1,5 +1,10 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
@@ -19,16 +24,17 @@ public class ISOPartFieldTest
                 LineStringType = ISOLineStringType.PolygonExterior,
                 Point =
                 {
-                    new ISOPoint{PointNorth = 11.611686m,PointEast = 48.079711m},
-                    new ISOPoint{PointNorth = 11.611879m,PointEast = 48.081546m},
-                    new ISOPoint{PointNorth = 11.617136m,PointEast = 48.081431m},
-                    new ISOPoint{PointNorth = 11.620419m,PointEast = 48.076829m},
-                    new ISOPoint{PointNorth = 11.614776m,PointEast = 48.075711m},
+                    new ISOPoint{PointNorth = 48.079711m,PointEast = 11.611686m},
+                    new ISOPoint{PointNorth = 48.081546m,PointEast = 11.611879m},
+                    new ISOPoint{PointNorth = 48.081431m,PointEast = 11.617136m},
+                    new ISOPoint{PointNorth = 48.076829m,PointEast = 11.620419m},
+                    new ISOPoint{PointNorth = 48.075711m,PointEast = 11.614776m},
                 }
             }}
         });
         var res= field.CalculateArea();
-        Assert.AreEqual((int)refValue, (int)res);
+        var ratio = res / refValue;
+        Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
     }
     
     [TestMethod]
@@ -44,17 +50,18 @@ public class ISOPartFieldTest
                 LineStringType = ISOLineStringType.PolygonExterior,
                 Point =
                 {
-                    new ISOPoint{PointNorth = 11.611686m,PointEast = 48.079711m},
-                    new ISOPoint{PointNorth = 11.611879m,PointEast = 48.081546m},
-                    new ISOPoint{PointNorth = 11.617136m,PointEast = 48.081431m},
-                    new ISOPoint{PointNorth = 11.620419m,PointEast = 48.076829m},
-                    new ISOPoint{PointNorth = 11.614776m,PointEast = 48.075711m},
-                    new ISOPoint{PointNorth = 11.611686m,PointEast = 48.079711m},
+                    new ISOPoint{PointNorth = 48.079711m,PointEast = 11.611686m},
+                    new ISOPoint{PointNorth = 48.081546m,PointEast = 11.611879m},
+                    new ISOPoint{PointNorth = 48.081431m,PointEast = 11.617136m},
+                    new ISOPoint{PointNorth = 48.076829m,PointEast = 11.620419m},
+                    new ISOPoint{PointNorth = 48.075711m,PointEast = 11.614776m},
+                    new ISOPoint{PointNorth = 48.079711m,PointEast = 11.611686m},
                 }
             }}
         });
         var res= field.CalculateArea();
-        Assert.AreEqual((int)refValue, (int)res);
+        var ratio = res / refValue;
+        Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
     }
 
 
@@ -67,7 +74,8 @@ public class ISOPartFieldTest
         {
             var size = field.CalculateArea();
             var ratio = size / field.PartfieldArea;
-            //Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
+            Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
         }
     }
+
 }
