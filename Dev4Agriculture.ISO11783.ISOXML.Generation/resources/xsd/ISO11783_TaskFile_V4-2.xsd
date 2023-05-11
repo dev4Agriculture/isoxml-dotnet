@@ -387,7 +387,7 @@
 						<xs:enumeration value="3">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									Version 4
+									Version 3
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>

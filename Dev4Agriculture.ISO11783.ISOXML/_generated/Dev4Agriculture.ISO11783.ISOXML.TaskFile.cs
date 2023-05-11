@@ -428,7 +428,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
-        EstDRmode,
+        Est_DR_mode,
         
         /// <summary>
         /// </summary>
@@ -490,7 +490,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("4")]
-        EffectiveRealized,
+        Effective_Realized,
     }
     
     /// <summary>
@@ -4150,12 +4150,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("2")]
-        FromfirstpointAonly,
+        Fromfirstpoint_A_only,
         
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("3")]
-        FromlastpointBonly,
+        Fromlastpoint_B_only,
         
         /// <summary>
         /// </summary>
@@ -4202,7 +4202,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("6")]
-        EstDRmode,
+        Est_DR_mode,
         
         /// <summary>
         /// </summary>
@@ -5176,7 +5176,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <summary>
         /// </summary>
         [System.Xml.Serialization.XmlEnumAttribute("1")]
-        ProductGroupdefault,
+        ProductGroup_default,
         
         /// <summary>
         /// </summary>
