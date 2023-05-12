@@ -104,13 +104,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
             double total = 0;
             var prev = path[size - 1];
-            var prevTanLat = Math.Tan((Math.PI / 2 - ToRadians(prev.PointEast)) / 2);
-            var prevLng = ToRadians(prev.PointNorth);
+            var prevTanLat = Math.Tan((Math.PI / 2 - ToRadians(prev.PointNorth)) / 2);
+            var prevLng = ToRadians(prev.PointEast);
 
             foreach (var point in path)
             {
-                var tanLat = Math.Tan((Math.PI / 2 - ToRadians(point.PointEast)) / 2);
-                var lng = ToRadians(point.PointNorth);
+                var tanLat = Math.Tan((Math.PI / 2 - ToRadians(point.PointNorth)) / 2);
+                var lng = ToRadians(point.PointEast);
                 total += PolarTriangleArea(tanLat, lng, prevTanLat, prevLng);
                 prevTanLat = tanLat;
                 prevLng = lng;

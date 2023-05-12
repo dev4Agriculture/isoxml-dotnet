@@ -381,35 +381,35 @@
 						<xs:enumeration value="0">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the DIS.1 (first draft international standard)
+									Version 0
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="1">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the FDIS.1 (final draft international standard, first edition)
+									Version 1
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="2">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the FDIS.2 and the first edition published as an international standard
+									Version 2
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="3">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the second edition published as a draft international standard (E2.DIS)
+									Version 3
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the second edition published as a final draft international standard (E2.FDIS)
+									Version 4
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
