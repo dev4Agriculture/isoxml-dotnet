@@ -23,7 +23,7 @@
 						<xs:enumeration value="4">
 							<xs:annotation>
 								<xs:documentation xml:lang="en">
-									The version of the second edition published as a Final Draft International Standard
+									Version 4
 								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>

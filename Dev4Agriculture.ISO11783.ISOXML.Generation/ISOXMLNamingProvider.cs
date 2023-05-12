@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -13,6 +14,60 @@ internal class ISOXMLNamingProvider : NamingProvider
     public ISOXMLNamingProvider(NamingScheme scheme) : base(scheme)
     {
     }
+
+    private static readonly string[] EnumWordsToRemove = {
+                "StartOfHeading",
+                "StartOfText",
+                "EndOfText",
+                "EndOfTransmission",
+                "Enquiry",
+                "Acknowledge",
+                "Bell",
+                "Backspace",
+                "HorizontalTab",
+                "LineFeed",
+                "VerticalTab",
+                "FormFeed",
+                "CarriageReturn",
+                "ShiftOut",
+                "ShiftIn",
+                "DataLinkEscape",
+                "NegativeAcknowledge",
+                "SynchronousIdle",
+                "EndOfTransmissionBlock",
+                "EndOfMedium",
+                "Substitute",
+                "Escape",
+                "FileSeparator",
+                "GroupSeparator",
+                "RecordSeparator",
+                "UnitSeparator",
+                "ExclamationMark",
+                "Quote",
+                "Hash",
+                "Dollar",
+                "Percent",
+                "Ampersand",
+                "SingleQuote",
+                "LeftParenthesis",
+                "RightParenthesis",
+                "Asterisk",
+                "Comma",
+                "Period",
+                "Slash",
+                "Colon",
+                "Semicolon",
+                "QuestionMark",
+                "LeftSquareBracket",
+                "Backslash",
+                "RightSquareBracket",
+                "Caret",
+                "Backquote",
+                "LeftCurlyBrace",
+                "Pipe",
+                "RightCurlyBrace",
+                "Tilde"
+            };
 
     public override string AttributeNameFromQualifiedName(XmlQualifiedName qualifiedName, XmlSchemaAttribute xmlAttribute)
     {
@@ -58,7 +113,14 @@ internal class ISOXMLNamingProvider : NamingProvider
         if (documentations.Count > 0)
         {
             var name = Regex.Replace(documentations[0].Text, @"\t|\n|\r|,|(\s+)", "");
-            return base.EnumMemberNameFromValue(enumName, name, xmlFacet);
+            var result = base.EnumMemberNameFromValue(enumName, name, xmlFacet);
+            var formattedResult = EnumWordsToRemove.Aggregate(result, (current, word) => current.Replace(word, "_"));
+            if (formattedResult.EndsWith("_"))
+            {
+                formattedResult = formattedResult.Remove(formattedResult.Length - 1);
+            }
+
+            return formattedResult;
         }
         return base.EnumMemberNameFromValue(enumName, value, xmlFacet);
     }
