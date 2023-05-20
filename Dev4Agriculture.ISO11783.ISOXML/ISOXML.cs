@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -296,7 +297,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 var fileNames = archive.Entries.Select(e => e.FullName).ToList();
                 if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidDataException("Archive has incorrect data included!");
+                    throw new NoTaskDataIncludedException();
                 }
 
                 if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
@@ -305,7 +306,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
                 archive.ExtractToDirectory(path, true);
             }
-
             var res = Load(path, loadBinData);
 
             if (archiveWarning != null)
@@ -316,6 +316,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Directory.Delete(path, true);
 
             return res;
+
         }
 
         /// <summary>
