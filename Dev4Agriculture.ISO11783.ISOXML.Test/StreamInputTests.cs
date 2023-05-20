@@ -157,9 +157,9 @@ public class StreamInputTests
 
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidZipFolderException),
+    [ExpectedException(typeof(InvalidDataException),
     "")]
-    public void CanLoadPartsOfCorruptFile()
+    public void RecognizesCorruptZipFile()
     {
         var path = "./testdata/LoadFromStream/CorruptStream.zip";
         using( var stream = File.OpenRead(path))

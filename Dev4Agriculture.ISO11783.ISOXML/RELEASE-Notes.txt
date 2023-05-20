@@ -1,6 +1,6 @@
 ﻿v0.17.1
 
-+ADD: Specific Exception for invalid ZipFolders or ZipFolders without TaskData
++ADD: Specific Exception for missing TaskData.xml. 
 
 v0.17.0
 

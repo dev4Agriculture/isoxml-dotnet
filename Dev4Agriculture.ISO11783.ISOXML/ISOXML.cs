@@ -292,28 +292,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = Guid.NewGuid().ToString();
             var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
-            try
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
-                using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+                var fileNames = archive.Entries.Select(e => e.FullName).ToList();
+                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var fileNames = archive.Entries.Select(e => e.FullName).ToList();
-                    if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new NoTaskDataIncludedException();
-                    }
-
-                    if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
-                    {
-                        archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
-                    }
-                    archive.ExtractToDirectory(path, true);
+                    throw new NoTaskDataIncludedException();
                 }
-            } catch (Exception ex)
-            {
-                throw new InvalidZipFolderException();
 
+                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                {
+                    archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
+                }
+                archive.ExtractToDirectory(path, true);
             }
-
             var res = Load(path, loadBinData);
 
             if (archiveWarning != null)
