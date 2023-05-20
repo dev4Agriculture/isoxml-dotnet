@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -131,11 +132,11 @@ public class StreamInputTests
         var filePath = "./testdata/LoadFromStream/InvalidArchive.zip";
         using (var stream = File.OpenRead(filePath))
         {
-            Assert.ThrowsException<InvalidDataException>(() => ISOXML.LoadFromArchive(stream));
+            Assert.ThrowsException<NoTaskDataIncludedException>(() => ISOXML.LoadFromArchive(stream));
         }
         using (var stream = File.OpenRead(filePath))
         {
-            Assert.ThrowsExceptionAsync<InvalidDataException>(async () => await ISOXML.LoadFromArchiveAsync(stream));
+            Assert.ThrowsExceptionAsync<NoTaskDataIncludedException>(async () => await ISOXML.LoadFromArchiveAsync(stream));
         }
     }
 
@@ -152,5 +153,19 @@ public class StreamInputTests
         var normalized2 = Regex.Replace(serialized, @"\s", string.Empty);
 
         Assert.IsTrue(String.Equals(normalized1,normalized2,StringComparison.OrdinalIgnoreCase));
+    }
+
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidZipFolderException),
+    "")]
+    public void CanLoadPartsOfCorruptFile()
+    {
+        var path = "./testdata/LoadFromStream/CorruptStream.zip";
+        using( var stream = File.OpenRead(path))
+        {
+            var isoxml = ISOXML.LoadFromArchive(stream);
+
+        }
     }
 }

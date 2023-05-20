@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -291,19 +292,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = Guid.NewGuid().ToString();
             var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
-            using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+            try
             {
-                var fileNames = archive.Entries.Select(e => e.FullName).ToList();
-                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
                 {
-                    throw new InvalidDataException("Archive has incorrect data included!");
-                }
+                    var fileNames = archive.Entries.Select(e => e.FullName).ToList();
+                    if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new NoTaskDataIncludedException();
+                    }
 
-                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
-                {
-                    archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
+                    if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                    {
+                        archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
+                    }
+                    archive.ExtractToDirectory(path, true);
                 }
-                archive.ExtractToDirectory(path, true);
+            } catch (Exception ex)
+            {
+                throw new InvalidZipFolderException();
+
             }
 
             var res = Load(path, loadBinData);
@@ -316,6 +324,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Directory.Delete(path, true);
 
             return res;
+
         }
 
         /// <summary>
