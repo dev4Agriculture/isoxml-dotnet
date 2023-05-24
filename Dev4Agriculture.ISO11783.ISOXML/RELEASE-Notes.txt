@@ -1,4 +1,7 @@
-﻿v0.17.1
+﻿v0.17.1.1
++ADD: Catch errors in form of a duplicated ID in a TaskSet and add a Message for that
+
+v0.17.1
 
 +ADD: Specific Exception for missing TaskData.xml. 
 
