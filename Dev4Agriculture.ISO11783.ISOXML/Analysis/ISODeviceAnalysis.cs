@@ -232,7 +232,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         public CulturalPracticeInfo GetTaskCulturalPractices(ISOTask isoTask)
         {
             var result = new CulturalPracticeInfo();
-            //all ddi values must me in constants
             var elements = FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
             var elementWorkTime = new List<WorkingTimeInfo>();
 
