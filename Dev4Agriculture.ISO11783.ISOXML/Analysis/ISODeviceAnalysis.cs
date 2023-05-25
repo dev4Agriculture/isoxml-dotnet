@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -22,6 +25,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         {
             return IdList.ToIntId(DeviceElementId);
         }
+    }
+
+    public class CulturalPracticeInfo
+    {
+        public CulturalPracticesType CulturalPractice { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime StopDateTime { get; set; }
+        public double DurationInSeconds { get; set; }
+        public string DeviceElementId { get; set; }
+        public string DeviceId { get; set; }
+        /// <summary>
+        /// If true source is property, otherwise DeviceClass
+        /// </summary>
+        public bool IsPropertySource { get; set; }
+    }
+
+    internal class WorkingTimeInfo
+    {
+        public TaskDDIEntry DdiEntry { get; set; }
+        public double Duration { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     /// <summary>
@@ -204,6 +229,105 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             return processData;
         }
 
+        public CulturalPracticeInfo GetTaskCulturalPractices(ISOTask isoTask)
+        {
+            var result = new CulturalPracticeInfo();
+            //all ddi values must me in constants
+            var elements = FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
+            var elementWorkTime = new List<WorkingTimeInfo>();
 
+            foreach (var element in elements)
+            {
+                var logs = isoTask.GetTaskExtract((ushort)DDIList.ActualWorkState, element.DeviceElementNo());
+                var info = new WorkingTimeInfo
+                {
+                    Duration = 0.0,
+                    StartDate = null,
+                    EndDate = null,
+                };
+                DateTime? startTimestamp = null;
+                foreach (var log in logs)
+                {
+                    foreach (var logData in log.Data)
+                    {
+                        if (logData.HasValue)
+                        {
+                            if (startTimestamp == null && logData.DDIValue == 1)
+                            {
+                                info.StartDate ??= logData.TimeStamp;
+                                startTimestamp = logData.TimeStamp;
+                            }
+                            else if(startTimestamp != null && logData.DDIValue == 0)
+                            {
+                                info.Duration += (logData.TimeStamp - startTimestamp.Value).TotalSeconds;
+                                startTimestamp = null;
+                                info.EndDate = logData.TimeStamp;
+                            }
+                        }
+                    }
+                }
+                elementWorkTime.Add(info);
+            }
+
+            var workingElement = elementWorkTime.OrderByDescending(s => s.Duration).FirstOrDefault();
+            result.DeviceElementId = workingElement.DdiEntry.DeviceElementId;
+            result.DurationInSeconds = workingElement.Duration;
+            result.StartDateTime = workingElement.StartDate.GetValueOrDefault();
+            result.StopDateTime = workingElement.EndDate.GetValueOrDefault();
+
+            var device = _isoxml.Data.Device.FirstOrDefault(s => s.DeviceElement.Any(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId));
+            result.DeviceId = device.DeviceId;
+            if (workingElement.DdiEntry.Type == DDIValueType.Property)
+            {
+                var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI == Utils.FormatDDI(179));
+                var elementDevice = device.DeviceElement.FirstOrDefault(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId);
+                var property = properties.FirstOrDefault(s => elementDevice.DeviceObjectReference.Any(dor => dor.DeviceObjectId == s.DevicePropertyObjectId));
+                result.CulturalPractice = (CulturalPracticesType)property.DevicePropertyValue;
+                result.IsPropertySource = true;
+            }
+            else if (isoTask.TryGetLastValue((ushort)DDIList.ActualCulturalPractice, workingElement.DdiEntry.DeviceElementNo(), out var ddiValue, false))
+            {
+                result.CulturalPractice = (CulturalPracticesType)ddiValue;
+            }
+            else
+            {
+                var client = new ClientName(device.ClientNAME);
+                result.CulturalPractice = MapDeviceClassToPracticeType(client.DeviceClass);
+            }
+            return result;
+        }
+
+        private CulturalPracticesType MapDeviceClassToPracticeType(DeviceClass className) => className switch
+        {
+            DeviceClass.NonSpecificSystem => CulturalPracticesType.Unknown,
+            DeviceClass.Tractor => CulturalPracticesType.Unknown,
+            DeviceClass.PrimarySoilTillage => CulturalPracticesType.Tillage,
+            DeviceClass.SecondarySoilTillage => CulturalPracticesType.Tillage,
+            DeviceClass.PlantersSeeders => CulturalPracticesType.SowingAndPlanting,
+            DeviceClass.Fertilizer => CulturalPracticesType.Fertilizing,
+            DeviceClass.Sprayers => CulturalPracticesType.CropProtection,
+            DeviceClass.Harvesters => CulturalPracticesType.Harvesting,
+            DeviceClass.RootHarvester => CulturalPracticesType.Harvesting,
+            DeviceClass.ForageHarvester => CulturalPracticesType.ForageHarvesting,
+            DeviceClass.Irrigation => CulturalPracticesType.Irrigation,
+            DeviceClass.TransportTrailers => CulturalPracticesType.Transport,
+            DeviceClass.FarmyardWork => CulturalPracticesType.Unknown,
+            DeviceClass.PoweredAuxilaryUnits => CulturalPracticesType.Unknown,
+            DeviceClass.SpecialCrops => CulturalPracticesType.Unknown,
+            DeviceClass.MunicipalWork => CulturalPracticesType.Unknown,
+            DeviceClass.UnDefined16 => CulturalPracticesType.Unknown,
+            DeviceClass.SensorSystem => CulturalPracticesType.Unknown,
+            DeviceClass.ReservedForFutureAssignment => CulturalPracticesType.Unknown,
+            DeviceClass.TimberHarvesters => CulturalPracticesType.Harvesting,
+            DeviceClass.Forwarders => CulturalPracticesType.Transport,
+            DeviceClass.TimberLoaders => CulturalPracticesType.Transport,
+            DeviceClass.TimberProcessingMachines => CulturalPracticesType.Unknown,
+            DeviceClass.Mulchers => CulturalPracticesType.Mulching,
+            DeviceClass.UtilityVehicles => CulturalPracticesType.Unknown,
+            DeviceClass.FeederMixer => CulturalPracticesType.Unknown,
+            DeviceClass.SlurryApplicators => CulturalPracticesType.SlurryManureApplication,
+            DeviceClass.Reserved => CulturalPracticesType.Unknown,
+            _ => CulturalPracticesType.Unknown
+        };
     }
 }
