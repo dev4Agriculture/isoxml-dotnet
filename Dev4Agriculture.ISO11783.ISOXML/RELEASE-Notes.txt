@@ -85,3 +85,5 @@ v0.16.3
 v0.17.0
   +ADD: Adjust CodeGeneration from Schema files to remove Parenthesis-Text
   +FIX: ISOPartField area calculation
+v0.17.1
+  +ADD: GetTaskCulturalPractice in ISOTaskAnalysis
