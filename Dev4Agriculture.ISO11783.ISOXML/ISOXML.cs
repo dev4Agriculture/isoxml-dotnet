@@ -452,67 +452,52 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return await Task.Run(() => Load(path, loadBinData));
         }
 
+        private void ReadIDList(IEnumerable<object> list)
+        {
+            foreach (var obj in list)
+            {
+                try
+                {
+                    IdTable.ReadObject(obj);
+                }
+                catch (DuplicatedISOObjectException e)
+                {
+                    var id = "";
+                    try
+                    {
+                        id = IdList.FindId(obj);
+                    } catch ( Exception exceptionReadingId)
+                    {
+                        id = "Second error: Error reading ID failed";
+                    }
+                    Messages.AddError(ResultMessageCode.DuplicatedId,new ResultDetail[]{ new ResultDetail()
+                    {
+                        MessageDetailType = ResultDetailType.MDTString,
+                        Value  = id
+                    } });
+                }
+            }
+
+        }
+
         /// <summary>
         /// Iterates through the given TASKDATA.XML and fills the IDList Tables
         /// </summary>
         private void ReadIDTable()
         {
-            foreach (var obj in Data.BaseStation)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.CodedComment)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.CodedCommentGroup)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.CropType)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.CulturalPractice)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Customer)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Device)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Farm)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.OperationTechnique)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Partfield)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Product)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Task)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.ValuePresentation)
-            {
-                IdTable.ReadObject(obj);
-            }
-            foreach (var obj in Data.Worker)
-            {
-                IdTable.ReadObject(obj);
-            }
+            ReadIDList(Data.CodedComment);
+            ReadIDList(Data.CodedCommentGroup);
+            ReadIDList(Data.CropType);
+            ReadIDList(Data.CulturalPractice);
+            ReadIDList(Data.Customer);
+            ReadIDList(Data.Device);
+            ReadIDList(Data.Farm);
+            ReadIDList(Data.OperationTechnique);
+            ReadIDList(Data.Partfield);
+            ReadIDList(Data.Product);
+            ReadIDList(Data.Task);
+            ReadIDList(Data.ValuePresentation);
+            ReadIDList(Data.Worker);
         }
 
         /// <summary>
