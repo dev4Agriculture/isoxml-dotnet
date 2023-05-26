@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
@@ -12,7 +14,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         ProcessData = 1,
         Property = 2
     }
-
     public class TaskDDIEntry
     {
         public string DeviceElementId;
@@ -203,7 +204,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             processData.AddRange(properties);
             return processData;
         }
-
 
     }
 }
