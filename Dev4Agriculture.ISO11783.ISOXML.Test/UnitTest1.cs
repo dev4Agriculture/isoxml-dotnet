@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Dev4Agriculture.ISO11783.ISOXML.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class StructureTests
     {
         [TestMethod]
         public void LoadSimpleTaskData()
@@ -45,6 +45,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
         public void CanHandleConstants()
         {
             Assert.AreEqual(Constants.TLG_VALUE_FOR_NO_VALUE, int.MinValue);
+        }
+
+        [TestMethod]
+        public void CanReadTaskDataWithDuplicatedIDs()
+        {
+            var isoxml = ISOXML.Load("./testdata/Structure/DuplicatedIDs");
+
+            Assert.AreEqual(2,isoxml.Messages.Count);
+
         }
 
     }

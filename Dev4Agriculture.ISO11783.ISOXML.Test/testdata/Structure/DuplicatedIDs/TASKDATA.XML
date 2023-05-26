@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="3" ManagementSoftwareManufacturer="dev4Ag_ErrorOnPurpose" ManagementSoftwareVersion="0.17.2" DataTransferOrigin="1">
+    <CTR A="CTR3" B="North America" />
+    <CTR A="CTR5" B="South America" />
+    <CTR A="CTR4" B="Europe" />
+    <FRM A="FRM3" B="Iowa" I="CTR3" />
+    <FRM A="FRM5" B="Brazil" I="CTR5" />
+    <FRM A="FRM4" B="Germany" I="CTR4" />
+    <TSK A="TSK1" B="73.67ac Field" G="1" H="1" I="1" J="1">
+        <TZN A="2" B="InField">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <TZN A="1" B="Default">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <DLT A="DFFF" B="31" />
+        <GRD A="11.849425" B="12.825342" C="2.242857142857143E-05" D="3.271428571428571E-05" E="140" F="140" G="GRD00001" I="2" J="2" />
+    </TSK>
+    <TSK A="TSK2" B="25.77ha with holes" G="1" H="1" I="1" J="1">
+        <TZN A="2" B="InField">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <TZN A="1" B="Default">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <DLT A="DFFF" B="31" />
+        <GRD A="-34.774187150" B="-12.51489484" C="4.5772900000000005E-05" D="7.626178571428571E-05" E="140" F="140" G="GRD00002" I="2" J="2" />
+    </TSK>
+    <TSK A="TSK3" B="14.39ha Field" G="1" H="1" I="1" J="1">
+        <TZN A="2" B="InField">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <TZN A="1" B="Default">
+            <PDV A="0001" B="0" E="VPN1" />
+        </TZN>
+        <DLT A="DFFF" B="31" />
+        <GRD A="14.755662638" B="9.325788216" C="3.499742857142857E-05" D="4.5470007142857144E-05" E="140" F="140" G="GRD00003" I="2" J="2" />
+    </TSK>
+    <VPN A="VPN1" B="0" C="0.01" D="2" E="l/ha" />
+    <VPN A="VPN1" B="0" C="0.01" D="2" E="l/ha" />
+    <VPN A="VPN1" B="0" C="0.01" D="2" E="l/ha" />
+</ISO11783_TaskData>
