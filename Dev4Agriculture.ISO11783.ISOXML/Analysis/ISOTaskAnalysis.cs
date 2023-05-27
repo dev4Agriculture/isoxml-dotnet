@@ -50,6 +50,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             var result = new CulturalPracticeInfo();
             var deviceAnalysis = new ISODeviceAnalysis(_isoxml);
             var elements = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
+            if (elements == null || !elements.Any())
+            {
+                return new CulturalPracticeInfo { CulturalPractice = CulturalPracticesType.Unknown };
+            }
             var elementWorkTimes = new List<WorkingTimeInfo>();
 
             foreach (var element in elements)
