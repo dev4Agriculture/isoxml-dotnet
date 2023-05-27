@@ -208,8 +208,40 @@ public static class Program
         var clientName = new ClientName(clientNameBytes);
         Console.WriteLine("Manufacturer of The TaskSet: See https://www.isobus.net/isobus/manufacturerCode/" + clientName.ManufacturerCode);
     }
+
+    public static void ExportToCSV(string path, string zipName = "")
+    {
+        ISOXML isoxml = null;
+        string folderPath = "";
+        if (String.IsNullOrEmpty(zipName))
+        {
+            isoxml = ISOXML.Load(path);
+            folderPath = Path.Combine(path, "data");
+        }
+        else
+        {
+            folderPath = Path.Combine(path, zipName.Replace(".zip", ""), "data");
+            var stream = File.OpenRead(Path.Combine(path, zipName));
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+
+        Directory.CreateDirectory(folderPath);
+        foreach(var tlg in isoxml.TimeLogs)
+        {
+           tlg.Value.SaveCSV(Path.Combine(folderPath));
+        }
+        foreach(var grid in isoxml.Grids)
+        {
+            grid.Value.SaveCSV(Path.Combine(folderPath));
+        }
+    }
+
     public static void Main()
     {
+
+        ExportToCSV("C:\\src\\xFarm\\geo-tools-iso-11783-part-10\\src\\test\\resources","ZeroValuesInLifeTime.zip");
+
+        return;
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
             "Created 2022 by dev4Agriculture \n" +
             "Enter the path were data shall be stored");
