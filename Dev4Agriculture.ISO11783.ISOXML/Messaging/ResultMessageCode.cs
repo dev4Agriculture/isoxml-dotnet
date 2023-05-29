@@ -9,6 +9,7 @@
         FileNotFound,
         FileAccessImpossible,
         FileInvalid,
+        DuplicatedId,
         XMLParsingError = 100,
         XMLWrongElement,
         XMLTextIn,

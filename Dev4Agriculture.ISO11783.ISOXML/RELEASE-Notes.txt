@@ -1,4 +1,4 @@
-﻿v0.17.2.1
+v0.17.2.1
 
 +FIX: add check if no elements with DDI179 
 
