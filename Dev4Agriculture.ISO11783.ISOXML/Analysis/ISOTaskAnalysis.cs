@@ -64,6 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     Duration = 0.0,
                     StartDate = null,
                     EndDate = null,
+                    DdiEntry = element
                 };
                 DateTime? startTimestamp = null;
                 foreach (var log in logs)
@@ -99,7 +100,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             result.DeviceId = device.DeviceId;
             if (workingElement.DdiEntry.Type == DDIValueType.Property)
             {
-                var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI == Utils.FormatDDI((ushort)DDIList.ActualCulturalPractice));
+                var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI.SequenceEqual(Utils.FormatDDI((ushort)DDIList.ActualCulturalPractice)));
                 var elementDevice = device.DeviceElement.FirstOrDefault(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId);
                 var property = properties.FirstOrDefault(s => elementDevice.DeviceObjectReference.Any(dor => dor.DeviceObjectId == s.DevicePropertyObjectId));
                 result.CulturalPractice = (CulturalPracticesType)property.DevicePropertyValue;
