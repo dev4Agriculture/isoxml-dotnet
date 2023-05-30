@@ -50,6 +50,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             var result = new CulturalPracticeInfo();
             var deviceAnalysis = new ISODeviceAnalysis(_isoxml);
             var elements = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
+            if (elements == null || !elements.Any())
+            {
+                return new CulturalPracticeInfo { CulturalPractice = CulturalPracticesType.Unknown };
+            }
             var elementWorkTimes = new List<WorkingTimeInfo>();
 
             foreach (var element in elements)
@@ -60,6 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     Duration = 0.0,
                     StartDate = null,
                     EndDate = null,
+                    DdiEntry = element
                 };
                 DateTime? startTimestamp = null;
                 foreach (var log in logs)
@@ -95,7 +100,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             result.DeviceId = device.DeviceId;
             if (workingElement.DdiEntry.Type == DDIValueType.Property)
             {
-                var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI == Utils.FormatDDI((ushort)DDIList.ActualCulturalPractice));
+                var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI.SequenceEqual(Utils.FormatDDI((ushort)DDIList.ActualCulturalPractice)));
                 var elementDevice = device.DeviceElement.FirstOrDefault(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId);
                 var property = properties.FirstOrDefault(s => elementDevice.DeviceObjectReference.Any(dor => dor.DeviceObjectId == s.DevicePropertyObjectId));
                 result.CulturalPractice = (CulturalPracticesType)property.DevicePropertyValue;

@@ -1,9 +1,10 @@
-﻿v0.17.2
+v0.17.2.1
+
++FIX: add check if no elements with DDI179 
+
+v0.17.2
 
 +ADD: GetTaskCulturalPractice in ISOTaskAnalysis
-﻿v0.17.1.1
-+ADD: Catch errors in form of a duplicated ID in a TaskSet and add a Message for that (Not released as single package)
-
 
 v0.17.1
 
