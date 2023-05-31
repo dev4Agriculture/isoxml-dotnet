@@ -1,4 +1,6 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+﻿using System.IO.Compression;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Examples;
 
@@ -208,11 +210,48 @@ public static class Program
         var clientName = new ClientName(clientNameBytes);
         Console.WriteLine("Manufacturer of The TaskSet: See https://www.isobus.net/isobus/manufacturerCode/" + clientName.ManufacturerCode);
     }
+
+    public static void XML2CSV(string path)
+    {
+        var stream = File.OpenRead(path);
+        var isoxml = ISOXML.LoadFromArchive(stream);
+
+        var tempFolderPath = Path.Join(Path.GetTempPath(), "isoxml_to_csv"); // Replace this with your Temp folder path
+        Directory.CreateDirectory(tempFolderPath);
+        // Your code to store data in Temp folder goes here...
+        var isoxmlJSON = JsonConvert.SerializeObject(isoxml.Data);
+        System.IO.File.WriteAllText(Path.Combine(tempFolderPath, "isoxml.json"), isoxmlJSON);
+        var messagesJSON = JsonConvert.SerializeObject(isoxml.Messages);
+        System.IO.File.WriteAllText(Path.Combine(tempFolderPath, "messages.json"), messagesJSON);
+
+        foreach (var grid in isoxml.Grids)
+        {
+            grid.Value.SaveCSV(Path.Combine(tempFolderPath));
+        }
+
+        foreach (var tlg in isoxml.TimeLogs)
+        {
+            tlg.Value.SaveCSV(Path.Combine(tempFolderPath));
+        }
+        // Read all files in the Temp folder and add to Zip file
+        var zipFilePath = Path.Combine(tempFolderPath, "result.zip");
+        //ZipFile.CreateFromDirectory(tempFolderPath, zipFilePath);
+        //Directory.Delete(tempFolderPath, true);
+        // Create a FileStream to return the Zip file
+        //var fileStream = new FileStream(zipFilePath, FileMode.Open, FileAccess.Read);
+    }
+
+
     public static void Main()
     {
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
             "Created 2022 by dev4Agriculture \n" +
             "Enter the path were data shall be stored");
+
+        XML2CSV("C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\07_CUSTOMERS\\022-xFarm\\04_Service_and_Support\\2023-05-18-TelemetryIssue\\TestData_From_Actia\\test.zip");
+
+        /*
+
         var path = Console.ReadLine();
         if (path is string and not "")
         {
@@ -221,7 +260,7 @@ public static class Program
         }
 
         ReadManufacturer();
-
+        */
 
     }
 
