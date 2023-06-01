@@ -1,4 +1,5 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+﻿using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Examples;
 
@@ -208,11 +209,27 @@ public static class Program
         var clientName = new ClientName(clientNameBytes);
         Console.WriteLine("Manufacturer of The TaskSet: See https://www.isobus.net/isobus/manufacturerCode/" + clientName.ManufacturerCode);
     }
+
+    public static void GetCulturalPractice()
+    {
+        var path = "C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\08_Projects\\03_ISOXML_ExampleDataBase\\BeispielDaten\\Herkunft_Unklar\\Lemken Sirius\\CCI 1200\\Fertilizer.zip";
+        var stream = File.OpenRead(path);
+        var isoxml = ISOXML.LoadFromArchive(stream);
+        var analyzer = new ISOTaskAnalysis(isoxml);
+        var acp = analyzer.GetTaskCulturalPractice(isoxml.Data.Task[0]);
+    }
+
     public static void Main()
     {
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
             "Created 2022 by dev4Agriculture \n" +
             "Enter the path were data shall be stored");
+
+        GetCulturalPractice();
+
+        return;
+        
+
         var path = Console.ReadLine();
         if (path is string and not "")
         {
