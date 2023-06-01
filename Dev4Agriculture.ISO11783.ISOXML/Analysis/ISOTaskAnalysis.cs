@@ -10,6 +10,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     {
         Ddi179 = 0,
         ClientName = 1,
+        None = 2,
     }
 
     public class CulturalPracticeInfo
@@ -52,7 +53,49 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             var elements = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
             if (elements == null || !elements.Any())
             {
-                return new CulturalPracticeInfo { CulturalPractice = CulturalPracticesType.Unknown };
+                var durations = new Dictionary<string, int>();
+                foreach( var dan in isoTask.DeviceAllocation)
+                {
+                    if(!durations.Keys.Contains(dan.DeviceIdRef))
+                    {
+                        durations.Add(dan.DeviceIdRef, 0);
+                    }
+
+                    durations[dan.DeviceIdRef] += dan.AllocationStamp.GetSeconds();
+
+                }
+                var deviceRefs = isoTask.DeviceAllocation.Select(entry => entry.DeviceIdRef).Distinct();
+
+                if(deviceRefs.Any())
+                {
+                    var devices = _isoxml.Data.Device.Where(entry => deviceRefs.Any(idRef => idRef == entry.DeviceId));
+
+                    var irrelevantClasses = new DeviceClass[] {
+                    DeviceClass.UnDefined16,
+                    DeviceClass.Reserved,
+                    DeviceClass.NonSpecificSystem,
+                    DeviceClass.ReservedForFutureAssignment,
+                    DeviceClass.SensorSystem,
+                    DeviceClass.Tractor,
+                    DeviceClass.UtilityVehicles
+                    };
+
+                    foreach (var dvc in devices)
+                    {
+                        var client = new ClientName(dvc.ClientNAME);
+                        if (Array.IndexOf(irrelevantClasses, client.DeviceClass) == -1)
+                        {
+                            result.CulturalPractice = Utils.MapDeviceClassToPracticeType(client.DeviceClass);
+                            result.Source = CulturalPracticeSourceType.ClientName;
+                            return result;
+                        }
+                    }
+                }
+
+                result.CulturalPractice = Utils.MapDeviceClassToPracticeType(DeviceClass.NonSpecificSystem);
+                result.Source = CulturalPracticeSourceType.None;
+                return result;
+
             }
             var elementWorkTimes = new List<WorkingTimeInfo>();
 
