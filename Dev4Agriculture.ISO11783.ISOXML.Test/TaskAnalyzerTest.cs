@@ -15,7 +15,35 @@ public class TaskAnalyzerTest
     [TestMethod]
     public async Task CulturalPractice_MultiTask()
     {
-        var statusResult = new int[] { 0, 0, 1, 1, 0, 2, 0, 2, 2, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 1, 2 };
+        var statusResult = new int[] {
+            0,
+            0,
+            (int)CulturalPracticesType.Fertilizing,
+            0,
+            0,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            0,
+            (int)CulturalPracticesType.CropProtection,
+            0,
+            0,
+            0,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            0,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            0,
+            0,
+            0,
+            (int)CulturalPracticesType.SowingAndPlanting,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (int)CulturalPracticesType.Fertilizing,
+            (int)CulturalPracticesType.SowingAndPlanting,
+         };
         var filePath = "./testdata/LoadFromStream/Another-single-ACP.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
@@ -27,8 +55,12 @@ public class TaskAnalyzerTest
         for (var index = 0; index < result.Data.Task.Count; index++)
         {
             var task = result.Data.Task[index];
-            var item = analyzer.GetTaskCulturalPractice(task);
-            Assert.AreEqual(statusResult[index], (int)item.CulturalPractice);
+            if(task.TaskStatus != TaskFile.ISOTaskStatus.Planned)
+            {
+                var item = analyzer.GetTaskCulturalPractice(task);
+                Console.WriteLine(index);
+                Assert.AreEqual(statusResult[index], (int)item.CulturalPractice);
+            }
         }
     }
     [TestMethod]

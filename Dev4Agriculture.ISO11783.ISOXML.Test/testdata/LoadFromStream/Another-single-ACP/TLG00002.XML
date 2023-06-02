@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TIM A="" D="4">
+    <PTN A="" B="" C="" D="1" E="" F="" G="" H="" I=""/>
+    <DLV A="DFFE" B="" C="DET-5000001" D="129026" E="16" F="31"/>
+    <DLV A="DFFE" B="" C="DET-5000001" D="129026" E="32" F="47"/>
+    <DLV A="DFFE" B="" C="DET-5000000" D="65096" E="0" F="15"/>
+    <DLV A="DFFE" B="" C="DET-5000000" D="65097" E="0" F="15"/>
+    <DLV A="DFFE" B="" C="DET-5000001" D="127257" E="24" F="39"/>
+    <DLV A="DFFE" B="" C="DET-5000001" D="127257" E="40" F="55"/>
+    <DLV A="DFFE" B="" C="DET-5000000" D="44032" E="0" F="15"/>
+    <DLV A="F23E" B="" C="DET-2000002"/>
+    <DLV A="F243" B="" C="DET-2000002"/>
+    <DLV A="0095" B="" C="DET-2000002"/>
+    <DLV A="0046" B="" C="DET-2000002"/>
+    <DLV A="0086" B="" C="DET-2000001"/>
+    <DLV A="0087" B="" C="DET-2000001"/>
+    <DLV A="008D" B="" C="DET-2000000"/>
+    <DLV A="009D" B="" C="DET-2000001"/>
+    <DLV A="0086" B="" C="DET-5000000"/>
+    <DLV A="0087" B="" C="DET-5000000"/>
+    <DLV A="F424" B="" C="DET-5000000"/>
+    <DLV A="F425" B="" C="DET-5000000"/>
+    <DLV A="0251" B="" C="DET-5000000"/>
+    <DLV A="0252" B="" C="DET-5000000"/>
+    <DLV A="0086" B="" C="DET-5000001"/>
+    <DLV A="0087" B="" C="DET-5000001"/>
+    <DLV A="0088" B="" C="DET-5000001"/>
+    <DLV A="0086" B="" C="DET-5000003"/>
+    <DLV A="0087" B="" C="DET-5000003"/>
+    <DLV A="009D" B="" C="DET-5000003"/>
+    <DLV A="0086" B="" C="DET-5000002"/>
+    <DLV A="0087" B="" C="DET-5000002"/>
+    <DLV A="009D" B="" C="DET-5000002"/>
+    <DLV A="0086" B="" C="DET-5000004"/>
+    <DLV A="0087" B="" C="DET-5000004"/>
+    <DLV A="009D" B="" C="DET-5000004"/>
+    <DLV A="00A1" B="" C="DET-644"/>
+    <DLV A="0122" B="" C="DET-644"/>
+    <DLV A="0043" B="" C="DET-644"/>
+    <DLV A="0046" B="" C="DET-644"/>
+    <DLV A="0086" B="" C="DET-644"/>
+    <DLV A="00A0" B="" C="DET-644"/>
+    <DLV A="E004" B="" C="DET-644"/>
+    <DLV A="009E" B="" C="DET-644"/>
+    <DLV A="008D" B="" C="DET-644"/>
+    <DLV A="0121" B="" C="DET-644"/>
+    <DLV A="0007" B="" C="DET-644"/>
+    <DLV A="0006" B="" C="DET-644"/>
+    <DLV A="002A" B="" C="DET-644"/>
+    <DLV A="004B" B="" C="DET-644"/>
+    <DLV A="004C" B="" C="DET-644"/>
+    <DLV A="0051" B="" C="DET-644"/>
+    <DLV A="0086" B="" C="DET-645"/>
+    <DLV A="0007" B="" C="DET-645"/>
+    <DLV A="0006" B="" C="DET-645"/>
+    <DLV A="0086" B="" C="DET-646"/>
+    <DLV A="0007" B="" C="DET-646"/>
+    <DLV A="0006" B="" C="DET-646"/>
+    <DLV A="0086" B="" C="DET-647"/>
+    <DLV A="0007" B="" C="DET-647"/>
+    <DLV A="0006" B="" C="DET-647"/>
+    <DLV A="0086" B="" C="DET-648"/>
+    <DLV A="0007" B="" C="DET-648"/>
+    <DLV A="0006" B="" C="DET-648"/>
+    <DLV A="0086" B="" C="DET-649"/>
+    <DLV A="0007" B="" C="DET-649"/>
+    <DLV A="0006" B="" C="DET-649"/>
+    <DLV A="0086" B="" C="DET-650"/>
+    <DLV A="0007" B="" C="DET-650"/>
+    <DLV A="0006" B="" C="DET-650"/>
+    <DLV A="008D" B="" C="DET-642"/>
+    <DLV A="0077" B="" C="DET-642"/>
+    <DLV A="0086" B="" C="DET-643"/>
+    <DLV A="0087" B="" C="DET-643"/>
+    <DLV A="0088" B="" C="DET-644"/>
+    <DLV A="00CD" B="" C="DET-644"/>
+    <DLV A="008E" B="" C="DET-644"/>
+    <DLV A="00CD" B="" C="DET-645"/>
+    <DLV A="00CD" B="" C="DET-646"/>
+    <DLV A="00CD" B="" C="DET-647"/>
+    <DLV A="00CD" B="" C="DET-648"/>
+    <DLV A="00CD" B="" C="DET-649"/>
+    <DLV A="00CD" B="" C="DET-650"/>
+    <DLV A="00CE" B="" C="DET-644"/>
+    <DLV A="00CE" B="" C="DET-645"/>
+    <DLV A="00CE" B="" C="DET-646"/>
+    <DLV A="00CE" B="" C="DET-647"/>
+    <DLV A="00CE" B="" C="DET-648"/>
+    <DLV A="00CE" B="" C="DET-649"/>
+    <DLV A="00CE" B="" C="DET-650"/>
+    <DLV A="010A" B="" C="DET-644"/>
+</TIM>
