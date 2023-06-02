@@ -1,5 +1,6 @@
 v0.17.3
 =OPT: Optimize algorithm to find CulturalPractice in a Task
++ADD: Functions to read durations
 
 v0.17.2.1
 
