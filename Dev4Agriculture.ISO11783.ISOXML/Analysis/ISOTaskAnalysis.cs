@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
@@ -28,6 +27,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     internal class WorkingTimeInfo
     {
         public TaskDDIEntry DdiEntry { get; set; }
+        public string DeviceIdRef { get; set; }
         public double Duration { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -35,53 +35,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 
     public class ISOTaskAnalysis
     {
-        private ISOXML _isoxml;
+        private readonly ISOXML _isoxml;
+        private readonly ISODeviceAnalysis _isoDeviceAnalysis;
 
         public ISOTaskAnalysis(ISOXML isoxml)
         {
             _isoxml = isoxml;
-        }
-
-
-        private Dictionary<string,WorkingTimeInfo> GetDeviceActivityDurationsFromDeviceAllocation(ISOTask isoTask)
-        {
-            var dvcDurations = new Dictionary<string, WorkingTimeInfo>();
-            foreach (var dan in isoTask.DeviceAllocation)
-            {
-                if (!dvcDurations.Keys.Contains(dan.DeviceIdRef))
-                {
-                    dvcDurations.Add(dan.DeviceIdRef, new WorkingTimeInfo());
-                }
-
-                if (dan.AllocationStamp != null)
-                {
-                    if (dvcDurations[dan.DeviceIdRef].StartDate == null || dvcDurations[dan.DeviceIdRef].StartDate > dan.AllocationStamp.Start)
-                    {
-                        dvcDurations[dan.DeviceIdRef].StartDate = dan.AllocationStamp.Start;
-                    }
-
-                    if (dvcDurations[dan.DeviceIdRef].EndDate == null || dvcDurations[dan.DeviceIdRef].EndDate > dan.AllocationStamp.Stop)
-                    {
-                        dvcDurations[dan.DeviceIdRef].EndDate = dan.AllocationStamp.Stop;
-                    }
-                    dvcDurations[dan.DeviceIdRef].Duration += dan.AllocationStamp.GetSeconds();
-
-                }
-
-            }
-            return dvcDurations;
+            _isoDeviceAnalysis = new ISODeviceAnalysis(isoxml);
         }
 
 
         private WorkingTimeInfo GetDeviceElementActivityDurationInTask(ISOTask isoTask, TaskDDIEntry element)
         {
             var logs = isoTask.GetTaskExtract((ushort)DDIList.ActualWorkState, element.DeviceElementNo(), "WorkState", true);
+            var device = _isoDeviceAnalysis.GetDeviceFromDeviceElement(element.DeviceElementId);
             var info = new WorkingTimeInfo
             {
                 Duration = 0.0,
                 StartDate = null,
                 EndDate = null,
-                DdiEntry = element
+                DdiEntry = element,
+                DeviceIdRef = device != null ? device.DeviceId : ""
             };
             DateTime? startTimestamp = null;
             foreach (var log in logs)
@@ -113,60 +87,52 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         }
 
         /// <summary>
-        /// Return CulturalPractice from device working element with biggest working time
+        /// Return all CulturalPractices from a given Task. Useful if you want to filter for multiple CulturalPractices
         /// </summary>
         /// <param name="isoTask"></param>
         /// <returns>CulturalPracticeInfo enum value</returns>
-        public List<CulturalPracticeInfo> GetTaskCulturalPractices(ISOTask isoTask)
+        public List<CulturalPracticeInfo> FindTaskCulturalPracticesList(ISOTask isoTask)
         {
             var result = new List<CulturalPracticeInfo>();
             var deviceAnalysis = new ISODeviceAnalysis(_isoxml);
             var elementWorkTimes = new List<WorkingTimeInfo>();
+
+
             //First find those devices in the task where we have an actual cultural practice.
             var acpElements = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualCulturalPractice);
             foreach (var element in acpElements)
             {
-                var info = GetDeviceElementActivityDurationInTask(isoTask, element);
-                if (info.Duration > 0.0)
+                var workingInfo = GetDeviceElementActivityDurationInTask(isoTask, element);
+                if (workingInfo.Duration > 0.0)
                 {
-                    elementWorkTimes.Add(info);
+                    elementWorkTimes.Add(workingInfo);
                 }
             }
 
 
-
-            //Additionally find those, that don't have the ACP but were active
-            var dvcDurations = GetDeviceActivityDurationsFromDeviceAllocation(isoTask);
-            if (dvcDurations.Any())
+            //Now check if there are devices left that are used but don't have ActualCulturalPractice in it
+            var irrelevantClasses = new DeviceClass[] {
+            DeviceClass.UnDefined16,
+            DeviceClass.Reserved,
+            DeviceClass.NonSpecificSystem,
+            DeviceClass.ReservedForFutureAssignment,
+            DeviceClass.SensorSystem,
+            DeviceClass.Tractor,
+            DeviceClass.UtilityVehicles
+            };
+            var detsWithWorkState = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualWorkState);
+            foreach( var detEntry in  detsWithWorkState)
             {
-
-
-                var irrelevantClasses = new DeviceClass[] {
-                DeviceClass.UnDefined16,
-                DeviceClass.Reserved,
-                DeviceClass.NonSpecificSystem,
-                DeviceClass.ReservedForFutureAssignment,
-                DeviceClass.SensorSystem,
-                DeviceClass.Tractor,
-                DeviceClass.UtilityVehicles
-                };
-
-                //Find all devices used in the dvcDurations to be able to access the ClientName
-                var devices = _isoxml.Data.Device.Where(entry => dvcDurations.Any(idRef => idRef.Key == entry.DeviceId));
-                foreach (var dvc in devices)
-                {
+                if ( !elementWorkTimes.Any( entry => entry.DdiEntry!= null && entry.DdiEntry.DeviceElementId == detEntry.DeviceElementId)){
+                    ISODevice dvc = deviceAnalysis.GetDeviceFromDeviceElement(detEntry.DeviceElementId);
                     var client = new ClientName(dvc.ClientNAME);
                     if (Array.IndexOf(irrelevantClasses, client.DeviceClass) == -1)
                     {
-                        result.Add(new CulturalPracticeInfo()
+                        var workingInfo = GetDeviceElementActivityDurationInTask(isoTask, detEntry);
+                        if (workingInfo.Duration > 0.0)
                         {
-                            CulturalPractice = Utils.MapDeviceClassToPracticeType(client.DeviceClass),
-                            Source = CulturalPracticeSourceType.ClientName,
-                            DeviceId = dvc.DeviceId,
-                            DurationInSeconds = dvcDurations[dvc.DeviceId].Duration,
-                            StartDateTime = dvcDurations[dvc.DeviceId].StartDate ?? DateTime.MinValue,
-                            StopDateTime = dvcDurations[dvc.DeviceId].EndDate ?? DateTime.MaxValue,
-                        });
+                            elementWorkTimes.Add(workingInfo);
+                        }
                     }
                 }
             }
@@ -183,7 +149,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     DeviceId = device.DeviceId
                 };
 
-                if (workingElement.DdiEntry == null)
+                if (workingElement.DdiEntry == null|| workingElement.DdiEntry.DDI != (ushort)DDIList.ActualCulturalPractice)
                 {
                     var client = new ClientName(device.ClientNAME);
                     cpt.CulturalPractice = Utils.MapDeviceClassToPracticeType(client.DeviceClass);
@@ -209,14 +175,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             return result;
         }
 
-        public CulturalPracticeInfo GetTaskCulturalPractice(ISOTask isoTask)
+
+        /// <summary>
+        /// Return the most significant Cultural Practice for a given Task.
+        /// Prefer known CulturalPractices over unknowns
+        /// </summary>
+        /// <param name="isoTask"></param>
+        /// <returns>An actual Cultural Practice and the corresponding duration</returns>
+        public CulturalPracticeInfo FindTaskCulturalPractice(ISOTask isoTask)
         {
-            return GetTaskCulturalPractices(isoTask).OrderByDescending(entry => entry.DurationInSeconds).FirstOrDefault() ?? new CulturalPracticeInfo()
-            {
-                DurationInSeconds = 0,
-                Source = CulturalPracticeSourceType.None,
-                CulturalPractice = CulturalPracticesType.Unknown
-            }
+            var culturalPractices = FindTaskCulturalPracticesList(isoTask).OrderByDescending(entry => entry.DurationInSeconds);
+            return culturalPractices
+                //Prefer returning a known cultural practise
+                .FirstOrDefault(entry => entry.CulturalPractice != CulturalPracticesType.Unknown) ??
+                //If none exists, try at least to return the longest time
+                culturalPractices.FirstOrDefault() ??
+                //Otherwise, at least don't return a nullpointer
+                new CulturalPracticeInfo()
+                {
+                    DurationInSeconds = 0,
+                    Source = CulturalPracticeSourceType.None,
+                    CulturalPractice = CulturalPracticesType.Unknown
+                }
             ;
         }
     }

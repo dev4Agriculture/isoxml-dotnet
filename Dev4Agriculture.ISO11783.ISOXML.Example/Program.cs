@@ -216,7 +216,7 @@ public static class Program
         var stream = File.OpenRead(path);
         var isoxml = ISOXML.LoadFromArchive(stream);
         var analyzer = new ISOTaskAnalysis(isoxml);
-        var acp = analyzer.GetTaskCulturalPractice(isoxml.Data.Task[0]);
+        var acp = analyzer.FindTaskCulturalPractice(isoxml.Data.Task[0]);
     }
 
     public static void Main()

@@ -16,32 +16,32 @@ public class TaskAnalyzerTest
     public async Task CulturalPractice_MultiTask()
     {
         var statusResult = new int[] {
-            0,
-            0,
-            (int)CulturalPracticesType.Fertilizing,
-            0,
-            0,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            0,
-            (int)CulturalPracticesType.CropProtection,
-            0,
-            0,
-            0,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            0,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            0,
-            0,
-            0,
-            (int)CulturalPracticesType.SowingAndPlanting,
-            0,
-            0,
-            0,
-            0,
-            0,
-            (int)CulturalPracticesType.Fertilizing,
+            0,//Task is initial
+            0,//Task is initial
+            (int)CulturalPracticesType.Fertilizing,//ACP as DPD, Active Workstate
+            0,//ACP but no Active Workstate
+            0,//Task Initial
+            (int)CulturalPracticesType.SowingAndPlanting,//Active Workstate, One DPT
+            0,//Task Initial
+            (int)CulturalPracticesType.SowingAndPlanting,//Active Workstate, One DPT
+            0,//No active Workstate
+            0,//No active Workstate
+            0,//Initial Task
+            0,//Initial Task
+            0,//Initial Task
+            (int)CulturalPracticesType.SowingAndPlanting,//Active Workstate, One DPT
+            0,//Initial
+            (int)CulturalPracticesType.SowingAndPlanting,//Active Workstate, One DPT
+            0,//Initial
+            0,//No active Workstate
+            0,//Initial
+            (int)CulturalPracticesType.SowingAndPlanting,//Active Workstate, One DPT
+            0,//ClientName, but no Active Workstate
+            (int)CulturalPracticesType.CropProtection,//ClientName + Active Workstate
+            0,//Clientname, but no Active Workstate
+            0,//No DeviceAllocation and no TLG, but TIM with DLVs. Therefore currently no ActualCulturalPractice *TODO* Optimize this for TC Basic TaskSets
+            0,//No Data at all
+            0,//ACP as DPD, but no active Workstate
             (int)CulturalPracticesType.SowingAndPlanting,
          };
         var filePath = "./testdata/LoadFromStream/Another-single-ACP.zip";
@@ -55,12 +55,9 @@ public class TaskAnalyzerTest
         for (var index = 0; index < result.Data.Task.Count; index++)
         {
             var task = result.Data.Task[index];
-            if(task.TaskStatus != TaskFile.ISOTaskStatus.Planned)
-            {
-                var item = analyzer.GetTaskCulturalPractice(task);
-                Console.WriteLine(index);
-                Assert.AreEqual(statusResult[index], (int)item.CulturalPractice);
-            }
+            var item = analyzer.FindTaskCulturalPractice(task);
+            Console.WriteLine(index);
+            Assert.AreEqual(statusResult[index], (int)item.CulturalPractice);
         }
     }
     [TestMethod]
@@ -75,9 +72,9 @@ public class TaskAnalyzerTest
 
         var analyzer = new ISOTaskAnalysis(result);
         var task = result.Data.Task.First();
-        var item = analyzer.GetTaskCulturalPractice(task);
+        var item = analyzer.FindTaskCulturalPractice(task);
         Assert.AreEqual(CulturalPracticesType.SowingAndPlanting, item.CulturalPractice);
-        Assert.AreEqual("DET-452", item.DeviceElementId);
+        Assert.AreEqual("DET-453", item.DeviceElementId);
         Assert.AreEqual("DVC-36", item.DeviceId);
         Assert.AreEqual(64, (int)item.DurationInSeconds);
         Assert.AreEqual(CulturalPracticeSourceType.ClientName, item.Source);
