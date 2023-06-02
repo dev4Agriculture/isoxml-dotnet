@@ -44,7 +44,7 @@ public class TaskAnalyzerTest
             0,//ACP as DPD, but no active Workstate
             (int)CulturalPracticesType.SowingAndPlanting,
          };
-        var filePath = "./testdata/LoadFromStream/Another-single-ACP.zip";
+        var filePath = "./testdata/LoadFromStream/MultipleActualCulturalPractices.zip";
         ISOXML result = null;
         using (var stream = File.OpenRead(filePath))
         {
