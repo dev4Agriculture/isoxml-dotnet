@@ -56,7 +56,6 @@ public class TaskAnalyzerTest
         {
             var task = result.Data.Task[index];
             var item = analyzer.FindTaskCulturalPractice(task);
-            Console.WriteLine(index);
             Assert.AreEqual(statusResult[index], (int)item.CulturalPractice);
         }
     }

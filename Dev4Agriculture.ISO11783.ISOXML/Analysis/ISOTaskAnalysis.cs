@@ -90,8 +90,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         /// Return all CulturalPractices from a given Task. Useful if you want to filter for multiple CulturalPractices
         /// </summary>
         /// <param name="isoTask"></param>
+        /// <param name="includeUnknownPractices">If activated, all those data for an unknown cultural practice and those with a duration of 0 are removed</param>
         /// <returns>CulturalPracticeInfo enum value</returns>
-        public List<CulturalPracticeInfo> FindTaskCulturalPracticesList(ISOTask isoTask)
+        public List<CulturalPracticeInfo> FindTaskCulturalPracticesList(ISOTask isoTask, bool includeUnknownPractices = true)
         {
             var result = new List<CulturalPracticeInfo>();
             var deviceAnalysis = new ISODeviceAnalysis(_isoxml);
@@ -125,13 +126,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             {
                 if ( !elementWorkTimes.Any( entry => entry.DdiEntry!= null && entry.DdiEntry.DeviceElementId == detEntry.DeviceElementId)){
                     ISODevice dvc = deviceAnalysis.GetDeviceFromDeviceElement(detEntry.DeviceElementId);
-                    var client = new ClientName(dvc.ClientNAME);
-                    if (Array.IndexOf(irrelevantClasses, client.DeviceClass) == -1)
+                    if (dvc != null)
                     {
-                        var workingInfo = GetDeviceElementActivityDurationInTask(isoTask, detEntry);
-                        if (workingInfo.Duration > 0.0)
+                        var client = new ClientName(dvc.ClientNAME);
+                        if (includeUnknownPractices || Array.IndexOf(irrelevantClasses, client.DeviceClass) == -1)
                         {
-                            elementWorkTimes.Add(workingInfo);
+                            var workingInfo = GetDeviceElementActivityDurationInTask(isoTask, detEntry);
+                            if (workingInfo.Duration > 0.0)
+                            {
+                                elementWorkTimes.Add(workingInfo);
+                            }
                         }
                     }
                 }
@@ -170,7 +174,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     cpt.Source = CulturalPracticeSourceType.Ddi179;
                     result.Add(cpt);
                 }
-                result.Add(cpt);
+                if (includeUnknownPractices || cpt.CulturalPractice != CulturalPracticesType.Unknown)
+                {
+                    result.Add(cpt);
+                }
             }
             return result;
         }
