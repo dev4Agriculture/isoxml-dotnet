@@ -1,3 +1,6 @@
+v0.17.4
++ADD: Function to get intersected area
+
 v0.17.3
 =OPT: Optimize algorithm to find CulturalPractice in a Task
 +ADD: Functions to read durations
