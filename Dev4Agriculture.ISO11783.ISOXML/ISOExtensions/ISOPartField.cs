@@ -63,7 +63,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
-        
+
+        public bool IsIntersectWithField(ISOPartfield secondField, out double intersectPercent)
+        {
+            intersectPercent = 0;
+            var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
+            if (polygon == null)
+                return false;
+            var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
+            if (exterior == null)
+                return false;
+            var polygonSecond = secondField.PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
+            if (polygonSecond == null)
+                return false;
+            var exteriorSecond = polygonSecond.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
+            if (exteriorSecond == null)
+                return false;
+
+            var intersectedArea = exterior.Point.ToList().GetIntersectionOfPolygons(exteriorSecond.Point.ToList());
+            if (!intersectedArea.Any())
+                return false;
+            var baseArea = GetArea(exterior.Point.ToArray());
+            var intersectArea = GetArea(intersectedArea.ToArray());
+            intersectPercent = intersectArea / baseArea * 100;
+            return true;
+        }
+
         /// <summary>
         ///  Calculate area for field
         /// </summary>
