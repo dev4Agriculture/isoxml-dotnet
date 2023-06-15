@@ -82,10 +82,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             var intersectedArea = exterior.Point.ToList().GetIntersectionOfPolygons(exteriorSecond.Point.ToList());
             if (!intersectedArea.Any())
-                return false;
+                return true;
             var baseArea = GetArea(exterior.Point.ToArray());
             var intersectArea = GetArea(intersectedArea.ToArray());
-            intersectPercent = intersectArea / baseArea * 100;
+            intersectPercent = intersectArea / baseArea;
             return true;
         }
 

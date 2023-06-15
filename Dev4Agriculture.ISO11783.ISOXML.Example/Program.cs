@@ -218,6 +218,44 @@ public static class Program
         return acp.CulturalPractice;
     }
 
+    private static String FixStringLength(String str)
+    {
+        return str.Substring(0, Math.Min(str.Length, 32)).PadRight(32, ' ');
+    }
+
+
+    public static void CompareFieldOverLaps(string path1, string path2)
+    {
+        var isoxml1 = ISOXML.LoadFromArchive(File.OpenRead(path1));
+        var isoxml2 = ISOXML.LoadFromArchive(File.OpenRead(path2));
+
+        var startLine = FixStringLength("    ")+"| ";
+        foreach (var field in isoxml1.Data.Partfield)
+        {
+            startLine += FixStringLength(field.PartfieldDesignator) + "| ";
+        }
+        Console.WriteLine(startLine);
+
+        foreach (var compareField in isoxml2.Data.Partfield)
+        {
+            var row = FixStringLength(compareField.PartfieldDesignator) + "| ";
+            foreach (var field in isoxml1.Data.Partfield)
+            {
+                if (compareField.IsIntersectWithField(field, out var percentage))
+                {
+                    row +=  FixStringLength((percentage * 100).ToString() + "%") + "| ";
+
+                }
+                else
+                {
+                    row +=  FixStringLength("Error") + "| ";
+                }
+            }
+            Console.WriteLine(row);
+
+        }
+    }
+
     public static void Main()
     {
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
@@ -227,7 +265,8 @@ public static class Program
             "1: Read Manufacturer from DeviceDescription\n" +
             "2: Get Cultural Practice for TaskSet first Task\n" +
             "3: Create Task with CodingData \n" +
-            "4: Create an example grid");
+            "4: Create an example grid \n" +
+            "5: Create FieldSize Comparison for 2 ISOXML DataSets");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
         {
@@ -271,6 +310,24 @@ public static class Program
                     CreateGrid(Path.Combine(path, "grid"));
                 }
                 break;
+            case 5:
+                Console.WriteLine("Select first ISOXML");
+                var path1 = Console.ReadLine();
+                Console.WriteLine("Select second ISOXML");
+                var path2 = Console.ReadLine();
+                if( String.IsNullOrWhiteSpace(path1) || String.IsNullOrWhiteSpace(path2))
+                {
+                    Console.WriteLine("One TaskSet was missing");
+                    return;
+                }
+
+                CompareFieldOverLaps(path1, path2);
+
+                break;
+
+
+
+
         }
 
         return;
