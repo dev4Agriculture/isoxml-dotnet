@@ -1,4 +1,5 @@
 ﻿using System;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -70,7 +71,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public String ToKMLString()
+        public string ToKMLString()
         {
             return "\n" +
                         (PosEast / ISOTLG.TLG_GPS_FACTOR).ToString().Replace(",", ".") + "," +

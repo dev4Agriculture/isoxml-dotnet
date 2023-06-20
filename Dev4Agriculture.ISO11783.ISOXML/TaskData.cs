@@ -5,6 +5,7 @@ using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -38,7 +39,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         var externalDoc = new XmlDocument();
                         externalDoc.LoadXml(extContent);
                         var mergeResult = MergeExternalContent(xmlDoc, externalDoc);
-                        if(mergeResult.Messages.Count > 0)
+                        if (mergeResult.Messages.Count > 0)
                         {
                             result.Messages.AddRange(mergeResult.Messages);
                         };
@@ -104,7 +105,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var filePath = "";
             if (!File.Exists(path))
             {
-                if (!Utils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out filePath))
+                if (!FileUtils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out filePath))
                 {
                     return new ResultWithMessages<ISO11783TaskDataFile>(
                         new ISO11783TaskDataFile(),
@@ -147,7 +148,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             taskData.Partfield.ToList().ForEach(entry => entry.FixPositionDigits());
             taskData.BaseStation.ToList().ForEach(entry => entry.FixPositionDigits());
-            foreach( var task in taskData.Task)
+            foreach (var task in taskData.Task)
             {
                 task.Grid.FirstOrDefault()?.FixPositionDigits();
                 task.Time.ToList().ForEach(entry => entry.FixPositionDigits());

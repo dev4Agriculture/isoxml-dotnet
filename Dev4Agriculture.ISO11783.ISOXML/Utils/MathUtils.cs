@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 {
     public class MathUtils
     {
@@ -17,13 +15,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             float Bx, float By, float Cx, float Cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            var BAx = Ax - Bx;
+            var BAy = Ay - By;
+            var BCx = Cx - Bx;
+            var BCy = Cy - By;
 
             // Calculate the Z coordinate of the cross product.
-            return (BAx * BCy - BAy * BCx);
+            return BAx * BCy - BAy * BCx;
         }
         // Return the dot product AB . BC.
         // Note that AB x BC = |AB| * |BC| * Cos(theta).
@@ -31,13 +29,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             float Bx, float By, float Cx, float Cy)
         {
             // Get the vectors' coordinates.
-            float BAx = Ax - Bx;
-            float BAy = Ay - By;
-            float BCx = Cx - Bx;
-            float BCy = Cy - By;
+            var BAx = Ax - Bx;
+            var BAy = Ay - By;
+            var BCx = Cx - Bx;
+            var BCy = Cy - By;
 
             // Calculate the dot product.
-            return (BAx * BCx + BAy * BCy);
+            return BAx * BCx + BAy * BCy;
         }
         // Return the angle ABC.
         // Return a value between PI and -PI.
@@ -47,10 +45,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             float Bx, float By, float Cx, float Cy)
         {
             // Get the dot product.
-            float dot_product = DotProduct(Ax, Ay, Bx, By, Cx, Cy);
+            var dot_product = DotProduct(Ax, Ay, Bx, By, Cx, Cy);
 
             // Get the cross product.
-            float cross_product = CrossProductLength(Ax, Ay, Bx, By, Cx, Cy);
+            var cross_product = CrossProductLength(Ax, Ay, Bx, By, Cx, Cy);
 
             // Calculate the angle.
             return (float)Math.Atan2(cross_product, dot_product);

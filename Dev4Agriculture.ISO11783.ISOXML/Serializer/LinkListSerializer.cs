@@ -84,7 +84,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         public void Serialize(ISO11783LinkListFile taskData, string path)
         {
             //Create our own namespaces for the output
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            var ns = new XmlSerializerNamespaces();
 
             //Add an empty namespace and empty value
             ns.Add("", "");

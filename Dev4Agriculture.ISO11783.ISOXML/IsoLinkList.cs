@@ -5,6 +5,7 @@ using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -253,7 +254,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
-            if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
+            if (!FileUtils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
                 var result = new ResultWithMessages<IsoLinkList>();
                 result.AddError(

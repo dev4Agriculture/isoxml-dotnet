@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -64,7 +63,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
             return
                 device.DeviceProcessData.First(dpd =>
-                    Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == entry.DDI &&
+                    DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == entry.DDI &&
                     dorList.Contains(dpd.DeviceProcessDataObjectId)
                 );
         }
@@ -87,7 +86,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
 
             return device.DeviceProperty.First(dpd =>
-                Utils.ConvertDDI(dpd.DevicePropertyDDI) == entry.DDI &&
+                DDIUtils.ConvertDDI(dpd.DevicePropertyDDI) == entry.DDI &&
                 dorList.Contains(dpd.DevicePropertyObjectId)
             );
         }
@@ -186,7 +185,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 //Now, go through the list of DeviceProperties and check, if our DDI is available there
                 .SelectMany(device => device.DeviceProperty
                     //Find the ObjectID for our DPT
-                    .Where(dpt => Utils.ConvertDDI(dpt.DevicePropertyDDI) == ddi)
+                    .Where(dpt => DDIUtils.ConvertDDI(dpt.DevicePropertyDDI) == ddi)
                     .Select(dpt => dpt.DevicePropertyObjectId)
                     //which is then linked in the DeviceObjectRelation(DOR) of a DET
                     .SelectMany(dptObjectId =>

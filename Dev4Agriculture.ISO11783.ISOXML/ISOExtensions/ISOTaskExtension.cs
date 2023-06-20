@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
@@ -85,11 +86,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// </summary>
         public void AddDefaultDataLogTrigger()
         {
-            if (!DataLogTrigger.Any(entry => Utils.ConvertDDI(entry.DataLogDDI) == (ushort)DDIList.RequestDefaultProcessData))
+            if (!DataLogTrigger.Any(entry => DDIUtils.ConvertDDI(entry.DataLogDDI) == (ushort)DDIList.RequestDefaultProcessData))
             {
                 DataLogTrigger.Add(new ISODataLogTrigger()
                 {
-                    DataLogDDI = Utils.FormatDDI(DDIList.RequestDefaultProcessData),
+                    DataLogDDI = DDIUtils.FormatDDI(DDIList.RequestDefaultProcessData),
                     DataLogMethod = (byte)(TriggerMethods.OnTime
                     | TriggerMethods.OnDistance
                     | TriggerMethods.ThresholdLimits

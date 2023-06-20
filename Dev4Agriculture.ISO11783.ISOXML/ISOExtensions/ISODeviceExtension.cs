@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
@@ -32,14 +33,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 resultMessageList.AddError(ResultMessageCode.LocalizationLabelTooShort,
                     ResultDetail.FromId(DeviceId),
-                    ResultDetail.FromString(Utils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
+                    ResultDetail.FromString(HexUtils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
                     ResultDetail.FromString(indexException.Message));
             }
             catch (LocalizationLabelInvalidException invalidLLException)
             {
                 resultMessageList.AddError(ResultMessageCode.LocalizationLabelTooShort,
                     ResultDetail.FromId(DeviceId),
-                    ResultDetail.FromString(Utils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
+                    ResultDetail.FromString(HexUtils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
                     ResultDetail.FromString(invalidLLException.Message));
 
             }
@@ -47,7 +48,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 resultMessageList.AddError(ResultMessageCode.LocalizationLabelBroken,
                     ResultDetail.FromId(DeviceId),
-                    ResultDetail.FromString(Utils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
+                    ResultDetail.FromString(HexUtils.ByteArrayToHexString(DeviceLocalizationLabel ?? new byte[0])),
                     ResultDetail.FromString(ex.Message));
 
             }
@@ -61,14 +62,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 resultMessageList.AddError(ResultMessageCode.ClientNameTooShort,
                     ResultDetail.FromId(DeviceId),
-                    ResultDetail.FromString(Utils.ByteArrayToHexString(ClientNAME ?? new byte[0])),
+                    ResultDetail.FromString(HexUtils.ByteArrayToHexString(ClientNAME ?? new byte[0])),
                     ResultDetail.FromString(indexException.Message));
             }
             catch (Exception ex)
             {
                 resultMessageList.AddError(ResultMessageCode.ClientNameBroken,
                     ResultDetail.FromId(DeviceId),
-                    ResultDetail.FromString(Utils.ByteArrayToHexString(ClientNAME ?? new byte[0])),
+                    ResultDetail.FromString(HexUtils.ByteArrayToHexString(ClientNAME ?? new byte[0])),
                     ResultDetail.FromString(ex.Message));
 
             }
@@ -91,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                                        from dpd in DeviceProcessData
                                        where dpd.DeviceProcessDataObjectId == dor.DeviceObjectId
                                        where dpd.IsTotal() &&
-                                             (Utils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort)DDIList.RequestDefaultProcessData)
+                                             (DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort)DDIList.RequestDefaultProcessData)
                                        select (det, dpd))
             {
                 result.Add((det, dpd));
@@ -102,12 +103,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool IsTotal(ushort DDI)
         {
-            return DeviceProcessData.First(entry => Utils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
+            return DeviceProcessData.First(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
         }
 
         public bool IsLifetimeTotal(ushort DDI)
         {
-            return DeviceProcessData.First(entry => Utils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
+            return DeviceProcessData.First(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
         }
 
     }

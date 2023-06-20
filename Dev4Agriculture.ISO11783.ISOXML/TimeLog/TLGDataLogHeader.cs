@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -348,7 +347,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         internal static ResultWithMessages<TLGDataLogHeader> Load(string path, string name)
         {
             var result = new ResultWithMessages<TLGDataLogHeader>();
-            if (Utils.AdjustFileNameToIgnoreCasing(path, name, out var filePath))
+            if (FileUtils.AdjustFileNameToIgnoreCasing(path, name, out var filePath))
             {
                 var xmlDocument = new XmlDocument();
                 try
@@ -453,7 +452,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var entry = new DLVWriter()
                 {
-                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI(DDIList.PGNBasedData)),
+                    ProcessDataDDI = HexUtils.ByteArrayToHexString(DDIUtils.FormatDDI(DDIList.PGNBasedData)),
                     DataLogPGN = dlv.DataLogPGN,
                     DataLogPGNStartBit = dlv.StartBit,
                     DataLogPGNStopBit = dlv.StopBit,
@@ -466,7 +465,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var entry = new DLVWriter()
                 {
-                    ProcessDataDDI = Utils.ByteArrayToHexString(Utils.FormatDDI(dlv.Ddi)),
+                    ProcessDataDDI = HexUtils.ByteArrayToHexString(DDIUtils.FormatDDI(dlv.Ddi)),
                     ProcessDataValue = "",
                     DeviceElementIdRef = "DET" + dlv.DeviceElement,
                     Index = dlv.Index
@@ -507,8 +506,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public void AddDataLogValue(TLGDataLogDDI tLGDataLogDDI)
         {
-            this.Ddis.Add(tLGDataLogDDI);
-            this.MaximumNumberOfEntries = (byte)this.Ddis.Count;
+            Ddis.Add(tLGDataLogDDI);
+            MaximumNumberOfEntries = (byte)Ddis.Count;
         }
     }
 }
