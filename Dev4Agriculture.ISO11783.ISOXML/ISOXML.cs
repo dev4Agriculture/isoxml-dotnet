@@ -696,7 +696,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         //p.136
                         pAlloc.TransferMode = ISOTransferMode.Emptying;
                     }
-                    UpdateAllocationStamp(pAlloc.ASP);
+                    UpdateAllocationStamp(pAlloc.AllocationStamp);
                 }
 
                 foreach (var item in task.WorkerAllocation)

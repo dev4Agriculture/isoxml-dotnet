@@ -4968,8 +4968,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     public partial class ISOProductAllocation
     {
         
+        /// <summary>
+        /// </summary>
         [System.Xml.Serialization.XmlElementAttribute("ASP")]
-        public ISOAllocationStamp ASP { get; set; }
+        public ISOAllocationStamp AllocationStamp { get; set; }
         
         /// <summary>
         /// </summary>

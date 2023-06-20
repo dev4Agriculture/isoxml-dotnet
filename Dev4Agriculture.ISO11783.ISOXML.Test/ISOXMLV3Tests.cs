@@ -229,7 +229,7 @@ public class ISOXMLV3Tests
         Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
         var loadedPAlloc = taskLoaded.ProductAllocation.First();
         Assert.AreEqual(ISOTransferMode.Emptying, loadedPAlloc.TransferMode);
-        Assert.AreEqual(new DateTime(startTime.Ticks, DateTimeKind.Unspecified), loadedPAlloc.ASP.Start);
+        Assert.AreEqual(new DateTime(startTime.Ticks, DateTimeKind.Unspecified), loadedPAlloc.AllocationStamp.Start);
     }
 
     [TestMethod]
@@ -247,7 +247,7 @@ public class ISOXMLV3Tests
         Assert.IsTrue(taskLoaded.ProductAllocationSpecified);
         var loadedPAlloc = taskLoaded.ProductAllocation.First();
         Assert.AreEqual(ISOTransferMode.Remainder, loadedPAlloc.TransferMode);
-        Assert.AreEqual(startTime, loadedPAlloc.ASP.Start);
+        Assert.AreEqual(startTime, loadedPAlloc.AllocationStamp.Start);
     }
 
     private static DateTime CreatetaskProductAllocation(string path, ISO11783TaskDataFileVersionMajor version)
@@ -266,7 +266,7 @@ public class ISOXMLV3Tests
 
         var productAlloc = new ISOProductAllocation()
         {
-            ASP = new ISOAllocationStamp()
+            AllocationStamp = new ISOAllocationStamp()
             {
                 Start = startTime
             },

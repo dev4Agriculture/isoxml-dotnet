@@ -3965,11 +3965,15 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:choice minOccurs="0">
-				<xs:element ref="ASP" minOccurs="0">
-					<!-- AllocationStamp -->
-				</xs:element>
-			</xs:choice>
+            <xs:choice minOccurs="0">
+                <xs:element ref="ASP" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            AllocationStamp
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
 			<xs:attribute name="A" use="required">
 				<xs:annotation>
 					<xs:documentation xml:lang="en">

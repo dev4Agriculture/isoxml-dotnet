@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
@@ -82,10 +83,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
         public void Serialize(ISO11783LinkListFile taskData, string path)
         {
-            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
+            //Create our own namespaces for the output
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+
+            //Add an empty namespace and empty value
+            ns.Add("", "");
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8 };
             var ser = new XmlSerializer(typeof(ISO11783LinkListFile));
             using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
-            ser.Serialize(xmlWriter, taskData);
+            ser.Serialize(xmlWriter, taskData, ns);
         }
 
         // mainly for debugging
