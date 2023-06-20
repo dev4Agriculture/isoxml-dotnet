@@ -145,6 +145,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 pln.FixPointDigits();
             }
 
+
+
+            foreach (var ggp in GuidanceGroup)
+            {
+                foreach (var gpn in ggp.GuidancePattern)
+                {
+                    foreach (var lsg in gpn.LineString)
+                    {
+                        lsg.FixPointDigits();
+                    }
+
+                    foreach (var pln in gpn.BoundaryPolygon)
+                    {
+                        pln.FixPointDigits();
+                    }
+                }
+            }
         }
     }
 }
