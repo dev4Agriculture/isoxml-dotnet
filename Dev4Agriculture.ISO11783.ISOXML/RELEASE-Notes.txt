@@ -1,3 +1,6 @@
+v0.19.0
+-FIX: Make sure to remove LineStringId in V3 TaskSets
+-FIX: Make sure to limit amount of digits to 9 for GuidancePattern Linestrings.
 v0.18.0
 -FIX: The ProductAllocation was the only element in a Task having an ASP instead of AllocationStamp in parameter. Fixed in XSD and therefore also in Lib
 -FIX: The LinkList-File doesn't export any NameSpace headers anymore
