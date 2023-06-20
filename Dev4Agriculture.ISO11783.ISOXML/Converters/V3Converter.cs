@@ -111,6 +111,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Converters
             point.Filename = null;
             point.Filelength = null;
 
+            return point;
+
         }
 
 
