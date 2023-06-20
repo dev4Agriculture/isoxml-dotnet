@@ -213,10 +213,17 @@ public static class Program
 
     public static void XML2CSV(string path)
     {
-        var stream = File.OpenRead(path);
-        var isoxml = ISOXML.LoadFromArchive(stream);
+        ISOXML isoxml = null;
+        if (path.EndsWith(".zip"))
+        {
+            var stream = File.OpenRead(path);
+            isoxml = ISOXML.LoadFromArchive(stream);
+        } else
+        {
+            isoxml = ISOXML.Load(path);
+        }
 
-        var tempFolderPath = Path.Join(Path.GetTempPath(), "isoxml_to_csv"); // Replace this with your Temp folder path
+        var tempFolderPath = Path.Join(Directory.GetParent(path).FullName, DateTime.Now.ToString("yyyy-MM-dd_T_hh_mm_ss")); // Replace this with your Temp folder path
         Directory.CreateDirectory(tempFolderPath);
         // Your code to store data in Temp folder goes here...
         var isoxmlJSON = JsonConvert.SerializeObject(isoxml.Data);
@@ -248,7 +255,7 @@ public static class Program
             "Created 2022 by dev4Agriculture \n" +
             "Enter the path were data shall be stored");
 
-        XML2CSV("C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\07_CUSTOMERS\\022-xFarm\\04_Service_and_Support\\2023-05-18-TelemetryIssue\\TestData_From_Actia\\test.zip");
+        XML2CSV("C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\07_CUSTOMERS\\022-xFarm\\04_Service_and_Support\\2023-06-14-TelemetryTimeStamp\\2023-06-16-00_00_00_b1f71648-355f-4457-a169-187239d0afdc_telemetry-3");
 
         /*
 
