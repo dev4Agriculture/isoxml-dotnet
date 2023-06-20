@@ -142,4 +142,16 @@ public class IsoGridTests
         Assert.AreEqual(value, Constants.TLG_VALUE_FOR_NO_VALUE);
     }
 
+    [TestMethod]
+    public void WillAdjustGridPositionOnSave()
+    {
+        //Loading a random task is faster than creating one ;) 
+        var isoxml = ISOXML.Load("./testdata/Grid/Type2_ReadValue");
+        isoxml.Data.Task[0].Grid.FirstOrDefault().GridMinimumNorthPosition = 10.01234567890123m;
+
+        isoxml.SetFolderPath("./GridTest");
+        isoxml.Save();
+        Assert.AreEqual(isoxml.Data.Task[0].Grid.FirstOrDefault().GridMinimumNorthPosition, 10.012345679m);
+    }
+
 }

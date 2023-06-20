@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
@@ -132,10 +133,36 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Directory.CreateDirectory(path);
             }
             path = FixTaskDataPath(path);
+            FixTaskDataContent(taskData);
             var isoxmlSerializer = new IsoxmlSerializer();
             isoxmlSerializer.Serialize(taskData, path);
         }
 
+
+        /// <summary>
+        /// Some Elements within the Taskdata.xml may only have up to x (currently 9) digits. That's what we fix here
+        /// </summary>
+        /// <param name="taskData"></param>
+        private static void FixTaskDataContent(ISO11783TaskDataFile taskData)
+        {
+            taskData.Partfield.ToList().ForEach(entry => entry.FixPositionDigits());
+            taskData.BaseStation.ToList().ForEach(entry => entry.FixPositionDigits());
+            foreach( var task in taskData.Task)
+            {
+                task.Grid.FirstOrDefault()?.FixPositionDigits();
+                task.Time.ToList().ForEach(entry => entry.FixPositionDigits());
+                task.CommentAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.DeviceAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.ProductAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.WorkerAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.DeviceAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.DeviceAllocation.ToList().ForEach(entry => entry.AllocationStamp?.FixPositionDigits());
+                task.Time.ToList().ForEach(entry => entry.Position.ToList().ForEach(ptn => ptn.FixDigits()));
+
+
+            }
+
+        }
 
         public static ResultWithMessages<ISO11783TaskDataFile> FromParsedElement(string elementString)
         {

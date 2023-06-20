@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -41,6 +42,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 seconds = 0;
                 return false;
+            }
+        }
+
+
+        internal void FixPositionDigits()
+        {
+            if( Position != null )
+            {
+                Position.ToList().ForEach( ptn => ptn.FixDigits());
             }
         }
     }

@@ -1,3 +1,8 @@
+v0.18.0
+-FIX: The ProductAllocation was the only element in a Task having an ASP instead of AllocationStamp in parameter. Fixed in XSD and therefore also in Lib
+-FIX: The LinkList-File doesn't export any NameSpace headers anymore
+-FIX: Several Points and  Positions may only have up to 9 digits. 
+
 v0.17.3
 =OPT: Optimize algorithm to find CulturalPractice in a Task
 +ADD: Functions to read durations

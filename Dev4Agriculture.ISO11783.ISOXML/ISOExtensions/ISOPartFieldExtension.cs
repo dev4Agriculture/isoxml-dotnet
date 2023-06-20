@@ -63,7 +63,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
-        
+
         /// <summary>
         ///  Calculate area for field
         /// </summary>
@@ -125,5 +125,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return 2 * Math.Atan2(t * Math.Sin(deltaLng), 1 + t * Math.Cos(deltaLng));
         }
 
+        internal void FixPositionDigits()
+        {
+            foreach (var pnt in Point)
+            {
+                pnt.FixDigits();
+            }
+            foreach (var lsg in LineString)
+            {
+                lsg.FixPointDigits();
+            }
+            foreach (var pln in PolygonnonTreatmentZoneonly)
+            {
+                pln.FixPointDigits();
+            }
+        }
     }
 }
