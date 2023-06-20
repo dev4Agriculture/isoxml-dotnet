@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -269,14 +270,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     };
                     if (dpd.IsLifeTimeTotal())
                     {
-                        if (TryGetLastValue(Utils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total))
+                        if (TryGetLastValue(DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total))
                         {
                             dlv.ProcessDataValue = total;
                         }
                     }
                     else if (dpd.IsTotal())
                     {
-                        if (TryGetTotalValue(Utils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total, totalAlgorithmType))
+                        if (TryGetTotalValue(DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total, totalAlgorithmType))
                         {
                             dlv.ProcessDataValue = total;
                         }

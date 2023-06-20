@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -65,7 +66,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return new ISOTLGExtractPoint(
                         DateUtilities.GetDateTimeFromTimeLogInfos(line.Date, line.Time),
                         TLGGPSInfo.FromTLGDataLogLine(line),
-                        has ? value : (int)Constants.TLG_VALUE_FOR_NO_VALUE,
+                        has ? value : Constants.TLG_VALUE_FOR_NO_VALUE,
                         has
                 );
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 {
 
     public class DateUtilities
@@ -28,7 +28,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public static DateTime GetDateTimeFromTimeLogInfos(int daysSince1980, uint milliSecondsSinceMidnight)
         {
-            return ISOXMLEpoch.AddDays(daysSince1980 + (milliSecondsSinceMidnight / MILLISECONDS_IN_DAY));
+            return ISOXMLEpoch.AddDays(daysSince1980 + milliSecondsSinceMidnight / MILLISECONDS_IN_DAY);
         }
 
 

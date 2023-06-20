@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 {
@@ -83,7 +84,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         public void Serialize(ISO11783TaskDataFile taskData, string path)
         {
             //Create our own namespaces for the output
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            var ns = new XmlSerializerNamespaces();
 
             //Add an empty namespace and empty value
             ns.Add("", "");
@@ -96,7 +97,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         public string Serialize(object obj)
         {
             //Create our own namespaces for the output
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            var ns = new XmlSerializerNamespaces();
 
             //Add an empty namespace and empty value
             ns.Add("", "");

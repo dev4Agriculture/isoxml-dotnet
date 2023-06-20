@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -94,7 +95,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-            if (Utils.AdjustFileNameToIgnoreCasing(FolderPath, BinName, out var binPath))
+            if (FileUtils.AdjustFileNameToIgnoreCasing(FolderPath, BinName, out var binPath))
             {
                 var binaryFile = File.Open(binPath, FileMode.Open);
                 messages.AddRange(ReadBinaryData(binaryFile, Header));
@@ -275,7 +276,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public static ISOTLG Generate(int index, string path, TLGGPSOptions tlgGPSOptions = null)
         {
-            if( tlgGPSOptions == null)
+            if (tlgGPSOptions == null)
             {
                 tlgGPSOptions = new TLGGPSOptions
                 {

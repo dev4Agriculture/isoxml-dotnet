@@ -1,5 +1,6 @@
 ﻿using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Examples;
 
@@ -89,12 +90,13 @@ public static class Program
         {
             for (uint gridRow = 0; gridRow < isoGrid.GridMaximumRow; gridRow++)
             {
-                var latitude = north + (decimal)(isoGrid.GridCellNorthSize * (gridRow+0.5));
-                var longitude = west + (decimal)(isoGrid.GridCellEastSize* (gridColumn+0.5));
-                if( partField.IsInField(longitude, latitude) )
+                var latitude = north + (decimal)(isoGrid.GridCellNorthSize * (gridRow + 0.5));
+                var longitude = west + (decimal)(isoGrid.GridCellEastSize * (gridColumn + 0.5));
+                if (partField.IsInField(longitude, latitude))
                 {
                     grid.SetValue(gridColumn, gridRow, 5 + (int)gridRow * 100);
-                } else
+                }
+                else
                 {
                     grid.SetValue(gridColumn, gridRow, 0);
                 }
@@ -122,7 +124,7 @@ public static class Program
 
         tzn1.ProcessDataVariable.Add(new ISOProcessDataVariable()
         {
-            ProcessDataDDI = Utils.FormatDDI(6),
+            ProcessDataDDI = DDIUtils.FormatDDI(6),
             ProcessDataValue = 0,
             ValuePresentationIdRef = vpn.ValuePresentationId
         });
@@ -135,7 +137,7 @@ public static class Program
 
         tznInner.ProcessDataVariable.Add(new ISOProcessDataVariable()
         {
-            ProcessDataDDI = Utils.FormatDDI(6),
+            ProcessDataDDI = DDIUtils.FormatDDI(6),
             ProcessDataValue = 0,
             ValuePresentationIdRef = vpn.ValuePresentationId
         });
@@ -240,7 +242,7 @@ public static class Program
             case 1:
                 Console.WriteLine("Enter DeviceDescription");
                 var dvcDescript = "";
-                while(!dvcDescript.EndsWith("</DVC>"))
+                while (!dvcDescript.EndsWith("</DVC>"))
                 {
                     dvcDescript += Console.ReadLine();
                 }
@@ -249,9 +251,9 @@ public static class Program
             case 2:
                 Console.WriteLine("Enter Path to get ActualCulturalPractice");
                 path = Console.ReadLine();
-                if (!String.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(path))
                 {
-                   Console.WriteLine("Actual Cultural Practice: "+ GetCulturalPractice(path).ToString());
+                    Console.WriteLine("Actual Cultural Practice: " + GetCulturalPractice(path).ToString());
                 }
 
                 break;

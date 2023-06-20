@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -16,9 +15,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public void Update(decimal north, decimal east)
         {
             MinLat = MinLat < north ? MinLat : north;
-            MinLong = MinLong < east ? MinLong: east;
+            MinLong = MinLong < east ? MinLong : east;
             MaxLat = MaxLat > north ? MaxLat : north;
-            MaxLong = MaxLong> east ? MaxLong : east;
+            MaxLong = MaxLong > east ? MaxLong : east;
         }
     }
 
@@ -72,10 +71,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
             if (polygon == null)
+            {
                 return 0;
+            }
+
             var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
             if (exterior == null)
+            {
                 return 0;
+            }
+
             var area = GetArea(exterior.Point.ToArray());
 
             var interiorPolygons = polygon.LineString.Where(s => s.LineStringType == ISOLineStringType.PolygonInterior);
@@ -139,6 +144,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 pln.FixPointDigits();
             }
+
         }
     }
 }
