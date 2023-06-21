@@ -3,11 +3,98 @@ using System.Collections.Generic;
 using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
-namespace Dev4Agriculture.ISO11783.ISOXML
+namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
 {
     public static class GeometryUtility
     {
         private const decimal EquityTolerance = 0.000000001m;
+
+        public static bool PolygonIsConvex(this List<ISOPoint> poly1)
+        {
+            if (poly1.Count < 3)
+            {
+                return false;
+            }
+
+            ISOPoint p;
+            ISOPoint v;
+            ISOPoint u;
+            var res = 0m;
+            for (var i = 0; i < poly1.Count; i++)
+            {
+                p = poly1[i];
+                ISOPoint tmp = poly1[(i+1) % poly1.Count];
+                v = new ISOPoint();
+                v.PointNorth = tmp.PointNorth - p.PointNorth;
+                v.PointEast = tmp.PointEast - p.PointEast;
+                u = poly1[(i+2) % poly1.Count];
+
+                if (i == 0)
+                {
+                    res = u.PointNorth * v.PointEast - u.PointEast * v.PointNorth + v.PointNorth * p.PointEast - v.PointEast * p.PointNorth;
+                }
+                else
+                {
+                    var newres = u.PointNorth * v.PointEast - u.PointEast * v.PointNorth + v.PointNorth * p.PointEast - v.PointEast * p.PointNorth;
+                    if ((newres > 0 && res < 0) || (newres < 0 && res > 0))
+                        return false;
+                }
+            }
+            return true;
+        }
+        
+        public static List<ISOPoint> ClearPolygon(List<ISOPoint> points)
+        {
+            for (var i = 0; i < points.Count - 2; i++)
+            {
+                var firstPoint = points[i];
+                var checkPoint = points[i + 1];
+                var secondPoint = points[i + 2];
+                if (PointOnLineSegment(firstPoint, secondPoint,checkPoint))
+                {
+                    points.Remove(checkPoint);
+                    i = 0;
+                }
+            }
+            return points;
+        }
+
+        private static bool PointOnLineSegment(ISOPoint pt1, ISOPoint pt2, ISOPoint pt, decimal epsilon = 0.0001m)
+        {
+            if (pt.PointNorth - Math.Max(pt1.PointNorth, pt2.PointNorth) > epsilon || 
+                Math.Min(pt1.PointNorth, pt2.PointNorth) - pt.PointNorth > epsilon || 
+                pt.PointEast - Math.Max(pt1.PointEast, pt2.PointEast) > epsilon || 
+                Math.Min(pt1.PointEast, pt2.PointEast) - pt.PointEast > epsilon)
+                return false;
+
+            if (Math.Abs(pt2.PointNorth - pt1.PointNorth) < epsilon)
+                return Math.Abs(pt1.PointNorth - pt.PointNorth) < epsilon || Math.Abs(pt2.PointNorth - pt.PointNorth) < epsilon;
+            if (Math.Abs(pt2.PointEast - pt1.PointEast) < epsilon)
+                return Math.Abs(pt1.PointEast - pt.PointEast) < epsilon || Math.Abs(pt2.PointEast - pt.PointEast) < epsilon;
+
+            var x = pt1.PointNorth + (pt.PointEast - pt1.PointEast) * (pt2.PointNorth - pt1.PointNorth) / (pt2.PointEast - pt1.PointEast);
+            var y = pt1.PointEast + (pt.PointNorth - pt1.PointNorth) * (pt2.PointEast - pt1.PointEast) / (pt2.PointNorth - pt1.PointNorth);
+
+            return Math.Abs(pt.PointNorth - x) < epsilon || Math.Abs(pt.PointEast - y) < epsilon;
+        }
+
+        public static bool IsPolygonsEqual(List<ISOPoint> polygon1, List<ISOPoint> polygon2)
+        {
+            if (polygon1.Count != polygon2.Count)
+            {
+                return false;
+            }
+            for (var i = 0; i < polygon1.Count; i++)
+            {
+                var p1 = polygon1[i];
+                var p2 = polygon2[i];
+                if (p1.PointNorth != p2.PointNorth || p1.PointEast != p2.PointEast)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private static List<ISOPoint> Order(this List<ISOPoint> points)
         {

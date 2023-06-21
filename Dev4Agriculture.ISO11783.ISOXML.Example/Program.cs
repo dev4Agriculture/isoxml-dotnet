@@ -195,7 +195,44 @@ public static class Program
 
         isoxml.Save();
     }
+    private static String FixStringLength(String str)
+    {
+        return str.Substring(0, Math.Min(str.Length, 32)).PadRight(32, ' ');
+    }
 
+
+    public static void CompareFieldOverLaps(string path1, string path2)
+    {
+        var isoxml1 = ISOXML.LoadFromArchive(File.OpenRead(path1));
+        var isoxml2 = ISOXML.LoadFromArchive(File.OpenRead(path2));
+
+        var startLine = FixStringLength("    ")+"| ";
+        foreach (var field in isoxml1.Data.Partfield)
+        {
+            startLine += FixStringLength(field.PartfieldDesignator) + "| ";
+        }
+        Console.WriteLine(startLine);
+
+        foreach (var compareField in isoxml2.Data.Partfield)
+        {
+            var row = FixStringLength(compareField.PartfieldDesignator) + "| ";
+            foreach (var field in isoxml1.Data.Partfield)
+            {
+                var res = compareField.IsIntersectWithField(field); 
+                if (res != null)
+                {
+                    row +=  FixStringLength((res.IntersectPercent * 100).ToString() + "%") + "| ";
+
+                }
+                else
+                {
+                    row +=  FixStringLength("Error") + "| ";
+                }
+            }
+            Console.WriteLine(row);
+
+        }
+    }
 
     /// <summary>
     /// We want to find out which manufacturer build a specific machine.
@@ -270,6 +307,19 @@ public static class Program
                 {
                     CreateGrid(Path.Combine(path, "grid"));
                 }
+                break;
+            case 5:
+                Console.WriteLine("Select first ISOXML");
+                var path1 = Console.ReadLine();
+                Console.WriteLine("Select second ISOXML");
+                var path2 = Console.ReadLine();
+                if( String.IsNullOrWhiteSpace(path1) || String.IsNullOrWhiteSpace(path2))
+                {
+                    Console.WriteLine("One TaskSet was missing");
+                    return;
+                }
+                CompareFieldOverLaps(path1, path2);
+                Console.ReadKey();
                 break;
         }
 
