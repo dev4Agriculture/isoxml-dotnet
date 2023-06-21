@@ -218,7 +218,7 @@ public static class Program
             var row = FixStringLength(compareField.PartfieldDesignator) + "| ";
             foreach (var field in isoxml1.Data.Partfield)
             {
-                var res = compareField.IsIntersectWithField(field); 
+                var res = compareField.TryGetOverlapWithPartfield(field); 
                 if (res != null)
                 {
                     row +=  FixStringLength((res.IntersectPercent * 100).ToString() + "%") + "| ";

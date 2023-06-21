@@ -64,7 +64,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
 
-        public IntersectionResult IsIntersectWithField(ISOPartfield secondField)
+        public IntersectionResult TryGetOverlapWithPartfield(ISOPartfield secondField)
         {
             var result = new IntersectionResult();
             var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);

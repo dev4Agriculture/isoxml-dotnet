@@ -96,7 +96,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             return true;
         }
 
-        private static List<ISOPoint> Order(this List<ISOPoint> points)
+        private static List<ISOPoint> OrderPointsByDistanceFromCenter(this List<ISOPoint> points)
         {
             if (!points.Any())
                 return points;
@@ -134,7 +134,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             }
 
             var res = new List<ISOPoint>();
-            res.AddRange(clippedCorners.Order());
+            res.AddRange(clippedCorners.OrderPointsByDistanceFromCenter());
             return res;
         }
 
