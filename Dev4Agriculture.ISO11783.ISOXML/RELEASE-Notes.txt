@@ -1,3 +1,5 @@
+v0.19.1
++ADD: Get the StopTime for an ASP or TIM, no matter if it exists or needs to be calculated from the Duration.
 v0.19.0
 -FIX: Make sure to remove LineStringId in V3 TaskSets
 -FIX: Make sure to limit amount of digits to 9 for GuidancePattern Linestrings.

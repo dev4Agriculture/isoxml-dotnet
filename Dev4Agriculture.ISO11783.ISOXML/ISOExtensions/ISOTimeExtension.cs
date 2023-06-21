@@ -47,6 +47,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
+
+        public DateTime? GetStopTime()
+        {
+            if (Stop != null)
+            {
+                return Stop;
+            }
+            else
+            {
+                return Start.AddSeconds(Duration ?? 0);
+            }
+        }
+
+        public bool TryGetStopTime(out DateTime stop)
+        {
+            stop = (DateTime)(GetStopTime() ?? null);
+            return stop != null;
+        }
+
+
         internal static ISOTime CreateSummarizedTimeElement(ISOTime lastTim, ISOTime tim, IEnumerable<ISODevice> devices)
         {
             foreach (var dlv in tim.DataLogValue)
