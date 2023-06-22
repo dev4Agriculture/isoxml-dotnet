@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="3" TaskControllerManufacturer="" TaskControllerVersion="" ManagementSoftwareManufacturer="FarmSystem" ManagementSoftwareVersion="1.0" DataTransferOrigin="1">
+	<AFE A="LINKLIST.XML" B="1" C="" D="1" E="3.2" F="6400"/>
+	<CTR A="CTR1" B="Doe" C="John" D="Main Road 3" F="12345" G="Bielefeld" I="Germany" J="01189998819991197253"/>
+	<PFD A="PFD1" B="2" C="Near the farm" D="46516">
+		<PLN A="1">
+			<LSG A="1">
+				<PNT A="2" C="42.44276046" D="9.76844219"/>
+				<PNT A="2" C="42.44425201" D="9.7710571"/>
+				<PNT A="2" C="42.44459533" D="9.76789372"/>
+				<PNT A="2" C="42.44283294" D="9.76816322"/>
+			</LSG>
+		</PLN>
+	</PFD>
+	<DVC A="DVC1" B="Rauch Diamant" C="18020029-17 " D="B00086000D30257F" E="0000862129" F="38303030303131" G="FF000000406564">
+		<DET A="DET1" B="1" C="1" D="DeviceElement" E="0" F="0">
+			<DOR A="29"/>
+			<DOR A="30"/>
+			<DOR A="31"/>
+			<DOR A="32"/>
+		</DET>
+		<DPD A="29" B="0001" C="3" D="8" E="Setpoint Volume per Area" F="2"/>
+		<DPD A="30" B="0002" C="1" D="1" E="Actual Volume per Area" F="2"/>
+		<DPD A="31" B="0077" C="1" D="24" E="Effective Total Time" F="12"/>
+		<DPD A="32" B="0078" C="1" D="24" E="Ineffective Total Time" F="12"/>
+		<DVP A="2" B="0" C="0.001" D="0" E="l/ha"/>
+		<DVP A="12" B="0" C="0.00027778" D="2" E="h"/>
+	</DVC>
+	<TSK A="TSK1" B="Seeding Task 1" C="CTR1" E="PFD1" G="1">
+	</TSK>
+</ISO11783_TaskData>
