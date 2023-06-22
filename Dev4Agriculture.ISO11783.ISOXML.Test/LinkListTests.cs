@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -138,5 +140,62 @@ public class LinkListTests
 
         Assert.IsFalse(isoxml.HasLinkList);
         Assert.AreEqual(1, isoxml.Messages.Count);
+    }
+
+
+    [TestMethod]
+    public void CanFindAllLinksAndClearLinkList()
+    {
+        var isoxml = ISOXML.Load("./testdata/LinkList/ValidLinkList_MultipleLinks");
+        var deviceLinks = isoxml.LinkList.FindAllLinks("DVC1");
+        var partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
+        Assert.AreEqual(deviceLinks.Count(), 3);
+        Assert.AreEqual(partfieldLinks.Count(), 2);
+
+        isoxml.LinkList.ClearLinks("PFD1");
+        deviceLinks = isoxml.LinkList.FindAllLinks("DVC1");
+        partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
+        Assert.AreEqual(deviceLinks.Count(), 3);
+        Assert.AreEqual(partfieldLinks.Count(), 0);
+
+        isoxml.LinkList.ClearLinkList();
+        deviceLinks = isoxml.LinkList.FindAllLinks("DVC1");
+        partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
+        Assert.AreEqual(deviceLinks.Count(), 0);
+        Assert.AreEqual(partfieldLinks.Count(), 0);
+
+        var linkList = new ISO11783LinkListFile()
+        {
+            FileVersion = isoxml.LinkList.FileVersion + "2",
+            DataTransferOrigin = isoxml.LinkList.DataTransferOrigin,
+            ManagementSoftwareManufacturer = isoxml.LinkList.ManagementSoftwareManufacturer,
+            ManagementSoftwareVersion = isoxml.LinkList.ManagementSoftwareVersion,
+            TaskControllerManufacturer = isoxml.LinkList.TaskControllerManufacturer,
+            TaskControllerVersion = isoxml.LinkList.TaskControllerVersion,
+            VersionMajor = isoxml.LinkList.VersionMajor,
+            VersionMinor = isoxml.LinkList.VersionMinor
+        };
+
+        var group = new ISOLinkGroup()
+        {
+            LinkGroupDesignator = "New",
+            LinkGroupType = ISOLinkGroupType.UUIDs
+        };
+        group.Link.Add(new ISOLink()
+        {
+            LinkDesignator = "Field",
+            LinkValue = Guid.NewGuid().ToString(),
+            ObjectIdRef = "PFD1"
+        });
+        linkList.LinkGroup.Add(group);
+
+        isoxml.LinkList.SetLinkList(linkList);
+
+        deviceLinks = isoxml.LinkList.FindAllLinks("DVC1");
+        partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
+        Assert.AreEqual(deviceLinks.Count(), 0);
+        Assert.AreEqual(partfieldLinks.Count(), 1);
+
+
     }
 }

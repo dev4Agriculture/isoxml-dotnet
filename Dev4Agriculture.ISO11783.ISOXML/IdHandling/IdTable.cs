@@ -16,7 +16,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             AddList("CCT", typeof(ISOCodedComment));
             AddList("CCG", typeof(ISOCodedCommentGroup));
             AddList("CCL", typeof(ISOCodedCommentListValue));
-            AddList("CLG", typeof(ISOColourLegend));
+            AddList("CLD", typeof(ISOColourLegend));
             AddList("CTP", typeof(ISOCropType));
             AddList("CVT", typeof(ISOCropVariety));
             AddList("CPC", typeof(ISOCulturalPractice));
