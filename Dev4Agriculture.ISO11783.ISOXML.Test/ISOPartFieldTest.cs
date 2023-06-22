@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using Dev4Agriculture.ISO11783.ISOXML.Geometry;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -76,6 +78,83 @@ public class ISOPartFieldTest
             var ratio = size / field.PartfieldArea;
             Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
         }
+    }
+
+    [TestMethod]
+    public void CalculatingIntersectArea_SimilarFieldWithMoreDots()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiFields.zip";
+        ISOXML isoxml = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        var fields = isoxml.Data.Partfield.ToList();
+        var result = new IntersectionResult { IntersectPercent = 0.747, Type = IntersectionAlgorithmType.WeightCenter, PolygonType = PolygonType.Concave };
+
+        var actualResult = fields[1].TryGetOverlapWithPartfield(fields[9]);
+
+        Assert.AreEqual(result.IntersectPercent, Math.Round(actualResult.IntersectPercent, 3));
+        Assert.AreEqual(result.Type, actualResult.Type);
+        Assert.AreEqual(result.PolygonType, actualResult.PolygonType);
+    }
+
+
+    [TestMethod]
+    public void CalculatingIntersectArea_HalfIntersection()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiFields.zip";
+        ISOXML isoxml = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        var fields = isoxml.Data.Partfield.ToList();
+        var result = new IntersectionResult { IntersectPercent = 0.58, Type = IntersectionAlgorithmType.WeightCenter, PolygonType = PolygonType.Convex  };
+
+        var actualResult = fields[7].TryGetOverlapWithPartfield(fields[8]);
+
+        Assert.AreEqual(result.IntersectPercent, Math.Round(actualResult.IntersectPercent, 2));
+        Assert.AreEqual(result.Type, actualResult.Type);
+        Assert.AreEqual(result.PolygonType, actualResult.PolygonType);
+    }
+
+    [TestMethod]
+    public void CalculatingIntersectArea_FieldInsideOther()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiFields.zip";
+        ISOXML isoxml = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        var fields = isoxml.Data.Partfield.ToList();
+        var result = new IntersectionResult { IntersectPercent = 0.1235, Type = IntersectionAlgorithmType.WeightCenter, PolygonType = PolygonType.Convex };
+
+        var actualResult = fields[3].TryGetOverlapWithPartfield(fields[4]);
+
+        Assert.AreEqual(result.IntersectPercent, Math.Round(actualResult.IntersectPercent, 4));
+        Assert.AreEqual(result.Type, actualResult.Type);
+        Assert.AreEqual(result.PolygonType, actualResult.PolygonType);
+    }
+
+    [TestMethod]
+    public void CalculatingIntersectArea_SameField()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiFields.zip";
+        ISOXML isoxml = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        var fields = isoxml.Data.Partfield.ToList();
+        var result = new IntersectionResult { IntersectPercent = 1, Type = IntersectionAlgorithmType.Bounds, PolygonType = PolygonType.None };
+
+        var actualResult = fields[4].TryGetOverlapWithPartfield(fields[4]);
+
+        Assert.AreEqual(result.IntersectPercent, actualResult.IntersectPercent);
+        Assert.AreEqual(result.Type, actualResult.Type);
+        Assert.AreEqual(result.PolygonType, actualResult.PolygonType);
     }
 
 }

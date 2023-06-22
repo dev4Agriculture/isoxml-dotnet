@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Dev4Agriculture.ISO11783.ISOXML.Geometry;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
@@ -61,6 +62,51 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public bool IsInField(decimal longitude,decimal latitude)
         {
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
+        }
+
+        /// <summary>
+        /// Returns algorithm type, polygon type and intersect percent with secondField
+        /// </summary>
+        /// <param name="secondField">The ISOPartfield</param>
+        /// <returns>IntersectionResult model</returns>
+        public IntersectionResult TryGetOverlapWithPartfield(ISOPartfield secondField)
+        {
+            var result = new IntersectionResult();
+            var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
+            if (polygon == null)
+                return null;
+            var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
+            if (exterior == null)
+                return null;
+            var polygonSecond = secondField.PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
+            if (polygonSecond == null)
+                return null;
+            var exteriorSecond = polygonSecond.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
+            if (exteriorSecond == null)
+                return null;
+
+            var p1 = GeometryUtility.ClearPolygon(exterior.Point.ToList());
+            var p2 = GeometryUtility.ClearPolygon(exteriorSecond.Point.ToList());
+
+            if (GeometryUtility.AreLineStringsEqual(p1, p2))
+            {
+                result.IntersectPercent = 1;
+                result.PolygonType = PolygonType.None;
+                result.Type = IntersectionAlgorithmType.Bounds;
+                return result;
+            }
+            var intersectedArea = p1.GetIntersectionOfConvexPolygons(p2);
+            if (!intersectedArea.Any())
+            {
+                return null;
+            }
+
+            var baseArea = GetArea(exterior.Point.ToArray());
+            var intersectArea = GetArea(intersectedArea.ToArray());
+            result.IntersectPercent = intersectArea / baseArea;
+            result.Type = IntersectionAlgorithmType.WeightCenter;
+            result.PolygonType = p2.PolygonIsConvex() ? PolygonType.Convex : PolygonType.Concave;
+            return result;
         }
 
         /// <summary>
