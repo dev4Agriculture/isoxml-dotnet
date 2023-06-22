@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.Converters;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 {
@@ -156,13 +158,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 if (workingElement.DdiEntry == null|| workingElement.DdiEntry.DDI != (ushort)DDIList.ActualCulturalPractice)
                 {
                     var client = new ClientName(device.ClientNAME);
-                    cpt.CulturalPractice = Utils.MapDeviceClassToPracticeType(client.DeviceClass);
+                    cpt.CulturalPractice = DeviceClassConversion.MapDeviceClassToPracticeType(client.DeviceClass);
                     cpt.Source = CulturalPracticeSourceType.ClientName;
 
                 }
                 else if (workingElement.DdiEntry.Type == DDIValueType.Property)
                 {
-                    var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI.SequenceEqual(Utils.FormatDDI((ushort)DDIList.ActualCulturalPractice)));
+                    var properties = device.DeviceProperty.Where(s => s.DevicePropertyDDI.SequenceEqual(DDIUtils.FormatDDI((ushort)DDIList.ActualCulturalPractice)));
                     var elementDevice = device.DeviceElement.FirstOrDefault(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId);
                     var property = properties.FirstOrDefault(s => elementDevice.DeviceObjectReference.Any(dor => dor.DeviceObjectId == s.DevicePropertyObjectId));
                     cpt.CulturalPractice = (CulturalPracticesType)property.DevicePropertyValue;

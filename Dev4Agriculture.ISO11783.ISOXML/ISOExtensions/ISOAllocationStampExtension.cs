@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -9,14 +10,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public ulong GetSeconds()
         {
-            if (this.Stop != null)
+            if (Stop != null)
             {
-                TimeSpan? duration = Stop - Start;
+                var duration = Stop - Start;
                 return (ulong)duration?.TotalSeconds;
             }
             else if (Duration != null)
             {
-                return Duration??0;
+                return Duration ?? 0;
             } else
             {
                 return 0;
@@ -26,9 +27,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool TryGetSeconds(out ulong seconds)
         {
-            if (this.Stop != null)
+            if (Stop != null)
             {
-                TimeSpan? duration = Stop - Start;
+                var duration = Stop - Start;
                 seconds = (ulong)duration?.TotalSeconds;
                 return true;
             }
@@ -41,6 +42,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 seconds = 0;
                 return false;
+            }
+        }
+
+        public DateTime? GetStopTime()
+        {
+            if (Stop != null)
+            {
+                return Stop;
+            }
+            else
+            {
+                return Start.AddSeconds(Duration ?? 0);
+            }
+        }
+
+        public bool TryGetStopTime(out DateTime stop)
+        {
+            stop = (DateTime)(GetStopTime() ?? null);
+            return stop != null;
+        }
+
+        internal void FixPositionDigits()
+        {
+            if (Position != null)
+            {
+                Position.ToList().ForEach( ptn => ptn.FixDigits());
             }
         }
     }

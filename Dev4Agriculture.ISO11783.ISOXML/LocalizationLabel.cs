@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -91,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             Reserved = data[6];
         }
 
-        public LocalizationLabel(string data) : this(Utils.HexStringToByteArray(data).Reverse().ToArray())
+        public LocalizationLabel(string data) : this(HexUtils.HexStringToByteArray(data).Reverse().ToArray())
         { }
 
         public byte[] ToArray()
@@ -111,7 +112,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         public override string ToString()
         {
-            return Utils.ByteArrayToHexString(ToArray());
+            return HexUtils.ByteArrayToHexString(ToArray());
         }
 
         public ResultMessageList Validate()

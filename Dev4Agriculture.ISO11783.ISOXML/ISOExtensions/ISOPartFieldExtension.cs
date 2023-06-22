@@ -16,9 +16,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public void Update(decimal north, decimal east)
         {
             MinLat = MinLat < north ? MinLat : north;
-            MinLong = MinLong < east ? MinLong: east;
+            MinLong = MinLong < east ? MinLong : east;
             MaxLat = MaxLat > north ? MaxLat : north;
-            MaxLong = MaxLong> east ? MaxLong : east;
+            MaxLong = MaxLong > east ? MaxLong : east;
         }
     }
 
@@ -117,10 +117,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
             if (polygon == null)
+            {
                 return 0;
+            }
+
             var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
             if (exterior == null)
+            {
                 return 0;
+            }
+
             var area = GetArea(exterior.Point.ToArray());
 
             var interiorPolygons = polygon.LineString.Where(s => s.LineStringType == ISOLineStringType.PolygonInterior);
@@ -170,5 +176,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return 2 * Math.Atan2(t * Math.Sin(deltaLng), 1 + t * Math.Cos(deltaLng));
         }
 
+        internal void FixPositionDigits()
+        {
+            foreach (var pnt in Point)
+            {
+                pnt.FixDigits();
+            }
+            foreach (var lsg in LineString)
+            {
+                lsg.FixPointDigits();
+            }
+            foreach (var pln in PolygonnonTreatmentZoneonly)
+            {
+                pln.FixPointDigits();
+            }
+
+
+
+            foreach (var ggp in GuidanceGroup)
+            {
+                foreach (var gpn in ggp.GuidancePattern)
+                {
+                    foreach (var lsg in gpn.LineString)
+                    {
+                        lsg.FixPointDigits();
+                    }
+
+                    foreach (var pln in gpn.BoundaryPolygon)
+                    {
+                        pln.FixPointDigits();
+                    }
+                }
+            }
+        }
     }
 }

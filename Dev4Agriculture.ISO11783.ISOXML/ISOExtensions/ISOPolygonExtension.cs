@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
     public partial class ISOPolygon
     {
-        
-
         private bool IsInPolygonLineString(decimal longitude, decimal latitude, ISOLineString lineString)
         {
             var points = lineString.Point;
@@ -38,14 +35,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             // The total angle should be 2 * PI or -2 * PI if
             // the point is in the polygon and close to zero
             // if the point is outside the polygon.
-            return (Math.Abs(totalAngle) > 0.000001);
+            return Math.Abs(totalAngle) > 0.000001;
         }
 
 
         public bool IsInPolygon(decimal longitude, decimal latitude)
         {
-           if(
-                LineString.Where(lsg => lsg.LineStringType ==ISOLineStringType.PolygonInterior)
+            if (
+                 LineString.Where(lsg => lsg.LineStringType == ISOLineStringType.PolygonInterior)
                 .Any(lsg => IsInPolygonLineString(longitude, latitude, lsg)))
             {
                 return false;
@@ -57,6 +54,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 return true;
             }
             return false;
+        }
+
+        internal void FixPointDigits()
+        {
+            foreach( var lsg in LineString)
+            {
+                lsg.FixPointDigits();
+            }
         }
     }
 }

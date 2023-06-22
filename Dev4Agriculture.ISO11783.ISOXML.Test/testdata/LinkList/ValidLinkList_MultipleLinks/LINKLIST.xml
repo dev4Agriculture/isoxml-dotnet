@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISO11783LinkList VersionMajor="4" VersionMinor="3"
+TaskControllerManufacturer="FarmCtrl" TaskControllerVersion="1.0"
+ManagementSoftwareManufacturer="FarmSystem"
+ManagementSoftwareVersion="1.0" FileVersion="3.2" DataTransferOrigin="2">
+    <LGP A="LGP10" B="1" E="Farming Data">
+        <LNK A="CTR1" B="{1059B14E-929F-4C4C-BCD4-C4F52A6A076A}"/>
+        <LNK A="PFD1" B="{92043685-072D-4CAA-B3A8-C1E9D23BDB31}" C="Headland"/>
+    </LGP>
+    <LGP A="LGP11" B="1" E="Farming Data">
+        <LNK A="CTR1" B="{1259B14E-929F-4C4C-BCD4-C4F52A6A076A}"/>
+        <LNK A="PFD1" B="{93043685-072D-4CAA-B3A8-C1E9D23BDB31}" C="Also Headland"/>
+    </LGP>
+    <LGP A="LGP31" B="1" E="Devices">
+        <LNK A="DVC1" B="{1059B14E-929F-4C4C-BCD4-C4F5286A07DA}"/>
+        <LNK A="TSK1" B="{1059BD4E-979F-4C4C-BCD4-C4F5286A07DA}"/>
+    </LGP>
+    <LGP A="LGP32" B="1" E="Devices">
+        <LNK A="DVC1" B="{1559B14E-929F-4C4C-BCD4-C4F5286A07DA}"/>
+        <LNK A="TSK1" B="{A059BD4E-979F-4C4C-BCD4-C4F5286A07DA}"/>
+    </LGP>
+    <LGP A="LGP33" B="3" E="Links">
+        <LNK A="DVC1" B="https://www.dev4Agriculture.de/"/>
+        <LNK A="TSK1" B="https://www.farmer-frank.de"/>
+    </LGP>
+</ISO11783LinkList>

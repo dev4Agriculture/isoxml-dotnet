@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
@@ -79,5 +80,52 @@ public class TaskAnalyzerTest
         Assert.AreEqual(CulturalPracticeSourceType.ClientName, item.Source);
         Assert.IsTrue(1 > Math.Abs((new DateTime(2022, 10, 19, 16, 3, 35) - item.StartDateTime).TotalSeconds));
         Assert.IsTrue(1 > Math.Abs((new DateTime(2022, 10, 19, 16, 4, 56) - item.StopDateTime).TotalSeconds));
+    }
+
+
+    [TestMethod]
+    public void CanCalculateStopTimesAndDurations()
+    {
+        var timeWithStop = new ISOTime()
+        {
+            Start = DateTime.Parse("2023-01-03T12:20:20"),
+            Stop = DateTime.Parse("2023-01-03T13:42:24")
+        };
+        var timeWithDuration = new ISOTime()
+        {
+            Start = DateTime.Parse("2023-01-03T12:20:20"),
+            Duration = 305
+        };
+
+
+        Assert.AreEqual(timeWithDuration.GetStopTime(), DateTime.Parse("2023-01-03T12:25:25"));
+        Assert.AreEqual(timeWithStop.GetStopTime(), DateTime.Parse("2023-01-03T13:42:24"));
+        Assert.AreEqual(timeWithDuration.GetSeconds(),(ulong)305);
+        Assert.AreEqual(timeWithStop.GetSeconds(), (ulong)4924);
+    }
+
+
+
+    [TestMethod]
+    public void CanCalculateStopTimesAndDurationsFromASP()
+    {
+        var timeWithStop = new ISOAllocationStamp()
+        {
+            Start = DateTime.Parse("2023-01-03T12:20:20"),
+            Stop = DateTime.Parse("2023-01-03T13:42:24")
+        };
+        var timeWithDuration = new ISOAllocationStamp()
+        {
+            Start = DateTime.Parse("2023-01-03T12:20:20"),
+            Duration = 305
+        };
+
+
+        Assert.AreEqual(timeWithDuration.GetStopTime(), DateTime.Parse("2023-01-03T12:25:25"));
+        Assert.AreEqual(timeWithStop.GetStopTime(), DateTime.Parse("2023-01-03T13:42:24"));
+        Assert.AreEqual(timeWithDuration.GetSeconds(), (ulong)305);
+        Assert.AreEqual(timeWithStop.GetSeconds(), (ulong)4924);
+
+
     }
 }

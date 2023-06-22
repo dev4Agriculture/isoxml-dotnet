@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -12,7 +15,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     {
         private static readonly LinkListSerializer LinkListSerializer = new LinkListSerializer();
 
-        private readonly ISO11783LinkListFile _linkListContent;
+        private ISO11783LinkListFile _linkListContent;
         private readonly IdList _groupIds;
 
         public ISO11783LinkListFileVersionMajor VersionMajor
@@ -56,6 +59,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             set => _linkListContent.DataTransferOrigin = value;
         }
 
+
+        public string FileVersion
+        {
+            get => _linkListContent.FileVersion;
+            set => _linkListContent.FileVersion = value;
+        }
+
         private IsoLinkList(ISO11783LinkListFile linkListContent)
         {
             if (linkListContent == null)
@@ -89,13 +99,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             _groupIds = new IdList("LGP");
         }
 
-        public string GetID(string uuid)
+        /// <summary>
+        /// Find the first ID that fits the given linkValue
+        /// </summary>
+        /// <param name="linkValue"></param>
+        /// <returns></returns>
+        public string GetID(string linkValue)
         {
             foreach (var group in _linkListContent.LinkGroup)
             {
                 foreach (var link in group.Link)
                 {
-                    if (link.LinkValue.Equals(uuid))
+                    if (link.LinkValue.Equals(linkValue))
                     {
                         return link.ObjectIdRef;
                     }
@@ -104,6 +119,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return null;
         }
 
+        /// <summary>
+        /// Returns the first Link associated with the ID Reference. Prefer to use FindAllLinks
+        /// </summary>
+        /// <param name="idRef"></param>
+        /// <returns></returns>
         public string GetFirstLink(string idRef)
         {
             foreach (var group in _linkListContent.LinkGroup)
@@ -117,6 +137,92 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
             return null;
+        }
+
+
+        /// <summary>
+        /// Returns all links for a specific XML ID; e.g. PFD1
+        /// </summary>
+        /// <param name="idRef"></param>
+        /// <returns></returns>
+        public IEnumerable<ISOLinkEntry> FindAllLinks(string idRef)
+        {
+            foreach (var grp in _linkListContent.LinkGroup)
+            {
+                foreach (var link in grp.Link)
+                {
+                    if (link.ObjectIdRef.Equals(idRef))
+                    {
+                        yield return new ISOLinkEntry()
+                        {
+                            type = grp.LinkGroupType,
+                            Id = link.LinkValue,
+                            Designator = link.LinkDesignator
+                        };
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns all XMLIds for a specific linkValue; e.g. a UUID
+        /// </summary>
+        /// <param name="idRef"></param>
+        /// <returns></returns>
+        public IEnumerable<ISOLinkEntry> FindAllIds(string linkValue)
+        {
+            foreach (var grp in _linkListContent.LinkGroup)
+            {
+                foreach (var link in grp.Link)
+                {
+                    if (link.LinkValue.Equals(linkValue))
+                    {
+                        yield return new ISOLinkEntry()
+                        {
+                            type = grp.LinkGroupType,
+                            Id = link.LinkValue,
+                            Designator = link.LinkDesignator
+                        };
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Deletes all content from the LinkList
+        /// </summary>
+        public void ClearLinkList()
+        {
+            _linkListContent.LinkGroup.Clear();
+        }
+
+        /// <summary>
+        /// Removes all Links for a specific id Reference
+        /// </summary>
+        /// <param name="idRef"></param>
+        public void ClearLinks(string idRef)
+        {
+            foreach(var grp in _linkListContent.LinkGroup)
+            {
+                for (var index = grp.Link.Count - 1; index >= 0; index--)
+                {
+                    if (grp.Link[index].ObjectIdRef.Equals(idRef))
+                    {
+                        grp.Link.RemoveAt(index);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Overwrites the current LinkList with an other one
+        /// </summary>
+        /// <param name="linkList"></param>
+        public void SetLinkList(ISO11783LinkListFile linkList)
+        {
+            _linkListContent = linkList;
         }
 
         /// <summary>
@@ -253,7 +359,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
-            if (!Utils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
+            if (!FileUtils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
                 var result = new ResultWithMessages<IsoLinkList>();
                 result.AddError(

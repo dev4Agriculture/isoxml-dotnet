@@ -39,5 +39,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
+        internal void FixPositionDigits()
+        {
+            GridMinimumEastPosition = decimal.Round(GridMinimumEastPosition, Constants.NUMBER_OF_DIGITS_FOR_POSITIONS, MidpointRounding.ToEven);
+            GridMinimumNorthPosition = decimal.Round(GridMinimumNorthPosition, Constants.NUMBER_OF_DIGITS_FOR_POSITIONS, MidpointRounding.ToEven);
+        }
     }
 }

@@ -11,7 +11,7 @@ using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
-using Newtonsoft.Json;
+using Dev4Agriculture.ISO11783.ISOXML.Converters;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -56,7 +56,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public IsoLinkList LinkList { get; private set; }
         public bool HasLinkList { get; private set; }
         private bool _binaryLoaded;
-        private const string _defaultLinkListFileName = "LINKLIST.XML";
+        private const string DefaultLinkListFileName = "LINKLIST.XML";
 
         /// <summary>
         /// The Major version of ISOXML which reflects the used standard: 3 or 4
@@ -216,7 +216,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Data.AttachedFile.Add(new ISOAttachedFile()
                 {
                     FileType = 1,
-                    FilenameWithExtension = _defaultLinkListFileName,
+                    FilenameWithExtension = DefaultLinkListFileName,
                     ManufacturerGLN = "",
                     Preserve = ISOPreserve.PreserveonTaskControllerandsendbacktoFMIS
                 });
@@ -335,7 +335,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         /// <param name="path">Path to the LinkList file</param>
         /// <param name="fileName">Default value is "LINKLIST.XML"</param>
-        public void LoadExternalLinkList(string path, string fileName = _defaultLinkListFileName)
+        public void LoadExternalLinkList(string path, string fileName = DefaultLinkListFileName)
         {
             var resultLinkList = IsoLinkList.LoadLinkList(path, fileName);
             LinkList = resultLinkList.Result;
@@ -460,17 +460,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     IdTable.ReadObject(obj);
                 }
-                catch (DuplicatedISOObjectException e)
+                catch (DuplicatedISOObjectException)
                 {
                     var id = "";
                     try
                     {
                         id = IdList.FindId(obj);
-                    } catch ( Exception exceptionReadingId)
+                    }
+                    catch (Exception)
                     {
                         id = "Second error: Error reading ID failed";
                     }
-                    Messages.AddError(ResultMessageCode.DuplicatedId,new ResultDetail[]{ new ResultDetail()
+                    Messages.AddError(ResultMessageCode.DuplicatedId, new ResultDetail[]{ new ResultDetail()
                     {
                         MessageDetailType = ResultDetailType.MDTString,
                         Value  = id
@@ -485,8 +486,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         private void ReadIDTable()
         {
+            ReadIDList(Data.BaseStation);
             ReadIDList(Data.CodedComment);
             ReadIDList(Data.CodedCommentGroup);
+            ReadIDList(Data.ColourLegend);
             ReadIDList(Data.CropType);
             ReadIDList(Data.CulturalPractice);
             ReadIDList(Data.Customer);
@@ -495,6 +498,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             ReadIDList(Data.OperationTechnique);
             ReadIDList(Data.Partfield);
             ReadIDList(Data.Product);
+            ReadIDList(Data.ProductGroup);
             ReadIDList(Data.Task);
             ReadIDList(Data.ValuePresentation);
             ReadIDList(Data.Worker);
@@ -635,230 +639,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         private ISO11783TaskDataFile UpdateDataForV3()
         {
-            var isoxmlSerializer = new IsoxmlSerializer();
-            var clonedData = isoxmlSerializer.DeepClone(Data);
-
-            foreach (var task in clonedData.Task)
-            {
-                switch (task.TaskStatus)
-                {
-                    //p.141
-                    case ISOTaskStatus.Template:
-                    case ISOTaskStatus.Canceled:
-                        task.TaskStatus = ISOTaskStatus.Planned;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (task.GuidanceAllocationSpecified)
-                {
-                    //p.142
-                    task.GuidanceAllocation.Clear();
-                }
-
-                //p.75
-                if (task.ControlAssignmentSpecified)
-                {
-                    //p.142
-                    task.ControlAssignment.Clear();
-                }
-
-                if (task.TreatmentZoneSpecified)
-                {
-                    foreach (var trZone in task.TreatmentZone)
-                    {
-                        if (trZone.ProcessDataVariable.Count > 1)
-                        {
-                            //p.148
-                            var firstDataVar = trZone.ProcessDataVariable.First();
-                            trZone.ProcessDataVariable.Clear();
-                            trZone.ProcessDataVariable.Add(firstDataVar);
-                        }
-
-                        //p.129
-                        trZone.ProcessDataVariable.First().ActualCulturalPracticeValue = null;
-                        trZone.ProcessDataVariable.First().ElementTypeInstanceValue = null;
-
-                        if (trZone.PolygonTreatmentZoneonly.Count > 1)
-                        {
-                            var firstPoly = trZone.PolygonTreatmentZoneonly.First();
-                            trZone.PolygonTreatmentZoneonly.Clear();
-                            trZone.PolygonTreatmentZoneonly.Add(firstPoly);
-                        }
-                    }
-                }
-
-                foreach (var pAlloc in task.ProductAllocation)
-                {
-                    if (pAlloc.TransferMode.HasValue && pAlloc.TransferMode == ISOTransferMode.Remainder)
-                    {
-                        //p.136
-                        pAlloc.TransferMode = ISOTransferMode.Emptying;
-                    }
-                    UpdateAllocationStamp(pAlloc.ASP);
-                }
-
-                foreach (var item in task.WorkerAllocation)
-                {
-                    UpdateAllocationStamp(item.AllocationStamp);
-                }
-
-                foreach (var time in task.Time)
-                {
-                    if (time.Type == ISOType2.PoweredDown)
-                    {
-                        //p.146
-                        time.Type = ISOType2.Clearing;
-                    }
-
-                    time.Start = new DateTime(time.Start.Ticks, DateTimeKind.Unspecified);
-                    if (time.StopValueSpecified)
-                    {
-                        time.Stop = new DateTime(time.StopValue.Ticks, DateTimeKind.Unspecified);
-                    }
-                }
-            }
-
-            foreach (var partfield in clonedData.Partfield)
-            {
-                if (partfield.GuidanceGroupSpecified)
-                {
-                    partfield.GuidanceGroup.Clear();
-                }
-
-                foreach (var line in partfield.LineString)
-                {
-                    if (line.LineStringType == ISOLineStringType.Obstacle)
-                    {
-                        line.LineStringType = ISOLineStringType.Flag;//p.117
-                        line.LineStringId = null; //p.118
-                        var pointsToDelete = new List<ISOPoint>();
-                        foreach (var point in line.Point)
-                        {
-                            if (point.PointType > ISOPointType.other)
-                            {
-                                pointsToDelete.Add(point);
-                                continue;
-                            }
-                            //p.124
-                            point.PointId = null;
-                            point.PointHorizontalAccuracy = null;
-                            point.PointVerticalAccuracy = null;
-                            point.Filename = null;
-                            point.Filelength = null;
-                        }
-
-                        foreach (var item in pointsToDelete)
-                        {
-                            line.Point.Remove(item);
-                        }
-                    }
-                }
-
-                foreach (var polygon in partfield.PolygonnonTreatmentZoneonly)
-                {
-                    //p.125
-                    if (polygon.PolygonType > ISOPolygonType.Other)
-                    {
-                        polygon.PolygonType = ISOPolygonType.Other;
-                    }
-                    polygon.PolygonId = null;
-                }
-            }
-
-            foreach (var product in clonedData.Product)
-            {
-                if (product.ProductRelationSpecified)
-                {
-                    //clear ProductRelation
-                    product.ProductRelation.Clear();
-                }
-                //p.133
-                product.ProductType = null;
-                product.MixtureRecipeQuantity = null;
-                product.DensityMassPerVolume = null;
-                product.DensityMassPerCount = null;
-                product.DensityVolumePerCount = null;
-            }
-
-            if (clonedData.TaskControllerCapabilitiesSpecified)
-            {
-                clonedData.TaskControllerCapabilities.Clear();
-            }
-
-            if (clonedData.AttachedFileSpecified)
-            {
-                clonedData.AttachedFile.Clear();
-            }
-
-            if (clonedData.BaseStationSpecified)
-            {
-                clonedData.BaseStation.Clear();
-            }
-
-            if (clonedData.CropTypeSpecified)
-            {
-                foreach (var crop in clonedData.CropType)
-                {
-                    crop.ProductGroupIdRef = null; //p.87
-                    if (crop.CropVarietySpecified)
-                    {
-                        foreach (var item in crop.CropVariety)
-                        {
-                            item.ProductIdRef = null; //p.88
-                        }
-                    }
-                }
-            }
-
-            if (clonedData.DeviceSpecified)
-            {
-                foreach (var device in clonedData.Device)
-                {
-                    if (device.DeviceStructureLabel.Length > 7)
-                    {
-                        device.DeviceStructureLabel = device.DeviceStructureLabel.Take(7).ToArray();
-                    }
-
-                    foreach (var item in device.DeviceProcessData)
-                    {
-                        var propAsByteArray = BitConverter.GetBytes(item.DeviceProcessDataProperty);
-                        if (propAsByteArray.Length >= 3)
-                        {
-                            var thirdbit = propAsByteArray.ElementAt(3);
-                            thirdbit = 0;
-                            item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray); // p.99
-                        }
-                    }
-                }
-            }
-
-            clonedData.lang = null; //p.115
-            if (clonedData.TaskControllerCapabilitiesSpecified)
-            {
-                clonedData.TaskControllerCapabilities.Clear();//p.116, p.143
-            }
-
-            if (clonedData.ProductGroupSpecified)
-            {
-                foreach (var productGroup in clonedData.ProductGroup)
-                {
-                    //p.139
-                    productGroup.ProductGroupType = null;
-                }
-            }
-
-            static void UpdateAllocationStamp(ISOAllocationStamp stamp)
-            {
-                stamp.Start = new DateTime(stamp.Start.Ticks, DateTimeKind.Unspecified);
-                if (stamp.StopValueSpecified)
-                {
-                    stamp.Stop = new DateTime(stamp.StopValue.Ticks, DateTimeKind.Unspecified);
-                }
-            }
-
-            return clonedData;
+            return V3Converter.ConvertToV3(Data);
         }
 
         /// <summary>
@@ -892,7 +673,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             try
             {
                 return serializer.Serialize(obj);
-            } catch (Exception ex)
+            }
+            catch (Exception)
             {
                 return "";
             }

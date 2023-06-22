@@ -4,6 +4,7 @@ using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
 //using System.IO;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -99,9 +100,9 @@ public class DeviceTests
         var path = "./testdata/devices/DeviceOnly.xml";
         var text = File.ReadAllText(path);
         var result = ISOXML.ParseFromXMLString(text);
-        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.ActualWorkState).IsOnChange());
-        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.SetpointCountPerAreaApplicationRate).IsOnTime());
-        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => Utils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.TotalArea).IsTotal());
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.ActualWorkState).IsOnChange());
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.SetpointCountPerAreaApplicationRate).IsOnTime());
+        Assert.IsTrue(result.Data.Device[0].DeviceProcessData.First(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == (ushort)DDIList.TotalArea).IsTotal());
     }
 
 }

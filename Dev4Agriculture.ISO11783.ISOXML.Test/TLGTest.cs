@@ -5,6 +5,7 @@ using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -97,7 +98,7 @@ public class TLGTest
         Assert.AreEqual(isoxml.Messages.Count, 0);
         Assert.AreEqual(IdList.ToIntId(isoxml.Data.Device[0].DeviceElement[1].DeviceElementId), -123456789);
         var isoDeviceAnalysis = new ISODeviceAnalysis(isoxml);
-        Assert.AreEqual(isoDeviceAnalysis.FindDeviceElementsForDDI(isoxml.Data.Task[0], Utils.ParseDDI("0043"))[0].DeviceElementNo(), -123456789);
+        Assert.AreEqual(isoDeviceAnalysis.FindDeviceElementsForDDI(isoxml.Data.Task[0], DDIUtils.ParseDDI("0043"))[0].DeviceElementNo(), -123456789);
     }
 
 
@@ -122,8 +123,8 @@ public class TLGTest
         isoxml.SetFolderPath(path_out);
         isoxml.TimeLogs["TLG00001"].Entries.Add(new TLGDataLogLine(0)
         {
-            GpsUTCDate= 0,
-            GpsUTCTime= 0,
+            GpsUTCDate = 0,
+            GpsUTCTime = 0,
             PosEast = 52,
             PosNorth = 7
         });
@@ -141,8 +142,8 @@ public class TLGTest
         var tim = isoxml.TimeLogs["TLG00001"].GenerateTimeElement(isoxml.Data.Device);
         Assert.IsNotNull(tim);
         Assert.AreEqual(11, tim.DataLogValue.Count);
-        Assert.AreEqual(1, tim.DataLogValue.Count( entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime));
-        Assert.AreEqual(48300, tim.DataLogValue.FirstOrDefault(entry => Utils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.TotalArea).ProcessDataValue);
+        Assert.AreEqual(1, tim.DataLogValue.Count(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime));
+        Assert.AreEqual(48300, tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.TotalArea).ProcessDataValue);
     }
 
     [TestMethod]
@@ -151,12 +152,12 @@ public class TLGTest
         var path = "./testdata/TimeLogs/Generated";
         var pathOut = "./out/timelogs/generated";
         var isoxml = ISOXML.Load(path);
-        foreach(var task in isoxml.Data.Task)
+        foreach (var task in isoxml.Data.Task)
         {
-           var timList = task.GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
-           Assert.IsNotNull(timList);
-           Assert.AreEqual(timList.Count, 1);
-            foreach( var entry in timList)
+            var timList = task.GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+            Assert.IsNotNull(timList);
+            Assert.AreEqual(timList.Count, 1);
+            foreach (var entry in timList)
             {
                 task.Time.Add(entry);
             }
