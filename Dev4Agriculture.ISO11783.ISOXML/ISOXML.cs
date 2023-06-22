@@ -486,8 +486,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         private void ReadIDTable()
         {
+            ReadIDList(Data.BaseStation);
             ReadIDList(Data.CodedComment);
             ReadIDList(Data.CodedCommentGroup);
+            ReadIDList(Data.ColourLegend);
             ReadIDList(Data.CropType);
             ReadIDList(Data.CulturalPractice);
             ReadIDList(Data.Customer);
@@ -496,6 +498,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             ReadIDList(Data.OperationTechnique);
             ReadIDList(Data.Partfield);
             ReadIDList(Data.Product);
+            ReadIDList(Data.ProductGroup);
             ReadIDList(Data.Task);
             ReadIDList(Data.ValuePresentation);
             ReadIDList(Data.Worker);

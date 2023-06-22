@@ -213,8 +213,16 @@ public static class Program
 
     public static CulturalPracticesType GetCulturalPractice(string path)
     {
-        var stream = File.OpenRead(path);
-        var isoxml = ISOXML.LoadFromArchive(stream);
+        ISOXML isoxml = null;
+        if(path.EndsWith(".zip"))
+        {
+            var stream = File.OpenRead(path);
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        else
+        {
+            isoxml = ISOXML.Load(path);
+        }
         var analyzer = new ISOTaskAnalysis(isoxml);
         var acp = analyzer.FindTaskCulturalPractice(isoxml.Data.Task[0]);
         return acp.CulturalPractice;

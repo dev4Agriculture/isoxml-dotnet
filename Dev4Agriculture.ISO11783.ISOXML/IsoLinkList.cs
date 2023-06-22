@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -13,7 +16,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
     {
         private static readonly LinkListSerializer LinkListSerializer = new LinkListSerializer();
 
-        private readonly ISO11783LinkListFile _linkListContent;
+        private ISO11783LinkListFile _linkListContent;
         private readonly IdList _groupIds;
 
         public ISO11783LinkListFileVersionMajor VersionMajor
@@ -118,6 +121,64 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
             return null;
+        }
+
+
+        /// <summary>
+        /// Returns all links for a specific XML ID; e.g. PFD1
+        /// </summary>
+        /// <param name="idRef"></param>
+        /// <returns></returns>
+        public IEnumerable<ISOLinkEntry> GetAllLinks(string idRef)
+        {
+            foreach (var grp in _linkListContent.LinkGroup)
+            {
+                foreach (var link in grp.Link)
+                {
+                    if (link.ObjectIdRef.Equals(idRef))
+                    {
+                        yield return new ISOLinkEntry()
+                        {
+                            type = grp.LinkGroupType,
+                            Id = link.LinkValue,
+                            Designator = link.LinkDesignator
+                        };
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Deletes all content from the LinkList
+        /// </summary>
+        public void ClearLinkList()
+        {
+            _linkListContent.LinkGroup.Clear();
+        }
+
+        public void ClearLinks(string idRef)
+        {
+            foreach(var grp in _linkListContent.LinkGroup)
+            {
+                for (var index = grp.Link.Count - 1; index >= 0; index--)
+                {
+                    if (grp.Link[index].ObjectIdRef.Equals(idRef))
+                    {
+                        grp.Link.RemoveAt(index);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Overwrites the current LinkList with an other one
+        /// </summary>
+        /// <param name="linkList"></param>
+        public void SetLinkList(ISO11783LinkListFile linkList)
+        {
+            _linkListContent = linkList;
         }
 
         /// <summary>
