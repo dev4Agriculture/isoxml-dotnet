@@ -64,6 +64,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
 
+        /// <summary>
+        /// Returns algorithm type, polygon type and intersect percent with secondField
+        /// </summary>
+        /// <param name="secondField">The ISOPartfield</param>
+        /// <returns>IntersectionResult model</returns>
         public IntersectionResult TryGetOverlapWithPartfield(ISOPartfield secondField)
         {
             var result = new IntersectionResult();
@@ -83,14 +88,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var p1 = GeometryUtility.ClearPolygon(exterior.Point.ToList());
             var p2 = GeometryUtility.ClearPolygon(exteriorSecond.Point.ToList());
 
-            if (GeometryUtility.IsPolygonsEqual(p1, p2))
+            if (GeometryUtility.AreLineStringsEqual(p1, p2))
             {
                 result.IntersectPercent = 1;
                 result.PolygonType = PolygonType.None;
                 result.Type = IntersectionAlgorithmType.Bounds;
                 return result;
             }
-            var intersectedArea = p1.GetIntersectionOfPolygons(p2);
+            var intersectedArea = p1.GetIntersectionOfConvexPolygons(p2);
             if (!intersectedArea.Any())
             {
                 return null;
@@ -98,7 +103,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             var baseArea = GetArea(exterior.Point.ToArray());
             var intersectArea = GetArea(intersectedArea.ToArray());
-            result.IntersectPercent = intersectArea / baseArea * 100;
+            result.IntersectPercent = intersectArea / baseArea;
             result.Type = IntersectionAlgorithmType.WeightCenter;
             result.PolygonType = p2.PolygonIsConvex() ? PolygonType.Convex : PolygonType.Concave;
             return result;

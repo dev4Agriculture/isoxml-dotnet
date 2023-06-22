@@ -78,7 +78,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             return Math.Abs(pt.PointNorth - x) < epsilon || Math.Abs(pt.PointEast - y) < epsilon;
         }
 
-        public static bool IsPolygonsEqual(List<ISOPoint> polygon1, List<ISOPoint> polygon2)
+        public static bool AreLineStringsEqual(List<ISOPoint> polygon1, List<ISOPoint> polygon2)
         {
             if (polygon1.Count != polygon2.Count)
             {
@@ -111,8 +111,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             my /= points.Count();
             return points.OrderBy(v => Math.Atan2((double)(v.PointNorth - my), (double)(v.PointEast - mX))).ToList();
         }
-
-        public static List<ISOPoint> GetIntersectionOfPolygons(this List<ISOPoint> poly1, List<ISOPoint> poly2)
+        /// <summary>
+        ///  Return intersection polygon of convex poly1 and convex poly2. 
+        /// </summary>
+        /// <param name="poly1">The convex polygon points</param>
+        /// <param name="poly2">The convex polygon points</param>
+        /// <returns></returns>
+        public static List<ISOPoint> GetIntersectionOfConvexPolygons(this List<ISOPoint> poly1, List<ISOPoint> poly2)
         {
             var clippedCorners = new List<ISOPoint>{};
             //Add  the corners of poly1 which are inside poly2       
@@ -133,9 +138,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
                 AddPoints(clippedCorners, GetIntersectionPoints(poly1[i], poly1[next], poly2));
             }
 
-            var res = new List<ISOPoint>();
-            res.AddRange(clippedCorners.OrderPointsByDistanceFromCenter());
-            return res;
+            return clippedCorners.OrderPointsByDistanceFromCenter();
         }
 
         private static bool IsEqual(decimal d1, decimal d2) => Math.Abs(d1 - d2) <= EquityTolerance;
@@ -192,17 +195,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
 
             var x = (b2 * c1 - b1 * c2) / det;
             var y = (a1 * c2 - a2 * c1) / det;
-            var online1 = (Math.Min(l1P1.PointEast, l1P2.PointEast) < x || IsEqual(Math.Min(l1P1.PointEast, l1P2.PointEast), x))
+            var onLine1 = (Math.Min(l1P1.PointEast, l1P2.PointEast) < x || IsEqual(Math.Min(l1P1.PointEast, l1P2.PointEast), x))
                            && (Math.Max(l1P1.PointEast, l1P2.PointEast) > x || IsEqual(Math.Max(l1P1.PointEast, l1P2.PointEast), x))
                            && (Math.Min(l1P1.PointNorth, l1P2.PointNorth) < y || IsEqual(Math.Min(l1P1.PointNorth, l1P2.PointNorth), y))
                            && (Math.Max(l1P1.PointNorth, l1P2.PointNorth) > y || IsEqual(Math.Max(l1P1.PointNorth, l1P2.PointNorth), y))
                 ;
-            var online2 = (Math.Min(l2P1.PointEast, l2P2.PointEast) < x || IsEqual(Math.Min(l2P1.PointEast, l2P2.PointEast), x))
+            var onLine2 = (Math.Min(l2P1.PointEast, l2P2.PointEast) < x || IsEqual(Math.Min(l2P1.PointEast, l2P2.PointEast), x))
                            && (Math.Max(l2P1.PointEast, l2P2.PointEast) > x || IsEqual(Math.Max(l2P1.PointEast, l2P2.PointEast), x))
                            && (Math.Min(l2P1.PointNorth, l2P2.PointNorth) < y || IsEqual(Math.Min(l2P1.PointNorth, l2P2.PointNorth), y))
                            && (Math.Max(l2P1.PointNorth, l2P2.PointNorth) > y || IsEqual(Math.Max(l2P1.PointNorth, l2P2.PointNorth), y))
                 ;
-            if (online1 && online2)
+            if (onLine1 && onLine2)
                 return new ISOPoint{PointEast = x, PointNorth = y};
             return null;
         }

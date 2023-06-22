@@ -264,7 +264,8 @@ public static class Program
             "1: Read Manufacturer from DeviceDescription\n" +
             "2: Get Cultural Practice for TaskSet first Task\n" +
             "3: Create Task with CodingData \n" +
-            "4: Create an example grid");
+            "4: Create an example grid \n" +
+            "5: Create FieldSize Comparison for 2 ISOXML DataSets");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
         {
