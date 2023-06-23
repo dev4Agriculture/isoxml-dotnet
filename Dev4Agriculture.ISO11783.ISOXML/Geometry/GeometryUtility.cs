@@ -78,22 +78,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             return Math.Abs(pt.PointNorth - x) < epsilon || Math.Abs(pt.PointEast - y) < epsilon;
         }
 
-        public static bool AreLineStringsEqual(List<ISOPoint> polygon1, List<ISOPoint> polygon2)
+        public static bool ArePointsEqual(List<ISOPoint> polygon1, List<ISOPoint> polygon2)
         {
             if (polygon1.Count != polygon2.Count)
             {
                 return false;
             }
-            for (var i = 0; i < polygon1.Count; i++)
-            {
-                var p1 = polygon1[i];
-                var p2 = polygon2[i];
-                if (p1.PointNorth != p2.PointNorth || p1.PointEast != p2.PointEast)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return polygon1.All(p1 => polygon2.Any(p2 => p2.PointNorth == p1.PointNorth && p2.PointEast == p1.PointEast));
         }
 
         private static List<ISOPoint> OrderPointsByDistanceFromCenter(this List<ISOPoint> points)

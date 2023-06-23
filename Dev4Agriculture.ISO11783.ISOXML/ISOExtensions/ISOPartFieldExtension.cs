@@ -87,8 +87,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             var p1 = GeometryUtility.ClearPolygon(exterior.Point.ToList());
             var p2 = GeometryUtility.ClearPolygon(exteriorSecond.Point.ToList());
+            if (p1[0].PointNorth == p1[^1].PointNorth && p1[0].PointEast == p1[^1].PointEast)
+                p1.RemoveAt(p1.Count - 1);
+            if (p2[0].PointNorth == p2[^1].PointNorth && p2[0].PointEast == p2[^1].PointEast)
+                p2.RemoveAt(p2.Count - 1);
 
-            if (GeometryUtility.AreLineStringsEqual(p1, p2))
+            if (GeometryUtility.ArePointsEqual(p1, p2))
             {
                 result.IntersectPercent = 1;
                 result.PolygonType = PolygonType.None;
@@ -100,12 +104,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 return null;
             }
+            result.PolygonType = p2.PolygonIsConvex() ? PolygonType.Convex : PolygonType.Concave;
+
+            if (GeometryUtility.ArePointsEqual(p1, intersectedArea))
+            {
+                var p2Area = GetArea(p2.ToArray());
+                var reverseIntersectedArea = p2.GetIntersectionOfConvexPolygons(p1);
+                var reverseArea = GetArea(reverseIntersectedArea.ToArray());
+                //2 is two times area of bigger polygon 
+                result.IntersectPercent = 2 - reverseArea / p2Area;
+                result.Type = IntersectionAlgorithmType.WeightCenterReversed;
+                return result;
+            }
 
             var baseArea = GetArea(exterior.Point.ToArray());
             var intersectArea = GetArea(intersectedArea.ToArray());
             result.IntersectPercent = intersectArea / baseArea;
             result.Type = IntersectionAlgorithmType.WeightCenter;
-            result.PolygonType = p2.PolygonIsConvex() ? PolygonType.Convex : PolygonType.Concave;
             return result;
         }
 

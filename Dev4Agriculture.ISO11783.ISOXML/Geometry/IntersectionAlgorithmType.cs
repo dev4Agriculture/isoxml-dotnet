@@ -3,6 +3,7 @@
     public enum IntersectionAlgorithmType
     {
         Bounds,
-        WeightCenter
+        WeightCenter,
+        WeightCenterReversed,
     }
 }

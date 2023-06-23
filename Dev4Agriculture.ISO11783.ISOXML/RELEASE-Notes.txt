@@ -1,3 +1,5 @@
+v0.19.3.1
++FIX: improved Function to get intersected
 v0.19.3
 +ADD: Function to get intersected area
 v0.19.2
