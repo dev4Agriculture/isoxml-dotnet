@@ -245,7 +245,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             try
             {
-                var filePath = storagePath + Name + ".CSV";
+                var filePath = Path.Combine(storagePath, Name + ".CSV");
                 var file = File.Create(filePath);
                 var streamWriter = new StreamWriter(file);
                 streamWriter.WriteLine(Header.ToStringWithDDIsOnly());
