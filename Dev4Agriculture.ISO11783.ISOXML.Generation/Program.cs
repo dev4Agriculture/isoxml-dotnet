@@ -60,7 +60,7 @@ internal class Program
 
         foreach (var file in files)
         {
-            File.Copy(file, DestinationFolder + Path.GetFileName(file));
+            File.Copy(file, Path.Combine(DestinationFolder, Path.GetFileName(file)));
         }
 
     }
