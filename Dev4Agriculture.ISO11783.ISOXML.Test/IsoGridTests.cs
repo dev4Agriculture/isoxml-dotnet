@@ -145,8 +145,9 @@ public class IsoGridTests
     [TestMethod]
     public void WillAdjustGridPositionOnSave()
     {
+        var outPath = "./testdata/Grid/Type2_ReadValue";
         //Loading a random task is faster than creating one ;) 
-        var isoxml = ISOXML.Load("./testdata/Grid/Type2_ReadValue");
+        var isoxml = ISOXML.Load(outPath);
         isoxml.Data.Task[0].Grid.FirstOrDefault().GridMinimumNorthPosition = 10.01234567890123m;
 
         isoxml.SetFolderPath("./GridTest");
@@ -154,4 +155,19 @@ public class IsoGridTests
         Assert.AreEqual(isoxml.Data.Task[0].Grid.FirstOrDefault().GridMinimumNorthPosition, 10.012345679m);
     }
 
+
+    [TestMethod]
+    public void CanExportCSVFiles()
+    {
+        var inPath = "./testdata/Grid/Type2_ReadValue";
+        var outPath = "./GridTest";
+        //Loading a random task is faster than creating one ;) 
+        var isoxml = ISOXML.Load(inPath);
+        isoxml.SetFolderPath(outPath);
+        foreach (var grid in isoxml.Grids)
+        {
+            grid.Value.SaveCSV(outPath);
+        }
+        Assert.IsTrue(File.Exists(Path.Combine(outPath, "GRD00001.CSV")));
+    }
 }

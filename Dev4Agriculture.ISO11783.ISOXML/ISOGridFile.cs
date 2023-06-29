@@ -46,8 +46,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             ISOGridFile grid = null;
             if (FileUtils.AdjustFileNameToIgnoreCasing(baseFolder, name + ".bin", out var filePath))
             {
-                grid = new ISOGridFile(type);
-
+                grid = new ISOGridFile(type)
+                {
+                    Name = name
+                };
                 grid.Init(width, height, layers);
                 var binaryFileStream = File.Open(filePath, FileMode.Open);
                 switch (grid.Type)
