@@ -1,19 +1,33 @@
+v0.19.3.4
+-FIX: Not all elements were read to the IDList; Polygon or LinesTring IDs could have been duplicated
+-FIX: When reading the ISOXML from a string,
+
 v0.19.3.3
 -FIX: Grid-Export to CSV had invalid filename
+
+v0.19.3.3
+-FIX: Grid-Export to CSV had invalid filename
+
 v0.19.3.2
 -FIX: Ensure the path for SaveTLG and SaveGrid is valid.
+
 v0.19.3.1
 +FIX: improved Function to get intersected area
+
 v0.19.3
 +ADD: Function to get intersected area
+
 v0.19.2
 +ADD: Several functions to improve the capabilities of the LinkList Functionalities
 -FIX: The IDs of BaseStation, ProductGroup and ColourLegend were not initialized.
+
 v0.19.1
 +ADD: Get the StopTime for an ASP or TIM, no matter if it exists or needs to be calculated from the Duration.
+
 v0.19.0
 -FIX: Make sure to remove LineStringId in V3 TaskSets
 -FIX: Make sure to limit amount of digits to 9 for GuidancePattern Linestrings.
+
 v0.18.0
 -FIX: The ProductAllocation was the only element in a Task having an ASP instead of AllocationStamp in parameter. Fixed in XSD and therefore also in Lib
 -FIX: The LinkList-File doesn't export any NameSpace headers anymore

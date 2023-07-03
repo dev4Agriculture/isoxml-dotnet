@@ -502,6 +502,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             ReadIDList(Data.Task);
             ReadIDList(Data.ValuePresentation);
             ReadIDList(Data.Worker);
+            foreach (var device in Data.Device)
+            {
+                ReadIDList(device.DeviceElement);
+            }
+
+            foreach (var field in Data.Partfield)
+            {
+                ReadIDList(field.PolygonnonTreatmentZoneonly);
+                foreach (var polygon in field.PolygonnonTreatmentZoneonly)
+                {
+                    ReadIDList(polygon.LineString);
+                    foreach (var linestring in polygon.LineString)
+                    {
+                        ReadIDList(linestring.Point);
+                    }
+                }
+                foreach (var linestring in field.LineString)
+                {
+                    ReadIDList(linestring.Point);
+                }
+                ReadIDList(field.Point);
+            }
         }
 
         /// <summary>
@@ -656,6 +678,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Data = taskData.Result,
                 Messages = taskData.Messages
             };
+            isoxml.ReadIDTable();
             isoxml.InitExtensionData();
             return isoxml;
         }
