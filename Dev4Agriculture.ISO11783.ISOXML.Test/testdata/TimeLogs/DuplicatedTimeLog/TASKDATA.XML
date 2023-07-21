@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ISO11783_TaskData DataTransferOrigin="2" ManagementSoftwareManufacturer="FarmSystem" ManagementSoftwareVersion="1.0" TaskControllerManufacturer="CCI" TaskControllerVersion="3.0" VersionMajor="4" VersionMinor="1">
+    <CTR A="CTR1" B="E0L SxxpcMJ" C="Bi eOB4iBhZK" D="tdEkLNjVSnUs" F="meqKq" G="aKetsF" I="golgDSu" J="IQv5pmahGsP"/>
+    <FRM A="FRM1" B="hWTWDXQdCTr" C="AyPlINSmahOf" E="Pjgj3" F="bi6eMT" H="DHSQ q1" I="CTR1"/>
+    <PFD A="PFD-2" B="2" C="5uvmpgDU" D="46316" E="CTR1" F="FRM1">
+        <PLN A="1">
+            <LSG A="1">
+                <PNT A="2" C="54.580684068" D="10.209195754"/>
+                <PNT A="2" C="54.581275346" D="10.210238120"/>
+                <PNT A="2" C="54.581672075" D="10.210957191"/>
+                <PNT A="2" C="54.582175615" D="10.211810729"/>
+                <PNT A="2" C="54.582312944" D="10.211927554"/>
+                <PNT A="2" C="54.582366349" D="10.211666725"/>
+                <PNT A="2" C="54.582679155" D="10.210839889"/>
+                <PNT A="2" C="54.583075883" D="10.209869525"/>
+                <PNT A="2" C="54.583030107" D="10.209581993"/>
+                <PNT A="2" C="54.582518937" D="10.208647392"/>
+                <PNT A="2" C="54.581977250" D="10.207703731"/>
+                <PNT A="2" C="54.581492784" D="10.206895015"/>
+                <PNT A="2" C="54.581347825" D="10.207056663"/>
+                <PNT A="2" C="54.581069353" D="10.207928321"/>
+                <PNT A="2" C="54.580756547" D="10.208916805"/>
+            </LSG>
+        </PLN>
+    </PFD>
+    <DVC A="DVC-1" B="uqfOhjIQhhe7sA0" C="150200029-17 " D="A00086000DF95589" E="ZWpiaDX5Bn" F="38303030303131" G="FF000000406564">
+        <DET A="DET-1" B="1" C="1" D="DeviceElement" E="0" F="0">
+            <DOR A="20"/>
+            <DOR A="21"/>
+            <DOR A="22"/>
+            <DOR A="23"/>
+            <DOR A="24"/>
+            <DOR A="25"/>
+            <DOR A="26"/>
+            <DOR A="27"/>
+            <DOR A="28"/>
+            <DOR A="29"/>
+            <DOR A="30"/>
+            <DOR A="31"/>
+            <DOR A="32"/>
+            <DOR A="33"/>
+            <DOR A="34"/>
+            <DOR A="35"/>
+            <DOR A="36"/>
+            <DOR A="37"/>
+            <DOR A="38"/>
+            <DOR A="39"/>
+            <DOR A="40"/>
+            <DOR A="41"/>
+            <DOR A="42"/>
+            <DOR A="43"/>
+            <DOR A="44"/>
+            <DOR A="45"/>
+            	  
+            <DOR A="46"/>
+        </DET>
+        <DET A="DET-123456789" B="2" C="1" D="Function" E="2" F="1">
+            <DOR A="19"/>
+            <DOR A="110"/>
+        </DET>
+        <DPD A="19" B="0043" C="1" D="8" E="Aktuelle Arbeitsbreite" F="3"/>
+        <DPD A="20" B="0054" C="1" D="1" E="Ertrag pro Flaeche" F="4"/>
+        <DPD A="21" B="0057" C="1" D="1" E="Ertrag pro Zeit" F="5"/>
+        <DPD A="22" B="005A" C="3" D="24" E="Gesamtertrag" F="6"/>
+        <DPD A="23" B="0063" C="1" D="1" E="Feuchtegehalt" F="7"/>
+        <DPD A="24" B="0074" C="3" D="24" E="Gesamtflaeche" F="8"/>
+        <DPD A="25" B="0075" C="3" D="24" E="Aktive Fahrstrecke" F="9"/>
+        <DPD A="26" B="0076" C="3" D="24" E="Inaktive Fahrstrecke" F="9"/>
+        <DPD A="27" B="0077" C="3" D="24" E="Aktive Gesamtzeit" F="10"/>
+        <DPD A="28" B="0078" C="3" D="24" E="Inaktive Gesamtzeit" F="10"/>
+        <DPD A="29" B="008D" C="1" D="1" E="Arbeitsstatus" F="2"/>
+        <DPD A="30" B="0094" C="3" D="24" E="Gesamtkraftstoffverbrauch" F="11"/>
+        <DPD A="31" B="0095" C="1" D="1" E="Aktueller Kraftstoffverbrauch" F="12"/>
+        <DPD A="32" B="00B1" C="1" D="1" E="Aktuelle Schnittlaenge" F="14"/>
+        <DPD A="33" B="0106" C="3" D="24" E="Durchschnittsfeuchte" F="7"/>
+        <DPD A="34" B="00FE" C="1" D="8" E="Seriennummer" F="2"/>
+        <DPD A="35" B="EA60" C="1" D="1" E="Motoristdrehzahl" F="15"/>
+        <DPD A="36" B="EA6A" C="1" D="1" E="Motorauslastung" F="16"/>
+        <DPD A="37" B="EA74" C="1" D="1" E="Kraftstofffuellstand" F="16"/>
+        <DPD A="38" B="EA7E" C="1" D="1" E="Fahrgeschwindigkeit" F="13"/>
+        <DPD A="39" B="EA88" C="1" D="1" E="Corn Craecker Abstand" F="17"/>
+        <DPD A="40" B="EA9C" C="1" D="1" E="Drehzahl Vorsatz" F="15"/>
+        <DPD A="41" B="EAA6" C="1" D="1" E="Drehzahl Einzug" F="15"/>
+        <DPD A="42" B="EAB0" C="1" D="1" E="Drehzahl Haeckseltrommel" F="15"/>
+        <DPD A="43" B="EACE" C="3" D="24" E="Trommelstunden" F="18"/>
+        <DPD A="44" B="EAD8" C="3" D="24" E="Vorsatzstunden" F="18"/>
+        <DPD A="45" B="EAE2" C="3" D="24" E="Motorstunden" F="18"/>
+        <DPD A="46" B="DFFF" C="1" D="31" E="default logging" F="2"/>
+        <DPT A="110" B="00B3" C="11" D="BearbeitungsArt" />
+        <DVP A="2" B="0" C="1" D="0" E=" "/>
+        <DVP A="3" B="0" C="0.001" D="3" E="m"/>
+        <DVP A="4" B="0" C="0.00001" D="2" E="t/ha"/>
+        <DVP A="5" B="0" C="0.0000036" D="2" E="t/h"/>
+        <DVP A="6" B="0" C="0.001" D="2" E="t"/>
+        <DVP A="7" B="0" C="0.0001" D="2" E="Prozent"/>
+        <DVP A="8" B="0" C="0.0001" D="2" E="ha"/>
+        <DVP A="9" B="0" C="0.000001" D="2" E="km"/>
+        <DVP A="10" B="0" C="0.0166666657" D="2" E="min"/>
+        <DVP A="11" B="0" C="0.001" D="2" E="l"/>
+        <DVP A="12" B="0" C="0.0035999999" D="2" E="l/h"/>
+        <DVP A="13" B="0" C="0.1000000015" D="1" E="km/h"/>
+        <DVP A="14" B="0" C="0.001" D="3" E="mm"/>
+        <DVP A="15" B="0" C="1" D="0" E="UPM"/>
+        <DVP A="16" B="0" C="1" D="0" E="Prozent"/>
+        <DVP A="17" B="0" C="0.1000000015" D="1" E="mm"/>
+        <DVP A="18" B="0" C="0.000277777" D="2" E="h"/>
+    </DVC>
+    <TSK A="TSK1" B="SAV" C="CTR1" E="PFD-2" G="4">
+        <TLG A="TLG00001" C="1"/>
+        <TLG A="TLG00001" C="1"/>
+        <TIM A="2020-01-02T17:30:20" B="2020-01-02T19:10:53" D="4">
+            <DLV A="005A" B="259605" C="DET-1"/>
+            <DLV A="0074" B="48300" C="DET-1"/>
+            <DLV A="0075" B="5503990" C="DET-1"/>
+            <DLV A="0076" B="1510627" C="DET-1"/>
+            <DLV A="0077" B="3559" C="DET-1"/>
+            <DLV A="0078" B="2453" C="DET-1"/>
+            <DLV A="0094" B="84889" C="DET-1"/>
+            	  
+            <DLV A="0106" B="546000" C="DET-1"/>
+            <DLV A="EACE" B="5828" C="DET-1"/>
+            <DLV A="EAD8" B="4963" C="DET-1"/>
+            <DLV A="EAE2" B="6012" C="DET-1"/>
+        </TIM>
+        <DAN A="A00086000DFB882F" C="DVC-1"/>
+    </TSK>
+    <TSK A="TSK20" B="D" C="CTR1" E="PFD-22" G="4">
+        <TLG A="TLG00001" C="1"/>
+        <TLG A="TLG00002" C="1"/>
+        <TIM A="2020-01-04T08:38:01" B="2020-01-04T08:58:23" D="4">
+            <DLV A="005A" B="35161" C="DET-1"/>
+            <DLV A="0074" B="7500" C="DET-1"/>
+            <DLV A="0075" B="842063" C="DET-1"/>
+            <DLV A="0076" B="472052" C="DET-1"/>
+            <DLV A="0077" B="713" C="DET-1"/>
+            <DLV A="0078" B="504" C="DET-1"/>
+            <DLV A="0094" B="12770" C="DET-1"/>
+            	  
+            <DLV A="0106" B="522400" C="DET-1"/>
+            <DLV A="EACE" B="1215" C="DET-1"/>
+            <DLV A="EAD8" B="1150" C="DET-1"/>
+            <DLV A="EAE2" B="1217" C="DET-1"/>
+        </TIM>
+        <DAN A="A00086000DFB882F" C="DVC-1"/>
+    </TSK>
+</ISO11783_TaskData>

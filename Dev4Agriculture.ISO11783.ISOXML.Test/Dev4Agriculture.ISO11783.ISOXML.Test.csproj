@@ -35,6 +35,11 @@
     <None Remove="testdata\LinkList\ValidLinkList_MultipleLinks\TASKDATA.XML" />
     <None Remove="testdata\Structure\Valid_To_Extend\TASKDATA.XML" />
     <None Remove="testdata\TaskData.xml" />
+    <None Remove="testdata\TimeLogs\DuplicatedTimeLog\TASKDATA.XML" />
+    <None Remove="testdata\TimeLogs\DuplicatedTimeLog\TLG00001.bin" />
+    <None Remove="testdata\TimeLogs\DuplicatedTimeLog\TLG00001.xml" />
+    <None Remove="testdata\TimeLogs\DuplicatedTimeLog\TLG00002.bin" />
+    <None Remove="testdata\TimeLogs\DuplicatedTimeLog\TLG00002.xml" />
     <None Remove="testdata\TLG00001.bin" />
     <None Remove="testdata\TLG00001.xml" />
     <None Remove="testdata\TLG00002.bin" />

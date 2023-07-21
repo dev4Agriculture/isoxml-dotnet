@@ -557,9 +557,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 foreach (var tlg in task.TimeLog)
                 {
-                    var entry = ISOTLG.LoadTLG(tlg.Filename, FolderPath);
-                    Messages.AddRange(entry.Messages);
-                    TimeLogs.Add(tlg.Filename, entry.Result);
+                    if (TimeLogs.ContainsKey(tlg.Filename))
+                    {
+                        Messages.AddError(ResultMessageCode.DuplicatedTLG, new ResultDetail() { MessageDetailType = ResultDetailType.MDTString, Value = tlg.Filename });
+                    }
+                    else
+                    {
+                        var entry = ISOTLG.LoadTLG(tlg.Filename, FolderPath);
+                        Messages.AddRange(entry.Messages);
+                        TimeLogs.Add(tlg.Filename, entry.Result);
+                    }
                 }
             }
             return TimeLogs.Count;
