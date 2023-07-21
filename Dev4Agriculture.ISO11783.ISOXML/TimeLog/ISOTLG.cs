@@ -186,6 +186,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         {
                             quitReading = true;
                             cause = "Could not find point for reEntry";
+                        } else
+                        {
+                            cause = "Found reEntry at position " + binaryFile.Position;
                         }
                         messages.AddError(ResultMessageCode.BINInvalidData,
                             ResultDetail.FromString(Name),
