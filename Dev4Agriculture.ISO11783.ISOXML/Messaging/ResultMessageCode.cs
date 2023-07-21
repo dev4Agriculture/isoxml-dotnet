@@ -10,6 +10,7 @@
         FileAccessImpossible,
         FileInvalid,
         DuplicatedId,
+        DuplicatedTLG,
         XMLParsingError = 100,
         XMLWrongElement,
         XMLTextIn,
@@ -42,7 +43,7 @@
         ClientNameBroken = 900,
         ClientNameTooShort,
         ClientNameDeviceClassInvalid,
-        ClientNameManufacturerInvalid
+        ClientNameManufacturerInvalid,
     }
 
     public enum ResultDetailType

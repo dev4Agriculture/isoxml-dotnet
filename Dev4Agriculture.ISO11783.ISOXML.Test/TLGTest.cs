@@ -168,4 +168,13 @@ public class TLGTest
         var isoxml2 = ISOXML.Load(pathOut);
         Assert.AreEqual(isoxml2.Messages.Count, 0);
     }
+
+
+    [TestMethod]
+    public void DuplicatedTLGLinkCausesErrorMessageButDoesNotCrash()
+    {
+        var path = "./testdata/TimeLogs/DuplicatedTimeLog";
+        var isoxml = ISOXML.Load(path);
+        Assert.AreEqual(isoxml.Messages.Count, 2);
+    }
 }

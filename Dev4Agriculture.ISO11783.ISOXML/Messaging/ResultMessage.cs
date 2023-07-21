@@ -81,6 +81,7 @@
                     Code == ResultMessageCode.BINInvalidNumberOfDataInRow ? "There were more binary data linked in the binary file than exist in the header. File: %1, Position: %2, Solution: %3" :
                     Code == ResultMessageCode.GRIDFileSizeMissmatch ? "FileSize of Grid doesn't match: %1" :
                     Code == ResultMessageCode.MissingId ? "There is no ID defined in %1. Assigning: %2" :
+                    Code == ResultMessageCode.DuplicatedTLG ? "A TLG Entry with the same ID was found twice. The second Entry was ignored! TLG Name: %1":
                     Code == ResultMessageCode.LinkListWrongRootElement ? "Wrong root element in LinkList.XML" :
                     Code == ResultMessageCode.LocalizationLabelBroken ? "LocalizationLabel broken in Device %1 : %2; Message: %3" :
                     Code == ResultMessageCode.LocalizationLabelTooShort ? "LocalizationLabel too Short in Device %1: %2; Message: %3" :

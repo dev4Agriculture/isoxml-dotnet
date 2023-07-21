@@ -265,6 +265,16 @@ public static class Program
         return acp.CulturalPractice;
     }
 
+
+    public static void CheckISOXML(string? path3)
+    {
+        var isoxml = ISOXML.Load(path3);
+        foreach(var item in isoxml.Messages)
+        {
+            Console.WriteLine(item.Description);
+        }
+    }
+
     public static void Main()
     {
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
@@ -275,7 +285,8 @@ public static class Program
             "2: Get Cultural Practice for TaskSet first Task\n" +
             "3: Create Task with CodingData \n" +
             "4: Create an example grid \n" +
-            "5: Create FieldSize Comparison for 2 ISOXML DataSets");
+            "5: Create FieldSize Comparison for 2 ISOXML DataSets\n" +
+            "6: Check ISOXML");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
         {
@@ -331,6 +342,11 @@ public static class Program
                 }
                 CompareFieldOverLaps(path1, path2);
                 Console.ReadKey();
+                break;
+            case 6:
+                Console.WriteLine("Select ISOXML to Check");
+                var path3 = Console.ReadLine();
+                CheckISOXML(path3);
                 break;
         }
 
