@@ -12,6 +12,7 @@ using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Converters;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -292,6 +293,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = Guid.NewGuid().ToString();
             var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
+            var loadingPath = path;
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 var fileNames = archive.Entries.Select(e => e.FullName).ToList();
@@ -304,9 +306,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
                 }
+
+                var filePath = fileNames.OrderBy(s => s.Length).First(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase));
+                if (!filePath.ToUpper().Equals("TASKDATA.XML"))
+                {
+                   loadingPath = FileUtils.GetParentFolder(path,filePath);
+                }
                 archive.ExtractToDirectory(path, true);
             }
-            var res = Load(path, loadBinData);
+            var res = Load(loadingPath, loadBinData);
 
             if (archiveWarning != null)
             {

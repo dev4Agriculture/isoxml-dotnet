@@ -5,7 +5,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
     public class FileUtils
     {
 
+        public static string GetParentFolder(string absolutePath,string relativePath)
+        {
+            // Combine the absolute and relative paths to get the full path of the file
+            string fullPath = Path.GetFullPath(Path.Combine(absolutePath, relativePath));
 
+            // Get the directory name of the full path, which represents the parent folder
+            string parentFolder = Path.GetDirectoryName(fullPath);
+
+            return parentFolder;
+        }
 
         public static bool AdjustFileNameToIgnoreCasing(string root, string fileName, out string path)
         {

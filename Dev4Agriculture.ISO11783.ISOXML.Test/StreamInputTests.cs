@@ -43,6 +43,24 @@ public class StreamInputTests
         Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
     }
 
+
+    [TestMethod]
+    public void CanLoadValidZipFromMultipleSubfolderStreamWithGrids()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiSubFolder.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(2, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+        Assert.AreEqual(1, result.TimeLogs.Count);
+    }
+
     [TestMethod]
     public void LoadFromZipWithMultipleExternalFilesInSubfolder()
     {
@@ -78,7 +96,7 @@ public class StreamInputTests
     }
 
     [TestMethod]
-    public void LoadZipFileWithMultiplyTaskdatXML()
+    public void LoadZipFileWithMultiplyTaskdataXML()
     {
         var filePath = "./testdata/LoadFromStream/MultiplyTaskdataXML.zip";
         ISOXML result = null;

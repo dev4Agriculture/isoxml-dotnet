@@ -1,4 +1,5 @@
-﻿using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+﻿using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
@@ -268,8 +269,17 @@ public static class Program
 
     public static void CheckISOXML(string? path3)
     {
-        var isoxml = ISOXML.Load(path3);
-        foreach(var item in isoxml.Messages)
+        ISOXML isoxml = null;
+        if (path3.EndsWith(".zip"))
+        {
+            var stream = File.OpenRead(path3);
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        else
+        {
+            isoxml = ISOXML.Load(path3);
+        }
+        foreach (var item in isoxml.Messages)
         {
             Console.WriteLine(item.Description);
         }
