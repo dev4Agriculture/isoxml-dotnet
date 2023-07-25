@@ -47,9 +47,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     }
 
+    public class ISOTLGReadConfiguration
+    {
+        public int DaysMinForValidDateRange;
+        public int DaysMaxForValidDateRange;
+    }
+
 
     public partial class ISOTLG
     {
+        private static ISOTLGReadConfiguration s_readConfiguration = new ISOTLGReadConfiguration()
+        {
+            DaysMinForValidDateRange = DateUtilities.DAYS_MIN_FOR_VALID_DATE_RANGE,
+            DaysMaxForValidDateRange = DateUtilities.DAYS_MAX_FOR_VALID_DATE_RANGE
+        };
+
+        public static void SetReaderConfiguration( ISOTLGReadConfiguration readConfiguration)
+        {
+            s_readConfiguration = readConfiguration;
+        }
 
         public string Name;
         public string BinName { get; private set; }
@@ -172,7 +188,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 var timeStamp = binaryReader.ReadInt32();
                 var date = binaryReader.ReadInt16();
 
-                if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date < DateUtilities.DAYS_MIN_FOR_VALID_DATE_RANGE || date > DateUtilities.DAYS_MAX_FOR_VALID_DATE_RANGE)
+                if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date <  s_readConfiguration.DaysMinForValidDateRange || date > s_readConfiguration.DaysMaxForValidDateRange)
                 {
                     dataLineBeginIndex += 1;
                     binaryFile.Seek(-5, SeekOrigin.Current);//In total we move 1 byte less backwards than we moved forward before
