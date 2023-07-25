@@ -297,12 +297,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 var fileNames = archive.Entries.Select(e => e.FullName).ToList();
-                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                if (!fileNames.Any(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new NoTaskDataIncludedException();
                 }
 
-                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                if (fileNames.Count(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
                 {
                     archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
                 }

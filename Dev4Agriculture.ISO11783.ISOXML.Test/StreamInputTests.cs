@@ -61,6 +61,24 @@ public class StreamInputTests
         Assert.AreEqual(1, result.TimeLogs.Count);
     }
 
+
+    [TestMethod]
+    public void DoesIgnoreNonTaskDataFiles()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiSubFolderAndMac.zip";
+        ISOXML result = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            result = ISOXML.LoadFromArchive(stream);
+        }
+
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(2, result.Grids.Count);
+        Assert.AreEqual(1, result.Grids["GRD00001"].Layers);
+        Assert.AreEqual(1, result.TimeLogs.Count);
+    }
+
     [TestMethod]
     public void LoadFromZipWithMultipleExternalFilesInSubfolder()
     {
