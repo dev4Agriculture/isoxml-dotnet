@@ -12,6 +12,7 @@ using Dev4Agriculture.ISO11783.ISOXML.Serializer;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Converters;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -292,30 +293,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var id = Guid.NewGuid().ToString();
             var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
+            var loadingPath = path;
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
             {
                 var fileNames = archive.Entries.Select(e => e.FullName).ToList();
-                if (!fileNames.Any(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
+                if (!fileNames.Any(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new NoTaskDataIncludedException();
                 }
 
-                if (fileNames.Count(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
+                if (fileNames.Count(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase)) > 1)
                 {
                     archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
                 }
+
+                var filePath = fileNames.OrderBy(s => s.Length).First(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML"));
+                if (!filePath.ToUpper().Equals("TASKDATA.XML"))
+                {
+                   loadingPath = FileUtils.GetParentFolder(path,filePath);
+                }
                 archive.ExtractToDirectory(path, true);
             }
-            var res = Load(path, loadBinData);
-
-            if (archiveWarning != null)
+            try
             {
-                res.Messages.Add(archiveWarning);
+                var res = Load(loadingPath, loadBinData);
+
+                if (archiveWarning != null)
+                {
+                    res.Messages.Add(archiveWarning);
+                }
+                return res;
+
             }
-
-            Directory.Delete(path, true);
-
-            return res;
+            finally
+            {
+                Directory.Delete(path, true);
+            }
 
         }
 

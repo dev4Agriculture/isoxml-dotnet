@@ -1,7 +1,12 @@
+v0.19.4.1
+-FIX: If a TaskData inside a Zip folder was hidden in multiple subfolders, this lead to loading issues
+
 v0.19.4
 =OPT: This is an optimization Release to better read invalid ISOXML Files and get the maximum out of the data.
+
 v0.19.3.5
 -FIX: The edge case that a TLG is linked twice in a TaskData.XML now doesn't cause a crash but an error in the messages List
+
 v0.19.3.4
 -FIX: Not all elements were read to the IDList; Polygon or LinesTring IDs could have been duplicated
 -FIX: When reading the ISOXML from a string,
