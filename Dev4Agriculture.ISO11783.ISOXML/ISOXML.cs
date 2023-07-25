@@ -307,7 +307,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     archiveWarning = ResultMessage.Warning(ResultMessageCode.MultipleTaskDataFound);
                 }
 
-                var filePath = fileNames.OrderBy(s => s.Length).First(x => x.Contains("TASKDATA.XML", StringComparison.OrdinalIgnoreCase));
+                var filePath = fileNames.OrderBy(s => s.Length).First(x => Path.GetFileName(x).ToUpper().Equals("TASKDATA.XML"));
                 if (!filePath.ToUpper().Equals("TASKDATA.XML"))
                 {
                    loadingPath = FileUtils.GetParentFolder(path,filePath);
