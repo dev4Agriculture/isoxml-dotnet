@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
@@ -46,9 +47,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     }
 
+    public class ISOTLGReadConfiguration
+    {
+        public int DaysMinForValidDateRange;
+        public int DaysMaxForValidDateRange;
+    }
+
 
     public partial class ISOTLG
     {
+        private static ISOTLGReadConfiguration s_readConfiguration = new ISOTLGReadConfiguration()
+        {
+            DaysMinForValidDateRange = DateUtilities.DAYS_MIN_FOR_VALID_DATE_RANGE,
+            DaysMaxForValidDateRange = DateUtilities.DAYS_MAX_FOR_VALID_DATE_RANGE
+        };
+
+        public static void SetReaderConfiguration( ISOTLGReadConfiguration readConfiguration)
+        {
+            s_readConfiguration = readConfiguration;
+        }
 
         public string Name;
         public string BinName { get; private set; }
@@ -117,16 +134,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
 
-        private bool FindReEntryInBrokenFile(FileStream binaryFile, BinaryReader binaryReader, long filePosition, ushort date)
+        private bool FindReEntryInBrokenFile(FileStream binaryFile, BinaryReader binaryReader, ushort date)
         {
-            filePosition += 6; //We jump over the date Entry of the last line to find the next valid date
+            //Read one Byte to go forward before searching a valid date
+            var justToRead = binaryReader.ReadByte();
             var found = false;
-            while (found == false && binaryFile.Position < binaryFile.Length - 2)
+            while (found == false && binaryFile.Position < binaryFile.Length - 6)
             {
+                var compareTime = binaryReader.ReadUInt32();
                 var compareDate = binaryReader.ReadUInt16();
-                if (compareDate > date - 1 && compareDate < date + 1)
+                if ((compareDate >= date - 1) && (compareDate <= date + 1) && compareTime >= 0 && compareTime <= DateUtilities.MILLISECONDS_IN_DAY)
                 {
                     found = true;
+                } else
+                {
+                    binaryFile.Seek(-5, SeekOrigin.Current);
                 }
             }
 
@@ -156,8 +178,48 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             var messages = new ResultMessageList();
             var binaryReader = new BinaryReader(binaryFile);
             ushort lastDate = 0;
-            long dataLineBeginIndex;
+            long dataLineBeginIndex = 0;
             long lastDataLineBeginIndex = 0;
+
+            //Check the first few bytes to be correct and within a logical range. For some rare broken files, this is a good solution to restore broken data
+            bool valid = false;
+            do
+            {
+                var timeStamp = binaryReader.ReadInt32();
+                var date = binaryReader.ReadInt16();
+
+                if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date <  s_readConfiguration.DaysMinForValidDateRange || date > s_readConfiguration.DaysMaxForValidDateRange)
+                {
+                    dataLineBeginIndex += 1;
+                    binaryFile.Seek(-5, SeekOrigin.Current);//In total we move 1 byte less backwards than we moved forward before
+
+                }
+                else
+                {
+                    binaryFile.Seek(-6, SeekOrigin.Current);
+                    valid = true;
+                }
+                if ((binaryFile.Length -  binaryFile.Position) < 6){
+                    messages.AddError(ResultMessageCode.BINInvalidData,
+                                                ResultDetail.FromString(Name),
+                                                ResultDetail.FromNumber(0),
+                                                ResultDetail.FromNumber(binaryFile.Length),
+                                                ResultDetail.FromString("Could not find point for reEntry")
+                                                );
+                    return messages;
+                }
+            } while (valid == false);
+            if (binaryFile.Position > 0)
+            {
+                messages.AddError(ResultMessageCode.BINInvalidData,
+                                            ResultDetail.FromString(Name),
+                                            ResultDetail.FromNumber(0),
+                                            ResultDetail.FromNumber(binaryFile.Length),
+                                            ResultDetail.FromString("Could find first valid date at " + binaryFile.Position)
+                                            );
+            }
+
+
             while (binaryFile.Position < binaryFile.Length)
             {
                 var quitReading = false;
@@ -176,13 +238,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         break;
                     case TLGDataLogReadResults.INVALID_DATA:
                         var cause = "";
+                        binaryFile.Seek(dataLineBeginIndex, SeekOrigin.Begin);
                         var index = binaryFile.Position;
                         if (lastDate == 0)
                         {
                             cause = "No valid StartDate found";
                             quitReading = true;
                         }
-                        else if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDataLineBeginIndex, lastDate) == false)
+                        else if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDate) == false)
                         {
                             quitReading = true;
                             cause = "Could not find point for reEntry";
@@ -199,9 +262,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
                         break;
                     case TLGDataLogReadResults.MORE_DATA_THAN_IN_HEADER:
-                        index = binaryFile.Position;
                         var solution = "";
-                        if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDataLineBeginIndex, lastDate) == false)
+                        binaryFile.Seek(dataLineBeginIndex, SeekOrigin.Begin);
+                        index = binaryFile.Position;
+                        if (FindReEntryInBrokenFile(binaryFile, binaryReader, lastDate) == false)
                         {
                             quitReading = true;
                             solution = "DataLoss, could not find point for reEntry";

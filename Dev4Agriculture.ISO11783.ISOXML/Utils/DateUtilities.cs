@@ -7,7 +7,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
     {
         public static DateTime ISOXMLEpoch = new DateTime(1980, 1, 1, 0, 0, 0);
 
-        private static readonly double MILLISECONDS_IN_DAY = 24.0 * 60 * 60 * 1000;
+        public static readonly double MILLISECONDS_IN_DAY = 24.0 * 60 * 60 * 1000;
+        //These 2 dates are used to filter valid and invalid Time- and Datestamps when reading TimeLog TLG....BIN Files
+        public static readonly int DAYS_MIN_FOR_VALID_DATE_RANGE = 7305; //Days between 01.01.1980 and 01.01.2000
+        public static readonly int DAYS_MAX_FOR_VALID_DATE_RANGE = 22281; //Days between 01.01.1980 and 01.01.2041
         public static readonly string DATE_FORMAT = "dd.MM.yyyy";
         public static string GetDateFromDaysSince1980(int daysSince1980)
         {
