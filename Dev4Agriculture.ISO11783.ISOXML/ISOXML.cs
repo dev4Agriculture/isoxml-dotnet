@@ -314,16 +314,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
                 archive.ExtractToDirectory(path, true);
             }
-            var res = Load(loadingPath, loadBinData);
-
-            if (archiveWarning != null)
+            try
             {
-                res.Messages.Add(archiveWarning);
+                var res = Load(loadingPath, loadBinData);
+
+                if (archiveWarning != null)
+                {
+                    res.Messages.Add(archiveWarning);
+                }
+                return res;
+
             }
-
-            Directory.Delete(path, true);
-
-            return res;
+            finally
+            {
+                Directory.Delete(path, true);
+            }
 
         }
 
