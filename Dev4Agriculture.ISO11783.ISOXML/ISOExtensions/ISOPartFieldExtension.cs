@@ -64,6 +64,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
 
+        public bool IsOverlappingBounds(FieldBounds bounds)
+        {
+            Bounds ??= CalculateBounds();
+
+            return !(
+                Bounds.MaxLong < bounds.MinLong ||
+                Bounds.MinLong > bounds.MaxLong ||
+                Bounds.MaxLat < bounds.MinLat ||
+                Bounds.MinLat > bounds.MaxLat);
+
+        }
+
+
         /// <summary>
         /// Returns algorithm type, polygon type and intersect percent with secondField
         /// </summary>

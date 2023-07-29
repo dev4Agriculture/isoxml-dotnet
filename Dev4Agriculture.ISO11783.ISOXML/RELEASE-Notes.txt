@@ -1,3 +1,6 @@
+v0.19.5.1
++ ADD: Function to check if a field is within bounds.
+
 v0.19.4.1
 -FIX: If a TaskData inside a Zip folder was hidden in multiple subfolders, this lead to loading issues
 
