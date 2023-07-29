@@ -185,8 +185,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             bool valid = false;
             do
             {
-                var timeStamp = binaryReader.ReadInt32();
-                var date = binaryReader.ReadInt16();
+                var timeStamp = binaryReader.ReadUInt32();
+                var date = binaryReader.ReadUInt16();
 
                 if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date <  s_readConfiguration.DaysMinForValidDateRange || date > s_readConfiguration.DaysMaxForValidDateRange)
                 {

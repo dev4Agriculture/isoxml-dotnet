@@ -296,7 +296,8 @@ public static class Program
             "3: Create Task with CodingData \n" +
             "4: Create an example grid \n" +
             "5: Create FieldSize Comparison for 2 ISOXML DataSets\n" +
-            "6: Check ISOXML");
+            "6: Check ISOXML\n" +
+            "7: Compare 2 folders");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
         {
@@ -358,9 +359,109 @@ public static class Program
                 var path3 = Console.ReadLine();
                 CheckISOXML(path3);
                 break;
+            case 7:
+                Console.WriteLine("Select first Folder to Check");
+                var path4 = Console.ReadLine();
+                Console.WriteLine("Select second Folder to Check");
+                var path5 = Console.ReadLine();
+                CompareFolders(path4, path5);
+                break;
+
         }
 
         return;
     }
 
+    private class CompareResultEntry
+    {
+        public bool exists;
+        public int Tasks;
+        public int tlgCount;
+        public int tlgLines;
+        public int Messages;
+        public int Errors;
+    }
+
+    private class CompareResult
+    {
+        public CompareResultEntry[] folder;
+        public CompareResult()
+        {
+            folder = new CompareResultEntry[2]{
+                new CompareResultEntry(),
+                new CompareResultEntry() };
+        }
+    }
+
+    private static void CompareFolders(string path1, string path2)
+    {
+        Dictionary<string,CompareResult> folders = new Dictionary<string, CompareResult>();
+        var folder1 = Directory.GetFiles(path1,"TASKDATA.XML",SearchOption.AllDirectories);
+        var folder2 = Directory.GetFiles(path2, "TASKDATA.XML", SearchOption.AllDirectories);
+
+        foreach( var folderPath in folder1 )
+        {
+            var relPath = folderPath.Replace(path1, "").Replace("TASKDATA.XML","");
+            var folder = new CompareResult();
+            var isoxml = ISOXML.Load(folderPath.Replace("TASKDATA.XML", ""));
+            var entry = folder.folder[0];
+            entry.exists = true;
+            entry.Messages = isoxml.Messages.Count;
+            entry.Errors = isoxml.Messages.FindAll(entry => entry.Type == Messaging.ResultMessageType.Error).Count;
+            entry.tlgCount = isoxml.TimeLogs.Count;
+            entry.Tasks = isoxml.Data.Task.Count;
+            entry.tlgLines = isoxml.TimeLogs.Sum(tlg => tlg.Value.Entries.Count);
+            folders.Add(relPath, folder);
+        }
+
+
+        foreach (var folderPath in folder2)
+        {
+            var relPath = folderPath.Replace(path2, "").Replace("TASKDATA.XML", "");
+            var folder = new CompareResult();
+            if (folders.ContainsKey(relPath))
+            {
+                folder = folders[relPath];
+            } else
+            {
+                folders.Add(relPath, folder);
+            }
+            var isoxml = ISOXML.Load(folderPath.Replace("TASKDATA.XML", ""));
+            var entry = folder.folder[1];
+            entry.exists = true;
+            entry.Messages = isoxml.Messages.Count;
+            entry.Errors = isoxml.Messages.FindAll(entry => entry.Type == Messaging.ResultMessageType.Error).Count;
+            entry.Tasks = isoxml.Data.Task.Count;
+            entry.tlgCount = isoxml.TimeLogs.Count;
+            entry.tlgLines = isoxml.TimeLogs.Sum(tlg => tlg.Value.Entries.Count);
+        }
+
+        Console.WriteLine("Found TaskSets: "+ folders.Count);
+        for(int i = 0; i<2; i++)
+        {
+            Console.WriteLine("Task only in Folder "+(i+1) + " : " + folders.All(entry => entry.Value.folder[i].exists));
+
+        }
+        Console.WriteLine("Direct comparison: ");
+        foreach( var entry in  folders )
+        {
+            var text = entry.Key;
+            text += "; ";
+            for (int i = 0; i < 2; i++)
+            {
+                text += entry.Value.folder[i].exists + "; ";
+                text += entry.Value.folder[i].Tasks + "; ";
+                text += entry.Value.folder[i].tlgCount + "; ";
+                text += entry.Value.folder[i].tlgLines + "; ";
+                text += entry.Value.folder[i].Messages + "; ";
+                text += entry.Value.folder[i].Errors + ";";
+
+            }
+            Console.WriteLine(text);
+
+        }
+
+       return;
+
+    }
 }

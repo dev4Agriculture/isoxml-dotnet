@@ -42,7 +42,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             }
             return true;
         }
-        
+
         public static List<ISOPoint> ClearPolygon(List<ISOPoint> points)
         {
             for (var i = 0; i < points.Count - 2; i++)

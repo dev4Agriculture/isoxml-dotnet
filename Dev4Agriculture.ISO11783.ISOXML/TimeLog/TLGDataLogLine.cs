@@ -186,6 +186,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
 
             NumberOfEntries = binaryReader.ReadByte();
+            if(NumberOfEntries > ArraySize)
+            {
+                return TLGDataLogReadResults.MORE_DATA_THAN_IN_HEADER;
+            }
             for (var index = 0; index < NumberOfEntries; index++)
             {
                 if (file.Position + 5 > file.Length)
