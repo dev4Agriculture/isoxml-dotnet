@@ -176,4 +176,42 @@ public class ISOPartFieldTest
         Assert.AreEqual(result.PolygonType, actualResult.PolygonType);
     }
 
+
+    [TestMethod]
+    public void CanCheckOverlapOfBounds()
+    {
+        var filePath = "./testdata/LoadFromStream/MultiFields.zip";
+        ISOXML isoxml = null;
+        using (var stream = File.OpenRead(filePath))
+        {
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        var fields = isoxml.Data.Partfield.ToList();
+        var AustraliaBounds = new FieldBounds()
+        {
+            MaxLat = -20,
+            MinLat = -40,
+            MaxLong = -60,
+            MinLong = -120
+        };
+        var GermanyBounds = new FieldBounds()
+        {
+            MaxLat = 49,
+            MinLat = 48,
+            MaxLong = 11.8m,
+            MinLong = 11
+        };
+        foreach( var field in fields)
+        {
+            var result = field.IsOverlappingBounds(AustraliaBounds);
+            Assert.IsFalse(result);
+        }
+        foreach (var field in fields)
+        {
+            var result = field.IsOverlappingBounds(GermanyBounds);
+            Assert.IsTrue(result);
+        }
+
+    }
+
 }
