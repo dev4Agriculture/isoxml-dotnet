@@ -20,6 +20,7 @@
     <AssemblyVersion>0.19.4.1</AssemblyVersion>
     <FileVersion>0.19.4.1</FileVersion>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE-Notes.txt"))</PackageReleaseNotes>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

@@ -287,6 +287,35 @@ public static class Program
 
     public static void Main()
     {
+        var bigpath = "C:\\Users\\FrankWiebeler\\Downloads\\deskmate.exe";
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var file = new FileStream(bigpath, FileMode.Open);
+        var bufferedBinaryReader = new BufferedBinaryReader(file, 2000000);
+        while (bufferedBinaryReader.Position < file.Length)
+        {
+            var value = bufferedBinaryReader.ReadByte();
+        }
+
+        file.Close();
+
+        watch.Stop();
+        Console.WriteLine("Optimized: " + watch.ElapsedMilliseconds);
+
+        watch.Restart();
+
+        file = new FileStream(bigpath,FileMode.Open);
+        var binaryReader = new BinaryReader(file);
+        while( file.Position < binaryReader.BaseStream.Length)
+        {
+            var value = binaryReader.ReadByte();
+        }
+        file.Close();
+        watch.Stop();
+        Console.WriteLine("Elapsed for normal reading: " + watch.ElapsedMilliseconds);
+
+
+        return;
+
         Console.WriteLine("Welcome to the Example code of the ISOXML.net Library \n " +
             "Created 2022 by dev4Agriculture \n" +
             "Enter the path were data shall be stored");
