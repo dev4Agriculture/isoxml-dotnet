@@ -1,3 +1,5 @@
+v0.19.5.1
+- FIX: In case 2 polygons were compared of which one was closed and one was not, the overlap algorithm might in some cases not recognize the equality of both polygons
 v0.19.5
 + ADD: Function to check if a field is within bounds.
 

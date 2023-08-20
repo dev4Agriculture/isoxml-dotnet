@@ -178,6 +178,69 @@ public class ISOPartFieldTest
 
 
     [TestMethod]
+    public void CanRecognizeClosedPolygonFieldAsEqualToNonClosedPolygon()
+    {
+        var pfd1 = new ISOPartfield();
+        var pln1 = new ISOPolygon()
+        {
+            PolygonType = ISOPolygonType.PartfieldBoundary
+        };
+        var lsg1 = new ISOLineString()
+        {
+            LineStringType = ISOLineStringType.PolygonExterior
+        };
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3154258728, PointEast = (decimal)7.5933585167 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3155326843, PointEast = (decimal)7.5938162804 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3157234192, PointEast = (decimal)7.5947408676 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3159179688, PointEast = (decimal)7.5956292152 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3160095215, PointEast = (decimal)7.596060276 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3162765503, PointEast = (decimal)7.5960063934 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3163757324, PointEast = (decimal)7.5957460403 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3163833618, PointEast = (decimal)7.5955486298 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164215088, PointEast = (decimal)7.5950818062 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164558411, PointEast = (decimal)7.5933494568 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164634705, PointEast = (decimal)7.592900753 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3160705566, PointEast = (decimal)7.593026638 });
+        lsg1.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3155174255, PointEast = (decimal)7.5932326317 });
+        pln1.LineString.Add(lsg1);
+        pfd1.PolygonnonTreatmentZoneonly.Add(pln1);
+
+
+        var pfd2 = new ISOPartfield();
+        var pln2 = new ISOPolygon()
+        {
+            PolygonType = ISOPolygonType.PartfieldBoundary
+        };
+        var lsg2 = new ISOLineString()
+        {
+            LineStringType = ISOLineStringType.PolygonExterior
+        };
+
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3154258728, PointEast = (decimal)7.5933585167 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3155326843, PointEast = (decimal)7.5938162804 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3157234192, PointEast = (decimal)7.5947408676 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3159179688, PointEast = (decimal)7.5956292152 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3160095215, PointEast = (decimal)7.596060276 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3162765503, PointEast = (decimal)7.5960063934 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3163757324, PointEast = (decimal)7.5957460403 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3163833618, PointEast = (decimal)7.5955486298 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164215088, PointEast = (decimal)7.5950818062 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164558411, PointEast = (decimal)7.5933494568 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3164634705, PointEast = (decimal)7.592900753 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3160705566, PointEast = (decimal)7.593026638 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3155174255, PointEast = (decimal)7.5932326317 });
+        lsg2.Point.Add(new ISOPoint() { PointNorth = (decimal)52.3154258728, PointEast = (decimal)7.5933585167 });
+        pln2.LineString.Add(lsg2);
+        pfd2.PolygonnonTreatmentZoneonly.Add(pln2);
+
+        var result = pfd2.TryGetOverlapWithPartfield(pfd1);
+        Assert.IsTrue(result.Type == IntersectionAlgorithmType.Bounds);
+        Assert.AreEqual(1, result.IntersectPercent);
+
+    }
+
+
+    [TestMethod]
     public void CanCheckOverlapOfBounds()
     {
         var filePath = "./testdata/LoadFromStream/MultiFields.zip";
