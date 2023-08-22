@@ -56,5 +56,66 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test
 
         }
 
+        [TestMethod]
+        public void DoesRecognizeDataOrignFMIS()
+        {
+            var isoxml = ISOXML.Create("test");
+            isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+            var device = new ISODevice()
+            {
+                DeviceDesignator = "Machine"
+            };
+
+            var partfield = new ISOPartfield()
+            {
+                PartfieldDesignator = "Field"
+            };
+
+            var partfield2 = new ISOPartfield()
+            {
+                PartfieldDesignator = "Field2"
+            };
+
+            var deviceResult = isoxml.IdTable.AddObjectAndAssignIdIfNone(device);
+            Assert.AreEqual("DVC1", device.DeviceId);
+            var partFieldResult = isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield);
+            Assert.AreEqual("PFD1", partfield.PartfieldId);
+            var partFieldResult2 = isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield2);
+            Assert.AreEqual("PFD2", partfield2.PartfieldId);
+
+
+
+        }
+
+        [TestMethod]
+        public void DoesRecognizeDataOrignMICS()
+        {
+            var isoxml = ISOXML.Create("test");
+            isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.MICS;
+            var device = new ISODevice()
+            {
+                DeviceDesignator = "Machine"
+            };
+
+            var partfield = new ISOPartfield()
+            {
+                PartfieldDesignator = "Field"
+            };
+
+            var partfield2 = new ISOPartfield()
+            {
+                PartfieldDesignator = "Field2"
+            };
+
+            var deviceResult = isoxml.IdTable.AddObjectAndAssignIdIfNone(device);
+            Assert.AreEqual("DVC-1", device.DeviceId);
+            var partFieldResult = isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield);
+            Assert.AreEqual("PFD-1", partfield.PartfieldId);
+            var partFieldResult2 = isoxml.IdTable.AddObjectAndAssignIdIfNone(partfield2);
+            Assert.AreEqual("PFD-2", partfield2.PartfieldId);
+
+
+
+        }
     }
 }
