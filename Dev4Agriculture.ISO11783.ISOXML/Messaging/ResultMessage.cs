@@ -22,6 +22,7 @@
             var lastIndex = 0;
             for (var index = 1; index <= Details.Length; index++)
             {
+                lastIndex = index;
                 if (message.IndexOf($"%{index}") > -1)
                 {
                     message = message.Replace($"%{index}", Details[index - 1].Value);
@@ -30,9 +31,8 @@
                 {
                     break;
                 }
-                lastIndex = index;
             }
-            if (lastIndex < Details.Length)
+            if (lastIndex <= Details.Length)
             {
                 message += "More Details: [";
                 for (var index = lastIndex; index <= Details.Length; index++)

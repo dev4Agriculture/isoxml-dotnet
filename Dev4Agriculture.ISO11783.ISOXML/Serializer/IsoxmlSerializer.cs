@@ -61,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         public IsoxmlSerializer()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _isoxmlAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
+            _isoxmlAssembly = assemblies.LastOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
 
         }
         public ResultWithMessages<object> Deserialize(XmlDocument xml)
