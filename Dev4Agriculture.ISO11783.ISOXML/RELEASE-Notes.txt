@@ -1,3 +1,7 @@
+v0.19.5.4
+- FIX: TryGetDDIValue in Time Elements, Converter to Version 3, Totals and Lifetime Totals might crash in case the coresponding list was empty
+
+
 v0.19.5.2
 - FIX: In case the DataTransferOrign was MICS, the generated IDs were still positive as the TransferOrign was not handed on to the IDList
 

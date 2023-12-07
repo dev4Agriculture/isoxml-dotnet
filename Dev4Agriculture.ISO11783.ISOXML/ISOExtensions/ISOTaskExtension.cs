@@ -200,7 +200,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             if (shallCheckTimeElements)
             {
                 var endTime = Time.Max(entry => entry.Start);
-                if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out lastValue))
+                if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out lastValue) ?? false)
                 {
                     return true;
                 }
@@ -238,7 +238,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 if (shallCheckTimeElements)
                 {
                     var endTime = Time.Max(entry => entry.Start);
-                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
                     {
                         return true;
                     }
@@ -260,7 +260,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 if (shallCheckTimeElements)
                 {
                     var endTime = Time.Max(entry => entry.Start);
-                    if (Time.First(entry => entry.Start == endTime).TryGetDDIValue(ddi, deviceElement, out totalValue))
+                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
                     {
                         return true;
                     }
