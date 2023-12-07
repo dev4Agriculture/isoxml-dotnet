@@ -52,7 +52,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         public LinkListSerializer()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            _linkListAssembly = assemblies.FirstOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
+            _linkListAssembly = assemblies.LastOrDefault(assembly => assembly.GetName().Name == "Dev4Agriculture.ISO11783.ISOXML");
 
         }
 

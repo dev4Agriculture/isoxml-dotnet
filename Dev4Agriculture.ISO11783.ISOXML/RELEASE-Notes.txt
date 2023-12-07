@@ -1,3 +1,6 @@
+v0.19.5.3
+- FIX: Error in case of some function Apps, Fix the error message generation with parameters
+
 v0.19.5.2
 - FIX: In case the DataTransferOrign was MICS, the generated IDs were still positive as the TransferOrign was not handed on to the IDList
 
