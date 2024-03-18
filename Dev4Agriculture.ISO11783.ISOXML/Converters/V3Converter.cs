@@ -57,8 +57,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Converters
                     }
 
                     //p.129
-                    trZone.ProcessDataVariable.First().ActualCulturalPracticeValue = null;
-                    trZone.ProcessDataVariable.First().ElementTypeInstanceValue = null;
+                    if( trZone.ProcessDataVariable.Count > 0)
+                    {
+                        trZone.ProcessDataVariable.First().ActualCulturalPracticeValue = null;
+                    }
+
+                    if(trZone.ProcessDataVariable.Count > 0)
+                    {
+                        trZone.ProcessDataVariable.First().ElementTypeInstanceValue = null;
+                    }
 
                     if (trZone.PolygonTreatmentZoneonly.Count > 1)
                     {

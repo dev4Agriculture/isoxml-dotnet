@@ -103,12 +103,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool IsTotal(ushort DDI)
         {
-            return DeviceProcessData.First(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
+            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
         }
 
         public bool IsLifetimeTotal(ushort DDI)
         {
-            return DeviceProcessData.First(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
+            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
         }
 
     }

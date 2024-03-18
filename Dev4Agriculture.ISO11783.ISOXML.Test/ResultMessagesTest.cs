@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 [TestClass]
@@ -22,6 +25,13 @@ public class ResultMessagesTest
         Assert.AreEqual(isoxml.Messages.Count, 13);
         Assert.AreEqual(isoxml.Messages[1].Title, "FileNotFound");
 
+    }
+
+    [TestMethod]
+    public void TestMessageSerializationWorks() {
+        var isoxml = ISOXML.Load("./testdata/ResultMessages/BrokenBinFile");
+        string result = JsonConvert.SerializeObject(isoxml.Messages);
+        Assert.IsTrue(Regex.Matches(result,"Code").Count == 13);
     }
 
 }

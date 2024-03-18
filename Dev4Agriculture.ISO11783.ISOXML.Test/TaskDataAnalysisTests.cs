@@ -52,5 +52,16 @@ public class TaskDataAnalysisTests
         Assert.AreEqual(entries.Data.Count, 2);
         Assert.AreEqual(filledEntries.Data.Count, 4677);
     }
+
+    [TestMethod]
+    public void CanReadDataLogValues()
+    {
+        var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
+        //Testing TIM-wise ValueReading.
+        //This is found <DLV A="0094" B="1000" C="DET-1"/>
+        Assert.IsTrue(isoxml.Data.Task[0].Time[0].TryGetDDIValue(148, -1, out int result));
+        Assert.AreEqual(result, (int)1000);
+        Assert.IsFalse(isoxml.Data.Task[0].Time[0].TryGetDDIValue(148, 1, out int result2));
+    }
 }
 
