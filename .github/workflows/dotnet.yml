@@ -45,7 +45,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
   buildMac:
 
-    runs-on: macos-latest
+    runs-on: macos-13
     strategy:
       matrix:
         dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x' ]
