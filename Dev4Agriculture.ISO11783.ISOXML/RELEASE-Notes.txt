@@ -1,3 +1,6 @@
+v0.19.5.5
+- FIX: If an empty or less than 6 bytes BIN-File existed, loading the ISOXML Caused an exception
+
 v0.19.5.4
 - FIX: TryGetDDIValue in Time Elements, Converter to Version 3, Totals and Lifetime Totals might crash in case the coresponding list was empty
 
