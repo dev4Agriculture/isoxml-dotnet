@@ -35,6 +35,7 @@
         XSDEnumUnknown = 400,
         BINInvalidData = 500,
         BINInvalidNumberOfDataInRow,
+        BINEmptyFile,
         GRIDFileSizeMissmatch = 600,
         LinkListWrongRootElement = 700,
         LocalizationLabelBroken = 800,

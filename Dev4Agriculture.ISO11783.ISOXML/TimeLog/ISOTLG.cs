@@ -181,6 +181,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             long dataLineBeginIndex = 0;
             long lastDataLineBeginIndex = 0;
 
+            if (binaryFile.Length == 0)
+            {
+                messages.AddWarning(ResultMessageCode.BINEmptyFile,
+                                            ResultDetail.FromString(Name),
+                                            ResultDetail.FromNumber(0),
+                                            ResultDetail.FromNumber(binaryFile.Length),
+                                            ResultDetail.FromString("An empty BIN-File might cause confusion")
+                                            );
+                return messages;
+            }
+
+            if (binaryFile.Length < 6)
+            {
+                messages.AddError(ResultMessageCode.BINInvalidData,
+                                            ResultDetail.FromString(Name),
+                                            ResultDetail.FromNumber(0),
+                                            ResultDetail.FromNumber(binaryFile.Length),
+                                            ResultDetail.FromString("The file is smaller than 6 bytes")
+                                            );
+                return messages;
+            }
+
             //Check the first few bytes to be correct and within a logical range. For some rare broken files, this is a good solution to restore broken data
             bool valid = false;
             do
