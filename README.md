@@ -55,6 +55,7 @@ This is the main Class. It consists of functions to create, load and save ISOXML
 ### static Load or LoadAsync
 The static Load-Functions are used to Load a TaskDataSet from a storage folder. 
 Its result consists of a Type ISOXML.
+There are also functions to read ISOXML From a Zip File.
 
 ### static Create
 Creates an Empty TaskDataSet
