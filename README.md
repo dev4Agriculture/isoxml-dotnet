@@ -104,9 +104,64 @@ This outputs the Hex-encoded name.
 This is used to export a WorkingSetMasterName to an ISOTaskDataFile.
 
 
+## TaskController Emulator
+The TaskController Emulator can be used to generate machine data just like a TaskController would do it. 
+
+### Generate
+
+Use the Generate-Function to create a new TaskController Emulator. You can set Version, and some info on the TaskController Manufacturer
+
+### Localization
+
+To ensure that all your devices receive a valid DeviceDescription, Use the SetLocalization-Function to define Language and Unit Systems
+
+
+### GenerateDevice
+
+This returns a DeviceGenerator. When calling "GenerateDevice", the generated, yet empty device is automatically added to the ISOXML TaskSet.
+
+Use the Functions of the DeviceGenerator to Simplify machine Generation:
+
+- AddDeviceElement: Use this if you need more than the main DeviceElement. The MainElement is directly generated with the Device
+- AddDeviceProcessData/AddDeviceProperty: Create a DPD or DPT-Element, directly link it inside the DeviceElement and - if provided - add the Value Presentation
+- NextDevice...Id: These functions can be used to generate IDs for DPD, DPT, DET, DVP. They are already called internally in the AddDeviceProcessData/AddDeviceProperty, so you don't need to call them. But you can if you want to influence the numbers
+
+### BUS Simulation: Connect and Disconnect
+
+In a normal TaskController. A DeviceDescription, a TimeLog and a DeviceAllocation is always added when a machine is connected.
+To do this in our emulator, use **ConnectDevice** and **DisconnectDevice**.
+
+### ISOXML Manipulation
+
+To be able to add Customers, Product, etc. and to be able to save the ISOXML, you can get the Whole ISOXML-Object from GetTaskDataSet();
+
+### TaskController Actions
+
+- If you want to collect machine data, you need to Start a task using StartTask().
+- Once you call StartTask, any other Started Task is paused
+- If you call FinishTask, the Task is set to "Final" and should not be started anymore
+
+### Data Recording
+
+The data Recording consists of 2 types of Functions:
+
+#### Time and Position Record
+
+We see Time and Position as leading, which means, that before any machine data is recorded, we need to record a Time and Position (position might as well be of status "UNKNOWN")
+
+#### Recording Machine Data
+
+There is in total 2 Functions to record Data, each comes in 2 forms.
+
+
+- **AddValue vs. UpdateValue**: UpdateValue can be used to set a new value for DDI+DET; not caring about the old value. Add(Raw)ValueTo... can used to sum up values over time. E.g. You might not want to keep track of the total driven distance, you might just add the value driven since the last record was done.
+- **Update vs. UpdateRaw***: ISOBUS works with Standardized Units, defined for each DDI at https://isobus.net. To track Data in this Unit, use the UpdateRaw function. 
+ You might however have a ValuePresentation defined and prefer to document data in your unit of choice. If so, use the Update... or Add...-Function. It will automatically convert the value based on your ValuePresentation
 
 
 
+
+- 
 # License note on Logos
 
 Please be aware that the logo assigned to this project is only covered under Apache2 when used with this project. 

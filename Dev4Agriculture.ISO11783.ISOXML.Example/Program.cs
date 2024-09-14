@@ -435,18 +435,18 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
-                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
             else
             {
-                emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 400 + a);
-                emulator.AddValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 400 + a);
+                emulator.AddRawValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
             }
             if (a % 4 == 0)
             {
-                emulator.UpdateMachineValue(DDIList.TotalArea, a * 1000);
+                emulator.UpdateRawMachineValue(DDIList.TotalArea, a * 1000);
             }
         }
         datetime = datetime.AddSeconds(5);
@@ -467,14 +467,14 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
-                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
             else
             {
-                emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20000);
-                emulator.AddValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20000);
+                emulator.AddRawValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
             }
         }
 
@@ -498,14 +498,14 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
-                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
             else
             {
-                emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20000 + a);
-                emulator.AddValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
+                emulator.UpdateRawMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20000 + a);
+                emulator.AddRawValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
             }
         }
         emulator.FinishTask();

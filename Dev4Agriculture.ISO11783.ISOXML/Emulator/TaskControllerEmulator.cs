@@ -450,8 +450,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
+        private int ConvertValue(ushort ddi, double value, short? deviceElement = null)
+        {
+            //TODO: Get Offset and Factor from the DeviceDescription
+            var factor = 100;
+            var offset = 0;
 
-        public void UpdateMachineValue(ushort ddi, int value, short? deviceElement = null)
+            return (int)Math.Round(value * factor + offset);
+        }
+
+
+        public void UpdateRawMachineValue(ushort ddi, int value, short? deviceElement = null)
         {
             deviceElement = FindDeviceElementIfNull(deviceElement);
             var device = FindDeviceForDeviceElement(deviceElement);
@@ -475,13 +484,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        public void UpdateMachineValue(DDIList ddi, int value, short? deviceElement = null)
+        public void UpdateRawMachineValue(DDIList ddi, int value, short? deviceElement = null)
         {
-            UpdateMachineValue((ushort)ddi, value, deviceElement);
+            UpdateRawMachineValue((ushort)ddi, value, deviceElement);
+        }
+
+        public void UpdateMachineValue(DDIList ddi, double value, short? deviceElement = null)
+        {
+            var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
+            UpdateRawMachineValue((ushort)ddi, rawValue, deviceElement);
         }
 
 
-        public void AddValueToMachineValue(ushort ddi, int value, short? deviceElement = null)
+
+        public void AddRawValueToMachineValue(ushort ddi, int value, short? deviceElement = null)
         {
 
             deviceElement = FindDeviceElementIfNull(deviceElement);
@@ -500,11 +516,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
-        public void AddValueToMachineValue(DDIList ddi, int value, short? deviceElement = null)
+        public void AddRawValueToMachineValue(DDIList ddi, int value, short? deviceElement = null)
         {
-            AddValueToMachineValue((ushort)ddi, value, deviceElement);
+            AddRawValueToMachineValue((ushort)ddi, value, deviceElement);
         }
 
+        public void AddValueToMachineValue(DDIList ddi, double value, short? deviceElement = null)
+        {
+            var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
+            AddRawValueToMachineValue((ushort)ddi, rawValue, deviceElement);
+        }
 
 
 
