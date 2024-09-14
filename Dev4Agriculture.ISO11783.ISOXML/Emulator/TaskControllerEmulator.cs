@@ -49,7 +49,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         private string _languageShorting;
         private UnitSystem_US _unitSystem;
         private UnitSystem_No_US? _unitSystemNoUs;
-
+        private ISOTime _pauseElement;
 
         public TaskControllerEmulator(ISOXML isoxml, bool allowAutoLog = true)
         {
@@ -72,6 +72,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
+        public void ImportISOXML(ISOXML isoxml)
+        {
+            isoxml.TaskControllerManufacturer = _isoxml.TaskControllerManufacturer;
+            isoxml.TaskControllerVersion = _isoxml.TaskControllerVersion;
+            isoxml.DataTransferOrigin = _isoxml.DataTransferOrigin;
+            isoxml.SetFolderPath(_isoxml.FolderPath);
+            foreach (var device in _isoxml.Data.Device)
+            {
+                if (!isoxml.Data.Device.Any( dvc =>
+                        dvc.ClientNAME.Equals(device.ClientNAME) &&
+                        dvc.DeviceStructureLabel.SequenceEqual(device.DeviceStructureLabel) &&
+                        dvc.DeviceSoftwareVersion.Equals(device.DeviceSoftwareVersion)
+                ))
+                {
+                    isoxml.Data.Device.Add(device);
+                }
+            }
+        }
+
 
         public void SetLocalization(string languageShorting, UnitSystem_US unitSystem, UnitSystem_No_US? unitSystemNoUs = null)
         {
@@ -81,7 +100,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        public DeviceGenerator GenerateDevice(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, int serialNo)
+        public DeviceGenerator NewDeviceGenerator(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, int serialNo)
         {
             var generator = new DeviceGenerator(_isoxml, name, softwareVersion, structureLabel, deviceClass, manufacturer, serialNo);
             generator.SetLocalization(_languageShorting, _unitSystem, _unitSystemNoUs);
@@ -170,7 +189,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         {
             if (_currentTask != null)
             {
-                PauseTask();
+                EndTask(ISOTaskStatus.Paused);
+            } else if (_pauseElement != null)
+            {
+                _pauseElement.Stop = timestamp;
+                _pauseElement = null;
             }
             _currentDeviceAllocations = new List<ISODeviceAllocation>();
             _currentMaxDPDCount = (byte)_connectedDevices.Sum(dvc => dvc.DeviceProcessData.Count);
@@ -535,8 +558,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _currentTask = null;
         }
 
-        public void PauseTask()
+        public void PauseTask(ISOType2 pauseReason = ISOType2.Ineffective)
         {
+            _pauseElement = new ISOTime()
+            {
+                Start = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time),
+                Type = pauseReason
+            };
+            _currentTask.Time.Add(_pauseElement);
             EndTask(ISOTaskStatus.Paused);
         }
 

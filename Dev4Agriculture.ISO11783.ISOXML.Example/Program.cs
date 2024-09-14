@@ -317,7 +317,7 @@ public static class Program
     {
         var emulator = TaskControllerEmulator.Generate(path, "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1");
         emulator.SetLocalization("en", UnitSystem_US.METRIC);
-        var machine = emulator.GenerateDevice("BeetHarvester", "1.0", new byte[] { 1, 0, 20, 30, 10, 10, 20, 10 }, DeviceClass.Harvesters, 999, 12345);
+        var deviceGenerator = emulator.NewDeviceGenerator("BeetHarvester", "1.0", new byte[] { 1, 0, 20, 30, 10, 10, 20, 10 }, DeviceClass.Harvesters, 999, 12345);
         //Units
         var dvpArea = new ISODeviceValuePresentation()
         {
@@ -350,8 +350,8 @@ public static class Program
         };
 
 
-        //WorkState
-        machine.AddDeviceProcessData(new ISODeviceProcessData()
+        
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.ActualWorkState),
             DeviceProcessDataDesignator = "Workstate",
@@ -359,29 +359,29 @@ public static class Program
             DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet
         });
 
-        machine.AddDeviceProcessData(new ISODeviceProcessData()
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.InstantaneousFuelConsumptionPerTime),
-            DeviceProcessDataDesignator = "Fuel Consumption",
+            DeviceProcessDataDesignator = "Fuel Consumption per Time",
             DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnTime | (byte)TriggerMethods.OnChange,
-            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet| (byte) ISODeviceProcessDataPropertyType.Setable 
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet
         },
         valuePresentation: dvpConsumption
         );
 
 
-        machine.AddDeviceProcessData(new ISODeviceProcessData()
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.EffectiveTotalDieselExhaustFluidConsumption),
             DeviceProcessDataDesignator = "AdBlue Consumption",
-            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnTime | (byte)TriggerMethods.OnChange,
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnTime | (byte)TriggerMethods.Total,
             DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet | (byte)ISODeviceProcessDataPropertyType.Setable
         },
         valuePresentation: dvpVolume
         );
 
 
-        machine.AddDeviceProcessData(new ISODeviceProcessData()
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.TotalFuelConsumption),
             DeviceProcessDataDesignator = "Total Fuel Consumption",
@@ -393,7 +393,7 @@ public static class Program
 
 
 
-        machine.AddDeviceProcessData(new ISODeviceProcessData()
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.TotalArea),
             DeviceProcessDataDesignator = "Total Area",
@@ -416,7 +416,7 @@ public static class Program
         isoxml.Data.Task.Add(task);
 
 
-        emulator.ConnectDevice(machine.GetDevice());
+        emulator.ConnectDevice(deviceGenerator.GetDevice());
 
         emulator.StartTask(DateTime.Now, task);
 
@@ -429,7 +429,7 @@ public static class Program
             {
                 PositionNorth = (decimal)52.2,
                 PositionEast = (decimal)(7.1 + 0.001 * a),
-                PositionStatus = ISOPositionStatus.GNSSfix
+                PositionStatus = ISOPositionStatus.PreciseGNSS
 
             });
 
@@ -473,13 +473,13 @@ public static class Program
             }
             else
             {
-                emulator.UpdateRawMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20000);
+                emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, 20.5);
                 emulator.AddRawValueToMachineValue(DDIList.EffectiveTotalDieselExhaustFluidConsumption, 4900);
             }
         }
 
         datetime = datetime.AddSeconds(1);
-        emulator.PauseTask();
+        emulator.PauseTask(ISOType2.Repair);
         datetime = datetime.AddSeconds(10);
 
         emulator.StartTask(datetime, task);

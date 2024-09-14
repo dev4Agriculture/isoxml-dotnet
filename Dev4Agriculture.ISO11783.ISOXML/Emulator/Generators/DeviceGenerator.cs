@@ -9,7 +9,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
 {
     public class DeviceGenerator
     {
-        private static LocalizationLabel s_localizationLabel = new LocalizationLabel();
+        private LocalizationLabel s_localizationLabel = new LocalizationLabel();
         private readonly ISOXML _isoxml;
         private readonly ISODevice _device;
         private readonly ISODeviceElement _mainDeviceElement;
@@ -28,6 +28,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
                 UnitArea = unitSystemNoUs ?? (unitSystem == UnitSystem_US.US || unitSystem == UnitSystem_US.IMPERIAL ? UnitSystem_No_US.IMPERIAL : UnitSystem_No_US.METRIC),
 
             };
+            _device.DeviceLocalizationLabel = s_localizationLabel.ToArray();
         }
 
         public DeviceGenerator(ISOXML isoxml, string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, int serialNo)
