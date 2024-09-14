@@ -1,3 +1,5 @@
+v0.20.0.0:
+- ADD: A TaskController Emulator was added to generate ISOXML Like a TaskController would do it.
 v0.19.5.5
 - FIX: If an empty or less than 6 bytes BIN-File existed, loading the ISOXML Caused an exception
 

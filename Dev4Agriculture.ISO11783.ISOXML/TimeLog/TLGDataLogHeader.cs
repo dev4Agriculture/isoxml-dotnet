@@ -434,6 +434,36 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return false;
         }
 
+        public byte GetOrAddDDIIndex(ushort ddi, int detId)
+        {
+            if (!TryGetDDIIndex(ddi, detId, out var index))
+            {
+                index = (byte)Ddis.Count();
+                AddDataLogValue(new TLGDataLogDDI()
+                {
+                    DeviceElement = detId,
+                    Ddi = ddi,
+                    Index = (byte)index
+                });
+            }
+            return (byte)index;
+        }
+
+
+
+        public void AddDataLogValue(TLGDataLogDDI tLGDataLogDDI)
+        {
+            Ddis.Add(tLGDataLogDDI);
+            MaximumNumberOfEntries = (byte)Ddis.Count;
+        }
+
+        public int GetOrAddDataLogValue(ushort ddi, byte det)
+        {
+            var index = GetOrAddDDIIndex(ddi, det);
+            MaximumNumberOfEntries = (byte)Ddis.Count;
+            return index;
+        }
+
         internal class DLVWriter
         {
             public string ProcessDataDDI { get; set; }
@@ -498,16 +528,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                                 dlv.DataLogPGN != 0 ? new XAttribute("E", dlv.DataLogPGNStartBit) : null,
                                 dlv.DataLogPGN != 0 ? new XAttribute("F", dlv.DataLogPGNStopBit) : null
                             )
-    )
-);
+                )
+            );
 
             doc.Save(tlgPath);
-        }
-
-        public void AddDataLogValue(TLGDataLogDDI tLGDataLogDDI)
-        {
-            Ddis.Add(tLGDataLogDDI);
-            MaximumNumberOfEntries = (byte)Ddis.Count;
         }
     }
 }
