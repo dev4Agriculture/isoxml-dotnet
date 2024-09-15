@@ -22,7 +22,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
     public class WorkSessionProcessData
     {
         public ushort DDI;
-        public short DET;
+        public int DET;
         public ISODevice Device;
         public WorkSessionProcessDataType Type;
         public bool Used;
@@ -323,7 +323,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
-        private void addMachineValue(ushort ddi, int value, short? deviceElement = null)
+        private void addMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
             if (_currentTask == null)
             {
@@ -342,7 +342,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 throw new NoTaskStartedException();
             }
 
-            var index = _currentTimeLog.Header.GetOrAddDataLogValue(ddi, (byte)deviceElement!);
+            var index = _currentTimeLog.Header.GetOrAddDataLogValue(ddi, (int)deviceElement!);
             if (index < _currentDataLine.Entries.Length && !_currentDataLine.Entries[index].IsSet)
             {
                 _currentDataLine.Entries[index].Value = value;
@@ -354,7 +354,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private short FindDeviceElementIfNull(short? deviceElement = null)
+        private short FindDeviceElementIfNull(int? deviceElement = null)
         {
             if (deviceElement == null)
             {
@@ -375,12 +375,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private ISODevice FindDeviceForDeviceElement(short? deviceElement)
+        private ISODevice FindDeviceForDeviceElement(int? deviceElement)
         {
             return _isoxml.Data.Device.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == "DET" + deviceElement));
         }
 
-        private WorkSessionProcessData FindOrAddLatestDataLogValue(ushort ddi, short deviceElement, WorkSessionProcessDataType type)
+        private WorkSessionProcessData FindOrAddLatestDataLogValue(ushort ddi, int deviceElement, WorkSessionProcessDataType type)
         {
             var dlv = _latestDataLogValues.FirstOrDefault(dpd => dpd.DDI == ddi && dpd.DET == deviceElement);
             if (dlv == null)
@@ -399,7 +399,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private bool FindDataLogValueInTimeElement(ushort ddi, short det)
+        private bool FindDataLogValueInTimeElement(ushort ddi, int det)
         {
             return _currentTime.DataLogValue.Any(dlv => DDIUtils.ConvertDDI(dlv.ProcessDataDDI) == ddi && dlv.DeviceElementIdRef == "DET" + det);
         }
@@ -427,7 +427,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
 
 
-        private void UpdateTimeElementWithLatestDataLogValue(ushort ddi, short det, int latestValue)
+        private void UpdateTimeElementWithLatestDataLogValue(ushort ddi, int det, int latestValue)
         {
             foreach (var dataLogValueEntry in _currentTime.DataLogValue)
             {
@@ -460,7 +460,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             return valueType;
         }
 
-        private void UpdateOrAddDLVInTIM(ushort ddi, short? deviceElement)
+        private void UpdateOrAddDLVInTIM(ushort ddi, int? deviceElement)
         {
             if (!FindDataLogValueInTimeElement(ddi, deviceElement ?? 0))
             {
@@ -473,7 +473,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private int ConvertValue(ushort ddi, double value, short? deviceElement = null)
+        private int ConvertValue(ushort ddi, double value, int? deviceElement = null)
         {
             //TODO: Get Offset and Factor from the DeviceDescription
             var factor = 100;
@@ -483,7 +483,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        public void UpdateRawMachineValue(ushort ddi, int value, short? deviceElement = null)
+        public void UpdateRawMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
             deviceElement = FindDeviceElementIfNull(deviceElement);
             var device = FindDeviceForDeviceElement(deviceElement);
@@ -507,12 +507,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        public void UpdateRawMachineValue(DDIList ddi, int value, short? deviceElement = null)
+        public void UpdateRawMachineValue(DDIList ddi, int value, int? deviceElement = null)
         {
             UpdateRawMachineValue((ushort)ddi, value, deviceElement);
         }
 
-        public void UpdateMachineValue(DDIList ddi, double value, short? deviceElement = null)
+        public void UpdateMachineValue(DDIList ddi, double value, int? deviceElement = null)
         {
             var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
             UpdateRawMachineValue((ushort)ddi, rawValue, deviceElement);
@@ -520,7 +520,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
 
 
-        public void AddRawValueToMachineValue(ushort ddi, int value, short? deviceElement = null)
+        public void AddRawValueToMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
 
             deviceElement = FindDeviceElementIfNull(deviceElement);
@@ -539,12 +539,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
-        public void AddRawValueToMachineValue(DDIList ddi, int value, short? deviceElement = null)
+        public void AddRawValueToMachineValue(DDIList ddi, int value, int? deviceElement = null)
         {
             AddRawValueToMachineValue((ushort)ddi, value, deviceElement);
         }
 
-        public void AddValueToMachineValue(DDIList ddi, double value, short? deviceElement = null)
+        public void AddValueToMachineValue(DDIList ddi, double value, int? deviceElement = null)
         {
             var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
             AddRawValueToMachineValue((ushort)ddi, rawValue, deviceElement);

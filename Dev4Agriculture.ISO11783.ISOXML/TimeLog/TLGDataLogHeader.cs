@@ -457,7 +457,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             MaximumNumberOfEntries = (byte)Ddis.Count;
         }
 
-        public int GetOrAddDataLogValue(ushort ddi, byte det)
+        public int GetOrAddDataLogValue(ushort ddi, int det)
         {
             var index = GetOrAddDDIIndex(ddi, det);
             MaximumNumberOfEntries = (byte)Ddis.Count;
