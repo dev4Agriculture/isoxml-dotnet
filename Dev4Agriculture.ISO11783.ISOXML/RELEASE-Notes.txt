@@ -1,5 +1,8 @@
-v0.19.6.0
+v0.19.6.1
 - FIX: In some ISOXML Folders, There are files that end with TASKDATA.XML but are not actually these files. This happens e.g. with MAC OS files. To avoid errors, we add a warning about that
+
+v0.19.6.1
+- Was not released due to pipeline issues
 
 v0.19.5.5
 - FIX: If an empty or less than 6 bytes BIN-File existed, loading the ISOXML Caused an exception
