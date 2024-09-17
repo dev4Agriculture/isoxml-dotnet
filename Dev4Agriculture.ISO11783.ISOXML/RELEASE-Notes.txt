@@ -1,7 +1,10 @@
-v0.19.6.1
+v0.19.6.2
 - FIX: In some ISOXML Folders, There are files that end with TASKDATA.XML but are not actually these files. This happens e.g. with MAC OS files. To avoid errors, we add a warning about that
 
 v0.19.6.1
+- Was not released due to pipeline issues
+
+v0.19.6.0
 - Was not released due to pipeline issues
 
 v0.19.5.5
