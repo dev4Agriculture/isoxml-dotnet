@@ -106,7 +106,6 @@ This is used to export a WorkingSetMasterName to an ISOTaskDataFile.
 
 
 
-
 # License note on Logos
 
 Please be aware that the logo assigned to this project is only covered under Apache2 when used with this project. 
