@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
@@ -359,9 +360,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         internal static ResultWithMessages<IsoLinkList> LoadLinkList(string path, string fileName)
         {
+            var result = new ResultWithMessages<IsoLinkList>();
+            if (FileUtils.HasMultipleFilesEndingWithThatName(path, fileName))
+            {
+                result.AddWarning(ResultMessageCode.FileNameEndingMultipleTimes, ResultDetail.FromString(fileName));
+            }
+
             if (!FileUtils.AdjustFileNameToIgnoreCasing(path, fileName, out var linkListPath))
             {
-                var result = new ResultWithMessages<IsoLinkList>();
                 result.AddError(
                     ResultMessageCode.FileNotFound,
                     ResultDetail.FromFile(fileName)
@@ -372,7 +378,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             else
             {
                 var text = File.ReadAllText(linkListPath.ToString());
-                return ParseLinkList(text);
+                var toReturn = ParseLinkList(text);
+                toReturn.Messages.AddRange(result.Messages);
+                return toReturn;
             }
         }
     }

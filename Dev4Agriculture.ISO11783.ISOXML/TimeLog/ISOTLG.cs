@@ -111,6 +111,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             var messages = headerResult.Messages;
 
 
+            if (FileUtils.HasMultipleFilesEndingWithThatName(FolderPath, BinName))
+            {
+                messages.AddWarning(ResultMessageCode.FileNameEndingMultipleTimes, ResultDetail.FromString(BinName));
+            }
 
             if (FileUtils.AdjustFileNameToIgnoreCasing(FolderPath, BinName, out var binPath))
             {

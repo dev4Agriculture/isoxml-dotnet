@@ -103,9 +103,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             var text = "";
             var filePath = "";
+            var result = new ResultWithMessages<IsoLinkList>();
             if (!File.Exists(path))
             {
-                if (!FileUtils.AdjustFileNameToIgnoreCasing(path, "TASKDATA.XML", out filePath))
+                var fileName = "TASKDATA.XML";
+                if (FileUtils.HasMultipleFilesEndingWithThatName(path, fileName))
+                {
+                    result.AddWarning(ResultMessageCode.FileNameEndingMultipleTimes, ResultDetail.FromString(fileName));
+                }
+
+                if (!FileUtils.AdjustFileNameToIgnoreCasing(path, fileName, out filePath))
                 {
                     return new ResultWithMessages<ISO11783TaskDataFile>(
                         new ISO11783TaskDataFile(),
@@ -123,7 +130,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             }
 
-            return ParseTaskData(text, !string.IsNullOrWhiteSpace(filePath) ? filePath : path);
+            var toReturn = ParseTaskData(text, !string.IsNullOrWhiteSpace(filePath) ? filePath : path);
+            toReturn.AddMessages(result.Messages);
+            return toReturn;
         }
 
 
