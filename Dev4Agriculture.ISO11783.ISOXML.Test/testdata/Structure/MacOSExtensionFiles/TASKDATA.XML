@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISO11783_TaskData VersionMajor="4" VersionMinor="2" DataTransferOrigin="1" ManagementSoftwareManufacturer="dev4Ag" ManagementSoftwareVersion="1.0">
+  <TSK A="TSK1" G="4" E="PFD1" B="Test" D="FRM1" H="0" I="0" J="1" C="CTR1">
+    <OTP A="CPC1"/>
+    <PAN A="PAN1" B="0001" C="1000000" F="VPN1"/>
+    <TZN A="0">
+      <PDV A="0001" B="1000000" E="VPN1" C="PDT1"/>
+    </TZN>
+    <TZN A="1">
+      <PDV A="0001" B="0" E="VPN1" C="PDT1"/>
+    </TZN>
+    <TZN A="2">
+      <PDV A="0001" B="0" E="VPN1" C="PDT1"/>
+    </TZN>
+    <GRD A="40.297612148160525" B="-89.99393109030053" C="0.00009076973121761834" D="0.00012040138244628906" E="18" F="43" G="GRD00001" H="3096" I="2" J="2"/>
+    <TIM A="2024-09-16T22:00:00.000Z" D="1">
+    </TIM>
+  </TSK>
+  <PDT A="PDT1" B="Urea" E="0001"/>
+  <PFD A="PFD1" B="695084" C="field_test 2" D="63720" F="FRM1" G="CTP1" H="CVT1">
+    <PLN A="1">
+      <LSG A="1">
+        <PNT A="2" C="44.30144160532313" D="-69.9940491074972"/>
+        <PNT A="2" C="44.299723286007016" D="-69.99410811609553"/>
+        <PNT A="2" C="44.29815221295843" D="-69.99405983633326"/>
+        <PNT A="2" C="44.29780035304983" D="-69.99193552679347"/>
+        <PNT A="2" C="44.300304246475555" D="-69.99189261144923"/>
+        <PNT A="2" C="44.30107339772033" D="-69.99247733301448"/>
+        <PNT A="2" C="44.30108976254528" D="-69.99366286939906"/>
+        <PNT A="2" C="44.30134341682528" D="-69.9937057847433"/>
+        <PNT A="2" C="44.30151524660288" D="-69.99355558103846"/>
+        <PNT A="2" C="44.301703440619804" D="-69.99379161543177"/>
+        <PNT A="2" C="44.3015479760348" D="-69.99401692098903"/>
+        <PNT A="2" C="44.30144160532313" D="-69.9940491074972"/>
+        <PNT A="2" C="44.30144160532313" D="-69.9940491074972"/>
+      </LSG>
+    </PLN>
+    <GGP A="GGP0" B="AB Lines">
+      <GPN A="GPN0" B="Linea Test_Rett" C="1" E="1">
+        <LSG A="5">
+          <PNT A="6" C="40.29826082632101" D="-89.99342683500575"/>
+          <PNT A="7" C="40.30051922870998" D="-89.99342683500575"/>
+        </LSG>
+      </GPN>
+    </GGP>
+  </PFD>
+  <CTP A="CTP1" B="lettuce_lettuce">
+    <CVT A="CVT1" B="BABY LEAF LATTIGHINO VERDE CRISP"/>
+  </CTP>
+  <FRM A="FRM1" B="Machinery"/>
+  <CPC A="CPC1" B="Nutrizione"/>
+  <CTR A="CTR1" B="Machinery" C="test"/>
+  <VPN A="VPN1" B="0" C="0.0001" D="4" E="l_ha"/>
+  <AFE A="LINKLIST.XML" B="2" C="" D="1"/>
+</ISO11783_TaskData>

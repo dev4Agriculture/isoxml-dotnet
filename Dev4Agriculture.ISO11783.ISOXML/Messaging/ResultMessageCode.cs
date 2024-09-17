@@ -9,6 +9,7 @@
         FileNotFound,
         FileAccessImpossible,
         FileInvalid,
+        FileNameEndingMultipleTimes,
         DuplicatedId,
         DuplicatedTLG,
         XMLParsingError = 100,

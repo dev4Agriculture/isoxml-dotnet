@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 {
@@ -16,6 +17,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
             return parentFolder;
         }
 
+        public static bool HasMultipleFilesEndingWithThatName(string root, string fileName)
+        {
+
+            fileName = fileName.ToLower();
+            if (!Directory.Exists(Path.GetFullPath(root)))
+            {
+                return false;
+            }
+            var files = Directory.GetFiles(root);
+            var numberOfSameFiles = files.ToList().Where(entry => entry.ToLower().EndsWith(fileName)).Count();
+            return numberOfSameFiles > 1;
+        }
+
+
         public static bool AdjustFileNameToIgnoreCasing(string root, string fileName, out string path)
         {
 
@@ -27,7 +42,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
             }
             foreach (var file in Directory.GetFiles(root))
             {
-                if (file.ToLower().EndsWith(fileName))
+                if (Path.GetFileName(file).ToLower().Equals(fileName))
                 {
                     path = file;
                     return true;
@@ -38,7 +53,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
             {
                 foreach (var file in Directory.GetFiles(Path.Combine(root, subdir)))
                 {
-                    if (file.ToLower().EndsWith(fileName))
+                    if (file.ToLower().Equals(fileName))
                     {
                         path = file;
                         return true;
