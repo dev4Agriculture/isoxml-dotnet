@@ -4,6 +4,7 @@ using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
@@ -29,9 +30,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         public int LastValue;
     }
 
+    public class WorkSessionFactor
+    {
+        public ushort DDI;
+        public int DET;
+        public ISODeviceValuePresentation dvp;
+        public int DeviceId;
+    }
 
     public class TaskControllerEmulator
     {
+        private static readonly ISODeviceValuePresentation DefaultDVP = new ISODeviceValuePresentation()
+        { Scale = 1 };
+
 
         private readonly ISOXML _isoxml;
         private ISOTask _currentTask;
@@ -44,6 +55,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         private readonly List<ISODevice> _connectedDevices;
         private TLGDataLogLine _currentDataLine;
         private readonly List<WorkSessionProcessData> _latestDataLogValues;
+        private readonly List<WorkSessionFactor> _factors;
         private bool _isFirstLine;
         private DeviceGenerator _deviceGenerator;
         private string _languageShorting;
@@ -57,6 +69,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _allowAutoLog = allowAutoLog;
             _latestDataLogValues = new List<WorkSessionProcessData>();
             _connectedDevices = new List<ISODevice>();
+            _factors = new List<WorkSessionFactor>();
         }
 
 
@@ -150,7 +163,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         {
             _connectedDevices.Remove(device);
             _currentMaxDPDCount = (byte)_connectedDevices.Sum(dvc => dvc.DeviceProcessData.Count());
+            _factors.RemoveAll(factor => ("DVC" + factor.DeviceId) == device.DeviceId);
             //TODO if we have more than 255DDIs, we need a second TimeLog
+
 
             if (_currentTask != null)
             {
@@ -375,9 +390,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private ISODevice FindDeviceForDeviceElement(int? deviceElement)
+        private ISODevice FindDeviceForDeviceElement(int? deviceElementId)
         {
-            return _isoxml.Data.Device.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == "DET" + deviceElement));
+            if(deviceElementId == null)
+            {
+                return _isoxml.Data.Device.FirstOrDefault();
+            }
+            else
+            {
+                return _isoxml.Data.Device.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == "DET" + deviceElementId));
+            }
         }
 
         private WorkSessionProcessData FindOrAddLatestDataLogValue(ushort ddi, int deviceElement, WorkSessionProcessDataType type)
@@ -475,13 +497,104 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private int ConvertValue(ushort ddi, double value, int? deviceElement = null)
         {
-            //TODO: Get Offset and Factor from the DeviceDescription
-            var factor = 100;
-            var offset = 0;
-
-            return (int)Math.Round(value * factor + offset);
+            var deviceValuePresentation = FindDeviceValuePresentationByDDI(ddi, deviceElement);
+            return (int)Math.Round(value / (double)deviceValuePresentation.Scale - deviceValuePresentation.Offset);
         }
 
+        private ISODeviceValuePresentation FindDeviceValuePresentationByDDI(ushort ddi, int? deviceElement = null)
+        {
+            ISODevice device = null;
+            if (deviceElement == null)
+            {
+                device = _isoxml.Data.Device.FirstOrDefault();
+                if (device == null)
+                {
+                    _factors.Add(new WorkSessionFactor()
+                    {
+                        DDI = ddi,
+                        DET = 0,
+                        DeviceId = 0,
+                        dvp = DefaultDVP
+                    });
+                    return DefaultDVP;
+                }
+            } else
+            {
+                var fromList = _factors.FirstOrDefault(entry => entry.DDI == ddi && entry.DET == deviceElement);
+                if (fromList != null)
+                {
+                    return fromList.dvp;
+                }
+            }
+
+            device = FindDeviceForDeviceElement(deviceElement);
+            if (device == null)
+            {
+                _factors.Add(new WorkSessionFactor()
+                {
+                    DDI = ddi,
+                    DET = 0,
+                    DeviceId = 0,
+                    dvp = DefaultDVP
+                });
+                return DefaultDVP;
+            }
+
+
+
+            var potentialDPDs = device.DeviceProcessData.Where(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == ddi);
+            if (!potentialDPDs.Any())
+            {
+                _factors.Add(new WorkSessionFactor()
+                {
+                    DDI = ddi,
+                    DET = 0,
+                    DeviceId = 0,
+                    dvp = DefaultDVP
+                });
+                return DefaultDVP;
+            }
+
+            var dpd = potentialDPDs.FirstOrDefault(
+                potDpd => device.DeviceElement.Any(
+                    det => det.DeviceObjectReference.Any(
+                        dor => dor.DeviceObjectId == potDpd.DeviceProcessDataObjectId)
+                    )
+                );
+            if (dpd == null || !dpd.DeviceValuePresentationObjectIdValueSpecified)
+            {
+                _factors.Add(new WorkSessionFactor()
+                {
+                    DDI = ddi,
+                    DET = deviceElement ?? 0,
+                    DeviceId = 0,
+                    dvp = DefaultDVP
+                });
+                return DefaultDVP;
+            }
+
+            var deviceValuePresentation = device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpd.DeviceValuePresentationObjectId);
+            if (deviceValuePresentation == null)
+            {
+                _factors.Add(new WorkSessionFactor()
+                {
+                    DDI = ddi,
+                    DET = 0,
+                    DeviceId = 0,
+                    dvp = DefaultDVP
+                });
+                return DefaultDVP;
+            }
+            _factors.Add(new WorkSessionFactor()
+            {
+                DDI = ddi,
+                DET = 0,
+                DeviceId =  IdList.ToIntId(device.DeviceId),
+                dvp = DefaultDVP
+            });
+
+            return deviceValuePresentation;
+        }
 
         public void UpdateRawMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
@@ -529,7 +642,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             var latestDataLogValue = FindOrAddLatestDataLogValue(ddi, deviceElement ?? 0, valueType);
             AddDeviceAllocationIfNoneExists(device);
             latestDataLogValue.LastValue += value;
-
+            addMachineValue(ddi, latestDataLogValue.LastValue, deviceElement);
             if (valueType == WorkSessionProcessDataType.Total || valueType == WorkSessionProcessDataType.LifeTime)
             {
                 UpdateOrAddDLVInTIM(ddi, deviceElement);
@@ -556,6 +669,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         {
             _currentTask.TaskStatus = status;
             _currentTask = null;
+            _currentTime = null;
+            _currentTimeLog = null;
+            if (_allowAutoLog)
+            {
+                StartAutoLog();
+            }
         }
 
         public void PauseTask(ISOType2 pauseReason = ISOType2.Ineffective)

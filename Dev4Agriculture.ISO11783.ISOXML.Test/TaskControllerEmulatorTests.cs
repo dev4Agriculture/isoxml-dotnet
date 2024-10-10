@@ -1,0 +1,236 @@
+﻿using System;
+using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.Emulator;
+using Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Dev4Agriculture.ISO11783.ISOXML.Test;
+
+[TestClass]
+public class TaskControllerEmulatorTests
+{
+    private ISOXML _isoxml = null;
+
+    private TaskControllerEmulator PrepareEmulator(bool autolog)
+    {
+        var isoxml = ISOXML.Create("");
+        _isoxml = isoxml;
+        var emulator = TaskControllerEmulator.Generate("", "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1");
+        ;
+        return emulator;
+    }
+
+    private ISODevice GetChopperDevice(ISOXML isoxml)
+    {
+        var deviceGenerator = new DeviceGenerator(_isoxml, "Chopper", "1.0", new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 }, DeviceClass.Harvesters, 99, 1234);
+        var dvpArea = new ISODeviceValuePresentation()
+        {
+            UnitDesignator = "ha",
+            NumberOfDecimals = 1,
+            Scale = (decimal)0.001
+        };
+
+        var dvpDistance = new ISODeviceValuePresentation()
+        {
+            UnitDesignator = "km",
+            NumberOfDecimals = 1,
+            Scale = (decimal)0.01
+        };
+
+
+        var dvpVolume = new ISODeviceValuePresentation()
+        {
+            UnitDesignator = "l",
+            NumberOfDecimals = 1,
+            Scale = (decimal)0.0001
+        };
+
+
+        var dvpConsumption = new ISODeviceValuePresentation()
+        {
+            UnitDesignator = "l/h",
+            NumberOfDecimals = 1,
+            Scale = (decimal)0.02666
+        };
+
+
+
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.ActualWorkState),
+            DeviceProcessDataDesignator = "Workstate",
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnChange,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet
+        });
+
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.InstantaneousFuelConsumptionPerTime),
+            DeviceProcessDataDesignator = "Fuel Consumption per Time",
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnTime | (byte)TriggerMethods.OnChange,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet
+        },
+        valuePresentation: dvpConsumption
+        );
+
+
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.EffectiveTotalDieselExhaustFluidConsumption),
+            DeviceProcessDataDesignator = "AdBlue Consumption",
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnTime | (byte)TriggerMethods.Total,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet | (byte)ISODeviceProcessDataPropertyType.Setable
+        },
+        valuePresentation: dvpVolume
+        );
+
+
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.TotalFuelConsumption),
+            DeviceProcessDataDesignator = "Total Fuel Consumption",
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnChange | (byte)TriggerMethods.Total,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet | (byte)ISODeviceProcessDataPropertyType.Setable
+        },
+        valuePresentation: dvpVolume
+        );
+
+
+
+        deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.TotalArea),
+            DeviceProcessDataDesignator = "Total Area",
+            DeviceProcessDataTriggerMethods = (byte)TriggerMethods.OnChange | (byte)TriggerMethods.Total,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet | (byte)ISODeviceProcessDataPropertyType.Setable
+        },
+        valuePresentation: dvpArea
+        );
+
+
+        return deviceGenerator.GetDevice();
+    }
+
+
+
+    [TestMethod]
+    public void AddingPositionsAddsTimeElement()
+    {
+        var emulator = PrepareEmulator(false);
+
+        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+
+
+        emulator.ConnectDevice(chopper);
+        emulator.StartTask(DateTime.Now);
+        for (var a = 1; a < 10; a++)
+        {
+            emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
+            {
+                PositionNorth = (decimal)(42.003 + 0.001 * a),
+                PositionEast = (decimal)(7.3),
+                PositionStatus = ISOPositionStatus.GNSSfix
+            });
+        }
+        emulator.FinishTask();
+
+        var isoxml = emulator.GetTaskDataSet();
+
+        Assert.AreEqual(isoxml.Data.Task.Count, 1);
+        Assert.AreEqual(isoxml.Data.Device.Count, 1);
+        var task = isoxml.Data.Task[0];
+        Assert.AreEqual(task.Time.Count, 1);
+        Assert.AreEqual(task.DeviceAllocation.Count, 0);
+
+    }
+
+    [TestMethod]
+    public void AddingMachineDataAddsDeviceAllocation()
+    {
+        var emulator = PrepareEmulator(false);
+
+        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+
+
+        emulator.ConnectDevice(chopper);
+        emulator.StartTask(DateTime.Now);
+        for (var a = 1; a < 10; a++)
+        {
+            emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
+            {
+                PositionNorth = (decimal)(42.003 + 0.001 * a),
+                PositionEast = (decimal)(7.3),
+                PositionStatus = ISOPositionStatus.GNSSfix
+            });
+            emulator.AddRawValueToMachineValue(DDIList.ActualWorkState, a % 2);
+        }
+        emulator.FinishTask();
+
+        var isoxml = emulator.GetTaskDataSet();
+
+        Assert.AreEqual(isoxml.Data.Task.Count, 1);
+        Assert.AreEqual(isoxml.Data.Device.Count, 1);
+        var task = isoxml.Data.Task[0];
+        Assert.AreEqual(task.Time.Count, 1);
+        Assert.AreEqual(task.DeviceAllocation.Count, 1);
+
+    }
+
+    [TestMethod]
+    public void AddingFormatedMachineDataIsConvertedCorrectly()
+    {
+        var emulator = PrepareEmulator(false);
+
+        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+
+
+        emulator.ConnectDevice(chopper);
+        emulator.StartTask(DateTime.Now);
+        for (var a = 1; a < 10; a++)
+        {
+            emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
+            {
+                PositionNorth = (decimal)(42.003 + 0.001 * a),
+                PositionEast = (decimal)7.3,
+                PositionStatus = ISOPositionStatus.GNSSfix
+            });
+            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a);
+            if (a % 2 == 0)
+            {
+                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 2);
+
+            }
+        }
+        emulator.FinishTask();
+
+        var isoxml = emulator.GetTaskDataSet();
+
+        Assert.AreEqual(isoxml.Data.Task.Count, 1);
+        Assert.AreEqual(isoxml.Data.Device.Count, 1);
+        var task = isoxml.Data.Task[0];
+        Assert.AreEqual(task.Time.Count, 1);
+        Assert.AreEqual(task.DeviceAllocation.Count, 1);
+        Assert.AreEqual(task.TimeLogs.Count, 1);
+        var timeLog = task.TimeLogs[0];
+        var currentFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.InstantaneousFuelConsumptionPerTime, -1);
+        var totalFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.TotalFuelConsumption, -1);
+
+        for (var a = 1; a <= task.TimeLogs.Count; a++)
+        {
+            Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, (a % 2 == 0 ? 2 : 1));
+            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / 0.02666));
+            if (a % 2 == 0)
+            {
+                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
+            }
+            else
+            {
+                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].IsSet, false);
+            }
+        }
+    }
+
+}
