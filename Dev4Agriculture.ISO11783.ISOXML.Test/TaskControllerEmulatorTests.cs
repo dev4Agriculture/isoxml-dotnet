@@ -20,12 +20,16 @@ public class TaskControllerEmulatorTests
         _isoxml = isoxml;
         var emulator = TaskControllerEmulator.Generate("", "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1");
         ;
+
         return emulator;
     }
 
     private ISODevice GetChopperDevice(ISOXML isoxml)
     {
         var deviceGenerator = new DeviceGenerator(_isoxml, "Chopper", "1.0", new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 }, DeviceClass.Harvesters, 99, 1234);
+        deviceGenerator.SetLocalization(
+            "en", UnitSystem_US.METRIC
+            );
         var dvpArea = new ISODeviceValuePresentation()
         {
             UnitDesignator = "ha",
@@ -125,19 +129,23 @@ public class TaskControllerEmulatorTests
 
 
         emulator.ConnectDevice(chopper);
-        emulator.StartTask(DateTime.Now);
+
+        emulator.StartTask(DateTime.Now, "Task");
         for (var a = 1; a < 10; a++)
         {
             emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
             {
                 PositionNorth = (decimal)(42.003 + 0.001 * a),
-                PositionEast = (decimal)(7.3),
+                PositionEast = (decimal)7.3,
                 PositionStatus = ISOPositionStatus.GNSSfix
             });
         }
         emulator.FinishTask();
 
         var isoxml = emulator.GetTaskDataSet();
+
+        isoxml.SetFolderPath("./out/TCEmulator/simpleTask");
+        isoxml.Save();
 
         Assert.AreEqual(isoxml.Data.Task.Count, 1);
         Assert.AreEqual(isoxml.Data.Device.Count, 1);
@@ -156,13 +164,13 @@ public class TaskControllerEmulatorTests
 
 
         emulator.ConnectDevice(chopper);
-        emulator.StartTask(DateTime.Now);
+        emulator.StartTask(DateTime.Now, "Task1");
         for (var a = 1; a < 10; a++)
         {
             emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
             {
                 PositionNorth = (decimal)(42.003 + 0.001 * a),
-                PositionEast = (decimal)(7.3),
+                PositionEast = (decimal)7.3,
                 PositionStatus = ISOPositionStatus.GNSSfix
             });
             emulator.AddRawValueToMachineValue(DDIList.ActualWorkState, a % 2);
@@ -170,6 +178,10 @@ public class TaskControllerEmulatorTests
         emulator.FinishTask();
 
         var isoxml = emulator.GetTaskDataSet();
+
+        isoxml.SetFolderPath("./out/TCEmulator/simpleTaskWithRawMachineData");
+        isoxml.Save();
+
 
         Assert.AreEqual(isoxml.Data.Task.Count, 1);
         Assert.AreEqual(isoxml.Data.Device.Count, 1);
@@ -188,7 +200,7 @@ public class TaskControllerEmulatorTests
 
 
         emulator.ConnectDevice(chopper);
-        emulator.StartTask(DateTime.Now);
+        emulator.StartTask(DateTime.Now, "TaskWithMachines");
         for (var a = 1; a < 10; a++)
         {
             emulator.AddTimeAndPosition(DateTime.Now, new ISOPosition()
@@ -208,6 +220,9 @@ public class TaskControllerEmulatorTests
 
         var isoxml = emulator.GetTaskDataSet();
 
+        isoxml.SetFolderPath("./out/TCEmulator/simpleTask");
+        isoxml.Save();
+
         Assert.AreEqual(isoxml.Data.Task.Count, 1);
         Assert.AreEqual(isoxml.Data.Device.Count, 1);
         var task = isoxml.Data.Task[0];
@@ -220,7 +235,7 @@ public class TaskControllerEmulatorTests
 
         for (var a = 1; a <= task.TimeLogs.Count; a++)
         {
-            Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, (a % 2 == 0 ? 2 : 1));
+            Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
             Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / 0.02666));
             if (a % 2 == 0)
             {
@@ -231,6 +246,72 @@ public class TaskControllerEmulatorTests
                 Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].IsSet, false);
             }
         }
+    }
+
+
+    [TestMethod]
+    public void CanStartATaskMultipleTimes()
+    {
+        var emulator = PrepareEmulator(true);
+
+        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+
+
+        emulator.ConnectDevice(chopper);
+        emulator.StartTask(DateTime.Now, "First Task");
+        for (var a = 1; a < 400; a++)
+        {
+            emulator.AddTimeAndPosition(DateTime.Now.AddSeconds(a), new ISOPosition()
+            {
+                PositionNorth = (decimal)(42.003 + 0.001 * a),
+                PositionEast = (decimal)7.3,
+                PositionStatus = ISOPositionStatus.GNSSfix
+            });
+            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a);
+            if (a % 2 == 0)
+            {
+                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 2);
+
+            }
+            if (a % 100 == 0)
+            {
+                emulator.StartTask(DateTime.Now.AddSeconds(a), "Task " + a);
+            }
+            if (a % 90 == 0)
+            {
+                emulator.PauseTask();
+            }
+        }
+        emulator.FinishTask();
+
+        var isoxml = emulator.GetTaskDataSet();
+
+        isoxml.SetFolderPath("./out/TCEmulator/MultiTask");
+        isoxml.Save();
+
+        Assert.AreEqual(isoxml.Data.Task.Count, 5); //4 Tasks and one AutoLog Task
+        Assert.AreEqual(isoxml.Data.Device.Count, 1);
+        /*var task = isoxml.Data.Task[0];
+        Assert.AreEqual(task.Time.Count, 1);
+        Assert.AreEqual(task.DeviceAllocation.Count, 1);
+        Assert.AreEqual(task.TimeLogs.Count, 1);
+        var timeLog = task.TimeLogs[0];
+        var currentFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.InstantaneousFuelConsumptionPerTime, -1);
+        var totalFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.TotalFuelConsumption, -1);
+
+        for (var a = 1; a <= task.TimeLogs.Count; a++)
+        {
+            Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
+            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / 0.02666));
+            if (a % 2 == 0)
+            {
+                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
+            }
+            else
+            {
+                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].IsSet, false);
+            }
+        }*/
     }
 
 }

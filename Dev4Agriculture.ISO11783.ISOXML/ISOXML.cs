@@ -648,6 +648,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 entry.Value.SaveTLG(FolderPath);
             }
 
+            foreach(var task in Data.Task)
+            {
+                task.CleanTimeStamps();
+            }
+
             if (VersionMajor != ISO11783TaskDataFileVersionMajor.Version4)
             {
                 var datav3 = UpdateDataForV3();

@@ -57,7 +57,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         private readonly List<WorkSessionProcessData> _latestDataLogValues;
         private readonly List<WorkSessionFactor> _factors;
         private bool _isFirstLine;
-        private DeviceGenerator _deviceGenerator;
         private string _languageShorting;
         private UnitSystem_US _unitSystem;
         private UnitSystem_No_US? _unitSystemNoUs;
@@ -93,7 +92,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             isoxml.SetFolderPath(_isoxml.FolderPath);
             foreach (var device in _isoxml.Data.Device)
             {
-                if (!isoxml.Data.Device.Any( dvc =>
+                if (!isoxml.Data.Device.Any(dvc =>
                         dvc.ClientNAME.Equals(device.ClientNAME) &&
                         dvc.DeviceStructureLabel.SequenceEqual(device.DeviceStructureLabel) &&
                         dvc.DeviceSoftwareVersion.Equals(device.DeviceSoftwareVersion)
@@ -174,7 +173,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        private void StartAutoLog()
+        private void StartAutoLog(DateTime timestamp)
         {
             ISOTask autoLogTask = null;
             foreach (var task in _isoxml.Data.Task)
@@ -197,32 +196,52 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 _isoxml.Data.Task.Add(autoLogTask);
 
             }
-            _currentTask = autoLogTask;
+            StartTask(timestamp, autoLogTask);
         }
 
-        public void StartTask(DateTime timestamp, ISOTask task = null)
+
+        public ISOTask StartTask(DateTime timestamp, string name)
+        {
+            var task = new ISOTask()
+            {
+                TaskDesignator = name
+            };
+            StartTask(timestamp, task);
+            return task;
+        }
+
+
+        public ISOTask StartTask(DateTime timestamp, ISOTask task)
         {
             if (_currentTask != null)
             {
-                EndTask(ISOTaskStatus.Paused);
-            } else if (_pauseElement != null)
+                EndTask(timestamp, ISOTaskStatus.Paused);
+            }
+            else if (_pauseElement != null)
             {
                 _pauseElement.Stop = timestamp;
                 _pauseElement = null;
             }
             _currentDeviceAllocations = new List<ISODeviceAllocation>();
             _currentMaxDPDCount = (byte)_connectedDevices.Sum(dvc => dvc.DeviceProcessData.Count);
-
             _currentTask = task;
             if (_currentTask == null)
             {
                 if (_allowAutoLog)
                 {
-                    StartAutoLog();
+                    StartAutoLog(timestamp);
                 }
                 else
                 {
                     throw new NoTaskInWorkSessionException();
+                }
+            }
+            else
+            {
+                if (!_isoxml.Data.Task.Any(entry => entry.Equals(task)))
+                {
+                    _isoxml.IdTable.AddObjectAndAssignIdIfNone(task);
+                    _isoxml.Data.Task.Add(task);
                 }
             }
             _startTime = timestamp;
@@ -238,6 +257,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _currentTask.Time.Add(_currentTime);
             AddTimeLog();
             _isFirstLine = true;
+            return _currentTask;
         }
 
         private void UpdateLatestDataLogValuesFromTimeElement(ISOTime iSOTime)
@@ -252,33 +272,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
-        public void StartPause(DateTime startTime, ISOType2 reason = ISOType2.Ineffective)
-        {
-            //Finish Worksession
-            if (_currentTimeLog != null)
-            {
-                if (_currentDataLine != null)
-                {
-                    _currentTimeLog.Entries.Add(_currentDataLine);
-                }
-            }
-
-            _startTime = startTime;
-        }
-
-
         public void AddTimeAndPosition(DateTime timestamp, ISOPosition position)
         {
             if (_currentTask == null)
             {
                 if (_allowAutoLog)
                 {
-                    StartAutoLog();
+                    StartAutoLog(timestamp);
                 }
                 else
                 {
                     throw new NoTaskInWorkSessionException();
                 }
+            }
+
+            if (_currentTimeLog == null)
+            {
+                AddTimeLog();
             }
 
             if (_currentDataLine != null)
@@ -340,18 +350,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private void addMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
-            if (_currentTask == null)
-            {
-                if (_allowAutoLog)
-                {
-                    StartAutoLog();
-                }
-                else
-                {
-                    throw new NoTaskInWorkSessionException();
-                }
-            }
-
             if (_currentDataLine == null || _currentTimeLog == null)
             {
                 throw new NoTaskStartedException();
@@ -392,7 +390,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private ISODevice FindDeviceForDeviceElement(int? deviceElementId)
         {
-            if(deviceElementId == null)
+            if (deviceElementId == null)
             {
                 return _isoxml.Data.Device.FirstOrDefault();
             }
@@ -518,7 +516,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     });
                     return DefaultDVP;
                 }
-            } else
+            }
+            else
             {
                 var fromList = _factors.FirstOrDefault(entry => entry.DDI == ddi && entry.DET == deviceElement);
                 if (fromList != null)
@@ -589,7 +588,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             {
                 DDI = ddi,
                 DET = 0,
-                DeviceId =  IdList.ToIntId(device.DeviceId),
+                DeviceId = IdList.ToIntId(device.DeviceId),
                 dvp = DefaultDVP
             });
 
@@ -665,7 +664,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
 
 
-        private void EndTask(ISOTaskStatus status)
+        private void EndTask(DateTime timeStamp, ISOTaskStatus status)
         {
             _currentTask.TaskStatus = status;
             _currentTask = null;
@@ -673,24 +672,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _currentTimeLog = null;
             if (_allowAutoLog)
             {
-                StartAutoLog();
+                StartAutoLog(timeStamp);
             }
         }
 
         public void PauseTask(ISOType2 pauseReason = ISOType2.Ineffective)
         {
+            var timeStamp = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time);
             _pauseElement = new ISOTime()
             {
-                Start = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time),
+                Start = timeStamp,
                 Type = pauseReason
             };
             _currentTask.Time.Add(_pauseElement);
-            EndTask(ISOTaskStatus.Paused);
+            EndTask(timeStamp, ISOTaskStatus.Paused);
         }
 
         public void FinishTask()
         {
-            EndTask(ISOTaskStatus.Completed);
+            if (_currentDataLine != null)
+            {
+                var timeStamp = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time);
+                EndTask(timeStamp, ISOTaskStatus.Completed);
+            }
         }
 
 

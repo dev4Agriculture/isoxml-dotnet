@@ -240,6 +240,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             result.SetResult(taskData);
             return result;
         }
-
     }
 }
