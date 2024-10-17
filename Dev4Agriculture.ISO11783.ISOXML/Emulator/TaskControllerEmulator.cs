@@ -46,6 +46,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private readonly ISOXML _isoxml;
         private ISOTask _currentTask;
+        private ISOTask _autoLogTask;
         private DateTime _startTime;
         private ISOTime _currentTime;
         private List<ISODeviceAllocation> _currentDeviceAllocations;
@@ -60,12 +61,41 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         private string _languageShorting;
         private UnitSystem_US _unitSystem;
         private UnitSystem_No_US? _unitSystemNoUs;
-        private ISOTime _pauseElement;
+
+        private void FindOrGenerateAutoLogTask()
+        {
+            foreach (var task in _isoxml.Data.Task)
+            {
+                if (task.TaskDesignator == "AUTOLOG")
+                {
+                    _autoLogTask = task;
+                    break;
+                }
+            }
+            if (_autoLogTask == null)
+            {
+                _autoLogTask = new ISOTask()
+                {
+                    TaskDesignator = "AUTOLOG",
+                    TaskStatus = ISOTaskStatus.Planned
+                };
+                _autoLogTask.AddDefaultDataLogTrigger();
+                _isoxml.IdTable.AddObjectAndAssignIdIfNone(_autoLogTask);
+                _isoxml.Data.Task.Add(_autoLogTask);
+
+            }
+
+        }
+
 
         public TaskControllerEmulator(ISOXML isoxml, bool allowAutoLog = true)
         {
             _isoxml = isoxml;
             _allowAutoLog = allowAutoLog;
+            if (allowAutoLog)
+            {
+                FindOrGenerateAutoLogTask();
+            }
             _latestDataLogValues = new List<WorkSessionProcessData>();
             _connectedDevices = new List<ISODevice>();
             _factors = new List<WorkSessionFactor>();
@@ -101,6 +131,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     isoxml.Data.Device.Add(device);
                 }
             }
+
+            if (_allowAutoLog)
+            {
+                FindOrGenerateAutoLogTask();
+            }
+        }
+
+        public ISOXML ExportISOXML(DateTime timeStampOfExport)
+        {
+            foreach(var task in _isoxml.Data.Task)
+            {
+                var finalTim = GetPauseElement(task);
+                if (finalTim != null && finalTim.Stop == null)
+                {
+                    finalTim.Stop = timeStampOfExport;
+                }
+
+
+                var finalDan = task.DeviceAllocation.Last();
+                if (finalDan.AllocationStamp != null && finalDan.AllocationStamp.Stop == null)
+                {
+                    finalDan.AllocationStamp.Stop = timeStampOfExport;
+                }
+            }
+
+            return _isoxml;
         }
 
 
@@ -175,28 +231,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private void StartAutoLog(DateTime timestamp)
         {
-            ISOTask autoLogTask = null;
-            foreach (var task in _isoxml.Data.Task)
-            {
-                if (task.TaskDesignator.Equals("AUTOLOG"))
-                {
-                    autoLogTask = task;
-                    break;
-                }
-            }
-            if (autoLogTask == null)
-            {
-                autoLogTask = new ISOTask()
-                {
-                    TaskDesignator = "AUTOLOG",
-                    TaskStatus = ISOTaskStatus.Running
-                };
-                autoLogTask.AddDefaultDataLogTrigger();
-                _isoxml.IdTable.AddObjectAndAssignIdIfNone(autoLogTask);
-                _isoxml.Data.Task.Add(autoLogTask);
-
-            }
-            StartTask(timestamp, autoLogTask);
+            StartTask(timestamp, _autoLogTask);
         }
 
 
@@ -217,17 +252,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             {
                 EndTask(timestamp, ISOTaskStatus.Paused);
             }
-            else if (_pauseElement != null)
+            var pauseElement = GetPauseElement(task);
+            if(pauseElement != null)
             {
-                _pauseElement.Stop = timestamp;
-                _pauseElement = null;
+                pauseElement.Stop = timestamp;
+                pauseElement = null;
             }
             _currentDeviceAllocations = new List<ISODeviceAllocation>();
             _currentMaxDPDCount = (byte)_connectedDevices.Sum(dvc => dvc.DeviceProcessData.Count);
             _currentTask = task;
             if (_currentTask == null)
             {
-                if (_allowAutoLog)
+                if (_allowAutoLog && _autoLogTask != task)
                 {
                     StartAutoLog(timestamp);
                 }
@@ -247,17 +283,34 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _startTime = timestamp;
             if (_currentTask.Time.Any(entry => entry.Type == ISOType2.Effective))
             {
-                UpdateLatestDataLogValuesFromTimeElement(_currentTask.Time.First(entry => entry.Type == ISOType2.Effective));
+                UpdateLatestDataLogValuesFromTimeElement(_currentTask.Time.Last(entry => entry.Type == ISOType2.Effective));
+            }
+            else
+            {
+                ClearLatestDataLogValues();
             }
             _currentTime = new ISOTime()
             {
                 Start = _startTime,
                 Type = ISOType2.Effective
             };
+            _currentTimeLog = null;
             _currentTask.Time.Add(_currentTime);
             AddTimeLog();
             _isFirstLine = true;
             return _currentTask;
+        }
+
+        private void ClearLatestDataLogValues()
+        {
+            //Onchange Machine data need to persist, but Totals need to be reverted to 0
+            foreach (var entry in _latestDataLogValues)
+            {
+                if (entry.Type == WorkSessionProcessDataType.Total)
+                {
+                    entry.LastValue = 0;
+                }
+            }
         }
 
         private void UpdateLatestDataLogValuesFromTimeElement(ISOTime iSOTime)
@@ -268,6 +321,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 if (dlvToUpdate != null)
                 {
                     dlvToUpdate.LastValue = (int)dlv.ProcessDataValue;
+                }
+                else
+                {
+                    var detId = IdList.ToIntId(dlv.DeviceElementIdRef);
+                    _latestDataLogValues.Add(new WorkSessionProcessData()
+                    {
+                        DDI = DDIUtils.ConvertDDI(dlv.ProcessDataDDI),
+                        DET = detId,
+                        Device = FindDeviceForDeviceElement(detId),
+                        LastValue = (int)dlv.ProcessDataValue,
+                        Type = WorkSessionProcessDataType.Total //This part should only happen if we find a DLV in a TIM for a machine that is not connected anymore. As it will most likely not change, we can set this to be a Total.
+                    });
                 }
             }
         }
@@ -339,10 +404,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             {
                 foreach (var entry in _latestDataLogValues)
                 {
-                    if (entry.Type == WorkSessionProcessDataType.Current)
-                    {
-                        addMachineValue(entry.DDI, entry.LastValue, entry.DET);
-                    }
+                    addMachineValue(entry.DDI, entry.LastValue, entry.DET);
                 }
                 _isFirstLine = false;
             }
@@ -666,25 +728,48 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private void EndTask(DateTime timeStamp, ISOTaskStatus status)
         {
+            if (_currentDataLine != null)
+            {
+                _currentTimeLog.Entries.Add(_currentDataLine);
+            }
+            _currentDataLine = null;
             _currentTask.TaskStatus = status;
+            var activeTaskWasAutoLog = _currentTask == _autoLogTask;
             _currentTask = null;
             _currentTime = null;
             _currentTimeLog = null;
-            if (_allowAutoLog)
+            var pauseElement = GetPauseElement(_currentTask);
+            if (pauseElement != null)
+            {
+                pauseElement.Stop = timeStamp;
+            }
+            if (_allowAutoLog && !activeTaskWasAutoLog)
             {
                 StartAutoLog(timeStamp);
             }
         }
 
+        private ISOTime? GetPauseElement(ISOTask currentTask)
+        {
+            if (currentTask == null)
+            {
+                return null;
+            }
+            var orderedElements = currentTask.Time.OrderBy(time => time.Start);
+            var lastElement = orderedElements.FirstOrDefault(time => time.Type != ISOType2.Planned && time.Type != ISOType2.Effective);
+            return lastElement;
+
+        }
+
         public void PauseTask(ISOType2 pauseReason = ISOType2.Ineffective)
         {
             var timeStamp = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time);
-            _pauseElement = new ISOTime()
+            var pauseElement = new ISOTime()
             {
                 Start = timeStamp,
                 Type = pauseReason
             };
-            _currentTask.Time.Add(_pauseElement);
+            _currentTask.Time.Add(pauseElement);
             EndTask(timeStamp, ISOTaskStatus.Paused);
         }
 

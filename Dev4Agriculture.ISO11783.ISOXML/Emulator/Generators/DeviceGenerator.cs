@@ -26,7 +26,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
             {
                 LanguageShorting = shortingAsByte,
                 UnitArea = unitSystemNoUs ?? (unitSystem == UnitSystem_US.US || unitSystem == UnitSystem_US.IMPERIAL ? UnitSystem_No_US.IMPERIAL : UnitSystem_No_US.METRIC),
-
+                Reserved = 0xFF
             };
             _device.DeviceLocalizationLabel = s_localizationLabel.ToArray();
         }

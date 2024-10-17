@@ -14,11 +14,14 @@ public class TaskControllerEmulatorTests
 {
     private ISOXML _isoxml = null;
 
+    private static double mm3persTolperh = 0.0036;
+    private static double secondsPerHour = 3600;
+
     private TaskControllerEmulator PrepareEmulator(bool autolog)
     {
         var isoxml = ISOXML.Create("");
         _isoxml = isoxml;
-        var emulator = TaskControllerEmulator.Generate("", "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1");
+        var emulator = TaskControllerEmulator.Generate("", "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1", autolog);
         ;
 
         return emulator;
@@ -57,7 +60,7 @@ public class TaskControllerEmulatorTests
         {
             UnitDesignator = "l/h",
             NumberOfDecimals = 1,
-            Scale = (decimal)0.02666
+            Scale = (decimal)mm3persTolperh
         };
 
 
@@ -142,7 +145,9 @@ public class TaskControllerEmulatorTests
         }
         emulator.FinishTask();
 
-        var isoxml = emulator.GetTaskDataSet();
+        var isoxml = emulator.ExportISOXML(DateTime.Now.AddSeconds(10));
+
+
 
         isoxml.SetFolderPath("./out/TCEmulator/simpleTask");
         isoxml.Save();
@@ -218,7 +223,7 @@ public class TaskControllerEmulatorTests
         }
         emulator.FinishTask();
 
-        var isoxml = emulator.GetTaskDataSet();
+        var isoxml = emulator.ExportISOXML(DateTime.Now.AddSeconds(400));
 
         isoxml.SetFolderPath("./out/TCEmulator/simpleTask");
         isoxml.Save();
@@ -236,7 +241,7 @@ public class TaskControllerEmulatorTests
         for (var a = 1; a <= task.TimeLogs.Count; a++)
         {
             Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
-            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / 0.02666));
+            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / mm3persTolperh));
             if (a % 2 == 0)
             {
                 Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
@@ -267,10 +272,10 @@ public class TaskControllerEmulatorTests
                 PositionEast = (decimal)7.3,
                 PositionStatus = ISOPositionStatus.GNSSfix
             });
-            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a);
+            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a%100);
             if (a % 2 == 0)
             {
-                emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 2);
+                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, ((a % 100) * 2/secondsPerHour));
 
             }
             if (a % 100 == 0)
@@ -284,34 +289,25 @@ public class TaskControllerEmulatorTests
         }
         emulator.FinishTask();
 
-        var isoxml = emulator.GetTaskDataSet();
+        var isoxml = emulator.ExportISOXML(DateTime.Now.AddSeconds(400));
 
         isoxml.SetFolderPath("./out/TCEmulator/MultiTask");
         isoxml.Save();
 
-        Assert.AreEqual(isoxml.Data.Task.Count, 5); //4 Tasks and one AutoLog Task
-        Assert.AreEqual(isoxml.Data.Device.Count, 1);
-        /*var task = isoxml.Data.Task[0];
-        Assert.AreEqual(task.Time.Count, 1);
-        Assert.AreEqual(task.DeviceAllocation.Count, 1);
-        Assert.AreEqual(task.TimeLogs.Count, 1);
-        var timeLog = task.TimeLogs[0];
-        var currentFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.InstantaneousFuelConsumptionPerTime, -1);
-        var totalFuelIndex = timeLog.Header.GetDDIIndex((ushort)DDIList.TotalFuelConsumption, -1);
+        var loadedISOXML = ISOXML.Load("./out/TCEmulator/MultiTask");
 
-        for (var a = 1; a <= task.TimeLogs.Count; a++)
-        {
-            Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
-            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / 0.02666));
-            if (a % 2 == 0)
-            {
-                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
-            }
-            else
-            {
-                Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].IsSet, false);
-            }
-        }*/
+        Assert.AreEqual(loadedISOXML.Data.Task.Count, 5); //4 Tasks and one AutoLog Task
+        Assert.AreEqual(loadedISOXML.Data.Device.Count, 1);
+
+        //Check AutoLogTask
+        var task = loadedISOXML.Data.Task[0];
+        Assert.AreEqual(task.TaskDesignator, "AUTOLOG");
+        Assert.AreEqual(task.Time.Count, 4);
+        Assert.AreEqual(task.DeviceAllocation.Count, 4);
+        Assert.AreEqual(task.TimeLogs.Count, 4);
+
+        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue,TLGTotalAlgorithmType.NO_RESETS), true);
+        Assert.AreEqual(totalValue, 21664);
     }
 
 }
