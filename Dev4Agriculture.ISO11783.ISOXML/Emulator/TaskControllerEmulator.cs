@@ -149,8 +149,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 }
 
 
-                var finalDan = task.DeviceAllocation.Last();
-                if (finalDan.AllocationStamp != null && finalDan.AllocationStamp.Stop == null)
+                var finalDan = task.DeviceAllocation.LastOrDefault();
+                if (finalDan != null && finalDan.AllocationStamp != null && finalDan.AllocationStamp.Stop == null)
                 {
                     finalDan.AllocationStamp.Stop = timeStampOfExport;
                 }
@@ -283,7 +283,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _startTime = timestamp;
             if (_currentTask.Time.Any(entry => entry.Type == ISOType2.Effective))
             {
-                UpdateLatestDataLogValuesFromTimeElement(_currentTask.Time.Last(entry => entry.Type == ISOType2.Effective));
+                var isoTime = _currentTask.Time.LastOrDefault(entry => entry.Type == ISOType2.Effective);
+                if( isoTime != null)
+                {
+                    UpdateLatestDataLogValuesFromTimeElement(isoTime);
+                }
             }
             else
             {
