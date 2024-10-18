@@ -74,6 +74,8 @@ All these subElements have names beginning with ISO. E.g. ISOPartfield, ISOCusto
 
 The Tasks include links to TimeLogs as well as a grid if those data are available in the TaskSet.
 
+The TaskDataFile is linked within an ISOXML Object as "Data".
+
 
 ## ISOGridFile
 This is an Application, Seeding or Prescription Map
@@ -104,7 +106,10 @@ This outputs the Hex-encoded name.
 This is used to export a WorkingSetMasterName to an ISOTaskDataFile.
 
 
+## TaskController Emulation
+The TaskController Emulator can be used to generate machine data just like a TaskController would do it. 
 
+You find details on that functionality in the specific [Chapter](./docs/TCEmulator.md);
 
 # License note on Logos
 

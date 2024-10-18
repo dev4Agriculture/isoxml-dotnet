@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
@@ -60,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 var entry = ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines, lastValue);
                 if (fillLines && entry.Data.Count > 0)
                 {
-                    lastValue = entry.Data.Last().DDIValue;
+                    lastValue = entry.Data.LastOrDefault()?.DDIValue ?? 0;
                 }
                 extracts.Add(entry);
             }
@@ -297,6 +298,58 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return list;
 
         }
+
+        /// <summary>
+        /// TimeStamps tend to have a lot of Milliseconds. We intend to lower the maximum digits of Milliseconds to 3
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        internal void CleanTimeStamps()
+        {
+            foreach (var tim in Time)
+            {
+                tim.Start = (DateTime)DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(tim.Start);
+                tim.Stop = DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(tim.Stop);
+            }
+            foreach (var dan in DeviceAllocation)
+            {
+                if (dan.AllocationStamp != null)
+                {
+                    dan.AllocationStamp.Start = (DateTime)DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(dan.AllocationStamp.Start);
+                    dan.AllocationStamp.Stop = DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(dan.AllocationStamp.Stop);
+                }
+            }
+
+            foreach (var can in CommentAllocation)
+            {
+                if (can.AllocationStamp != null)
+                {
+                    can.AllocationStamp.Start = (DateTime)DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(can.AllocationStamp.Start);
+                    can.AllocationStamp.Stop = DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(can.AllocationStamp.Stop);
+                }
+            }
+
+            foreach (var gan in this.GuidanceAllocation)
+            {
+                if (gan.AllocationStamp != null)
+                {
+                    foreach (var asp in gan.AllocationStamp)
+                    {
+                        asp.Start = (DateTime)DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(asp.Start);
+                        asp.Stop = DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(asp.Stop);
+                    }
+                }
+            }
+
+            foreach (var pan in ProductAllocation)
+            {
+                if (pan.AllocationStamp != null)
+                {
+                    pan.AllocationStamp.Start = (DateTime)DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(pan.AllocationStamp.Start);
+                    pan.AllocationStamp.Stop = DateUtilities.TrimDateTimeToThreeDigitsOfMillisecondsMax(pan.AllocationStamp.Stop);
+                }
+            }
+        }
+
 
     }
 }
