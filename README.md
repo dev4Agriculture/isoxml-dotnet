@@ -111,12 +111,6 @@ The TaskController Emulator can be used to generate machine data just like a Tas
 
 You find details on that functionality in the specific [Chapter](./docs/TCEmulator.md);
 
-
-
-
-
-
-- 
 # License note on Logos
 
 Please be aware that the logo assigned to this project is only covered under Apache2 when used with this project. 

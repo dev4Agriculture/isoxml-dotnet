@@ -347,6 +347,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         internal static ResultWithMessages<TLGDataLogHeader> Load(string path, string name)
         {
             var result = new ResultWithMessages<TLGDataLogHeader>();
+
+            if (FileUtils.HasMultipleFilesEndingWithThatName(path, name))
+            {
+                result.AddWarning(ResultMessageCode.FileNameEndingMultipleTimes, ResultDetail.FromString(name));
+            }
+
             if (FileUtils.AdjustFileNameToIgnoreCasing(path, name, out var filePath))
             {
                 var xmlDocument = new XmlDocument();
