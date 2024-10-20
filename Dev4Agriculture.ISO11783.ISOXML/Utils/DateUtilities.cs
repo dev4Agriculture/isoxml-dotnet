@@ -43,5 +43,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 
         }
 
+
+        public static DateTime? TrimDateTimeToThreeDigitsOfMillisecondsMax(DateTime? dateTime)
+        {
+
+            if (dateTime == null)
+            {
+                return null;
+            }
+            // Calculate the truncated ticks for milliseconds
+            long ticks = dateTime.Value.Ticks / TimeSpan.TicksPerMillisecond;
+            ticks *= TimeSpan.TicksPerMillisecond;
+
+            // Round the milliseconds to three digits
+            return new DateTime(ticks, dateTime.Value.Kind);
+        }
+
+
     }
 }

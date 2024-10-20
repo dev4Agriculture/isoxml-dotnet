@@ -328,6 +328,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <returns></returns>
         public static int ToIntId(string ID)
         {
+            if (ID.Length <= 3)
+            {
+                return 0;
+            }
             return int.Parse(ID.Substring(3));
         }
 

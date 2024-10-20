@@ -61,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool IsInField(decimal longitude,decimal latitude)
         {
-            return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
+            return PolygonnonTreatmentZoneonly.FirstOrDefault()?.IsInPolygon(longitude, latitude) ?? false;
         }
 
         public bool IsOverlappingBounds(FieldBounds bounds)

@@ -1,3 +1,12 @@
+v0.20.1.1:
+- FIX: Several bugs in the non-published version of the TaskController Emulator
+
+v0.20.0.1:
+- ADD: A TaskController Emulator was added to generate ISOXML Like a TaskController would do it.
+
+v0.20.0.0:
+- Internal Release, not published. Base for the TaskController Emulator.
+
 v0.19.6.1
 - FIX: In some ISOXML Folders, There are files that end with TASKDATA.XML but are not actually these files. This happens e.g. with MAC OS files. To avoid errors, we add a warning about that
 
