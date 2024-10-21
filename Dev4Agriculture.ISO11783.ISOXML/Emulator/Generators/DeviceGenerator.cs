@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
+﻿using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
 {
     public class DeviceGenerator
     {
-        private LocalizationLabel s_localizationLabel = new LocalizationLabel();
+        private LocalizationLabel _localizationLabel = new LocalizationLabel();
         private readonly ISOXML _isoxml;
         private readonly ISODevice _device;
         private readonly ISODeviceElement _mainDeviceElement;
@@ -52,13 +48,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
         public void SetLocalization(string languageShorting, UnitSystem_US unitSystem, UnitSystem_No_US? unitSystemNoUs = null)
         {
             var shortingAsByte = languageShorting.Select(entry => (byte)entry).ToArray();
-            s_localizationLabel = new LocalizationLabel()
+            _localizationLabel = new LocalizationLabel()
             {
                 LanguageShorting = shortingAsByte,
                 UnitArea = unitSystemNoUs ?? (unitSystem == UnitSystem_US.US || unitSystem == UnitSystem_US.IMPERIAL ? UnitSystem_No_US.IMPERIAL : UnitSystem_No_US.METRIC),
                 Reserved = 0xFF
             };
-            _device.DeviceLocalizationLabel = s_localizationLabel.ToArray();
+            _device.DeviceLocalizationLabel = _localizationLabel.ToArray();
         }
 
 
@@ -124,7 +120,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
                     SerialNo = serialNoLong
                 }.ToArray(),
                 DeviceDesignator = name,
-                DeviceLocalizationLabel = s_localizationLabel.ToArray(),
+                DeviceLocalizationLabel = _localizationLabel.ToArray(),
                 DeviceSerialNumber = serialNo,
                 DeviceStructureLabel = structureLabel.ToArray(),
                 DeviceSoftwareVersion = softwareVersion

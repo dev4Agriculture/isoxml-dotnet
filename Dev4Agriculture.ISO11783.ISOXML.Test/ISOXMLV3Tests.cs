@@ -333,7 +333,7 @@ public class ISOXMLV3Tests
         };
         partfield.GuidanceGroup.Add(new ISOGuidanceGroup());
         var ls = new ISOLineString() { LineStringType = ISOLineStringType.Obstacle };
-        ls.Point.Add(new ISOPoint() { PointType = ISOPointType.Flag, PointId = "PNT-1" , Filename = "flagfilenameVal" });
+        ls.Point.Add(new ISOPoint() { PointType = ISOPointType.Flag, PointId = "PNT-1", Filename = "flagfilenameVal" });
         ls.Point.Add(new ISOPoint() { PointType = ISOPointType.FieldAccess, PointId = "PNT-2", Filename = "filenameVal" });
         partfield.LineString.Add(ls);
         partfield.PolygonnonTreatmentZoneonly.Add(new ISOPolygon() { PolygonType = ISOPolygonType.Headland });

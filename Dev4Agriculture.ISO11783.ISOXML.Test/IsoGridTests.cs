@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Dev4Agriculture.ISO11783.ISOXML;
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
 [TestClass]

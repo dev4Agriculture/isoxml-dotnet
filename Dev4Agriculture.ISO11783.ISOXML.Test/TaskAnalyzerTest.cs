@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
@@ -100,7 +98,7 @@ public class TaskAnalyzerTest
 
         Assert.AreEqual(timeWithDuration.GetStopTime(), DateTime.Parse("2023-01-03T12:25:25"));
         Assert.AreEqual(timeWithStop.GetStopTime(), DateTime.Parse("2023-01-03T13:42:24"));
-        Assert.AreEqual(timeWithDuration.GetSeconds(),(ulong)305);
+        Assert.AreEqual(timeWithDuration.GetSeconds(), (ulong)305);
         Assert.AreEqual(timeWithStop.GetSeconds(), (ulong)4924);
     }
 

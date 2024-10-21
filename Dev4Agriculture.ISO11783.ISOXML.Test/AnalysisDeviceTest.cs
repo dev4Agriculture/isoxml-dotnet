@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+﻿using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;

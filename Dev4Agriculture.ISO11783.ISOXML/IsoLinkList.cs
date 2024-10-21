@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using System.Xml.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
@@ -204,7 +203,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="idRef"></param>
         public void ClearLinks(string idRef)
         {
-            foreach(var grp in _linkListContent.LinkGroup)
+            foreach (var grp in _linkListContent.LinkGroup)
             {
                 for (var index = grp.Link.Count - 1; index >= 0; index--)
                 {

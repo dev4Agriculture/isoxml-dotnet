@@ -13,7 +13,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             // first and last vertices.
             int max_point = points.Count - 1;
             var totalAngle = 0.0;
-            if (points.Count > 1 && ((points.First().PointEast!= points.Last().PointEast) || (points.First().PointNorth != points.Last().PointNorth)))
+            if ((points.First().PointEast != points.Last().PointEast) || (points.First().PointNorth != points.Last().PointNorth))
             {
                 totalAngle = MathUtils.GetAngle(
                     (float)points[max_point].PointEast, (float)points[max_point].PointNorth,
@@ -58,7 +58,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         internal void FixPointDigits()
         {
-            foreach( var lsg in LineString)
+            foreach (var lsg in LineString)
             {
                 lsg.FixPointDigits();
             }

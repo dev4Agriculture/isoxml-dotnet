@@ -27,7 +27,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public FieldBounds Bounds;
 
-        private FieldBounds UpdateFromPoints(FieldBounds bounds, IEnumerable<ISOPoint> points) {
+        private FieldBounds UpdateFromPoints(FieldBounds bounds, IEnumerable<ISOPoint> points)
+        {
             foreach (var point in points)
             {
                 bounds.Update(point.PointNorth, point.PointEast);
@@ -59,9 +60,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
-        public bool IsInField(decimal longitude,decimal latitude)
+        public bool IsInField(decimal longitude, decimal latitude)
         {
-            return PolygonnonTreatmentZoneonly.FirstOrDefault()?.IsInPolygon(longitude, latitude) ?? false;
+            return PolygonnonTreatmentZoneonly.First().IsInPolygon(longitude, latitude);
         }
 
         public bool IsOverlappingBounds(FieldBounds bounds)

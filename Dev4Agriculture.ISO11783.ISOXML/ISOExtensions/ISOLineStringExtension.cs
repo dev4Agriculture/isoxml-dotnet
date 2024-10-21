@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
+﻿namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
     public partial class ISOLineString
     {

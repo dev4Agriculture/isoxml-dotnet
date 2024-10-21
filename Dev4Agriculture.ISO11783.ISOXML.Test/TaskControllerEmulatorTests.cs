@@ -304,7 +304,7 @@ public class TaskControllerEmulatorTests
         Assert.AreEqual(task.DeviceAllocation.Count, 4);
         Assert.AreEqual(task.TimeLogs.Count, 4);
 
-        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue,TLGTotalAlgorithmType.NO_RESETS), true);
+        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue, TLGTotalAlgorithmType.NO_RESETS), true);
         Assert.AreEqual(totalValue, 21664);
     }
 

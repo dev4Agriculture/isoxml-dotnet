@@ -23,11 +23,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             for (var i = 0; i < poly1.Count; i++)
             {
                 p = poly1[i];
-                ISOPoint tmp = poly1[(i+1) % poly1.Count];
+                ISOPoint tmp = poly1[(i + 1) % poly1.Count];
                 v = new ISOPoint();
                 v.PointNorth = tmp.PointNorth - p.PointNorth;
                 v.PointEast = tmp.PointEast - p.PointEast;
-                u = poly1[(i+2) % poly1.Count];
+                u = poly1[(i + 2) % poly1.Count];
 
                 if (i == 0)
                 {
@@ -42,7 +42,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             }
             return true;
         }
-        
+
         public static List<ISOPoint> ClearPolygon(List<ISOPoint> points)
         {
             for (var i = 0; i < points.Count - 2; i++)
@@ -50,7 +50,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
                 var firstPoint = points[i];
                 var checkPoint = points[i + 1];
                 var secondPoint = points[i + 2];
-                if (PointOnLineSegment(firstPoint, secondPoint,checkPoint))
+                if (PointOnLineSegment(firstPoint, secondPoint, checkPoint))
                 {
                     points.Remove(checkPoint);
                     i = 0;
@@ -61,9 +61,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
 
         private static bool PointOnLineSegment(ISOPoint pt1, ISOPoint pt2, ISOPoint pt, decimal epsilon = 0.0001m)
         {
-            if (pt.PointNorth - Math.Max(pt1.PointNorth, pt2.PointNorth) > epsilon || 
-                Math.Min(pt1.PointNorth, pt2.PointNorth) - pt.PointNorth > epsilon || 
-                pt.PointEast - Math.Max(pt1.PointEast, pt2.PointEast) > epsilon || 
+            if (pt.PointNorth - Math.Max(pt1.PointNorth, pt2.PointNorth) > epsilon ||
+                Math.Min(pt1.PointNorth, pt2.PointNorth) - pt.PointNorth > epsilon ||
+                pt.PointEast - Math.Max(pt1.PointEast, pt2.PointEast) > epsilon ||
                 Math.Min(pt1.PointEast, pt2.PointEast) - pt.PointEast > epsilon)
                 return false;
 
@@ -110,7 +110,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
         /// <returns></returns>
         public static List<ISOPoint> GetIntersectionOfConvexPolygons(this List<ISOPoint> poly1, List<ISOPoint> poly2)
         {
-            var clippedCorners = new List<ISOPoint>{};
+            var clippedCorners = new List<ISOPoint> { };
             //Add  the corners of poly1 which are inside poly2       
             foreach (var t in poly1.Where(t => IsPointInsidePoly(t, poly2)))
             {
@@ -197,7 +197,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
                            && (Math.Max(l2P1.PointNorth, l2P2.PointNorth) > y || IsEqual(Math.Max(l2P1.PointNorth, l2P2.PointNorth), y))
                 ;
             if (onLine1 && onLine2)
-                return new ISOPoint{PointEast = x, PointNorth = y};
+                return new ISOPoint { PointEast = x, PointNorth = y };
             return null;
         }
 
@@ -208,7 +208,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Geometry
             {
                 var next = (i + 1 == poly.Count) ? 0 : i + 1;
                 var ip = GetIntersectionPoint(l1P1, l1P2, poly[i], poly[next]);
-                if (ip != null) intersectionPoints.Add(ip);
+                if (ip != null)
+                    intersectionPoints.Add(ip);
             }
             return intersectionPoints.ToArray();
         }

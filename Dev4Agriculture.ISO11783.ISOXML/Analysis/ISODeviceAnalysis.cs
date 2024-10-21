@@ -35,9 +35,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             _isoxml = isoxml;
         }
 
-        public ISODevice? GetDeviceFromDeviceElement(string deviceElementId)
+        public ISODevice GetDeviceFromDeviceElement(string deviceElementId)
         {
-            return _isoxml.Data.Device.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == deviceElementId));
+            return _isoxml.Data.Device.First(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == deviceElementId));
         }
 
         public ISODeviceElement GetDeviceElement(string deviceElementId)
@@ -62,7 +62,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
             return
-                device.DeviceProcessData.FirstOrDefault(dpd =>
+                device.DeviceProcessData.First(dpd =>
                     DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == entry.DDI &&
                     dorList.Contains(dpd.DeviceProcessDataObjectId)
                 );
@@ -85,7 +85,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
 
-            return device.DeviceProperty.FirstOrDefault(dpd =>
+            return device.DeviceProperty.First(dpd =>
                 DDIUtils.ConvertDDI(dpd.DevicePropertyDDI) == entry.DDI &&
                 dorList.Contains(dpd.DevicePropertyObjectId)
             );
@@ -102,11 +102,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             switch (entry.Type)
             {
                 case DDIValueType.ProcessData:
-                    return FindDeviceProcessData(entry)?.DeviceProcessDataDesignator ?? "";
+                    return FindDeviceProcessData(entry).DeviceProcessDataDesignator;
 
 
                 case DDIValueType.Property:
-                    return FindDeviceProperty(entry)?.DevicePropertyDesignator ?? "";
+                    return FindDeviceProperty(entry).DevicePropertyDesignator;
 
                 default:
                     return "";
@@ -121,20 +121,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         public ISODeviceValuePresentation GetDeviceValuePresentation(TaskDDIEntry entry)
         {
             var device = GetDeviceFromDeviceElement(entry.DeviceElementId);
-            if (device == null)
-            {
-                return new ISODeviceValuePresentation()
-                {
-                    Scale = 1,
-                    Offset = 0,
-                    UnitDesignator = ""
-                };
-            }
             switch (entry.Type)
             {
                 case DDIValueType.ProcessData:
                     var dpd = FindDeviceProcessData(entry);
-                    if (dpd!=null && dpd.DeviceValuePresentationObjectIdValueSpecified)
+                    if (dpd.DeviceValuePresentationObjectIdValueSpecified)
                     {
                         return device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpd.DeviceValuePresentationObjectId);
                     }
@@ -200,7 +191,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     .SelectMany(dptObjectId =>
                             device.DeviceElement
                             //Now, if this DOR links our DPT from the machine in the Task, we found an entry to add
-                            .Where( det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
+                            .Where(det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
                             .Select(det => new TaskDDIEntry()
                             {
                                 DeviceElementId = det.DeviceElementId,

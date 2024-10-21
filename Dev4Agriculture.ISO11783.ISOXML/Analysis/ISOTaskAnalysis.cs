@@ -81,7 +81,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 }
                 if (info.EndDate == null && info.StartDate != null)
                 {
-                    info.EndDate = log.Data.LastOrDefault()?.TimeStamp ?? startTimestamp.Value;
+                    info.EndDate = log.Data.Last().TimeStamp;
                     info.Duration += (info.EndDate.Value - startTimestamp.Value).TotalSeconds;
                 }
             }
@@ -124,9 +124,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             DeviceClass.UtilityVehicles
             };
             var detsWithWorkState = deviceAnalysis.FindDeviceElementsForDDI(isoTask, (ushort)DDIList.ActualWorkState);
-            foreach( var detEntry in  detsWithWorkState)
+            foreach (var detEntry in detsWithWorkState)
             {
-                if ( !elementWorkTimes.Any( entry => entry.DdiEntry!= null && entry.DdiEntry.DeviceElementId == detEntry.DeviceElementId)){
+                if (!elementWorkTimes.Any(entry => entry.DdiEntry != null && entry.DdiEntry.DeviceElementId == detEntry.DeviceElementId))
+                {
                     ISODevice dvc = deviceAnalysis.GetDeviceFromDeviceElement(detEntry.DeviceElementId);
                     if (dvc != null)
                     {
@@ -155,7 +156,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     DeviceId = device.DeviceId
                 };
 
-                if (workingElement.DdiEntry == null|| workingElement.DdiEntry.DDI != (ushort)DDIList.ActualCulturalPractice)
+                if (workingElement.DdiEntry == null || workingElement.DdiEntry.DDI != (ushort)DDIList.ActualCulturalPractice)
                 {
                     var client = new ClientName(device.ClientNAME);
                     cpt.CulturalPractice = DeviceClassConversion.MapDeviceClassToPracticeType(client.DeviceClass);

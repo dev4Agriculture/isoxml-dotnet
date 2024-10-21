@@ -81,7 +81,7 @@ internal class Program
 
         GenerateFromXSDs(args);
         GenerateFromDDIList(args);
-        
+
 
     }
 }

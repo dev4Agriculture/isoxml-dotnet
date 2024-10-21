@@ -14,8 +14,8 @@ public class DeviceGeneratorTest
     public void CanGenerateDeviceWithNumericSerialNo()
     {
         var path = "./out/TCEmulator/DeviceGenerator/Base";
-        var tcEmulator = TaskControllerEmulator.Generate(path,"dev4Agriculture", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item2, "0.1.1");
-        var generator = new DeviceGenerator(tcEmulator.GetTaskDataSet(), "My Chopper", "0.1.0",new byte[]{ 1, 2, 3, 4, 5, 6, 7 }, DeviceClass.Harvesters, 921, 12345);
+        var tcEmulator = TaskControllerEmulator.Generate(path, "dev4Agriculture", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item2, "0.1.1");
+        var generator = new DeviceGenerator(tcEmulator.GetTaskDataSet(), "My Chopper", "0.1.0", new byte[] { 1, 2, 3, 4, 5, 6, 7 }, DeviceClass.Harvesters, 921, 12345);
         var dvc = generator.GetDevice();
         Assert.IsNotNull(dvc);
         Assert.AreEqual(dvc.DeviceDesignator, "My Chopper");

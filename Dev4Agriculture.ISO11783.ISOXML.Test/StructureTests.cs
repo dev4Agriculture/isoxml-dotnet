@@ -52,7 +52,7 @@ public class StructureTests
     {
         var isoxml = ISOXML.Load("./testdata/Structure/DuplicatedIDs");
 
-        Assert.AreEqual(2,isoxml.Messages.Count);
+        Assert.AreEqual(2, isoxml.Messages.Count);
 
     }
 

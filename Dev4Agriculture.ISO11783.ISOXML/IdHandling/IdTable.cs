@@ -7,11 +7,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 {
     public class IdTable
     {
-        public Dictionary<System.Type, IdList> IdLists;
+        public Dictionary<Type, IdList> IdLists;
 
         public IdTable()
         {
-            IdLists = new Dictionary<System.Type, IdList>();
+            IdLists = new Dictionary<Type, IdList>();
 
             AddList("BSN", typeof(ISOBaseStation));
             AddList("CCT", typeof(ISOCodedComment));
@@ -40,7 +40,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
 
 
 
-        private void AddList(string name, System.Type type)
+        private void AddList(string name, Type type)
         {
             IdLists.Add(type, new IdList(name));
 
@@ -133,7 +133,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <param name="value"></param>
         internal void SetDataTransferOrign(ISO11783TaskDataFileDataTransferOrigin value)
         {
-            foreach(var entry in IdLists)
+            foreach (var entry in IdLists)
             {
                 entry.Value.DataTransferOrign = value;
             }

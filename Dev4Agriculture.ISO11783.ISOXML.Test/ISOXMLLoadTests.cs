@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
