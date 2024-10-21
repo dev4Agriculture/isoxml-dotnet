@@ -61,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 var entry = ISOTLGExtract.FromTimeLog(tlg, ddi, det, name, fillLines, lastValue);
                 if (fillLines && entry.Data.Count > 0)
                 {
-                    lastValue = entry.Data.Last().DDIValue;
+                    lastValue = entry.Data.LastOrDefault()?.DDIValue ?? 0;
                 }
                 extracts.Add(entry);
             }

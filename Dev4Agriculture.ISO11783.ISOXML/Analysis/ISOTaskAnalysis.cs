@@ -79,7 +79,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                         }
                     }
                 }
-                if (info.EndDate == null && info.StartDate != null)
+                if (log.Data != null && log.Data.Count > 0 && info.EndDate == null && info.StartDate != null)
                 {
                     info.EndDate = log.Data.Last().TimeStamp;
                     info.Duration += (info.EndDate.Value - startTimestamp.Value).TotalSeconds;
