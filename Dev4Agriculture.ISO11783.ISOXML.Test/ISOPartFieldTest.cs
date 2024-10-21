@@ -33,7 +33,7 @@ public class ISOPartFieldTest
         });
         var res = field.CalculateArea();
         var ratio = res / refValue;
-        Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
+        Assert.IsTrue(ratio is > 0.99 and < 1.01);
     }
 
     [TestMethod]
@@ -60,7 +60,7 @@ public class ISOPartFieldTest
         });
         var res = field.CalculateArea();
         var ratio = res / refValue;
-        Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
+        Assert.IsTrue(ratio is > 0.99 and < 1.01);
     }
 
 
@@ -73,7 +73,7 @@ public class ISOPartFieldTest
         {
             var size = field.CalculateArea();
             var ratio = size / field.PartfieldArea;
-            Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
+            Assert.IsTrue(ratio is > 0.99 and < 1.01);
         }
     }
 
@@ -247,14 +247,14 @@ public class ISOPartFieldTest
             isoxml = ISOXML.LoadFromArchive(stream);
         }
         var fields = isoxml.Data.Partfield.ToList();
-        var AustraliaBounds = new FieldBounds()
+        var australiaBounds = new FieldBounds()
         {
             MaxLat = -20,
             MinLat = -40,
             MaxLong = -60,
             MinLong = -120
         };
-        var GermanyBounds = new FieldBounds()
+        var germanyBounds = new FieldBounds()
         {
             MaxLat = 49,
             MinLat = 48,
@@ -263,12 +263,12 @@ public class ISOPartFieldTest
         };
         foreach (var field in fields)
         {
-            var result = field.IsOverlappingBounds(AustraliaBounds);
+            var result = field.IsOverlappingBounds(australiaBounds);
             Assert.IsFalse(result);
         }
         foreach (var field in fields)
         {
-            var result = field.IsOverlappingBounds(GermanyBounds);
+            var result = field.IsOverlappingBounds(germanyBounds);
             Assert.IsTrue(result);
         }
 

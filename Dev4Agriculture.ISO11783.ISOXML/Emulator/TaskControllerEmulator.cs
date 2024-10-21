@@ -169,12 +169,64 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-        public DeviceGenerator NewDeviceGenerator(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, int serialNo)
+        private DeviceGenerator AddGenerator(DeviceGenerator deviceGenerator)
+        {
+            deviceGenerator.SetLocalization(_languageShorting, _unitSystem, _unitSystemNoUs);
+            _isoxml.Data.Device.Add(deviceGenerator.GetDevice());
+            return deviceGenerator;
+
+        }
+
+
+        /// <summary>
+        /// Create a new DeviceGenerator for Devices with a SerialNumber that's a string that can be converted to Int
+        /// Any non-numeric value will be converted to its index in the alphabet +10 (e.g. "DE45" becomes 131445)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="softwareVersion"></param>
+        /// <param name="structureLabel"></param>
+        /// <param name="deviceClass"></param>
+        /// <param name="manufacturer"></param>
+        /// <param name="serialNo"></param>
+        /// <returns></returns>
+        public DeviceGenerator NewDeviceGenerator(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, string serialNo)
         {
             var generator = new DeviceGenerator(_isoxml, name, softwareVersion, structureLabel, deviceClass, manufacturer, serialNo);
-            generator.SetLocalization(_languageShorting, _unitSystem, _unitSystemNoUs);
-            _isoxml.Data.Device.Add(generator.GetDevice());
-            return generator;
+            return AddGenerator(generator);
+        }
+
+        /// <summary>
+        /// Create a new DeviceGenerator for Devices with a pure numeric serial number
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="softwareVersion"></param>
+        /// <param name="structureLabel"></param>
+        /// <param name="deviceClass"></param>
+        /// <param name="manufacturer"></param>
+        /// <param name="serialNoLong"></param>
+        /// <returns></returns>
+        public DeviceGenerator NewDeviceGenerator(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, int serialNoLong)
+        {
+            var generator = new DeviceGenerator(_isoxml, name, softwareVersion, structureLabel, deviceClass, manufacturer, serialNoLong);
+            return AddGenerator(generator);
+        }
+
+
+        /// <summary>
+        /// Create a new DeviceGenerator for a Device which has 2 serial numbers: 1 numeric for the clientname, 1 including letters for the DeviceDescription
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="softwareVersion"></param>
+        /// <param name="structureLabel"></param>
+        /// <param name="deviceClass"></param>
+        /// <param name="manufacturer"></param>
+        /// <param name="serialNo"></param>
+        /// <param name="serialNoLong"></param>
+        /// <returns></returns>
+        public DeviceGenerator NewDeviceGenerator(string name, string softwareVersion, byte[] structureLabel, DeviceClass deviceClass, int manufacturer, string serialNo, int serialNoLong)
+        {
+            var generator = new DeviceGenerator(_isoxml, name, softwareVersion, structureLabel, deviceClass, manufacturer, serialNo, serialNoLong);
+            return AddGenerator(generator);
         }
 
         private void AddTimeLog()
@@ -189,11 +241,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             _isoxml.TimeLogs.Add(_currentTimeLog.Name, _currentTimeLog);
         }
 
+
+
+        /// <summary>
+        /// Returns the current TaskdataSet ISOXML.
+        /// This function is e.g. used to add other elements like Farms or Customers afterwards.
+        /// Attention: To export the full ISOXML, call the ExportISOXML Function
+        /// </summary>
+        /// <returns></returns>
         public ISOXML GetTaskDataSet()
         {
             return _isoxml;
         }
 
+        /// <summary>
+        /// This function connects a machine to the TaskController Emulator. Afterwards the machine will be mentioned in any started Task until it was disconnected
+        /// </summary>
+        /// <param name="device"></param>
         public void ConnectDevice(ISODevice device)
         {
             _connectedDevices.Add(device);
@@ -215,6 +279,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
+
+        /// <summary>
+        /// This is equal to "unplugging" the Device(Machine) from a TaskController
+        /// </summary>
+        /// <param name="device"></param>
         public void DisconnectDevice(ISODevice device)
         {
             _connectedDevices.Remove(device);
@@ -236,6 +305,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
+        /// <summary>
+        /// Start a Task with a name. Attention: This function always creates a new Task!
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ISOTask StartTask(DateTime timestamp, string name)
         {
             var task = new ISOTask()
@@ -247,6 +322,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
+        /// <summary>
+        /// Start a Task from an ISOTask Object. If the ISOTask Object is not yet part of the TaskData within the TCEmulator, it'll be added.
+        /// When adding the Task, its ID might change. The updated Element is returned
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        /// <exception cref="NoTaskInWorkSessionException"></exception>
         public ISOTask StartTask(DateTime timestamp, ISOTask task)
         {
             if (_currentTask != null)
@@ -342,6 +425,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
+
+        /// <summary>
+        /// Add a new entry for Time+Position to the current Task and by that to the current TimeLog
+        /// It also finishes the previous line
+        /// Important: This always has to be the first function called before adding machine data
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <param name="position"></param>
+        /// <exception cref="NoTaskInWorkSessionException"></exception>
         public void AddTimeAndPosition(DateTime timestamp, ISOPosition position)
         {
             if (_currentTask == null)
@@ -662,6 +754,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             return deviceValuePresentation;
         }
 
+
+        /// <summary>
+        /// Update a "current" value for a Machines DDI; e.g. the Current Fuel Consumption.
+        /// This function takes the RawValue like you'ld send it via the ISOBUS.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void UpdateRawMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
             deviceElement = FindDeviceElementIfNull(deviceElement);
@@ -685,12 +785,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
-
+        /// <summary>
+        /// Update a "current" value for a Machines DDI; e.g. the Current Fuel Consumption.
+        /// This function takes the RawValue like you'ld send it via the ISOBUS.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void UpdateRawMachineValue(DDIList ddi, int value, int? deviceElement = null)
         {
             UpdateRawMachineValue((ushort)ddi, value, deviceElement);
         }
 
+
+        /// <summary>
+        /// Update a "current" value for a Machines DDI; e.g. the Current Fuel Consumption.
+        /// This function takes the value using the unit defined in the corresponding DeviceValuePresentation.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void UpdateMachineValue(DDIList ddi, double value, int? deviceElement = null)
         {
             var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
@@ -698,7 +812,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         }
 
 
-
+        /// <summary>
+        /// Add (=increase!) a Total value for a machines DDI; e.g. TotalArea.
+        /// This function takes the raw value of difference like it would be sent via the ISOBUS.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void AddRawValueToMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
 
@@ -718,11 +838,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
+        /// <summary>
+        /// Add (=increase!) a Total value for a machines DDI; e.g. TotalArea.
+        /// This function takes the raw value of difference like it would be sent via the ISOBUS.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void AddRawValueToMachineValue(DDIList ddi, int value, int? deviceElement = null)
         {
             AddRawValueToMachineValue((ushort)ddi, value, deviceElement);
         }
 
+        /// <summary>
+        /// Add (=increase!) a Total value for a machines DDI; e.g. TotalArea.
+        /// This function takes the value of difference using the unit defined in the corresponding DeviceValuePresentation.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="value"></param>
+        /// <param name="deviceElement"></param>
         public void AddValueToMachineValue(DDIList ddi, double value, int? deviceElement = null)
         {
             var rawValue = ConvertValue((ushort)ddi, value, deviceElement);
@@ -766,6 +900,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         }
 
+        /// <summary>
+        /// Pause a Task so you can restart it later
+        /// </summary>
+        /// <param name="pauseReason"></param>
         public void PauseTask(ISOType2 pauseReason = ISOType2.Ineffective)
         {
             var timeStamp = DateUtilities.GetDateTimeFromTimeLogInfos(_currentDataLine.Date, _currentDataLine.Time);
@@ -778,6 +916,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             EndTask(timeStamp, ISOTaskStatus.Paused);
         }
 
+
+        /// <summary>
+        /// Stop a Task. This task should not be started again afterwards
+        /// </summary>
         public void FinishTask()
         {
             if (_currentDataLine != null)

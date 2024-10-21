@@ -27,11 +27,10 @@ public class ResultMessagesTest
     }
 
     [TestMethod]
-    public void TestMessageSerializationWorks()
-    {
+    public void TestMessageSerializationWorks() {
         var isoxml = ISOXML.Load("./testdata/ResultMessages/BrokenBinFile");
         string result = JsonConvert.SerializeObject(isoxml.Messages);
-        Assert.IsTrue(Regex.Matches(result, "Code").Count == 13);
+        Assert.IsTrue(Regex.Matches(result,"Code").Count == 13);
     }
 
 }

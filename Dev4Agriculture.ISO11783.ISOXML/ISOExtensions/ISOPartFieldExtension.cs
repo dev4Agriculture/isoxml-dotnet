@@ -88,23 +88,39 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var result = new IntersectionResult();
             var polygon = PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
             if (polygon == null)
+            {
                 return null;
+            }
+
             var exterior = polygon.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
             if (exterior == null)
+            {
                 return null;
+            }
+
             var polygonSecond = secondField.PolygonnonTreatmentZoneonly.FirstOrDefault(s => s.PolygonType == ISOPolygonType.PartfieldBoundary);
             if (polygonSecond == null)
+            {
                 return null;
+            }
+
             var exteriorSecond = polygonSecond.LineString.FirstOrDefault(s => s.LineStringType == ISOLineStringType.PolygonExterior);
             if (exteriorSecond == null)
+            {
                 return null;
+            }
 
             var p1 = exterior.Point.ToList();
             var p2 = exteriorSecond.Point.ToList();
             if (p1[0].PointNorth == p1[^1].PointNorth && p1[0].PointEast == p1[^1].PointEast)
+            {
                 p1.RemoveAt(p1.Count - 1);
+            }
+
             if (p2[0].PointNorth == p2[^1].PointNorth && p2[0].PointEast == p2[^1].PointEast)
+            {
                 p2.RemoveAt(p2.Count - 1);
+            }
 
             p1 = GeometryUtility.ClearPolygon(p1);
             p2 = GeometryUtility.ClearPolygon(p2);

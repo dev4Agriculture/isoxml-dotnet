@@ -61,7 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             DaysMaxForValidDateRange = DateUtilities.DAYS_MAX_FOR_VALID_DATE_RANGE
         };
 
-        public static void SetReaderConfiguration(ISOTLGReadConfiguration readConfiguration)
+        public static void SetReaderConfiguration( ISOTLGReadConfiguration readConfiguration)
         {
             s_readConfiguration = readConfiguration;
         }
@@ -149,8 +149,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 if ((compareDate >= date - 1) && (compareDate <= date + 1) && compareTime >= 0 && compareTime <= DateUtilities.MILLISECONDS_IN_DAY)
                 {
                     found = true;
-                }
-                else
+                } else
                 {
                     binaryFile.Seek(-5, SeekOrigin.Current);
                 }
@@ -214,7 +213,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 var timeStamp = binaryReader.ReadInt32();
                 var date = binaryReader.ReadInt16();
 
-                if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date < s_readConfiguration.DaysMinForValidDateRange || date > s_readConfiguration.DaysMaxForValidDateRange)
+                if (timeStamp < 0 || timeStamp > DateUtilities.MILLISECONDS_IN_DAY || date <  s_readConfiguration.DaysMinForValidDateRange || date > s_readConfiguration.DaysMaxForValidDateRange)
                 {
                     dataLineBeginIndex += 1;
                     binaryFile.Seek(-5, SeekOrigin.Current);//In total we move 1 byte less backwards than we moved forward before
@@ -225,8 +224,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     binaryFile.Seek(-6, SeekOrigin.Current);
                     valid = true;
                 }
-                if ((binaryFile.Length - binaryFile.Position) < 6)
-                {
+                if ((binaryFile.Length -  binaryFile.Position) < 6){
                     messages.AddError(ResultMessageCode.BINInvalidData,
                                                 ResultDetail.FromString(Name),
                                                 ResultDetail.FromNumber(0),
@@ -276,8 +274,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         {
                             quitReading = true;
                             cause = "Could not find point for reEntry";
-                        }
-                        else
+                        } else
                         {
                             cause = "Found reEntry at position " + binaryFile.Position;
                         }

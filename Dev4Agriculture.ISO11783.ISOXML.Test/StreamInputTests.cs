@@ -144,7 +144,7 @@ public class StreamInputTests
         Assert.AreEqual(0, result.Messages.Count);
         Assert.IsTrue(result.HasLinkList);
     }
-
+    
     [TestMethod]
     public async Task CanLoadValidZipStreamValidLinkListAsync()
     {
@@ -187,7 +187,7 @@ public class StreamInputTests
         var normalized1 = Regex.Replace(text, @"\s", string.Empty);
         var normalized2 = Regex.Replace(serialized, @"\s", string.Empty);
 
-        Assert.IsTrue(String.Equals(normalized1, normalized2, StringComparison.OrdinalIgnoreCase));
+        Assert.IsTrue(String.Equals(normalized1,normalized2,StringComparison.OrdinalIgnoreCase));
     }
 
 
@@ -197,7 +197,7 @@ public class StreamInputTests
     public void RecognizesCorruptZipFile()
     {
         var path = "./testdata/LoadFromStream/CorruptStream.zip";
-        using (var stream = File.OpenRead(path))
+        using( var stream = File.OpenRead(path))
         {
             var isoxml = ISOXML.LoadFromArchive(stream);
 

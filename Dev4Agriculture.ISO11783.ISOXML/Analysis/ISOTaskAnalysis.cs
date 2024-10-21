@@ -128,7 +128,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             {
                 if (!elementWorkTimes.Any(entry => entry.DdiEntry != null && entry.DdiEntry.DeviceElementId == detEntry.DeviceElementId))
                 {
-                    ISODevice dvc = deviceAnalysis.GetDeviceFromDeviceElement(detEntry.DeviceElementId);
+                    var dvc = deviceAnalysis.GetDeviceFromDeviceElement(detEntry.DeviceElementId);
                     if (dvc != null)
                     {
                         var client = new ClientName(dvc.ClientNAME);
@@ -195,6 +195,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         public CulturalPracticeInfo FindTaskCulturalPractice(ISOTask isoTask)
         {
             var culturalPractices = FindTaskCulturalPracticesList(isoTask).OrderByDescending(entry => entry.DurationInSeconds);
+#pragma warning disable IDE0055
             return culturalPractices
                 //Prefer returning a known cultural practise
                 .FirstOrDefault(entry => entry.CulturalPractice != CulturalPracticesType.Unknown) ??
@@ -208,6 +209,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     CulturalPractice = CulturalPracticesType.Unknown
                 }
             ;
+#pragma warning restore
         }
     }
 }
