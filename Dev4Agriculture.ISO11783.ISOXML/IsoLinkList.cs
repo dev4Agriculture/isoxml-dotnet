@@ -314,7 +314,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         internal static string FixLinkListPath(string path)
         {
-            if (path.ToUpper().EndsWith(".XML") == false)
+            if (!path.ToUpper().EndsWith(".XML"))
             {
                 path = Path.Combine(path.ToString(), "LINKLIST.XML");
             }

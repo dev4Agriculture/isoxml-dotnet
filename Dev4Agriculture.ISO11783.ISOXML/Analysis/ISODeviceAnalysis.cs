@@ -29,7 +29,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
     /// </summary>
     public class ISODeviceAnalysis
     {
-        private ISOXML _isoxml;
+        private readonly ISOXML _isoxml;
         public ISODeviceAnalysis(ISOXML isoxml)
         {
             _isoxml = isoxml;
@@ -172,6 +172,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 
 
             //Find all assigned machines and in such, search for the properties.
+#pragma warning disable IDE0055
             var properties = isoTask.DeviceAllocation.ToList()
                 //First Filter all DANs for those that are not planned. Only filter if an AllocationStamp is available anyway)
                 .Where(deviceAllocation => deviceAllocation.AllocationStamp == null || deviceAllocation.AllocationStamp.Type != ISOType.Planned)
@@ -200,6 +201,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                             }).ToList()
                            ).ToList()
                     ).ToList();
+#pragma warning restore
             processData.AddRange(properties);
             return processData;
         }

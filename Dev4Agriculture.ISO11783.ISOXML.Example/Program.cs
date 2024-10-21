@@ -1,5 +1,4 @@
-﻿using System.IO;
-using de.dev4Agriculture.ISOXML.DDI;
+﻿using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
@@ -47,8 +46,8 @@ public static class Program
 
         var north = (decimal)52.223;
         var south = (decimal)52.225;
-        var west =  (decimal)7.222;
-        var east =  (decimal)7.226;
+        var west = (decimal)7.222;
+        var east = (decimal)7.226;
         var west2 = (decimal)7.223;
         var east2 = (decimal)7.225;
 
@@ -215,7 +214,7 @@ public static class Program
 
         isoxml.Save();
     }
-    private static String FixStringLength(String str)
+    private static string FixStringLength(string str)
     {
         return str.Substring(0, Math.Min(str.Length, 32)).PadRight(32, ' ');
     }
@@ -226,7 +225,7 @@ public static class Program
         var isoxml1 = ISOXML.LoadFromArchive(File.OpenRead(path1));
         var isoxml2 = ISOXML.LoadFromArchive(File.OpenRead(path2));
 
-        var startLine = FixStringLength("    ")+"| ";
+        var startLine = FixStringLength("    ") + "| ";
         foreach (var field in isoxml1.Data.Partfield)
         {
             startLine += FixStringLength(field.PartfieldDesignator) + "| ";
@@ -238,15 +237,15 @@ public static class Program
             var row = FixStringLength(compareField.PartfieldDesignator) + "| ";
             foreach (var field in isoxml1.Data.Partfield)
             {
-                var res = compareField.TryGetOverlapWithPartfield(field); 
+                var res = compareField.TryGetOverlapWithPartfield(field);
                 if (res != null)
                 {
-                    row +=  FixStringLength((res.IntersectPercent * 100).ToString() + "%") + "| ";
+                    row += FixStringLength((res.IntersectPercent * 100).ToString() + "%") + "| ";
 
                 }
                 else
                 {
-                    row +=  FixStringLength("Error") + "| ";
+                    row += FixStringLength("Error") + "| ";
                 }
             }
             Console.WriteLine(row);
@@ -268,8 +267,8 @@ public static class Program
 
     public static CulturalPracticesType GetCulturalPractice(string path)
     {
-        ISOXML isoxml = null;
-        if(path.EndsWith(".zip"))
+        ISOXML isoxml;
+        if (path.EndsWith(".zip"))
         {
             var stream = File.OpenRead(path);
             isoxml = ISOXML.LoadFromArchive(stream);
@@ -286,7 +285,11 @@ public static class Program
 
     public static void CheckISOXML(string? path3)
     {
-        ISOXML isoxml = null;
+        ISOXML isoxml;
+        if (path3 == null)
+        {
+            return;
+        }
         if (path3.EndsWith(".zip"))
         {
             var stream = File.OpenRead(path3);
@@ -305,6 +308,10 @@ public static class Program
 
     private static void ConvertXML2JSON(string? path4)
     {
+        if (path4 == null)
+        {
+            return;
+        }
         var devices = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ISO11783_TaskData VersionMajor=\"3\" VersionMinor=\"3\" ManagementSoftwareManufacturer=\"iXmap Services GmbH &amp; Co. KG\" ManagementSoftwareVersion=\"1.5.0.2\" TaskControllerManufacturer=\"SDF Guidance\" TaskControllerVersion=\"IM6447AE\" DataTransferOrigin=\"2\">\n<DVC A=\"DVC-1\" B=\"KRONE Haecksler\" C=\"150200029-17 \" D=\"A00E86000DE0287F\" E=\"0000862189\" F=\"38303030303131\" G=\"FF000000406564\">\n    <DET A=\"DET-1\" B=\"1\" C=\"1\" D=\"DeviceElement\" E=\"0\" F=\"0\">\n      <DOR A=\"19\"/>\n      <DOR A=\"20\"/>\n      <DOR A=\"21\"/>\n      <DOR A=\"22\"/>\n      <DOR A=\"23\"/>\n      <DOR A=\"24\"/>\n      <DOR A=\"25\"/>\n      <DOR A=\"26\"/>\n      <DOR A=\"27\"/>\n      <DOR A=\"28\"/>\n      <DOR A=\"29\"/>\n      <DOR A=\"30\"/>\n      <DOR A=\"31\"/>\n      <DOR A=\"32\"/>\n      <DOR A=\"33\"/>\n      <DOR A=\"34\"/>\n      <DOR A=\"35\"/>\n      <DOR A=\"36\"/>\n      <DOR A=\"37\"/>\n      <DOR A=\"38\"/>\n      <DOR A=\"39\"/>\n      <DOR A=\"40\"/>\n      <DOR A=\"41\"/>\n      <DOR A=\"42\"/>\n      <DOR A=\"43\"/>\n      <DOR A=\"44\"/>\n      <DOR A=\"45\"/>\n	  <DOR A=\"46\"/>\n    </DET>\n    <DPD A=\"19\" B=\"0043\" C=\"1\" D=\"8\" E=\"Aktuelle Arbeitsbreite\" F=\"3\"/>\n    <DPD A=\"20\" B=\"0054\" C=\"1\" D=\"1\" E=\"Ertrag pro Flaeche\" F=\"4\"/>\n    <DPD A=\"21\" B=\"0057\" C=\"1\" D=\"1\" E=\"Ertrag pro Zeit\" F=\"5\"/>\n    <DPD A=\"22\" B=\"005A\" C=\"3\" D=\"24\" E=\"Gesamtertrag\" F=\"6\"/>\n    <DPD A=\"23\" B=\"0063\" C=\"1\" D=\"1\" E=\"Feuchtegehalt\" F=\"7\"/>\n    <DPD A=\"24\" B=\"0074\" C=\"3\" D=\"24\" E=\"Gesamtflaeche\" F=\"8\"/>\n    <DPD A=\"25\" B=\"0075\" C=\"3\" D=\"24\" E=\"Aktive Fahrstrecke\" F=\"9\"/>\n    <DPD A=\"26\" B=\"0076\" C=\"3\" D=\"24\" E=\"Inaktive Fahrstrecke\" F=\"9\"/>\n    <DPD A=\"27\" B=\"0077\" C=\"3\" D=\"24\" E=\"Aktive Gesamtzeit\" F=\"10\"/>\n    <DPD A=\"28\" B=\"0078\" C=\"3\" D=\"24\" E=\"Inaktive Gesamtzeit\" F=\"10\"/>\n    <DPD A=\"29\" B=\"008D\" C=\"1\" D=\"1\" E=\"Arbeitsstatus\" F=\"2\"/>\n    <DPD A=\"30\" B=\"0094\" C=\"3\" D=\"24\" E=\"Gesamtkraftstoffverbrauch\" F=\"11\"/>\n    <DPD A=\"31\" B=\"0095\" C=\"1\" D=\"1\" E=\"Aktueller Kraftstoffverbrauch\" F=\"12\"/>\n    <DPD A=\"32\" B=\"00B1\" C=\"1\" D=\"1\" E=\"Aktuelle Schnittlaenge\" F=\"14\"/>\n    <DPD A=\"33\" B=\"0106\" C=\"3\" D=\"24\" E=\"Durchschnittsfeuchte\" F=\"7\"/>\n    <DPD A=\"34\" B=\"00FE\" C=\"1\" D=\"8\" E=\"Seriennummer\" F=\"2\"/>\n    <DPD A=\"35\" B=\"EA60\" C=\"1\" D=\"1\" E=\"Motoristdrehzahl\" F=\"15\"/>\n    <DPD A=\"36\" B=\"EA6A\" C=\"1\" D=\"1\" E=\"Motorauslastung\" F=\"16\"/>\n    <DPD A=\"37\" B=\"EA74\" C=\"1\" D=\"1\" E=\"Kraftstofffuellstand\" F=\"16\"/>\n    <DPD A=\"38\" B=\"EA7E\" C=\"1\" D=\"1\" E=\"Fahrgeschwindigkeit\" F=\"13\"/>\n    <DPD A=\"39\" B=\"EA88\" C=\"1\" D=\"1\" E=\"Corn Craecker Abstand\" F=\"17\"/>\n    <DPD A=\"40\" B=\"EA9C\" C=\"1\" D=\"1\" E=\"Drehzahl Vorsatz\" F=\"15\"/>\n    <DPD A=\"41\" B=\"EAA6\" C=\"1\" D=\"1\" E=\"Drehzahl Einzug\" F=\"15\"/>\n    <DPD A=\"42\" B=\"EAB0\" C=\"1\" D=\"1\" E=\"Drehzahl Haeckseltrommel\" F=\"15\"/>\n    <DPD A=\"43\" B=\"EACE\" C=\"3\" D=\"24\" E=\"Trommelstunden\" F=\"18\"/>\n    <DPD A=\"44\" B=\"EAD8\" C=\"3\" D=\"24\" E=\"Vorsatzstunden\" F=\"18\"/>\n    <DPD A=\"45\" B=\"EAE2\" C=\"3\" D=\"24\" E=\"Motorstunden\" F=\"18\"/>\n    <DPD A=\"46\" B=\"DFFF\" C=\"1\" D=\"31\" E=\"default logging\" F=\"2\"/>\n    <DVP A=\"2\" B=\"0\" C=\"1\" D=\"0\" E=\" \"/>\n    <DVP A=\"3\" B=\"0\" C=\"0.001\" D=\"3\" E=\"m\"/>\n    <DVP A=\"4\" B=\"0\" C=\"0.00001\" D=\"2\" E=\"t/ha\"/>\n    <DVP A=\"5\" B=\"0\" C=\"0.0000036\" D=\"2\" E=\"t/h\"/>\n    <DVP A=\"6\" B=\"0\" C=\"0.001\" D=\"2\" E=\"t\"/>\n    <DVP A=\"7\" B=\"0\" C=\"0.0001\" D=\"2\" E=\"Prozent\"/>\n    <DVP A=\"8\" B=\"0\" C=\"0.0001\" D=\"2\" E=\"ha\"/>\n    <DVP A=\"9\" B=\"0\" C=\"0.000001\" D=\"2\" E=\"km\"/>\n    <DVP A=\"10\" B=\"0\" C=\"0.0166666657\" D=\"2\" E=\"min\"/>\n    <DVP A=\"11\" B=\"0\" C=\"0.001\" D=\"2\" E=\"l\"/>\n    <DVP A=\"12\" B=\"0\" C=\"0.0035999999\" D=\"2\" E=\"l/h\"/>\n    <DVP A=\"13\" B=\"0\" C=\"0.1000000015\" D=\"1\" E=\"km/h\"/>\n    <DVP A=\"14\" B=\"0\" C=\"0.001\" D=\"3\" E=\"mm\"/>\n    <DVP A=\"15\" B=\"0\" C=\"1\" D=\"0\" E=\"UPM\"/>\n    <DVP A=\"16\" B=\"0\" C=\"1\" D=\"0\" E=\"Prozent\"/>\n    <DVP A=\"17\" B=\"0\" C=\"0.1000000015\" D=\"1\" E=\"mm\"/>\n    <DVP A=\"18\" B=\"0\" C=\"0.000277777\" D=\"2\" E=\"h\"/>\n  </DVC>\n  </ISO11783_TaskData>";
         var content = new APIDeviceDescriptionInputModel(APIDeviceDescriptionType.ISOXML, devices);
         File.WriteAllText(path4, JsonConvert.SerializeObject(content));
@@ -350,7 +357,6 @@ public static class Program
         };
 
 
-        
         deviceGenerator.AddDeviceProcessData(new ISODeviceProcessData()
         {
             DeviceProcessDataDDI = DDIUtils.FormatDDI(DDIList.ActualWorkState),
@@ -435,7 +441,7 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, a > 5 ? 0 : 1);
                 emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
@@ -467,7 +473,7 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, a > 5 ? 0 : 1);
                 emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
@@ -498,7 +504,7 @@ public static class Program
 
             if (a % 2 == 0)
             {
-                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, (a > 5 ? 0 : 1));
+                emulator.UpdateRawMachineValue(DDIList.ActualWorkState, a > 5 ? 0 : 1);
                 emulator.AddRawValueToMachineValue(DDIList.TotalFuelConsumption, 4900);
 
             }
@@ -525,7 +531,7 @@ public static class Program
             "4: Create an example grid \n" +
             "5: Create FieldSize Comparison for 2 ISOXML DataSets\n" +
             "6: Check ISOXML\n" +
-            "7: Convert to JSON\n"+
+            "7: Convert to JSON\n" +
             "8: Generate ISOXML Machine Data");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
@@ -533,7 +539,7 @@ public static class Program
             Console.WriteLine("Error");
             return;
         }
-        string path = "";
+        var path = "";
         switch (nr)
         {
             case 1:
@@ -575,7 +581,7 @@ public static class Program
                 var path1 = Console.ReadLine();
                 Console.WriteLine("Select second ISOXML");
                 var path2 = Console.ReadLine();
-                if( String.IsNullOrWhiteSpace(path1) || String.IsNullOrWhiteSpace(path2))
+                if (string.IsNullOrWhiteSpace(path1) || string.IsNullOrWhiteSpace(path2))
                 {
                     Console.WriteLine("One TaskSet was missing");
                     return;

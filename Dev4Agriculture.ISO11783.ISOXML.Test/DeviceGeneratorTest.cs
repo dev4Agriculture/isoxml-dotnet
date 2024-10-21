@@ -92,7 +92,7 @@ public class DeviceGeneratorTest
             UnitDesignator = "°C",
             NumberOfDecimals = 1,
             Offset = 18300,
-            Scale = (decimal)100
+            Scale = 100
         };
         generator.AddDeviceProcessData(new ISODeviceProcessData()
         {

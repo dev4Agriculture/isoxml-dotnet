@@ -1,3 +1,6 @@
+v0.21.1.1:
+  - FIX: We added several definitions for SerialNumber handling in the DeviceGenerator, but we did not add the corresponding definitions in the TCEmulator
+
 v0.21.0.1:
  - FIX: Switching the DataTransferOrign lead to errors as it's static.
  + ADD: Handle Devices with a SerialNumber including Letters.

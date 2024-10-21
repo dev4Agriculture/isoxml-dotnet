@@ -98,7 +98,7 @@ public class TaskAnalyzerTest
 
         Assert.AreEqual(timeWithDuration.GetStopTime(), DateTime.Parse("2023-01-03T12:25:25"));
         Assert.AreEqual(timeWithStop.GetStopTime(), DateTime.Parse("2023-01-03T13:42:24"));
-        Assert.AreEqual(timeWithDuration.GetSeconds(), (ulong)305);
+        Assert.AreEqual(timeWithDuration.GetSeconds(),(ulong)305);
         Assert.AreEqual(timeWithStop.GetSeconds(), (ulong)4924);
     }
 
