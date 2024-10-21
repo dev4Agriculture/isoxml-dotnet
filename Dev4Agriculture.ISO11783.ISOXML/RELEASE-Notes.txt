@@ -1,3 +1,7 @@
+v0.21.0.1:
+ - FIX: Switching the DataTransferOrign lead to errors as it's static.
+ + ADD: Handle Devices with a SerialNumber including Letters.
+ -FIX: Ensure that the TaskControllerEmulator always makes the ISOXML use DataTransferOrign MICS, not FMIS
 v0.20.1.1:
 - FIX: Several bugs in the non-published version of the TaskController Emulator
 

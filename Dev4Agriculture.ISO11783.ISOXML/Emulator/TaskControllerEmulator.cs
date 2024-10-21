@@ -91,6 +91,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         public TaskControllerEmulator(ISOXML isoxml, bool allowAutoLog = true)
         {
             _isoxml = isoxml;
+            _isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.MICS;
             _allowAutoLog = allowAutoLog;
             if (allowAutoLog)
             {
