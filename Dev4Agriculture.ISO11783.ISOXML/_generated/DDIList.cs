@@ -1,8 +1,9 @@
-using System.Collections.Generic; 
+﻿using System.Collections.Generic;
 
-namespace de.dev4Agriculture.ISOXML.DDI{
-    public enum DDIList
+namespace de.dev4Agriculture.ISOXML.DDI
 {
+    public enum DDIList
+    {
         InternalDataBaseDDI = 0x0000,
         SetpointVolumePerAreaApplicationRateAsMm_3M_2 = 0x0001,
         ActualVolumePerAreaApplicationRateAsMm_3M_2 = 0x0002,
@@ -668,18 +669,18 @@ namespace de.dev4Agriculture.ISOXML.DDI{
         _65534_ProprietaryDDIRange = 0xE000,
     }
 
-     public class DDIEntry
-     {
+    public class DDIEntry
+    {
         public int Id;
         public string Name;
         public string Description;
         public string Unit;
         public double Resolution;
-     }
+    }
 
-     public class DDIInfo
-     {
-         public static readonly Dictionary<DDIList, DDIEntry> DDICollection = new Dictionary<DDIList, DDIEntry>
+    public class DDIInfo
+    {
+        public static readonly Dictionary<DDIList, DDIEntry> DDICollection = new Dictionary<DDIList, DDIEntry>
          {
 
              {DDIList.InternalDataBaseDDI, new DDIEntry{Id = 0, Name = "InternalDataBaseDDI", Description = "This DDI is reserved for internal use only.", Resolution = 1, Unit = "not defined"} },
@@ -1346,5 +1347,5 @@ namespace de.dev4Agriculture.ISOXML.DDI{
              {DDIList.RequestDefaultProcessData, new DDIEntry{Id = 57343, Name = "RequestDefaultProcessData", Description = "Request Default Process Data. This DDE is the highest ISO assigned entity.  The range above this number is reserved for manufacture specific DDE's.", Resolution = 1, Unit = "n.a."} },
              {DDIList._65534_ProprietaryDDIRange, new DDIEntry{Id = 57344, Name = "_65534_ProprietaryDDIRange", Description = "Manufacturer proprietary definitions", Resolution = 0, Unit = "n.a."} },
          };
-     }
+    }
 }

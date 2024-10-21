@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using Dev4Agriculture.ISO11783.ISOXML.Geometry;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
@@ -34,11 +31,11 @@ public class ISOPartFieldTest
                 }
             }}
         });
-        var res= field.CalculateArea();
+        var res = field.CalculateArea();
         var ratio = res / refValue;
         Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
     }
-    
+
     [TestMethod]
     public void CalculatingAreaMatchesRealArea_ClosedPolygon()
     {
@@ -61,7 +58,7 @@ public class ISOPartFieldTest
                 }
             }}
         });
-        var res= field.CalculateArea();
+        var res = field.CalculateArea();
         var ratio = res / refValue;
         Assert.IsTrue(ratio > 0.99 && ratio < 1.01);
     }
@@ -71,8 +68,8 @@ public class ISOPartFieldTest
     public void FieldAreasMatchInAllAreasOfTheWorld()
     {
         var isoxml = ISOXML.Load("./testdata/CodingData/Partfields");
-        Assert.AreEqual(0,isoxml.Messages.Count);
-        foreach(var field in isoxml.Data.Partfield)
+        Assert.AreEqual(0, isoxml.Messages.Count);
+        foreach (var field in isoxml.Data.Partfield)
         {
             var size = field.CalculateArea();
             var ratio = size / field.PartfieldArea;
@@ -110,7 +107,7 @@ public class ISOPartFieldTest
             isoxml = ISOXML.LoadFromArchive(stream);
         }
         var fields = isoxml.Data.Partfield.ToList();
-        var result = new IntersectionResult { IntersectPercent = 0.58, Type = IntersectionAlgorithmType.WeightCenter, PolygonType = PolygonType.Convex  };
+        var result = new IntersectionResult { IntersectPercent = 0.58, Type = IntersectionAlgorithmType.WeightCenter, PolygonType = PolygonType.Convex };
 
         var actualResult = fields[7].TryGetOverlapWithPartfield(fields[8]);
 
@@ -264,7 +261,7 @@ public class ISOPartFieldTest
             MaxLong = 11.8m,
             MinLong = 11
         };
-        foreach( var field in fields)
+        foreach (var field in fields)
         {
             var result = field.IsOverlappingBounds(AustraliaBounds);
             Assert.IsFalse(result);

@@ -256,7 +256,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     found = true;
                 }
             }
-            if (found == false)
+            if (!found)
             {
                 if (shallCheckTimeElements)
                 {
@@ -285,12 +285,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             ISOTime lastTim = null;
 
-            foreach(var tlg in TimeLogs)
+            foreach (var tlg in TimeLogs)
             {
                 var tim = tlg.GenerateTimeElement(devices);
                 if (lastTim != null)
                 {
-                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim,devices);
+                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim, devices);
                 }
                 list.Add(tim);
                 lastTim = tim;
@@ -299,10 +299,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
+
         /// <summary>
         /// TimeStamps tend to have a lot of Milliseconds. We intend to lower the maximum digits of Milliseconds to 3
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         internal void CleanTimeStamps()
         {
             foreach (var tim in Time)
@@ -328,7 +328,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 }
             }
 
-            foreach (var gan in this.GuidanceAllocation)
+            foreach (var gan in GuidanceAllocation)
             {
                 if (gan.AllocationStamp != null)
                 {
@@ -349,7 +349,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 }
             }
         }
-
 
     }
 }

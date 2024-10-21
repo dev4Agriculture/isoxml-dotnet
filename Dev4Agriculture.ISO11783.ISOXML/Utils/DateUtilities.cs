@@ -52,7 +52,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
                 return null;
             }
             // Calculate the truncated ticks for milliseconds
-            long ticks = dateTime.Value.Ticks / TimeSpan.TicksPerMillisecond;
+            var ticks = dateTime.Value.Ticks / TimeSpan.TicksPerMillisecond;
             ticks *= TimeSpan.TicksPerMillisecond;
 
             // Round the milliseconds to three digits

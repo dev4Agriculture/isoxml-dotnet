@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
@@ -18,7 +16,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             else if (Duration != null)
             {
                 return Duration ?? 0;
-            } else
+            }
+            else
             {
                 return 0;
             }
@@ -67,7 +66,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             if (Position != null)
             {
-                Position.ToList().ForEach( ptn => ptn.FixDigits());
+                Position.ToList().ForEach(ptn => ptn.FixDigits());
             }
         }
     }

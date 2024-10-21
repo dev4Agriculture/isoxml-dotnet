@@ -171,7 +171,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     LinkList.DataTransferOrigin = (ISO11783LinkListFileDataTransferOrigin)value;
                 }
-                IdList.DataOrign = value;
+                IdTable.SetDataTransferOrign(value);
             }
         }
 
@@ -203,7 +203,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void AddLinkList()
         {
-            if (HasLinkList == false)
+            if (!HasLinkList)
             {
                 LinkList = new IsoLinkList()
                 {
@@ -545,7 +545,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         public void LoadBinaryData()
         {
-            if (_binaryLoaded == false)
+            if (!_binaryLoaded)
             {
                 LoadGrids();
                 LoadTimeLogs();
@@ -648,7 +648,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 entry.Value.SaveTLG(FolderPath);
             }
 
-            foreach(var task in Data.Task)
+            foreach (var task in Data.Task)
             {
                 task.CleanTimeStamps();
             }

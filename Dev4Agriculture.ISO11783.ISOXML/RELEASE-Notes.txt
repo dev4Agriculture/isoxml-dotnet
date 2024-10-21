@@ -1,3 +1,17 @@
+v0.21.0.1:
+ - FIX: Switching the DataTransferOrign lead to errors as it's static.
+ + ADD: Handle Devices with a SerialNumber including Letters.
+ -FIX: Ensure that the TaskControllerEmulator always makes the ISOXML use DataTransferOrign MICS, not FMIS
+ -FIX: IMPORTANT: We had several First() or Last() calls that might cause throwing errors. We're now using FirstOrDefault() and LastOrDefault(). ATTENTION: If you used the following functions in a TryCatch, you'll now need to check the Result for NULL: 
+            - GetDeviceFromDeviceElement: Might now return null
+            - FindDeviceProcessData: Might now return null
+            - FindDeviceProperty: Might now return null
+            - GetDeviceDataDesignator: Might now return ""
+            - GetDeviceValuePresentation: Might now return a Default ValuePresentation
+            - IsInField caused crash if no Field exists.
+            - 
+
+
 v0.20.1.1:
 - FIX: Several bugs in the non-published version of the TaskController Emulator
 

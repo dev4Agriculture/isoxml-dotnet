@@ -34,7 +34,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
     {
         public ushort DDI;
         public int DET;
-        public ISODeviceValuePresentation dvp;
+        public ISODeviceValuePresentation DVP;
         public int DeviceId;
     }
 
@@ -91,6 +91,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
         public TaskControllerEmulator(ISOXML isoxml, bool allowAutoLog = true)
         {
             _isoxml = isoxml;
+            _isoxml.DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.MICS;
             _allowAutoLog = allowAutoLog;
             if (allowAutoLog)
             {
@@ -140,7 +141,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         public ISOXML ExportISOXML(DateTime timeStampOfExport)
         {
-            foreach(var task in _isoxml.Data.Task)
+            foreach (var task in _isoxml.Data.Task)
             {
                 var finalTim = GetPauseElement(task);
                 if (finalTim != null && finalTim.Stop == null)
@@ -253,7 +254,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 EndTask(timestamp, ISOTaskStatus.Paused);
             }
             var pauseElement = GetPauseElement(task);
-            if(pauseElement != null)
+            if (pauseElement != null)
             {
                 pauseElement.Stop = timestamp;
                 pauseElement = null;
@@ -284,7 +285,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             if (_currentTask.Time.Any(entry => entry.Type == ISOType2.Effective))
             {
                 var isoTime = _currentTask.Time.LastOrDefault(entry => entry.Type == ISOType2.Effective);
-                if( isoTime != null)
+                if (isoTime != null)
                 {
                     UpdateLatestDataLogValuesFromTimeElement(isoTime);
                 }
@@ -408,13 +409,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             {
                 foreach (var entry in _latestDataLogValues)
                 {
-                    addMachineValue(entry.DDI, entry.LastValue, entry.DET);
+                    AddMachineValue(entry.DDI, entry.LastValue, entry.DET);
                 }
                 _isFirstLine = false;
             }
         }
 
-        private void addMachineValue(ushort ddi, int value, int? deviceElement = null)
+        private void AddMachineValue(ushort ddi, int value, int? deviceElement = null)
         {
             if (_currentDataLine == null || _currentTimeLog == null)
             {
@@ -578,7 +579,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                         DDI = ddi,
                         DET = 0,
                         DeviceId = 0,
-                        dvp = DefaultDVP
+                        DVP = DefaultDVP
                     });
                     return DefaultDVP;
                 }
@@ -588,7 +589,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 var fromList = _factors.FirstOrDefault(entry => entry.DDI == ddi && entry.DET == deviceElement);
                 if (fromList != null)
                 {
-                    return fromList.dvp;
+                    return fromList.DVP;
                 }
             }
 
@@ -600,7 +601,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     DDI = ddi,
                     DET = 0,
                     DeviceId = 0,
-                    dvp = DefaultDVP
+                    DVP = DefaultDVP
                 });
                 return DefaultDVP;
             }
@@ -615,7 +616,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     DDI = ddi,
                     DET = 0,
                     DeviceId = 0,
-                    dvp = DefaultDVP
+                    DVP = DefaultDVP
                 });
                 return DefaultDVP;
             }
@@ -633,7 +634,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     DDI = ddi,
                     DET = deviceElement ?? 0,
                     DeviceId = 0,
-                    dvp = DefaultDVP
+                    DVP = DefaultDVP
                 });
                 return DefaultDVP;
             }
@@ -646,7 +647,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                     DDI = ddi,
                     DET = 0,
                     DeviceId = 0,
-                    dvp = DefaultDVP
+                    DVP = DefaultDVP
                 });
                 return DefaultDVP;
             }
@@ -655,7 +656,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 DDI = ddi,
                 DET = 0,
                 DeviceId = IdList.ToIntId(device.DeviceId),
-                dvp = DefaultDVP
+                DVP = DefaultDVP
             });
 
             return deviceValuePresentation;
@@ -668,7 +669,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
             AddDeviceAllocationIfNoneExists(device);
 
-            addMachineValue(ddi, value, deviceElement);
+            AddMachineValue(ddi, value, deviceElement);
 
 
             var valueType = FindWorkSessionProcessDataType(ddi, device);
@@ -707,7 +708,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             var latestDataLogValue = FindOrAddLatestDataLogValue(ddi, deviceElement ?? 0, valueType);
             AddDeviceAllocationIfNoneExists(device);
             latestDataLogValue.LastValue += value;
-            addMachineValue(ddi, latestDataLogValue.LastValue, deviceElement);
+            AddMachineValue(ddi, latestDataLogValue.LastValue, deviceElement);
             if (valueType == WorkSessionProcessDataType.Total || valueType == WorkSessionProcessDataType.LifeTime)
             {
                 UpdateOrAddDLVInTIM(ddi, deviceElement);
@@ -753,7 +754,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
-        private ISOTime? GetPauseElement(ISOTask currentTask)
+        private ISOTime GetPauseElement(ISOTask currentTask)
         {
             if (currentTask == null)
             {

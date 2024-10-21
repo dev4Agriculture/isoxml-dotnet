@@ -14,9 +14,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public LocalizationLabel LocalizationLabelParsed { get; private set; }
 
-        [XmlIgnore]
-        public ClientName ClientNameParsed { get; private set; }
 
+        private ClientName _clientName = null;
+
+        [XmlIgnore]
+        public ClientName ClientNameParsed
+        {
+            get
+            {
+                if (_clientName != null)
+                {
+                    return _clientName;
+                }
+                else
+                {
+                    try
+                    {
+                        _clientName = new ClientName(ClientNAME);
+                        return _clientName;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+            private set => _clientName = value;
+        }
 
         /// <summary>
         /// Convert all encoded data like ClientName & LocalizationLabel to readable structures
@@ -101,14 +125,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return result;
         }
 
-        public bool IsTotal(ushort DDI)
+        public bool IsTotal(ushort ddi)
         {
-            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsTotal() ?? false;
+            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == ddi)?.IsTotal() ?? false;
         }
 
-        public bool IsLifetimeTotal(ushort DDI)
+        public bool IsLifetimeTotal(ushort ddi)
         {
-            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == DDI)?.IsLifeTimeTotal() ?? false;
+            return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == ddi)?.IsLifeTimeTotal() ?? false;
         }
     }
 }

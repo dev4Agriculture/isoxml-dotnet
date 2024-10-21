@@ -6,7 +6,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
     public class FileUtils
     {
 
-        public static string GetParentFolder(string absolutePath,string relativePath)
+        public static string GetParentFolder(string absolutePath, string relativePath)
         {
             // Combine the absolute and relative paths to get the full path of the file
             string fullPath = Path.GetFullPath(Path.Combine(absolutePath, relativePath));

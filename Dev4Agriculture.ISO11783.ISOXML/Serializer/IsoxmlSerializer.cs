@@ -101,11 +101,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
 
             //Add an empty namespace and empty value
             ns.Add("", "");
-            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8};
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8 };
             var ser = new XmlSerializer(obj.GetType());
             var output = new StringWriterWithEncoding();
-            using var xmlWriter = XmlWriter.Create(output,xmlWriterSettings);
-            ser.Serialize(xmlWriter, obj,ns);
+            using var xmlWriter = XmlWriter.Create(output, xmlWriterSettings);
+            ser.Serialize(xmlWriter, obj, ns);
             return output.ToString();
         }
 

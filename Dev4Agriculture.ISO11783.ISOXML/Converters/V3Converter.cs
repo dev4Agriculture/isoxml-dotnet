@@ -57,12 +57,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Converters
                     }
 
                     //p.129
-                    if( trZone.ProcessDataVariable.Count > 0)
+                    if (trZone.ProcessDataVariable.Count > 0)
                     {
                         trZone.ProcessDataVariable.First().ActualCulturalPracticeValue = null;
                     }
 
-                    if(trZone.ProcessDataVariable.Count > 0)
+                    if (trZone.ProcessDataVariable.Count > 0)
                     {
                         trZone.ProcessDataVariable.First().ElementTypeInstanceValue = null;
                     }
@@ -170,7 +170,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Converters
                 }
                 polygon.PolygonId = null;
 
-                foreach(var lsg in polygon.LineString)
+                foreach (var lsg in polygon.LineString)
                 {
                     MakeLineStringV3(lsg);
                 }

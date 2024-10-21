@@ -35,7 +35,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             _isoxml = isoxml;
         }
 
-        public ISODevice? GetDeviceFromDeviceElement(string deviceElementId)
+        public ISODevice GetDeviceFromDeviceElement(string deviceElementId)
         {
             return _isoxml.Data.Device.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == deviceElementId));
         }
@@ -121,20 +121,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
         public ISODeviceValuePresentation GetDeviceValuePresentation(TaskDDIEntry entry)
         {
             var device = GetDeviceFromDeviceElement(entry.DeviceElementId);
-            if (device == null)
-            {
-                return new ISODeviceValuePresentation()
-                {
-                    Scale = 1,
-                    Offset = 0,
-                    UnitDesignator = ""
-                };
-            }
             switch (entry.Type)
             {
                 case DDIValueType.ProcessData:
                     var dpd = FindDeviceProcessData(entry);
-                    if (dpd!=null && dpd.DeviceValuePresentationObjectIdValueSpecified)
+                    if (dpd != null && dpd.DeviceValuePresentationObjectIdValueSpecified)
                     {
                         return device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpd.DeviceValuePresentationObjectId);
                     }
@@ -143,7 +134,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 
                 case DDIValueType.Property:
                     var dpt = FindDeviceProperty(entry);
-                    if (dpt.DeviceValuePresentationObjectIdValueSpecified)
+                    if (dpt != null && dpt.DeviceValuePresentationObjectIdValueSpecified)
                     {
                         return device.DeviceValuePresentation.FirstOrDefault(dvp => dvp.DeviceValuePresentationObjectId == dpt.DeviceValuePresentationObjectId);
                     }
@@ -200,7 +191,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     .SelectMany(dptObjectId =>
                             device.DeviceElement
                             //Now, if this DOR links our DPT from the machine in the Task, we found an entry to add
-                            .Where( det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
+                            .Where(det => det.DeviceObjectReference.Any(dor => dor.DeviceObjectId == dptObjectId))
                             .Select(det => new TaskDDIEntry()
                             {
                                 DeviceElementId = det.DeviceElementId,

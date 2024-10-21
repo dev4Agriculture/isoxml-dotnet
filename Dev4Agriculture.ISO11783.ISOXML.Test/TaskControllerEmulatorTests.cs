@@ -12,22 +12,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 [TestClass]
 public class TaskControllerEmulatorTests
 {
-    private ISOXML _isoxml = null;
+    private ISOXML _isoxml;
 
-    private static double mm3persTolperh = 0.0036;
-    private static double secondsPerHour = 3600;
+    private const double Mm3persTolperh = 0.0036;
+    private const double SecondsPerHour = 3600;
 
     private TaskControllerEmulator PrepareEmulator(bool autolog)
     {
-        var isoxml = ISOXML.Create("");
-        _isoxml = isoxml;
         var emulator = TaskControllerEmulator.Generate("", "Test", ISO11783TaskDataFileVersionMajor.Version4, ISO11783TaskDataFileVersionMinor.Item1, "1.1", autolog);
-        ;
+        _isoxml = emulator.GetTaskDataSet();
 
         return emulator;
     }
 
-    private ISODevice GetChopperDevice(ISOXML isoxml)
+    private ISODevice GetChopperDevice()
     {
         var deviceGenerator = new DeviceGenerator(_isoxml, "Chopper", "1.0", new byte[] { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 }, DeviceClass.Harvesters, 99, 1234);
         deviceGenerator.SetLocalization(
@@ -60,7 +58,7 @@ public class TaskControllerEmulatorTests
         {
             UnitDesignator = "l/h",
             NumberOfDecimals = 1,
-            Scale = (decimal)mm3persTolperh
+            Scale = (decimal)Mm3persTolperh
         };
 
 
@@ -128,7 +126,7 @@ public class TaskControllerEmulatorTests
     {
         var emulator = PrepareEmulator(false);
 
-        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+        var chopper = GetChopperDevice();
 
 
         emulator.ConnectDevice(chopper);
@@ -165,7 +163,7 @@ public class TaskControllerEmulatorTests
     {
         var emulator = PrepareEmulator(false);
 
-        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+        var chopper = GetChopperDevice();
 
 
         emulator.ConnectDevice(chopper);
@@ -201,7 +199,7 @@ public class TaskControllerEmulatorTests
     {
         var emulator = PrepareEmulator(false);
 
-        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+        var chopper = GetChopperDevice();
 
 
         emulator.ConnectDevice(chopper);
@@ -241,7 +239,7 @@ public class TaskControllerEmulatorTests
         for (var a = 1; a <= task.TimeLogs.Count; a++)
         {
             Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
-            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / mm3persTolperh));
+            Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / Mm3persTolperh));
             if (a % 2 == 0)
             {
                 Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
@@ -259,7 +257,7 @@ public class TaskControllerEmulatorTests
     {
         var emulator = PrepareEmulator(true);
 
-        var chopper = GetChopperDevice(emulator.GetTaskDataSet());
+        var chopper = GetChopperDevice();
 
 
         emulator.ConnectDevice(chopper);
@@ -272,10 +270,10 @@ public class TaskControllerEmulatorTests
                 PositionEast = (decimal)7.3,
                 PositionStatus = ISOPositionStatus.GNSSfix
             });
-            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a%100);
+            emulator.UpdateMachineValue(DDIList.InstantaneousFuelConsumptionPerTime, a % 100);
             if (a % 2 == 0)
             {
-                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, ((a % 100) * 2/secondsPerHour));
+                emulator.AddValueToMachineValue(DDIList.TotalFuelConsumption, a % 100 * 2 / SecondsPerHour);
 
             }
             if (a % 100 == 0)
@@ -306,7 +304,7 @@ public class TaskControllerEmulatorTests
         Assert.AreEqual(task.DeviceAllocation.Count, 4);
         Assert.AreEqual(task.TimeLogs.Count, 4);
 
-        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue,TLGTotalAlgorithmType.NO_RESETS), true);
+        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue, TLGTotalAlgorithmType.NO_RESETS), true);
         Assert.AreEqual(totalValue, 21664);
     }
 
