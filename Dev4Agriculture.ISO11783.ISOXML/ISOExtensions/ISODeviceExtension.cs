@@ -14,9 +14,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         [XmlIgnore]
         public LocalizationLabel LocalizationLabelParsed { get; private set; }
 
-        [XmlIgnore]
-        public ClientName ClientNameParsed { get; private set; }
 
+        private ClientName? _clientName = null;
+
+        [XmlIgnore]
+        public ClientName ClientNameParsed
+        {
+            get
+            {
+                if (_clientName != null)
+                {
+                    return _clientName;
+                }
+                else
+                {
+                    try
+                    {
+                        _clientName = new ClientName(ClientNAME);
+                        return _clientName;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+            private set => _clientName = value;
+        }
 
         /// <summary>
         /// Convert all encoded data like ClientName & LocalizationLabel to readable structures

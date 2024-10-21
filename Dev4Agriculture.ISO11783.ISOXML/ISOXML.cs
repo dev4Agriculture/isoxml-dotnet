@@ -171,7 +171,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     LinkList.DataTransferOrigin = (ISO11783LinkListFileDataTransferOrigin)value;
                 }
-                IdList.DataOrign = value;
+                IdTable.SetDataTransferOrign(value);
             }
         }
 

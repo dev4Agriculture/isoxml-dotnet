@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dev4Agriculture.ISO11783.ISOXML.Exceptions;
 using Dev4Agriculture.ISO11783.ISOXML.LinkListFile;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
@@ -163,6 +164,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <param name="name"></param>
         /// <param name="index"></param>
         /// <returns></returns>
+        [Obsolete("Use the non-static version BuildISOID where possible, especially if you switch between being a TC and a FMIS")]
         public static string BuildID(string name, int index)
         {
             return name + (DataOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ?
@@ -172,10 +174,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
+
         public string Name { get; private set; }
         private readonly Dictionary<int, object> _ids;
         private int _nextId;
         private int _nextTmpId = NextTmpBase;
+        public ISO11783TaskDataFileDataTransferOrigin DataTransferOrign = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+
+
+
+
+        /// <summary>
+        /// Generate a proper ID as described in ISO11783-10 for xs:id-Fields
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public string BuildISOID(string name, int index)
+        {
+            return name + (DataTransferOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ?
+                    index.ToString() :
+                    "-" + index.ToString()
+                    );
+        }
+
 
 
         public IdList(string name)
@@ -183,6 +205,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             Name = name;
             _nextId = 1;
             _ids = new Dictionary<int, object>();
+            DataTransferOrign = DataOrign;
         }
 
         /// <summary>
@@ -196,7 +219,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             var id = FindId(obj);
             if (id == null || id.Equals(""))
             {
-                id = BuildID(Name, _nextId);
+                id = BuildISOID(Name, _nextId);
                 _ids.Add(_nextId, obj);
                 SetId(obj, id);
                 _nextId++;
@@ -295,7 +318,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 if (entry.Key >= NextTmpBase)
                 {
-                    var id = BuildID(Name, _nextId);
+                    var id = BuildISOID(Name, _nextId);
                     SetId(entry.Value, id);
                     tempItems.Add(_nextId, entry.Value);
                     result.AddWarning(ResultMessageCode.MissingId,

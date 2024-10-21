@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dev4Agriculture.ISO11783.ISOXML.Messaging;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
@@ -124,6 +125,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             return result;
         }
 
+
+        /// <summary>
+        /// This function defines for the IDLists, if the source of our data shall be an FMIS or a TaskController. It's relevant for generating new Elements.
+        /// The DataTransferOrign MUST be set BEFORE any elements are generated, otherwise the origns will be mixed up!
+        /// </summary>
+        /// <param name="value"></param>
+        internal void SetDataTransferOrign(ISO11783TaskDataFileDataTransferOrigin value)
+        {
+            foreach(var entry in IdLists)
+            {
+                entry.Value.DataTransferOrign = value;
+            }
+        }
     }
 
 }
