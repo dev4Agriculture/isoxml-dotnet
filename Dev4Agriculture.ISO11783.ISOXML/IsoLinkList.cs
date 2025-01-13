@@ -157,7 +157,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         {
                             type = grp.LinkGroupType,
                             Id = link.LinkValue,
-                            Designator = link.LinkDesignator
+                            Designator = link.LinkDesignator,
+                            ManufacturerGLN = grp.ManufacturerGLN,
+                            LinkGroupNamespace = grp.LinkGroupNamespace,
                         };
                     }
                 }
@@ -181,7 +183,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         {
                             type = grp.LinkGroupType,
                             Id = link.LinkValue,
-                            Designator = link.LinkDesignator
+                            Designator = link.LinkDesignator,
+                            ManufacturerGLN = grp.ManufacturerGLN,
+                            LinkGroupNamespace = grp.LinkGroupNamespace,
                         };
                     }
                 }
