@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x']
+        dotnet-version: ['3.0', '3.1.x', '5.0.x', '6.0.x']
 
     steps:
     - uses: actions/checkout@v3
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['6.0.x', '7.0.x', '8.0.x']
+        dotnet-version: ['7.0.x', '8.0.x']
 
     steps:
     - uses: actions/checkout@v3 
@@ -44,7 +44,7 @@ jobs:
     - name: Build Linux
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --verbosity normal
+      run: dotnet test --no-build --verbosity normal
   buildWindows:
 
     runs-on: windows-latest
