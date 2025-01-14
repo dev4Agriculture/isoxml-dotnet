@@ -5,17 +5,34 @@ on:
     branches: [ "main" ]
 
 jobs:
+  buildLinuxOld:
+
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        dotnet-version: ['3.0', '3.1.x', '5.0.x']
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version:  ${{ matrix.dotnet-version }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Linux
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
   buildLinux:
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x' ]
+        dotnet-version: ['6.0.x','7.0.x','8.0.x' ]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install Dependencies
-      run: sudo apt-get update && sudo apt-get install -y libicu-dev libssl1.1 || sudo apt-get install -y libssl1.1 || sudo apt-get install -y libssl-dev  
+    - uses: actions/checkout@v3 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -31,7 +48,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x' ]
+        dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x','7.0.x','8.0.x' ]
 
     steps:
     - uses: actions/checkout@v3
@@ -50,7 +67,7 @@ jobs:
     runs-on: macos-12
     strategy:
       matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x' ]
+        dotnet-version: ['3.0', '3.1.x', '5.0.x','6.0.x','7.0.x','8.0.x' ]
 
     steps:
     - uses: actions/checkout@v3
