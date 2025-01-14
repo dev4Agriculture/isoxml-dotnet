@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  buildLinuxOld:
+  buildLinux:
 
     runs-on: ubuntu-20.04
     strategy:
@@ -18,27 +18,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version:  ${{ matrix.dotnet-version }}
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build Linux
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-  buildLinux:
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ['7.0.x', '8.0.x']
-
-    steps:
-    - uses: actions/checkout@v3 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version:  ${{ matrix.dotnet-version }}
-    - name: Print Installed SDKs
-      run: dotnet --info
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Linux
