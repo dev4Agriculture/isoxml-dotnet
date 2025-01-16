@@ -1,5 +1,5 @@
-v0.21.1.2:
-  - FIX: We adjusted implemenation of LinkList with adding ManufacturerGLN and LinkGroupNamespace to ISOLinkEntry 
+v0.21.2.0:
+  - ADD: We adjusted implemenation of LinkList with adding ManufacturerGLN and LinkGroupNamespace to ISOLinkEntry 
 
 v0.21.1.1:
   - FIX: We added several definitions for SerialNumber handling in the DeviceGenerator, but we did not add the corresponding definitions in the TCEmulator
