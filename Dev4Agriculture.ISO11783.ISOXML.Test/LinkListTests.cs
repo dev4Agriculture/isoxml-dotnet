@@ -151,6 +151,14 @@ public class LinkListTests
         var partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
         Assert.AreEqual(deviceLinks.Count(), 3);
         Assert.AreEqual(partfieldLinks.Count(), 2);
+        Assert.IsTrue(deviceLinks.Any(s =>
+         s.ManufacturerGLN.Equals("Headland") &&
+         s.LinkGroupNamespace.Equals("https://portal.bvl.bund.de/psm/jsp/DatenBlatt.jsp?kennr=")
+        ));
+        Assert.IsTrue(partfieldLinks.Any(s =>
+        s.ManufacturerGLN.Equals("Headland") &&
+        s.LinkGroupNamespace.Equals("urn:epc:id:sgtin:")
+        ));
 
         isoxml.LinkList.ClearLinks("PFD1");
         deviceLinks = isoxml.LinkList.FindAllLinks("DVC1");
@@ -195,7 +203,6 @@ public class LinkListTests
         partfieldLinks = isoxml.LinkList.FindAllLinks("PFD1");
         Assert.AreEqual(deviceLinks.Count(), 0);
         Assert.AreEqual(partfieldLinks.Count(), 1);
-
 
     }
 }
