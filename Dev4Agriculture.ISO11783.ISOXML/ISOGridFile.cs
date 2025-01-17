@@ -202,6 +202,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 for (var l = 0; l < Layers; l++)
                 {
                     var filePath = Path.Combine(storagePath, Name + (Layers > 1 ? "_" + l : "") + ".CSV");
+                    if (!Directory.Exists(storagePath))
+                    {
+                        Directory.CreateDirectory(storagePath);
+                    }
                     var file = File.Create(filePath);
                     var streamWriter = new StreamWriter(file);
                     switch (Type)
