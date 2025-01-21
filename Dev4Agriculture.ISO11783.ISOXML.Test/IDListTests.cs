@@ -131,7 +131,11 @@ public class IDListTests
     {
         var firstPath = "./testdata/IDList/WrongIds";
         var isoxml = ISOXML.Load(firstPath);
-        Assert.AreEqual(5,isoxml.Messages.Count);
+        Assert.AreEqual(6, isoxml.Messages.Count);
+        foreach(var message in isoxml.Messages)
+        {
+            Assert.AreEqual(message.Code, Messaging.ResultMessageCode.WrongId);
+        }
     }
 }
 

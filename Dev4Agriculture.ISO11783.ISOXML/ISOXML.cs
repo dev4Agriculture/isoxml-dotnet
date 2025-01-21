@@ -663,6 +663,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         }
 
+
+        private void ReadISOPolygonIDList(ICollection<ISOPolygon> isoPolygonList)
+        {
+            ReadIDList(isoPolygonList);
+            foreach (var polygon in isoPolygonList)
+            {
+                ReadIDList(polygon.LineString);
+                foreach (var linestring in polygon.LineString)
+                {
+                    ReadIDList(linestring.Point);
+                }
+            }
+
+        }
+
         /// <summary>
         /// Iterates through the given TASKDATA.XML and fills the IDList Tables
         /// </summary>
@@ -670,8 +685,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             ReadIDList(Data.BaseStation);
             ReadIDList(Data.CodedComment);
+            foreach (var codedComment in Data.CodedComment)
+            {
+                ReadIDList(codedComment.CodedCommentListValue);
+            }
+
             ReadIDList(Data.CodedCommentGroup);
             ReadIDList(Data.ColourLegend);
+            foreach (var legend in Data.ColourLegend)
+            {
+                ReadIDList(legend.ColourRange);
+            }
             ReadIDList(Data.CropType);
             ReadIDList(Data.CulturalPractice);
             ReadIDList(Data.Customer);
@@ -689,22 +713,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 ReadIDList(device.DeviceElement);
             }
 
+
+            foreach (var cropType in Data.CropType)
+            {
+                ReadIDList(cropType.CropVariety);
+            }
+
+
+
             foreach (var field in Data.Partfield)
             {
-                ReadIDList(field.PolygonnonTreatmentZoneonly);
-                foreach (var polygon in field.PolygonnonTreatmentZoneonly)
-                {
-                    ReadIDList(polygon.LineString);
-                    foreach (var linestring in polygon.LineString)
-                    {
-                        ReadIDList(linestring.Point);
-                    }
-                }
+                ReadISOPolygonIDList(field.PolygonnonTreatmentZoneonly);
                 foreach (var linestring in field.LineString)
                 {
                     ReadIDList(linestring.Point);
                 }
                 ReadIDList(field.Point);
+                ReadIDList(field.GuidanceGroup);
+                foreach (var group in field.GuidanceGroup)
+                {
+                    ReadIDList(group.GuidancePattern);
+                    ReadISOPolygonIDList(group.BoundaryPolygon);
+                }
             }
         }
 
