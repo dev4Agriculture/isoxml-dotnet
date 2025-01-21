@@ -1,5 +1,8 @@
+v0.21.3.0:
+  + ADD: When an Id is referenced somewhere in a TaskData that does not belong to an existing object within the TaskData, we add an ErrorMessage
+
 v0.21.2.0:
-  - ADD: We adjusted implemenation of LinkList with adding ManufacturerGLN and LinkGroupNamespace to ISOLinkEntry 
+  + ADD: We adjusted implemenation of LinkList with adding ManufacturerGLN and LinkGroupNamespace to ISOLinkEntry 
 
 v0.21.1.1:
   - FIX: We added several definitions for SerialNumber handling in the DeviceGenerator, but we did not add the corresponding definitions in the TCEmulator

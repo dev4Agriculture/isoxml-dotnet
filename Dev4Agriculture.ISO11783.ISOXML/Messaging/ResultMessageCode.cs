@@ -12,6 +12,7 @@
         FileNameEndingMultipleTimes,
         DuplicatedId,
         DuplicatedTLG,
+        WrongId,
         XMLParsingError = 100,
         XMLWrongElement,
         XMLTextIn,

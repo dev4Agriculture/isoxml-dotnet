@@ -143,7 +143,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 Directory.CreateDirectory(path);
             }
             path = FixTaskDataPath(path);
-            FixTaskDataContent(taskData);
+            FixTaskDataPositionNumberOfDigits(taskData);
             var isoxmlSerializer = new IsoxmlSerializer();
             isoxmlSerializer.Serialize(taskData, path);
         }
@@ -153,7 +153,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// Some Elements within the Taskdata.xml may only have up to x (currently 9) digits. That's what we fix here
         /// </summary>
         /// <param name="taskData"></param>
-        private static void FixTaskDataContent(ISO11783TaskDataFile taskData)
+        private static void FixTaskDataPositionNumberOfDigits(ISO11783TaskDataFile taskData)
         {
             taskData.Partfield.ToList().ForEach(entry => entry.FixPositionDigits());
             taskData.BaseStation.ToList().ForEach(entry => entry.FixPositionDigits());
