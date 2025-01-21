@@ -1,3 +1,6 @@
+v0.21.3.1:
+  + ADD / -FIX: The CropVarieties and the Partfields within the GuidancePatterns were not initialized/added to the ID-List. This lead to errors in checking for NonExisting Links
+
 v0.21.3.0:
   + ADD: When an Id is referenced somewhere in a TaskData that does not belong to an existing object within the TaskData, we add an ErrorMessage
 
