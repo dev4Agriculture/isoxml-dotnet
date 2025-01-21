@@ -54,6 +54,7 @@
                     Code == ResultMessageCode.FileInvalid ? "File Invalid: %1, Exception: %2" :
                     Code == ResultMessageCode.FileNameEndingMultipleTimes ? "Multiple files ending with %1 might lead to reading confusion in some terminals" :
                     Code == ResultMessageCode.MultipleTaskDataFound ? "Multiple TaskData files found; only the first one is loaded" :
+                    Code == ResultMessageCode.WrongId ? "Found ObjectIdReference for non-existing element: %1":
                     Code == ResultMessageCode.FileSizeMissmatch ? "FileSize of %1 doesn't match; Is %2 but should be %3 Bytes" :
                     Code == ResultMessageCode.FileNotFound ? "File could not be found: %1; Message: %2" :
                     Code == ResultMessageCode.FileAccessImpossible ? "File could not be accessed: %1; Message: %2" :

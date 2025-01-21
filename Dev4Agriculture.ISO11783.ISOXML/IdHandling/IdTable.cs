@@ -97,9 +97,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         /// <returns></returns>
         public object FindById(string id)
         {
+            var idContext = id.Substring(0, 3);
             foreach (var list in IdLists)
             {
-                if (list.Value.Name.Equals(id.Substring(0, 3)))
+                if (list.Value.Name.Equals(idContext))
                 {
                     return list.Value.FindObject(id);
                 }
@@ -137,6 +138,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             {
                 entry.Value.DataTransferOrign = value;
             }
+        }
+
+
+#nullable enable
+        internal bool IsEmptyOrLinkToValidElement(string? idContent)
+        {
+            if (string.IsNullOrEmpty(idContent))
+            {
+                return true;
+            }
+            if (FindById(idContent) != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 

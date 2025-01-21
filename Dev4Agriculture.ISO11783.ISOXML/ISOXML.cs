@@ -274,6 +274,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             isoxml.ReadIDTable();
 
+            isoxml.CheckObjectReferences();
+
             if (loadBinData)
             {
                 isoxml.LoadBinaryData();
@@ -281,6 +283,172 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             isoxml.InitExtensionData();
 
             return isoxml;
+        }
+
+        private void CheckIdAndAddErrorIfWrong(string idRef)
+        {
+            if (!IdTable.IsEmptyOrLinkToValidElement(idRef))
+            {
+                Messages.AddError(ResultMessageCode.WrongId, new[]{ new ResultDetail()
+                    {
+                        MessageDetailType = ResultDetailType.MDTId,
+                        Value = idRef
+                    }});
+            }
+        }
+
+        /// <summary>
+        /// In this function we check, if each ObjectID-Reference is pointing to an actual Element. Otherwise we add an error to the ResultsList
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void CheckObjectReferences()
+        {
+            foreach (var codedComment in Data.CodedComment)
+            {
+                CheckIdAndAddErrorIfWrong(codedComment.CodedCommentGroupIdRef);
+            }
+
+            foreach (var cropType in Data.CropType)
+            {
+                CheckIdAndAddErrorIfWrong(cropType.ProductGroupIdRef);
+                foreach (var cropVariety in cropType.CropVariety)
+                {
+                    CheckIdAndAddErrorIfWrong(cropVariety.ProductIdRef);
+                }
+            }
+
+            foreach (var culturalPractice in Data.CulturalPractice)
+            {
+                foreach (var otr in culturalPractice.OperationTechniqueReference)
+                {
+                    CheckIdAndAddErrorIfWrong(otr.OperationTechniqueIdRef);
+                }
+            }
+
+            foreach (var farm in Data.Farm)
+            {
+                CheckIdAndAddErrorIfWrong(farm.CustomerIdRef);
+            }
+
+            foreach (var partfield in Data.Partfield)
+            {
+                foreach (var guidanceGroup in partfield.GuidanceGroup)
+                {
+                    foreach (var guidancePattern in guidanceGroup.GuidancePattern)
+                    {
+                        CheckIdAndAddErrorIfWrong(guidancePattern.BaseStationIdRef);
+                    }
+                }
+
+
+                CheckIdAndAddErrorIfWrong(partfield.CustomerIdRef);
+                CheckIdAndAddErrorIfWrong(partfield.CropTypeIdRef);
+                CheckIdAndAddErrorIfWrong(partfield.CropVarietyIdRef);
+                CheckIdAndAddErrorIfWrong(partfield.FarmIdRef);
+                CheckIdAndAddErrorIfWrong(partfield.FieldIdRef);
+            }
+
+
+            foreach (var product in Data.Product)
+            {
+                CheckIdAndAddErrorIfWrong(product.ProductGroupIdRef);
+                CheckIdAndAddErrorIfWrong(product.ValuePresentationIdRef);
+
+                foreach (var prn in product.ProductRelation)
+                {
+                    CheckIdAndAddErrorIfWrong(prn.ProductIdRef);
+                }
+            }
+
+            foreach (var task in Data.Task)
+            {
+                CheckIdAndAddErrorIfWrong(task.CustomerIdRef);
+                CheckIdAndAddErrorIfWrong(task.FarmIdRef);
+                CheckIdAndAddErrorIfWrong(task.PartfieldIdRef);
+                CheckIdAndAddErrorIfWrong(task.ResponsibleWorkerIdRef);
+
+
+                foreach (var can in task.CommentAllocation)
+                {
+                    CheckIdAndAddErrorIfWrong(can.CodedCommentListValueIdRef);
+                    CheckIdAndAddErrorIfWrong(can.CodedCommentIdRef);
+                }
+
+                foreach (var cnn in task.Connection)
+                {
+                    CheckIdAndAddErrorIfWrong(cnn.DeviceIdRef_0);
+                    CheckIdAndAddErrorIfWrong(cnn.DeviceElementIdRef_0);
+                    CheckIdAndAddErrorIfWrong(cnn.DeviceIdRef_1);
+                    CheckIdAndAddErrorIfWrong(cnn.DeviceElementIdRef_1);
+                }
+
+                foreach (var dan in task.DeviceAllocation)
+                {
+                    CheckIdAndAddErrorIfWrong(dan.DeviceIdRef);
+                }
+
+                foreach (var dlt in task.DataLogTrigger)
+                {
+                    CheckIdAndAddErrorIfWrong(dlt.DeviceElementIdRef);
+                    CheckIdAndAddErrorIfWrong(dlt.ValuePresentationIdRef);
+                }
+
+                foreach (var gan in task.GuidanceAllocation)
+                {
+                    CheckIdAndAddErrorIfWrong(gan.GuidanceGroupIdRef);
+                    foreach( var guidanceShift in gan.GuidanceShift)
+                    {
+                        CheckIdAndAddErrorIfWrong(guidanceShift.GuidanceGroupIdRef);
+                        CheckIdAndAddErrorIfWrong(guidanceShift.GuidancePatternIdRef);
+                    }
+                }
+
+                foreach (var opertechPractice in task.OperTechPractice)
+                {
+                    CheckIdAndAddErrorIfWrong(opertechPractice.CulturalPracticeIdRef);
+                    CheckIdAndAddErrorIfWrong(opertechPractice.OperationTechniqueIdRef);
+                }
+
+                foreach (var pan in task.ProductAllocation)
+                {
+                    CheckIdAndAddErrorIfWrong(pan.DeviceElementIdRef);
+                    CheckIdAndAddErrorIfWrong(pan.ProductIdRef);
+                    CheckIdAndAddErrorIfWrong(pan.ValuePresentationIdRef);
+                    CheckIdAndAddErrorIfWrong(pan.ProductSubTypeIdRef);
+                }
+
+
+                foreach (var tim in task.Time)
+                {
+                    foreach (var dlv in tim.DataLogValue)
+                    {
+                        CheckIdAndAddErrorIfWrong(dlv.DeviceElementIdRef);
+                    }
+                }
+
+                foreach (var treatmentZone in task.TreatmentZone)
+                {
+                    foreach (var pdv in treatmentZone.ProcessDataVariable)
+                    {
+                        CheckIdAndAddErrorIfWrong(pdv.DeviceElementIdRef);
+                        CheckIdAndAddErrorIfWrong(pdv.ProductIdRef);
+                        CheckIdAndAddErrorIfWrong(pdv.ValuePresentationIdRef);
+                    }
+                }
+
+
+                foreach (var workerAllocation in task.WorkerAllocation)
+                {
+                    CheckIdAndAddErrorIfWrong(workerAllocation.WorkerIdRef);
+                }
+            }
+
+
+            foreach (var valuePresentation in Data.ValuePresentation)
+            {
+                CheckIdAndAddErrorIfWrong(valuePresentation.ColourLegendIdRef);
+            }
+
         }
 
         /// <summary>

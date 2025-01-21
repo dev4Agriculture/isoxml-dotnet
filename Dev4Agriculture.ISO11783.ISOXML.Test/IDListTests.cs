@@ -124,6 +124,15 @@ public class IDListTests
         Assert.IsNull(isoxml.IdTable.FindById("DET10"));
         Assert.IsNull(isoxml.IdTable.FindById("DET-1"));
     }
+
+
+    [TestMethod]
+    public void CanFindWrongIdsInTaskData()
+    {
+        var firstPath = "./testdata/IDList/WrongIds";
+        var isoxml = ISOXML.Load(firstPath);
+        Assert.AreEqual(5,isoxml.Messages.Count);
+    }
 }
 
 
