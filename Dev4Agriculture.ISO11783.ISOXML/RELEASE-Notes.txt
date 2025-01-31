@@ -1,4 +1,9 @@
-v0.21.3.1:
+v0.22:
+  + UPD: Updated all Dependencies
+  + UPD: Update the List of DDIs
+  WARNING: Due to changes in the DDIList, some Elements are renamed to DDIName+"Deprecated". This makes the the Library Future safe, BUT it might result in the same DDIEnum Entry to have a different number now!
+
+v0.21.3.1/2:
   + ADD / -FIX: The CropVarieties and the Partfields within the GuidancePatterns were not initialized/added to the ID-List. This lead to errors in checking for NonExisting Links
 
 v0.21.3.0:
