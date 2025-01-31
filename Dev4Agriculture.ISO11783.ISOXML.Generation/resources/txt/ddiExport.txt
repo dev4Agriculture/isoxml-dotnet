@@ -1,5 +1,5 @@
 Snap-shot of the ISO 11783-11 online data base
-Version: 2022011001
+Version: 2025012101
 @ Copyright International Organization for Standardization, see: www.iso.org/iso/copyright.htm. No reproduction on networking 
 permitted without license from ISO. The export file from the online data base is supplied without liability. Hard and Saved 
 copies of this document are considered uncontrolled and represents a snap-shot of the ISO11783-11 online data base.
@@ -2082,7 +2082,7 @@ none
 
 DD Entity: 82 Application Total Count
 Definition: Accumulated Application specified as count
-Comment: is a counter of a device element
+Comment: Task total of a device element for the application of a countable product. Often used as total for the group Setpoint, Actual, Default, Minimum & Maximum Count Per Area Application Rate (DDI 11 through 15). This DDI is meant for countable products.
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -2096,9 +2096,9 @@ Submit by: Part 10 Task Force
 Submit Date: 2003-08-01
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-02-02
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2022-08-09
+Status Comments: Comment update only!
 Attachments: 
 none
 
@@ -2675,7 +2675,7 @@ none
 
 
 
-DD Entity: 107 ActualBaleHeight
+DD Entity: 107 Actual Bale Height
 Definition: Actual Bale Height is only applicable to square baler
 Comment: 
 Typically used by Device Classes: 
@@ -2688,10 +2688,10 @@ Display Range: 0 - 2147483647
 Submit by: Part 10 Task Force
 Submit Date: 2003-08-01
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-02-02
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Revision Number: 2
+Current Status: Published
+Status Date: 2024-04-15
+Status Comments: Typo fix only
 Attachments: 
 none
 
@@ -3445,9 +3445,9 @@ none
 
 
 
-DD Entity: 137 Device Volume Capacity
+DD Entity: 137 Device Volume Capacity (Deprecated)
 Definition: DeviceElement Volume Capacity, dimension of a DeviceElement
-Comment: This DDE was a result of Jan 2005 Task Controller meeting.
+Comment: This DDE can be used to define the physical volume capacity that can be filled into this element, like the number of liters that can be filled into a bin. Note, there are a preferred duplicate DDIs 71, 72 and 73!
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -3466,17 +3466,17 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-01-20
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-02-02
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Update comment to use lower DDIs
 Attachments: 
 none
 
 
 
-DD Entity: 138 Device Mass Capacity
+DD Entity: 138 Device Mass Capacity (Deprecated)
 Definition: DeviceElement Mass Capacity, dimension of a DeviceElement
-Comment: This DDE was a result of Jan 2005 Task Controller meeting.
+Comment: This DDE can be used to define the weight that can be loaded into the element. Note, there are a preferred duplicate DDIs 74, 75 and 76!
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -3495,17 +3495,17 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-01-20
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-02-02
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Update comment to use lower DDIs
 Attachments: 
 none
 
 
 
-DD Entity: 139 Device Count Capacity
+DD Entity: 139 Device Count Capacity (Deprecated)
 Definition: DeviceElement Count Capacity, dimension of a DeviceElement
-Comment: This DDE was a result of Jan 2005 Task Controller meeting.
+Comment: This DDE can be used to define the count capacity that can be loaded into the element, like the number of seeds that a grain bin can carry. Note, there are a preferred duplicate DDIs 77, 78 and 79!
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -3524,9 +3524,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-01-20
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-02-02
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Update comment to use lower DDIs
 Attachments: 
 none
 
@@ -3534,7 +3534,7 @@ none
 
 DD Entity: 140 Setpoint Percentage Application Rate
 Definition: Application Rate expressed as percentage
-Comment: This DDE was a result of Jan 2005 Task Controller meeting.
+Comment: This DDE defines the setpoint application rate expressed in percentage. Usually this DDI is used within FMIS systems in combination with other information like a base-rate or a default-rate.
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -3549,9 +3549,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-01-20
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2015-01-26
-Status Comments: 
+Current Status: Published
+Status Date: 2023-07-10
+Status Comments: Comment update
 Attachments: 
 none
 
@@ -3617,15 +3617,15 @@ Typically used by Device Classes:
 Unit: ms - Time
 Resolution: 1
 SAE SPN: not specified
-CANBus Range: -2147483648 - 2147483647
-Display Range: -2147483648 - 2147483647
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
 Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-03-01
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 2
-Current Status: ISO-Approved
-Status Date: 2011-04-04
-Status Comments: 
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-12-10
+Status Comments: As only positive values are allowed, the ranges have been adapted.
 Attachments: 
 none
 
@@ -3678,9 +3678,18 @@ none
 
 DD Entity: 144 Yaw Angle
 Definition: Pivot / Yaw Angle of a DeviceElement
-Comment: This DDE was a result of March 2005 TF10 meeting
+Comment: 
 Typically used by Device Classes: 
-
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+11 - Transport / Trailers
 Unit: ° - Angle
 Resolution: 0,001
 SAE SPN: not specified
@@ -3690,9 +3699,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-03-01
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-05-09
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2023-07-10
+Status Comments: Comment "This DDE was a result of March 2005 TF10 meeting." removed
 Attachments: 
 none
 
@@ -3700,9 +3709,18 @@ none
 
 DD Entity: 145 Roll Angle
 Definition: Roll Angle of a DeviceElement
-Comment: This DDE was a result of March 2005 TF10 meeting
+Comment: 
 Typically used by Device Classes: 
-
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+11 - Transport / Trailers
 Unit: ° - Angle
 Resolution: 0,001
 SAE SPN: not specified
@@ -3712,9 +3730,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-03-01
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-05-09
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: New Request Submitted
+Status Date: 2023-07-10
+Status Comments: Comment "This DDE was a result of March 2005 TF10 meeting." removed
 Attachments: 
 none
 
@@ -3722,9 +3740,18 @@ none
 
 DD Entity: 146 Pitch Angle
 Definition: Pitch Angle of a DeviceElement
-Comment: This DDE was a result of March 2005 TF10 meeting
+Comment: 
 Typically used by Device Classes: 
-
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+11 - Transport / Trailers
 Unit: ° - Angle
 Resolution: 0,001
 SAE SPN: not specified
@@ -3734,9 +3761,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-03-01
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-05-09
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2023-07-10
+Status Comments: Comment "This DDE was a result of March 2005 TF10 meeting." removed
 Attachments: 
 none
 
@@ -3744,7 +3771,7 @@ none
 
 DD Entity: 147 Log Count
 Definition: Log Counter, may be used to control data log record generation on a Task Controller
-Comment: This DDE was a result of March 2005 TF10 meeting
+Comment: 
 Typically used by Device Classes: 
 1 - Tractor
 2 - Primary Soil Tillage
@@ -3764,9 +3791,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-03-01
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2005-05-09
-Status Comments: DDEs have been moved to published for creating the new Annex A version.
+Current Status: Published
+Status Date: 2023-07-10
+Status Comments: Comment "This DDE was a result of March 2005 TF10 meeting." removed
 Attachments: 
 none
 
@@ -4153,8 +4180,13 @@ https://www.isobus.net/isobus/attachments/203/ISO11783-11-DDI-158-Prescription C
 
 
 DD Entity: 159 Number of Sub-Units per Section
-Definition: Specifies the number of sub-units for a section (e.g. number of nozzles per sprayer section or number of planter row units per metering device).
-Comment: This DDE is used for objects which have further sub-units per section, which are of interest to the operator but not needed for the Task Controller operation itself. With this information and the overall width of the section the system can calculate for instance the row spacing without having individual objects for each row in the DCD.
+Definition: Specifies the number of Units for a section (e.g. number of nozzles per sprayer section or number of planter seeding rows common to a controlled 
+section).
+Comment: This DDE is used in a Section Device Element to indicate the number of physical Units under that section.   The Units are of interest to the operator 
+but not needed for the Task Controller operation itself.  With this information and the overall width of the section, a Task Controller with a user 
+interface may calculate and depict for instance the row spacing without having individual objects for each row in the DDOP.  An implement should 
+not include Unit Device Elements under any Section where this DDI exists.  If Unit device elements are defined under a Section element in the 
+DDOP and this DDI value is also included in the Section element, this DDI value shall be ignored.
 Typically used by Device Classes: 
 0 - Non-specific system
 1 - Tractor
@@ -4181,9 +4213,9 @@ Submit by: Jason Walter
 Submit Date: 2008-12-03
 Submit Company: 33 - John Deere
 Revision Number: 1
-Current Status: ISO-Approved
-Status Date: 2009-02-05
-Status Comments: 
+Current Status: Published
+Status Date: 2024-02-14
+Status Comments: Textual update on the Definition and Comments field only.
 Attachments: 
 none
 
@@ -4242,7 +4274,7 @@ Current Status: ISO-Approved
 Status Date: 2009-02-05
 Status Comments: 
 Attachments: 
-https://www.isobus.net/isobus/attachments/181/ISO11783-11-DDI-160-Section Control State-v1.pdf
+https://www.isobus.net/isobus/attachments/181/ISO11783-11-DDI-160-Section Control State-v2.pdf
 
 
 
@@ -4898,7 +4930,7 @@ none
 
 DD Entity: 178 Element Type Instance
 Definition: This DDI is used to enumerate and identify multiple device elements (DET) of the same type within one Device Description object pool. The value of this DDI is independent of the DET number. The combination of device element type and value of Element Type Instance ETI represents a unique object inside the device description object pool and therefore shall exist only once per object pool. Recommendation: The definition of the device elements should be made from left to right direction or from front to back direction.  When in a matrix, count left-to-right first, then front-to-back and at last top-to-bottom. See attachment for more information.
-Comment: This DDE allows the system to communicate with a device element object independent of the device element number. The same tank of a seeder for instance could have various device element numbers based upon the DDD. The DDD structure may change during setup the implement. In this case a unique implement tank might has a different element number as before. Particular if the Task Controller (TC) use a user interface to display and change data by the operator. Therefore the TC needs clear or rather unique device element information. Assign this DDE for instance to a DET of type bin. This number can be displayed to the operator while it may be printed physically at the bin. The ETI number range from 0 to 65533 inside the object pool corresponds to a displayed value from 1 to 65534 on a user interface or physical device.
+Comment: This DDE allows the system to communicate with a device element object independent of the device element number. The same tank of a seeder for instance could have various device element numbers based upon the DDD. The DDD structure may change during setup the implement. In this case a unique implement tank might has a different element number as before. Particular if the Task Controller (TC) use a user interface to display and change data by the operator. Therefore the TC needs clear or rather unique device element information. Assign this DDE for instance to a DET of type bin. This number can be displayed to the operator while it may be printed physically at the bin. The ETI number range from 0 to 65533 inside the object pool corresponds to a displayed value from 1 to 65534 on a user interface or physical device. Note: for a more detailed description please look at the attachment of DDI 179 - "Actual Cultural Practice"
 Typically used by Device Classes: 
 Not Assigned
 Unit: n.a. - 
@@ -4914,7 +4946,7 @@ Current Status: Published
 Status Date: 2021-08-11
 Status Comments: Added latest version of attachment
 Attachments: 
-https://www.isobus.net/isobus/attachments/204/Multiple and Single Product Implement Description_20101222-v1.pdf
+none
 
 
 
@@ -5998,11 +6030,11 @@ Submit by: Jaap van Bergeijk
 Submit Date: 2011-04-30
 Submit Company: AGCO
 Revision Number: 1
-Current Status: ISO-Approved
-Status Date: 2011-04-30
-Status Comments: 
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Add attachment
 Attachments: 
-none
+https://www.isobus.net/isobus/attachments/245/ISO11783-11-DD-214-Bale Documentation-v1.pdf
 
 
 
@@ -6194,7 +6226,7 @@ none
 
 
 DD Entity: 222 Last Bale Tag Number
-Definition: The Last Bale Tag Number as a decimal number in the range of 0 to 4294967295. Note that the value of this DDI has the limitation of being an unsigned 32 bit number.
+Definition: The Last Bale Tag Number as a decimal number in the range of 0 to 2147483647. Note that the value of this DDI has the limitation of being an signed 32 bit number.
 Comment: For balers: the recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
 Typically used by Device Classes: 
 7 - Harvesters
@@ -6202,15 +6234,15 @@ Typically used by Device Classes:
 Unit: n.a. - 
 Resolution: 1
 SAE SPN: 
-CANBus Range: 0 - 4294967295
-Display Range: 0 - 4294967295
+CANBus Range: -2147483648 - 2147483647
+Display Range: -2147483648 - 2147483647
 Submit by: Jaap van Bergeijk
 Submit Date: 2011-04-30
 Submit Company: AGCO
 Revision Number: 1
-Current Status: ISO-Approved
-Status Date: 2011-04-30
-Status Comments: 
+Current Status: Published
+Status Date: 2024-03-05
+Status Comments: Change of value range to signed integer format
 Attachments: 
 none
 
@@ -6433,7 +6465,7 @@ Current Status: ISO-Published
 Status Date: 2011-09-28
 Status Comments: 
 Attachments: 
-https://www.isobus.net/isobus/attachments/279/ISO11783-11-DDI-229-Weighing System Implementation.pdf
+https://www.isobus.net/isobus/attachments/279/ISO11783-11-DDI-229-Weighing System Implementation-v2.pdf
 
 
 
@@ -8094,9 +8126,9 @@ Submit by: Joe Tevis
 Submit Date: 2013-09-23
 Submit Company: Topcon 
 Revision Number: 2
-Current Status: ISO-Submitted (Pending)
-Status Date: 2015-07-30
-Status Comments: 
+Current Status: Published
+Status Date: 2022-10-28
+Status Comments: Change status to published
 Attachments: 
 https://www.isobus.net/isobus/attachments/401/Prescription Mode Supporting Doc-v1.ppt
 
@@ -8125,9 +8157,9 @@ Submit by: Joe Tevis
 Submit Date: 2013-09-23
 Submit Company: Topcon
 Revision Number: 2
-Current Status: ISO-Submitted (Pending)
-Status Date: 2015-07-30
-Status Comments: 
+Current Status: Published
+Status Date: 2022-10-28
+Status Comments: Change status to published
 Attachments: 
 none
 
@@ -9200,7 +9232,7 @@ none
 
 
 DD Entity: 322 Load Identification Number
-Definition: The Load Identification Number as a decimal number in the range of 0 to 4294967295. Note that the value of this DDI has the limitation of being an unsigned 32 bit number.
+Definition: The Load Identification Number as a decimal number in the range of 0 to 2147483647. Note that the value of this DDI has the limitation of being an signed 32 bit number.
 Comment: The DDI Load Identification Number can be used together with the DDI “320 - Last loaded Weight” to document the loading of material on a weighing system. See also the attached document for more details. 
 Typically used by Device Classes: 
 4 - Planters /Seeders
@@ -9221,18 +9253,18 @@ Display Range: 0 - 2147483647
 Submit by: Franz Hoepfinger
 Submit Date: 2013-05-21
 Submit Company: 367 - Fliegl Agrartechnik GmbH
-Revision Number: 1
+Revision Number: 2
 Current Status: ISO-Published
-Status Date: 2013-07-15
-Status Comments: 
+Status Date: 2024-05-21
+Status Comments: Status was published
 Attachments: 
-https://www.isobus.net/isobus/attachments/393/ISO11783-11-DDI-322-Load_Identification_Number_v1-v2.pdf
+https://www.isobus.net/isobus/attachments/1005/ISO11783-11-DDI-322-Load_Identification_Number_v1-v2.pdf
 
 
 
 DD Entity: 323 Unload Identification Number
 Definition: The Unload Identification Number as a decimal number in the range of 0 to 2147483647. Note that the value of this DDI has the limitation of being an unsigned 32 bit number.
-Comment: The DDI Unload Identification Number can be used together with the DDI “321 - Last Unloaded Weight” to document the unloading of material on a weighing system. See also the attached document for more details.
+Comment: The DDI Unload Identification Number can be used together with the DDI “321 - Last Unloaded Weight” to document the unloading of material on a weighing system. See also the attached document for more details. Note: for more detailed information see also the attachment on DDI 322!
 Typically used by Device Classes: 
 4 - Planters /Seeders
 5 - Fertilizer
@@ -9253,11 +9285,11 @@ Submit by: Franz Hoepfinger
 Submit Date: 2013-07-15
 Submit Company: 367 - Fliegl Agratechnik GmbH
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2013-07-15
-Status Comments: 
+Current Status: Published
+Status Date: 2024-05-03
+Status Comments: Attachment deleted and added a note to look at DDI 322
 Attachments: 
-https://www.isobus.net/isobus/attachments/399/ISO11783-11-DDI-323-Unload_Identification_Number_v1-v1.pdf
+none
 
 
 
@@ -9702,7 +9734,7 @@ none
 
 
 
-DD Entity: 339 Effective Total Loading Time
+DD Entity: 339 Total Loading Time
 Definition: The total time needed in the current task to load a product such as crop.
 Comment: 
 Typically used by Device Classes: 
@@ -9718,16 +9750,16 @@ Display Range: 0 - 2147483647
 Submit by: Frank Wiebeler
 Submit Date: 2013-12-04
 Submit Company: Maschinenfabrik Bernard Krone GmbH
-Revision Number: 1
+Revision Number: 2
 Current Status: ISO-Published
-Status Date: 2014-01-17
-Status Comments: 
+Status Date: 2025-01-21
+Status Comments: Status was published
 Attachments: 
 none
 
 
 
-DD Entity: 340 Effective Total Unloading Time
+DD Entity: 340 Total Unloading Time
 Definition: The total time needed in the current task to unload a product crop.
 Comment: 
 Typically used by Device Classes: 
@@ -9744,10 +9776,10 @@ Display Range: 0 - 2147483647
 Submit by: Frank Wiebeler
 Submit Date: 2013-12-04
 Submit Company: Maschinenfabrik Bernard Krone GmbH
-Revision Number: 1
+Revision Number: 2
 Current Status: ISO-Published
-Status Date: 2014-01-17
-Status Comments: 
+Status Date: 2025-01-21
+Status Comments: Status was published
 Attachments: 
 none
 
@@ -10067,7 +10099,7 @@ none
 
 
 
-DD Entity: 353 Total Application of Nitrogen
+DD Entity: 353 Total Application of Nitrogen [N2]
 Definition: Accumulated application of nitrogen [N2] specified as gram [g]
 Comment: This total is a counter of a device element
 Typically used by Device Classes: 
@@ -11598,7 +11630,7 @@ none
 
 
 
-DD Entity: 401 Actual Application of Nitrogen as [mg/l]
+DD Entity: 401 Actual Application of Nitrogen [N2] as [mg/l]
 Definition: Actual application of Nitrogen [N2] specified as milligram per liter [mg/l]
 Comment: Is the actual amount of Nitrogen [N2] in liquid manure ( see also DD Entity 353 )
 Typically used by Device Classes: 
@@ -12443,7 +12475,7 @@ none
 
 
 
-DD Entity: 432 Setpoint Application Rate of Nitrogen
+DD Entity: 432 Setpoint Application Rate of Nitrogen [N2]
 Definition: Setpoint application rate of nitrogen specified as a mass per area
 Comment: As a reference the toal amount of nitrogen will be documented with DDE353
 Typically used by Device Classes: 
@@ -12469,7 +12501,7 @@ none
 
 
 
-DD Entity: 433 Actual  Application Rate of Nitrogen
+DD Entity: 433 Actual  Application Rate of Nitrogen [N2]
 Definition: Actual application rate of nitrogen specified as a mass per area
 Comment: As a reference the toal amount of nitrogen will be documented with DDE353
 Typically used by Device Classes: 
@@ -12495,7 +12527,7 @@ none
 
 
 
-DD Entity: 434 Minimum Application Rate of Nitrogen
+DD Entity: 434 Minimum Application Rate of Nitrogen [N2]
 Definition: Minimum application rate of nitrogen specified as a mass per area
 Comment: As a reference the toal amount of nitrogen will be documented with DDE353
 Typically used by Device Classes: 
@@ -12521,7 +12553,7 @@ none
 
 
 
-DD Entity: 435 Maximum  Application Rate of Nitrogen
+DD Entity: 435 Maximum  Application Rate of Nitrogen [N2]
 Definition: Maximum application rate of nitrogen specified as a mass per area
 Comment: As a reference the toal amount of nitrogen will be documented with DDE353
 Typically used by Device Classes: 
@@ -13190,7 +13222,7 @@ none
 
 DD Entity: 459 Unloaded Total Count
 Definition: Accumulated Unloaded specified as count
-Comment: Is a counter of a device element
+Comment: Task total of a device element. It shall represent the number of products being unloaded in one or more unload operations. The product itself shall be countable. See Unloaded Total Mass (429) or Unloaded Total Volume (453) if the product isn't countable.
 Typically used by Device Classes: 
 4 - Planters /Seeders
 7 - Harvesters
@@ -13208,9 +13240,9 @@ Submit by: Franz Hoepfinger
 Submit Date: 2015-07-24
 Submit Company: 367 - Fliegl Agrartechnik GmbH
 Revision Number: 2
-Current Status: ISO-Published
-Status Date: 2015-11-03
-Status Comments: 
+Current Status: Published
+Status Date: 2022-08-09
+Status Comments: Comment update only!
 Attachments: 
 none
 
@@ -13345,7 +13377,7 @@ none
 
 DD Entity: 464 Haul Counter
 Definition: Each Time a Device Element is filled and emptied this is called a haul cycle. This counter counts the cycles
-Comment: Is a counter of a device element. Can be used to count loads, fillings, tippings and such. 
+Comment: Is a counter of a device element. Can be used to count filling and emptying cycles. To more precisely document what your device element is doing, consider to implement DDI 179 Actual Cultural Practice as well - even if the device has only one operation.
 
 Typically used by Device Classes: 
 4 - Planters /Seeders
@@ -13365,9 +13397,9 @@ Submit by: Franz Hoepfinger
 Submit Date: 2015-07-24
 Submit Company: 367 - Fliegl Agrartechnik GmbH
 Revision Number: 2
-Current Status: ISO-Published
-Status Date: 2015-12-14
-Status Comments: 
+Current Status: Published
+Status Date: 2022-08-09
+Status Comments: Comment update only!
 Attachments: 
 none
 
@@ -14804,11 +14836,11 @@ Submit by: Karsten Helweg
 Submit Date: 2015-12-10
 Submit Company: Competence Center ISOBUS e.V.
 Revision Number: 3
-Current Status: ISO-Published
-Status Date: 2016-08-24
-Status Comments: 
+Current Status: Published
+Status Date: 2023-05-17
+Status Comments: added new attachment version 1.14
 Attachments: 
-https://www.isobus.net/isobus/attachments/623/TramlineControl_BasicRequirementsV1_12-v1.pdf
+https://www.isobus.net/isobus/attachments/623/TramlineControl_BasicRequirements_v1.14-v1.pdf
 
 
 
@@ -15293,10 +15325,11 @@ none
 
 
 
-DD Entity: 522 Twine Bale Total Count
+DD Entity: 522 Twine Bale Total Count (Deprecated)
 Definition: The total number of  twine bound product units for which Twine binding method was used during operation.
 Comment: Twine Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. 
-The total trigger method and the setable property are required for this DDE. 
+The total trigger method and the setable property are required for this DDE.
+Note, there is a preferred duplicate DDI 683!
 Typically used by Device Classes: 
 9 - Forage harvester
 Unit: # - Quantity/Count
@@ -15307,19 +15340,19 @@ Display Range: 0 - 2147483647
 Submit by: Frank Elshout
 Submit Date: 2017-01-26
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2017-02-04
-Status Comments: 
+Revision Number: 2
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Added hint into comment to other DDI 683
 Attachments: 
 none
 
 
 
-DD Entity: 523 Mesh Bale Total Count
-Definition: The total number of mesh product units for which Net binding method was used during operation.
-Comment: Twine Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. 
-The total trigger method and the setable property are required for this DDE. 
+DD Entity: 523 Mesh Bale Total Count (Deprecated)
+Definition: The total number of mesh bound product units for which mesh binding method was used during operation.
+Comment: Mesh Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. 
+The total trigger method and the setable property are required for this DDE.  Note, there is a preferred duplicate DDI 682!
 
 Typically used by Device Classes: 
 9 - Forage harvester
@@ -15331,18 +15364,19 @@ Display Range: 0 - 2147483647
 Submit by: Frank Elshout
 Submit Date: 2017-01-26
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2017-02-04
-Status Comments: 
+Revision Number: 2
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Added hint into comment to other DDI 682
 Attachments: 
 none
 
 
 
-DD Entity: 524 Lifetime Twine Bale Total Count
+DD Entity: 524 Lifetime Twine Bale Total Count (Deprecated)
 Definition: Entire total number of  twine bound product units for which Twine binding method was used during operation, of a device lifetime
 Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore this DDE shall not be setable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE but shall not support the setable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+Note, there is a preferred duplicate DDI 687!
 Typically used by Device Classes: 
 9 - Forage harvester
 Unit: # - Quantity/Count
@@ -15353,18 +15387,18 @@ Display Range: 0 - 2147483647
 Submit by: Frank Elshout
 Submit Date: 2017-01-26
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2017-02-04
-Status Comments: 
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Added hint into comment to other DDI 687
 Attachments: 
 none
 
 
 
-DD Entity: 525 Lifetime Mesh Bale Total Count
-Definition: Entire total number of mesh product units for which Net binding method was used during operation, of a device lifetime
-Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore this DDE shall not be setable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE but shall not support the setable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+DD Entity: 525 Lifetime Mesh Bale Total Count (Deprecated)
+Definition: Total number of mesh bound product units for which mesh binding method was used during operation, of a device lifetime
+Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore this DDE shall not be setable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE but shall not support the setable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed. Note, there is a preferred duplicate DDI 686!
 Typically used by Device Classes: 
 9 - Forage harvester
 Unit: # - Quantity/Count
@@ -15375,10 +15409,10 @@ Display Range: 0 - 2147483647
 Submit by: Frank Elshout
 Submit Date: 2017-01-26
 Submit Company: 89 - Kverneland Group, Electronics Division
-Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2017-02-04
-Status Comments: 
+Revision Number: 2
+Current Status: Published
+Status Date: 2024-02-05
+Status Comments: Added hint into comment to other DDI 686
 Attachments: 
 none
 
@@ -15683,7 +15717,7 @@ none
 
 
 DD Entity: 536 Total Applied Preservative
-Definition: The total volume of applied preservative in this task.
+Definition: The total volume of applied preservative, respectively silage additive in this task.
 Comment: 
 Typically used by Device Classes: 
 7 - Harvesters
@@ -15709,9 +15743,9 @@ Submit by: Frank Wiebeler
 Submit Date: 2017-08-01
 Submit Company: Maschinenfabrik Bernard Krone GmbH&CO KG
 Revision Number: 1
-Current Status: ISO-Published
-Status Date: 2018-03-19
-Status Comments: Status was published
+Current Status: Published
+Status Date: 2023-04-27
+Status Comments: Added, respectively silage additive to the definition.
 Attachments: 
 none
 
@@ -16655,7 +16689,7 @@ DD Entity: 564 Actual Voltage
 Definition: Actual Voltage of a Device Element
 Comment: 
 Typically used by Device Classes: 
-Not Assigned
+27 - Weeders
 Unit: V - Electrical voltage
 Resolution: 0,001
 SAE SPN: 
@@ -16664,10 +16698,10 @@ Display Range: -2147483,648 - 2147483,647
 Submit by: Franz Hoepfinger
 Submit Date: 2019-02-15
 Submit Company: 973 - Zasso GmbH
-Revision Number: 1
+Revision Number: 2
 Current Status: Published
-Status Date: 2019-03-12
-Status Comments: 
+Status Date: 2023-03-28
+Status Comments: Added Weeders as device class
 Attachments: 
 none
 
@@ -16880,7 +16914,7 @@ Comment:
 Typically used by Device Classes: 
 Not Assigned
 Unit: kWh/m² - Electrical energy per area
-Resolution: 0,0000001
+Resolution: 1,0E-7
 SAE SPN: 
 CANBus Range: 0 - 2147483647
 Display Range: 0 - 214,7483647
@@ -16902,7 +16936,7 @@ Comment:
 Typically used by Device Classes: 
 Not Assigned
 Unit: kWh/m² - Electrical energy per area
-Resolution: 0,0000001
+Resolution: 1,0E-7
 SAE SPN: 
 CANBus Range: 0 - 2147483647
 Display Range: 0 - 214,7483647
@@ -16924,7 +16958,7 @@ Comment:
 Typically used by Device Classes: 
 Not Assigned
 Unit: kWh/m² - Electrical energy per area
-Resolution: 0,0000001
+Resolution: 1,0E-7
 SAE SPN: 
 CANBus Range: 0 - 2147483647
 Display Range: 0 - 214,7483647
@@ -16946,7 +16980,7 @@ Comment:
 Typically used by Device Classes: 
 Not Assigned
 Unit: kWh/m² - Electrical energy per area
-Resolution: 0,0000001
+Resolution: 1,0E-7
 SAE SPN: 
 CANBus Range: 0 - 2147483647
 Display Range: 0 - 214,7483647
@@ -18756,13 +18790,16 @@ none
 
 DD Entity: 644 Binding Method
 Definition: Specification of the method used to bind bales.
-The value definitions are:
+
+The value definitions represent a set of flags. 
+The flag values are:
 0 = unknown (default)
 1 = Mesh
 2 = Twine
 3 = Film
-
-All other values are reserved for future assignments.
+4 = Twine & Mesh
+5 = Twine & Film
+6 and higher are are reserved for future assignments
 Comment: This DDE allows a baler to specify what method is being used to bind the bales.
 Typically used by Device Classes: 
 7 - Harvesters
@@ -18770,15 +18807,15 @@ Typically used by Device Classes:
 Unit: n.a. - 
 Resolution: 1
 SAE SPN: 
-CANBus Range: 0 - 3
-Display Range: 0 - 3
+CANBus Range: 0 - 5
+Display Range: 0 - 5
 Submit by: Mike Schmidt on behalf of Steffen Hoffmann
 Submit Date: 2021-04-20
 Submit Company: AGCO
-Revision Number: 1
-Current Status: Published
-Status Date: 2021-09-13
-Status Comments: 
+Revision Number: 2
+Current Status: New Request Submitted
+Status Date: 2022-03-21
+Status Comments: added 4 and 5; 
 Attachments: 
 none
 
@@ -18807,7 +18844,7 @@ none
 
 
 
-DD Entity: 646 Last Bale Twine Consumption
+DD Entity: 646 Last Bale Binding Twine Consumption
 Definition: Binding twine consumption in the most recently produced bale
 Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
 Typically used by Device Classes: 
@@ -18821,16 +18858,16 @@ Display Range: 0 - 2147483647
 Submit by: Mike Schmidt on behalf of Steffen Hoffmann
 Submit Date: 2021-04-20
 Submit Company: AGCO
-Revision Number: 1
+Revision Number: 2
 Current Status: Published
-Status Date: 2021-09-13
-Status Comments: 
+Status Date: 2023-04-24
+Status Comments: Only wording changed from "Twine Binding" to "Binding Twine"
 Attachments: 
 none
 
 
 
-DD Entity: 647 Last Bale Mesh Consumption
+DD Entity: 647 Last Bale Binding Mesh Consumption
 Definition: Binding mesh consumption in the most recently produced bale
 Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
 Typically used by Device Classes: 
@@ -18846,14 +18883,14 @@ Submit Date: 2021-04-20
 Submit Company: AGCO
 Revision Number: 1
 Current Status: Published
-Status Date: 2021-09-13
-Status Comments: 
+Status Date: 2022-10-10
+Status Comments: Added "Binding" to name
 Attachments: 
 none
 
 
 
-DD Entity: 648 Last Bale Film Consumption
+DD Entity: 648 Last Bale Binding Film Consumption
 Definition: Binding film consumption in the most recently produced bale
 Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
 Typically used by Device Classes: 
@@ -18869,14 +18906,14 @@ Submit Date: 2021-04-20
 Submit Company: AGCO
 Revision Number: 1
 Current Status: Published
-Status Date: 2021-09-13
-Status Comments: 
+Status Date: 2022-10-10
+Status Comments: Added "Binding" to name
 Attachments: 
 none
 
 
 
-DD Entity: 649 Last Bale Film Stretching
+DD Entity: 649 Last Bale Binding Film Stretching
 Definition: Binding film stretching in the most recently produced bale
 Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
 Typically used by Device Classes: 
@@ -18892,8 +18929,8 @@ Submit Date: 2021-04-20
 Submit Company: AGCO
 Revision Number: 1
 Current Status: Published
-Status Date: 2021-09-13
-Status Comments: 
+Status Date: 2022-10-10
+Status Comments: Added "Binding" to name
 Attachments: 
 none
 
@@ -19106,6 +19143,962 @@ none
 
 
 
+DD Entity: 658 Actual CO2 equivalent specified as mass per area 
+Definition: Actual CO2 equivalent specified as mass per area
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+25 - Slurry Applicators
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 659 Actual CO2 equivalent specified as mass per time 
+Definition: Actual CO2 equivalent specified as mass per time
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+25 - Slurry Applicators
+26 - Feeder / Mixer
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co. KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 660 Actual CO2 equivalent specified as mass per mass 
+Definition: Actual CO2 equivalent specified as mass per mass (application rate)
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+10 - Irrigation
+25 - Slurry Applicators
+Unit: mg/kg - Mass per mass unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 661 Actual CO2 equivalent specified as mass per yield 
+Definition: Actual CO2 equivalent specified as mass per yield mass
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+19 - Timber Harvesters
+Unit: mg/kg - Mass per mass unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 662 Actual CO2 equivalent specified as mass per volume 
+Definition: Actual CO2 equivalent specified as mass per volume
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+10 - Irrigation
+25 - Slurry Applicators
+Unit: mg/l - Mass per capacity unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co. KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 663 Actual CO2 equivalent specified as mass per count 
+Definition: Actual CO2 equivalent specified as mass per count
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+5 - Fertilizer
+7 - Harvesters
+8 - Root Harvester
+19 - Timber Harvesters
+Unit: n.a. - 
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co. KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 664 Total CO2 equivalent
+Definition: Accumulated CO2 equivalent specified as mass in kilogram [kg]
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+19 - Timber Harvesters
+20 - Forwarders
+21 - Timber loaders
+22 - Timber Processing Machines
+25 - Slurry Applicators
+26 - Feeder / Mixer
+Unit: kg - Mass
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co. KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 665 Lifetime total CO2 equivalent
+Definition: Entire Lifetime CO2 equivalent specified as mass in kilogram [kg]
+
+Comment: For more details see also ISO-14040 and ISO-14044 documents.
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+19 - Timber Harvesters
+20 - Forwarders
+21 - Timber loaders
+22 - Timber Processing Machines
+25 - Slurry Applicators
+26 - Feeder / Mixer
+Unit: kg - Mass
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2022-10-20
+Submit Company: GRIMME Landmaschinenfabrik GmbH & Co. KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-11-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 666 Working Direction
+Definition: This DDI defines the intended Working Direction in the field and also defines the numbering of the Bouts.
+Comment: The Working Direction defines the intended Working Direction in the field and also defines the numbering of the Bouts. If the Working Direction is 1 (working from left to right, compared to AB-reference line) the numbering of the Bouts is also from left to right in ascending order. If the Working Direction is 2 (working from right to left, compared to AB-reference line) the numbering of the Bouts is from right to left in ascending order. 
+For more details see attachment DDI 505.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: not defined - not defined
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2
+Display Range: 0 - 2
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 667 Distance between Guidance Track Number 0R and 1
+Definition: This DDI defines the distance between tracks 0R and 1.
+Comment: If the user wants to start with a different Working Width than 100%, the Track Number 0 has to be divided in two separate Tracks 0R and 0L. Therefore, the Tracks 0R and 0L are deviated from the original Track 0. To calculate the correct positions of these Tracks, the distance d0R/1 between Track 0R and 1 and the distance d0R/0L between 0R and 0L have to be defined.
+For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 668 Distance between Guidance Track Number 0R and 0L
+Definition: This DDI defines the distance between tracks 0R and 0L.
+Comment: If the user wants to start with a different Working Width than 100%, the Track Number 0 has to be divided in two separate Tracks 0R and 0L. Therefore, the Tracks 0R and 0L are deviated from the original Track 0. To calculate the correct positions of these Tracks, the distance d0R/1 between Track 0R and 1 and the distance d0R/0L between 0R and 0L have to be defined.
+For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 669 Bout Track Number Shift
+Definition: This DDI defines the amount of tramlines the Tramline pattern is to be shifted.
+Comment: The implement may have the possibility to give a Bout Track Number Shift in its calculation to shift the Tramline pattern. In that case the Tramline calculation is based on the following formula:
+Bout Track Number = Guidance Track Number + 1 + Bout Track Number Shift.
+The Task Controller shall store Bout track number shift in conjunction with the Unique A-B Guidance Reference Line ID. The TC shall send this value on change of Unique A-B Guidance Reference Line ID to inform the implement that it needs to take this Bout Track Number Shift into account. Therefore, this DDI should be settable.
+The Guidance Track Numbers are not influenced by this DDI. A positive Bout Track Number Shift will shift the Tramline pattern in the direction of the lower Guidance Track Numbers. A negative Bout Track Number Shift will shift the Tramline pattern in the direction of the higher Guidance Track Numbers.
+For more details see attachment DDI 505.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: not defined - not defined
+Resolution: 1
+SAE SPN: 
+CANBus Range: -2147483648 - 2147483647
+Display Range: -2147483648 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 670 Tramline Crop protection/fertilization Working Width
+Definition: Working Width of the Crop protection/fertilization vehicle which will drive on the tramline tracks. 
+Comment: Working Width of the Crop protection/fertilization vehicle. This is also the distance between the single Tramline Tracks. This value is a manual user input and is provided by the Implement to the Task Controller.
+For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 671 Tramline Tire Width
+Definition: Width of the largest tire which should fit on the Tramline Track.
+Comment: This is the Width of the largest tire which should fit on the Tramline Track. The distance between the rows besides the Tramline Track shall be wider than the Tire Width to avoid crop damage.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 672 Tramline Wheel Distance
+Definition: Distance between the centres of the Wheels of the Crop protection/fertilization vehicle.
+Comment: For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 673 Tramline Irrigation Working Width
+Definition: The Working Width of the Irrigation system is the Distance between the single Tramline Tracks for the Irrigation system.
+Comment: Besides a Tramlining rhythm for a Sprayer, a second Tramlining rhythm with a different pattern for an irrigation system may exist.
+The Working Width of the Irrigation system is also the Distance between the single Tramline Tracks for the Irrigation system. This value is a manual user input and is provided by the Implement to the Tramline Controller.
+The following picture shows an example with a 6m Seed drill Width, 24m Sprayer Width and a 66m Irrigation Width.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 674 Tramline Irrigation Tire Width
+Definition: Width of the largest tire which should fit on the Tramline Track.
+Comment: This is the Width of the largest Tire which should fit on the Tramline Track. The distance between the rows besides the Tramline Track shall be wider than the Irrigation Tire Width to avoid crop damage.
+For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 675 Tramline Irrigation Wheel Distance
+Definition: Distance between the centre of the Wheels of the Irrigation system.
+Comment: For more details see attachment DDI 505.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+Unit: mm - Length
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Karsten Helweg
+Submit Date: 2015-12-10
+Submit Company: Competence Center ISOBUS e.V.
+Revision Number: 1
+Current Status: Published
+Status Date: 2022-12-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 676 Last Bale Binding Mesh Layers
+Definition: Binding mesh layers in the most recently produced bale
+Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
+Typically used by Device Classes: 
+7 - Harvesters
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Mike Schmidt on behalf of Steffen Hoffmann
+Submit Date: 2023-03-23
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-04-27
+Status Comments: New added
+Attachments: 
+none
+
+
+
+DD Entity: 677 Last Bale Binding Film Layers
+Definition: Binding film layers in the most recently produced bale
+Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
+Typically used by Device Classes: 
+7 - Harvesters
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Mike Schmidt on behalf of Steffen Hoffmann
+Submit Date: 2023-03-23
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-04-27
+Status Comments: New added
+Attachments: 
+none
+
+
+
+DD Entity: 678 Last Bale Binding Twine Layers
+Definition: Binding twine layers in the most recently produced bale
+Comment: The recommended use of this DDE is for a baler to report this once for every bale that is produced. A baler may add this to its default set of data, based on an internal on-change data trigger that causes the baler to report the value of this DDE after the bale is produced. The recommendation for data logging is that all "Last Bale" DDEs that are supported by a device are reported together at the moment that the bale is produced and leaves the machine.
+Typically used by Device Classes: 
+7 - Harvesters
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Mike Schmidt on behalf of Steffen Hoffmann
+Submit Date: 2023-04-28
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-02
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 679 Crop Contamination Total Mass
+Definition: Accumulated mass of contamination in yield by dirt or foreign material as a total counter
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: kg - Mass
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 680 Crop Contamination Lifetime Total Mass
+Definition: Accumulated mass of contamination in yield by dirt or foreign material as a lifetime counter
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: kg - Mass
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 681 Film bale Total Count
+Definition: The total number of foil or film bound product units for which foil or film binding method was used during operation. 
+Comment: Foil or Film Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. The total trigger method and the settable property are required for this DDE. 
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 682 Mesh bale Total Count
+Definition: The total number of mesh bound product units for which mesh binding method was used during operation. 
+Comment: Mesh Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. The total trigger method and the settable property are required for this DDE. 
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 683 Twine bale Total Count
+Definition: The total number of twine bound product units for which twine binding method was used during operation. 
+Comment: Twine Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. The total trigger method and the settable property are required for this DDE. 
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 684 Wrapping Film bale Total Count
+Definition: The total number of wrapping units for which wrapping film binding method was used during operation. 
+
+Comment: Wrapping Film Total Count can be used as total counter of a device element. It is intended to be used as task based and therefore it is recommended to support the on-time and on-change trigger methods. The total trigger method and the settable property are required for this DDE. 
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 685 Lifetime Film Bale Total Count
+Definition: Total number of film or foil bound product units for which film or foil binding method was used during operation, of a device lifetime.
+Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore, this DDE shall not be settable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE, but shall not support the settable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 686 Lifetime Mesh Bale Total Count
+Definition: Total number of mesh bound product units for which mesh binding method was used during operation, of a device lifetime
+Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore, this DDE shall not be settable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE, but shall not support the settable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 687 Lifetime Twine Bale Total Count
+Definition: Total number of twine bound product units for which Twine binding method was used during operation, of a device lifetime.
+Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore, this DDE shall not be settable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE, but shall not support the settable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 688 Lifetime Wrapping Film Bale Total Count
+Definition: Total number of wrapping units for which wrapping film binding method was used during operation, of a device lifetime.
+Comment: This is the overall total of the device. This total does not refer to an application controlled by a Task Controller. Therefore, this DDE shall not be settable within the device description and neither shall the device reset the value when the task status changed. It is up to the device control system when to reset this value. The Working Set Master shall support the total trigger method for this DDE, but shall not support the settable property. The Task Controller can request and store this DDE at the end of a task. But it shall not set this DDE when the task is resumed.
+Typically used by Device Classes: 
+9 - Forage harvester
+Unit: # - Quantity/Count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Indra Tjalma
+Submit Date: 2023-03-27
+Submit Company: 89 - Kverneland Group, Electronics Division
+Revision Number: 1
+Current Status: New Request Submitted
+Status Date: 2023-03-27
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 689 Effective Total Electrical Battery Energy Consumption
+Definition: Accumulated total electrical battery energy consumption in working position.
+Comment: 
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+11 - Transport / Trailers
+Unit: kWh - Electrical energy
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: -2147483648 - 2147483647
+Display Range: -2147483,648 - 2147483,647
+Submit by: Johannes Nägele
+Submit Date: 2023-12-04
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2024-02-19
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 690 Ineffective Total Electrical Battery Energy Consumption
+Definition: Accumulated total electrical battery energy consumption in non working position.
+Comment: Energy throughput of the battery including secondary consumers like DC/DC converter, AC compressor...
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+11 - Transport / Trailers
+Unit: kWh - Electrical energy
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: -2147483648 - 2147483647
+Display Range: -2147483,648 - 2147483,647
+Submit by: Johannes Nägele
+Submit Date: 2023-12-04
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2024-02-19
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 691 Instantaneous Electrical Battery Energy Consumption per Time
+Definition: Electrical battery energy consumption per time
+Comment: Energy throughput of the battery including secondary consumers like DC/DC converter, AC compressor...
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+11 - Transport / Trailers
+Unit: W - Electrical Power
+Resolution: 1
+SAE SPN: 
+CANBus Range: -2147483648 - 2147483647
+Display Range: -2147483648 - 2147483647
+Submit by: Johannes Nägele
+Submit Date: 2023-12-04
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2024-02-19
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 692 Instantaneous Electrical Battery Energy Consumption per Area
+Definition: Electrical battery energy consumption per area
+Comment: Energy throughput of the battery including secondary consumers like DC/DC converter, AC compressor...
+Typically used by Device Classes: 
+1 - Tractor
+2 - Primary Soil Tillage
+3 - Secondary Soil Tillage
+4 - Planters /Seeders
+5 - Fertilizer
+6 - Sprayers
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+10 - Irrigation
+11 - Transport / Trailers
+Unit: kWh/m² - Electrical energy per area
+Resolution: 1,0E-5
+SAE SPN: 
+CANBus Range: -2147483648 - 2147483647
+Display Range: -21474,83648 - 21474,836470000002
+Submit by: Johannes Nägele
+Submit Date: 2023-12-04
+Submit Company: AGCO
+Revision Number: 1
+Current Status: Published
+Status Date: 2024-02-19
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 693 Lifetime Total Loading Time
+Definition: Entire Total Loading Time of the device lifetime.
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+11 - Transport / Trailers
+12 - Farmyard Work
+Unit: s - Time count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Thomas Meyerdirks
+Submit Date: 2025-01-17
+Submit Company: Maschinenfabrik Bernard KRONE GmbH & Co. KG
+Revision Number: 1
+Current Status: ISO-Published
+Status Date: 2025-01-21
+Status Comments: Status was published
+Attachments: 
+none
+
+
+
+DD Entity: 694 Lifetime Total Unloading Time
+Definition: Entire Total Unloading Time of the device lifetime.
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+11 - Transport / Trailers
+12 - Farmyard Work
+Unit: s - Time count
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Thomas Meyerdirks
+Submit Date: 2025-01-17
+Submit Company: Maschinenfabrik Bernard KRONE GmbH & Co. KG
+Revision Number: 1
+Current Status: ISO-Published
+Status Date: 2025-01-21
+Status Comments: Status was published
+Attachments: 
+none
+
+
+
 DD Entity: 32768 Maximum Droplet Size
 Definition: Definition:
 The maximum droplet size the system can produce. Defined as:
@@ -19140,6 +20133,134 @@ Revision Number: 1
 Current Status: Published
 Status Date: 2021-05-12
 Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 32769 Maximum Crop Grade Diameter
+Definition: Maximum crop diameter in mm, measured with crop specific methods
+
+Comment: The diameter of the crop to indicate its grade. An example of the application of this DDI is grading root crops such as potatoes and onions.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 32770 Maximum Crop Grade Length
+Definition: Maximum crop length in mm, measured with crop specific methods
+
+Comment: The length of the crop to indicate its grade.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 32771 Maximum Crop Contamination Mass per Area
+Definition: Maximum absolut mass of contamination in yield by dirt or foreign material per area
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 32772 Maximum Crop Contamination Mass per Time
+Definition: Maximum mass of contamination in yield by dirt or foreign material per time
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 32773 Maximum Crop Conditioning Intensity
+Definition: The maximum level of crop conditioning intensity, expressed as a percentage of the maximum level offered by the implement.
+Comment: Conditioning means, changing the physical properties of the crop. For example, mowers can condition the mowed crop at a particular intensity level, to speed up the drying process. A percentage of the maximum level offered by the implement' is used, because there is currently no known sensor which can measure a conditioning level.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+14 - Special Crops
+15 - Municipal Work
+Unit: % - Percent
+Resolution: 0,01
+SAE SPN: 
+CANBus Range: 0 - 10000
+Display Range: 0 - 100,00
+Submit by: Mike Schmidt
+Submit Date: 2024-03-13
+Submit Company: AGCO Corporation
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-07-05
+Status Comments: Update Display range to 100,00
 Attachments: 
 none
 
@@ -19190,6 +20311,134 @@ none
 
 
 
+DD Entity: 36865 Minimum Crop Grade Diameter
+Definition: Minimum crop diameter in mm, measured with crop specific methods
+
+Comment: The diameter of the crop to indicate its grade. An example of the application of this DDI is grading root crops such as potatoes and onions.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 36866 Minimum Crop Grade Length
+Definition: Minimum crop length in mm, measured with crop specific methods
+
+Comment: The length of the crop to indicate its grade.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 36867 Minimum Crop Contamination Mass per Area
+Definition: Minimum absolut mass of contamination in yield by dirt or foreign material per area
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 36868 Minimum Crop Contamination Mass per Time
+Definition: Minimum mass of contamination in yield by dirt or foreign material per time
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 36869 Minimum Crop Conditioning Intensity
+Definition: The minimum level of crop conditioning intensity, expressed as a percentage of the maximum level offered by the implement.
+Comment: Conditioning means, changing the physical properties of the crop. For example, mowers can condition the mowed crop at a particular intensity level, to speed up the drying process. A percentage of the maximum level offered by the implement' is used, because there is currently no known sensor which can measure a conditioning level.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+14 - Special Crops
+15 - Municipal Work
+Unit: % - Percent
+Resolution: 0,01
+SAE SPN: 
+CANBus Range: 0 - 10000
+Display Range: 0 - 100,00
+Submit by: Mike Schmidt
+Submit Date: 2024-03-13
+Submit Company: AGCO Corporation
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-07-05
+Status Comments: Update display range to 100,00
+Attachments: 
+none
+
+
+
 DD Entity: 40960 Default Droplet Size
 Definition: The default droplet size the system is producing. Defined as:
 0 = Unknown,
@@ -19229,6 +20478,134 @@ Revision Number: 1
 Current Status: Published
 Status Date: 2021-05-12
 Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 40961 Default Crop Grade Diameter
+Definition: Default crop diameter in mm, measured with crop specific methods
+
+Comment: The diameter of the crop to indicate its grade. An example of the application of this DDI is grading root crops such as potatoes and onions.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 40962 Default Crop Grade Length
+Definition: Default crop length in mm, measured with crop specific methods
+
+Comment: The length of the crop to indicate its grade.
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 40963 Default Crop Contamination Mass per Area
+Definition: Default absolut mass of contamination in yield by dirt or foreign material per area
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 40964 Default Crop Contamination Mass per Time
+Definition: Default mass of contamination in yield by dirt or foreign material per time
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 40965 Default Crop Conditioning Intensity
+Definition: The default level of crop conditioning intensity, expressed as a percentage of the maximum level offered by the implement.
+Comment: Conditioning means, changing the physical properties of the crop. For example, mowers can condition the mowed crop at a particular intensity level, to speed up the drying process. A percentage of the maximum level offered by the implement' is used, because there is currently no known sensor which can measure a conditioning level.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+14 - Special Crops
+15 - Municipal Work
+Unit: % - Percent
+Resolution: 0,01
+SAE SPN: 
+CANBus Range: 0 - 10000
+Display Range: 0 - 100,00
+Submit by: Mike Schmidt
+Submit Date: 2024-03-13
+Submit Company: AGCO Corporation
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-07-05
+Status Comments: Update display range to 100,00
 Attachments: 
 none
 
@@ -19279,6 +20656,137 @@ none
 
 
 
+DD Entity: 45057 Actual Crop Grade Diameter 
+Definition: Actual crop diameter in mm, measured with crop specific methods
+
+Comment: The diameter of the crop to indicate its grade. An example of the application of this DDI is grading root crops such as potatoes and onions.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 45058 Actual Crop Grade Length
+Definition: Actual crop length in mm, measured with crop specific methods
+
+Comment: The length of the crop to indicate its grade.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 45059 Actual Crop Contamination Mass per Area
+Definition: Absolut mass of contamination in yield by dirt or foreign material per area, see also DDI 100.
+
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 45060 Actual Crop Contamination Mass per Time
+Definition: Absolut mass of contamination in yield by dirt or foreign material per time
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 45061 Actual Crop Conditioning Intensity
+Definition: The actual level of crop conditioning intensity, expressed as a percentage of the maximum level offered by the implement.
+Comment: Conditioning means, changing the physical properties of the crop. For example, mowers can condition the mowed crop at a particular intensity level, to speed up the drying process. A percentage of the maximum level offered by the implement' is used, because there is currently no known sensor which can measure a conditioning level.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+14 - Special Crops
+15 - Municipal Work
+Unit: % - Percent
+Resolution: 0,01
+SAE SPN: 
+CANBus Range: 0 - 10000
+Display Range: 0 - 100,00
+Submit by: Mike Schmidt
+Submit Date: 2024-03-13
+Submit Company: AGCO Corporation
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-07-05
+Status Comments: Update display range to 100,00
+Attachments: 
+none
+
+
+
 DD Entity: 49152 Setpoint Droplet Size
 Definition: The setpoint for droplet size. Defined as:
 0 = Unknown,
@@ -19324,6 +20832,136 @@ none
 
 
 
+DD Entity: 49153 Setpoint Crop Grade Diameter
+Definition: Setpoint crop diameter in mm, measured with crop specific methods
+
+Comment: The diameter of the crop to indicate its grade. An example of the application of this DDI is grading root crops such as potatoes and onions.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 49154 Setpoint Crop Grade Length
+Definition: Setpoint crop length in mm, measured with crop specific methods
+
+Comment: The length of the crop to indicate its grade.
+
+Typically used by Device Classes: 
+4 - Planters /Seeders
+7 - Harvesters
+8 - Root Harvester
+14 - Special Crops
+17 - Sensor System
+Unit: mm - Length
+Resolution: 0,001
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range: 0 - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-03-24
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-15
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 49155 Setpoint Crop Contamination Mass per Area
+Definition: Setpoint of the absolut mass of contamination in yield by dirt or foreign material per area
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/m² - Mass per area unit
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 49156 Setpoint Crop Contamination Mass per Time
+Definition: Setpoint of the mass of contamination in yield by dirt or foreign material per time
+
+Comment: 
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+Unit: mg/s - Mass flow
+Resolution: 1
+SAE SPN: 
+CANBus Range: 0 - 2147483647
+Display Range:  - 2147483647
+Submit by: Hendrik Hageböke
+Submit Date: 2023-05-02
+Submit Company: GRIMME Landmaschinen GmbH & Co.KG
+Revision Number: 1
+Current Status: Published
+Status Date: 2023-05-31
+Status Comments: 
+Attachments: 
+none
+
+
+
+DD Entity: 49157 Setpoint Crop Conditioning Intensity
+Definition: The setpoint level of crop conditioning intensity, expressed as a percentage of the maximum level offered by the implement.
+Comment: Conditioning means, changing the physical properties of the crop. For example, mowers can condition the mowed crop at a particular intensity level, to speed up the drying process. A percentage of the maximum level offered by the implement' is used, because there is currently no known sensor which can measure a conditioning level.
+Typically used by Device Classes: 
+7 - Harvesters
+8 - Root Harvester
+9 - Forage harvester
+14 - Special Crops
+15 - Municipal Work
+Unit: % - Percent
+Resolution: 0,01
+SAE SPN: 
+CANBus Range: 0 - 10000
+Display Range: 0 - 100,00
+Submit by: Mike Schmidt
+Submit Date: 2024-03-13
+Submit Company: AGCO Corporation
+Revision Number: 3
+Current Status: Published
+Status Date: 2024-07-05
+Status Comments: Update display range to 100,00
+Attachments: 
+none
+
+
+
 DD Entity: 57342 PGN Based Data
 Definition: This DDI is used in the XML files to identify PGN based data.
 Comment: This DDI is specified in ISO 11783-10 IS paragraph 6.3 Logging parameters from parameter groups.
@@ -19363,7 +21001,7 @@ none
 
 DD Entity: 57343 Request Default Process Data
 Definition: Request Default Process Data. This DDE is the highest ISO assigned entity.  The range above this number is reserved for manufacture specific DDE's.
-Comment: This DDE was a result of Jan 2005 Task Controller meeting.
+Comment: 
 Typically used by Device Classes: 
 Not Assigned
 Unit: n.a. - 
@@ -19375,9 +21013,9 @@ Submit by: 11783-Part 10 Task Force
 Submit Date: 2005-01-20
 Submit Company: 89 - Kverneland Group, Electronics Division
 Revision Number: 1
-Current Status: ISO-Approved
-Status Date: 2009-02-05
-Status Comments: Updated description, added reference to ISO11783-10
+Current Status: Published
+Status Date: 2023-07-10
+Status Comments: Comment "This DDE was a result of March 2005 TF10 meeting." removed
 Attachments: 
 none
 
