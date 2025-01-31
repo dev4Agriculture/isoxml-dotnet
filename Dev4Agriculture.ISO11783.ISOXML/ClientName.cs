@@ -34,7 +34,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         UtilityVehicles = 24,
         FeederMixer = 25,
         SlurryApplicators = 26,
-        Weeders = 27
+        Weeders = 27,
+        Reserved = 28
     }
 
     public class ClientName
@@ -57,7 +58,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
                 else if (_deviceClassRaw >= DeviceClassMax)
                 {
-                    return DeviceClass.Reserved;
+                    return DeviceClass.ReservedForFutureAssignment;
                 }
                 else
                 {
