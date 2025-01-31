@@ -34,7 +34,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         UtilityVehicles = 24,
         FeederMixer = 25,
         SlurryApplicators = 26,
-        Reserved = 27
+        Weeders = 27
     }
 
     public class ClientName
