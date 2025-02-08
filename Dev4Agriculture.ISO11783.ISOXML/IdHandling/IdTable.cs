@@ -141,8 +141,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
         }
 
 
-#nullable enable
-        internal bool IsEmptyOrLinkToValidElement(string? idContent)
+        internal bool IsEmptyOrLinkToValidElement(string idContent)
         {
             if (string.IsNullOrEmpty(idContent))
             {

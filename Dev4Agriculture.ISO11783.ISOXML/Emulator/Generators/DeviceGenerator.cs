@@ -159,7 +159,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators
             };
             if (detId != null)
             {
-                var det = _device.DeviceElement.FirstOrDefault(det => det.DeviceElementId == detId);
+                var det = _device.DeviceElement.FirstOrDefault(de => de.DeviceElementId == detId);
                 det?.DeviceObjectReference.Add(dor);
             }
             else

@@ -90,8 +90,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             ns.Add("", "");
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8 };
             var ser = new XmlSerializer(typeof(ISO11783LinkListFile));
-            using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
-            ser.Serialize(xmlWriter, taskData, ns);
+            using (var xmlWriter = XmlWriter.Create(path, xmlWriterSettings))
+            {
+                ser.Serialize(xmlWriter, taskData, ns);
+            }
         }
 
         // mainly for debugging

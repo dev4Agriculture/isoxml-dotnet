@@ -58,7 +58,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
             {
                 return null;
             }
-            device ??= GetDeviceFromDeviceElement(entry.DeviceElementId);
+            if (device is null)
+            {
+                device = GetDeviceFromDeviceElement(entry.DeviceElementId);
+            }
             var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
             return
@@ -81,7 +84,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                 return null;
             }
 
-            device ??= GetDeviceFromDeviceElement(entry.DeviceElementId);
+            if (device is null)
+            {
+                device = GetDeviceFromDeviceElement(entry.DeviceElementId);
+            }
             var dorList = device.DeviceElement.Where(det => det.DeviceElementId == entry.DeviceElementId)
                 .SelectMany(det => det.DeviceObjectReference).Select(dor => dor.DeviceObjectId).ToList();
 

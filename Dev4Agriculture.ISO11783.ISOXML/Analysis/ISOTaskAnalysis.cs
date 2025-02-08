@@ -68,7 +68,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
                     {
                         if (startTimestamp == null && logData.DDIValue == 1)
                         {
-                            info.StartDate ??= logData.TimeStamp;
+                            if (info.StartDate is null)
+                            {
+                                info.StartDate = logData.TimeStamp;
+                            }
                             startTimestamp = logData.TimeStamp;
                         }
                         else if (startTimestamp != null && logData.DDIValue == 0)
@@ -146,7 +149,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Analysis
 
             foreach (var workingElement in elementWorkTimes)
             {
-                var device = _isoxml.Data.Device.FirstOrDefault(s => s.DeviceElement.Any(s => s.DeviceElementId == workingElement.DdiEntry.DeviceElementId));
+                var device = _isoxml.Data.Device.FirstOrDefault(s => s.DeviceElement.Any(e => e.DeviceElementId == workingElement.DdiEntry.DeviceElementId));
                 var cpt = new CulturalPracticeInfo()
                 {
                     DeviceElementId = workingElement.DdiEntry.DeviceElementId,
