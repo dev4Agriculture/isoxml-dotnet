@@ -1,3 +1,12 @@
+v0.22.1.3
+    +ADD: Compatibility with .net2.0 Standard
+
+v0.22.1.1 & v0.22.1.2:
+   Do not exist; burned version numbers
+
+v0.22.1:
+  +ADD: Weeding DeviceType
+
 v0.22:
   + UPD: Updated all Dependencies
   + UPD: Update the List of DDIs
