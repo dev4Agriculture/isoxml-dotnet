@@ -1,5 +1,9 @@
+v0.22.1.1:
+  =OPT: Add compatibility with .net Standard 2.0
+
 v0.22.1:
   +ADD: DeviceType Weeders added
+
 v0.22:
   + UPD: Updated all Dependencies
   + UPD: Update the List of DDIs
