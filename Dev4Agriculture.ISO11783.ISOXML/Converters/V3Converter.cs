@@ -195,7 +195,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Converters
                 {
                     var thirdbit = propAsByteArray.ElementAt(3);
                     thirdbit = 0;
-                    item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray); // p.99
+                    item.DeviceProcessDataProperty = (byte)BitConverter.ToInt16(propAsByteArray, 0); // p.99
                 }
             }
 
