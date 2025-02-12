@@ -2,37 +2,69 @@
 {
     public class DeviceClassConversion
     {
-        public static CulturalPracticesType MapDeviceClassToPracticeType(DeviceClass className) => className switch
+        public static CulturalPracticesType MapDeviceClassToPracticeType(DeviceClass className)
         {
-            DeviceClass.NonSpecificSystem => CulturalPracticesType.Unknown,
-            DeviceClass.Tractor => CulturalPracticesType.Unknown,
-            DeviceClass.PrimarySoilTillage => CulturalPracticesType.Tillage,
-            DeviceClass.SecondarySoilTillage => CulturalPracticesType.Tillage,
-            DeviceClass.PlantersSeeders => CulturalPracticesType.SowingAndPlanting,
-            DeviceClass.Fertilizer => CulturalPracticesType.Fertilizing,
-            DeviceClass.Sprayers => CulturalPracticesType.CropProtection,
-            DeviceClass.Harvesters => CulturalPracticesType.Harvesting,
-            DeviceClass.RootHarvester => CulturalPracticesType.Harvesting,
-            DeviceClass.ForageHarvester => CulturalPracticesType.ForageHarvesting,
-            DeviceClass.Irrigation => CulturalPracticesType.Irrigation,
-            DeviceClass.TransportTrailers => CulturalPracticesType.Transport,
-            DeviceClass.FarmyardWork => CulturalPracticesType.Unknown,
-            DeviceClass.PoweredAuxilaryUnits => CulturalPracticesType.Unknown,
-            DeviceClass.SpecialCrops => CulturalPracticesType.Unknown,
-            DeviceClass.MunicipalWork => CulturalPracticesType.Unknown,
-            DeviceClass.UnDefined16 => CulturalPracticesType.Unknown,
-            DeviceClass.SensorSystem => CulturalPracticesType.Unknown,
-            DeviceClass.ReservedForFutureAssignment => CulturalPracticesType.Unknown,
-            DeviceClass.TimberHarvesters => CulturalPracticesType.Harvesting,
-            DeviceClass.Forwarders => CulturalPracticesType.Transport,
-            DeviceClass.TimberLoaders => CulturalPracticesType.Transport,
-            DeviceClass.TimberProcessingMachines => CulturalPracticesType.Unknown,
-            DeviceClass.Mulchers => CulturalPracticesType.Mulching,
-            DeviceClass.UtilityVehicles => CulturalPracticesType.Unknown,
-            DeviceClass.FeederMixer => CulturalPracticesType.Unknown,
-            DeviceClass.SlurryApplicators => CulturalPracticesType.SlurryManureApplication,
-            DeviceClass.Reserved => CulturalPracticesType.Unknown,
-            _ => CulturalPracticesType.Unknown
-        };
+            switch (className)
+            {
+                case DeviceClass.NonSpecificSystem:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.Tractor:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.PrimarySoilTillage:
+                    return CulturalPracticesType.Tillage;
+                case DeviceClass.SecondarySoilTillage:
+                    return CulturalPracticesType.Tillage;
+                case DeviceClass.PlantersSeeders:
+                    return CulturalPracticesType.SowingAndPlanting;
+                case DeviceClass.Fertilizer:
+                    return CulturalPracticesType.Fertilizing;
+                case DeviceClass.Sprayers:
+                    return CulturalPracticesType.CropProtection;
+                case DeviceClass.Harvesters:
+                    return CulturalPracticesType.Harvesting;
+                case DeviceClass.RootHarvester:
+                    return CulturalPracticesType.Harvesting;
+                case DeviceClass.ForageHarvester:
+                    return CulturalPracticesType.ForageHarvesting;
+                case DeviceClass.Irrigation:
+                    return CulturalPracticesType.Irrigation;
+                case DeviceClass.TransportTrailers:
+                    return CulturalPracticesType.Transport;
+                case DeviceClass.FarmyardWork:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.PoweredAuxilaryUnits:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.SpecialCrops:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.MunicipalWork:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.UnDefined16:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.SensorSystem:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.ReservedForFutureAssignment:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.TimberHarvesters:
+                    return CulturalPracticesType.Harvesting;
+                case DeviceClass.Forwarders:
+                    return CulturalPracticesType.Transport;
+                case DeviceClass.TimberLoaders:
+                    return CulturalPracticesType.Transport;
+                case DeviceClass.TimberProcessingMachines:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.Mulchers:
+                    return CulturalPracticesType.Mulching;
+                case DeviceClass.UtilityVehicles:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.FeederMixer:
+                    return CulturalPracticesType.Unknown;
+                case DeviceClass.SlurryApplicators:
+                    return CulturalPracticesType.SlurryManureApplication;
+                case DeviceClass.Reserved:
+                    return CulturalPracticesType.Unknown;
+                default:
+                    return CulturalPracticesType.Unknown;
+            };
+        }
     }
 }

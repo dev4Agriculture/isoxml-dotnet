@@ -90,8 +90,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             ns.Add("", "");
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
-            using var xmlWriter = XmlWriter.Create(path, xmlWriterSettings);
-            ser.Serialize(xmlWriter, taskData, ns);
+            using (var xmlWriter = XmlWriter.Create(path, xmlWriterSettings))
+            {
+                ser.Serialize(xmlWriter, taskData, ns);
+            }
         }
 
         public string Serialize(object obj)
@@ -104,8 +106,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true, Encoding = Encoding.UTF8 };
             var ser = new XmlSerializer(obj.GetType());
             var output = new StringWriterWithEncoding();
-            using var xmlWriter = XmlWriter.Create(output, xmlWriterSettings);
-            ser.Serialize(xmlWriter, obj, ns);
+            using (var xmlWriter = XmlWriter.Create(output, xmlWriterSettings))
+            {
+                ser.Serialize(xmlWriter, obj, ns);
+            }
             return output.ToString();
         }
 
@@ -113,14 +117,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Serializer
         {
             var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             var ser = new XmlSerializer(typeof(ISO11783TaskDataFile));
-            using var stream = new MemoryStream();
-            using var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
-            ser.Serialize(xmlWriter, taskData);
-            var xmlDoc = new XmlDocument();
-            stream.Position = 0;
-            xmlDoc.Load(stream);
-            var copiedTask = Deserialize(xmlDoc);
-            return (ISO11783TaskDataFile)copiedTask.Result;
+            using (var stream = new MemoryStream())
+            {
+                using (var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
+                {
+                    ser.Serialize(xmlWriter, taskData);
+
+                }
+                var xmlDoc = new XmlDocument();
+                stream.Position = 0;
+                xmlDoc.Load(stream);
+                var copiedTask = Deserialize(xmlDoc);
+                return (ISO11783TaskDataFile)copiedTask.Result;
+            }
         }
 
         // mainly for debugging

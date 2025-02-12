@@ -67,7 +67,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public bool IsOverlappingBounds(FieldBounds bounds)
         {
-            Bounds ??= CalculateBounds();
+            if (Bounds is null)
+            {
+                Bounds = CalculateBounds();
+            }
 
             return !(
                 Bounds.MaxLong < bounds.MinLong ||
@@ -112,12 +115,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             var p1 = exterior.Point.ToList();
             var p2 = exteriorSecond.Point.ToList();
-            if (p1[0].PointNorth == p1[^1].PointNorth && p1[0].PointEast == p1[^1].PointEast)
+            if (p1[0].PointNorth == p1[p1.Count - 1].PointNorth && p1[0].PointEast == p1[p1.Count-1].PointEast)
             {
                 p1.RemoveAt(p1.Count - 1);
             }
 
-            if (p2[0].PointNorth == p2[^1].PointNorth && p2[0].PointEast == p2[^1].PointEast)
+            if (p2[0].PointNorth == p2[p2.Count - 1].PointNorth && p2[0].PointEast == p2[p2.Count - 1].PointEast)
             {
                 p2.RemoveAt(p2.Count - 1);
             }
