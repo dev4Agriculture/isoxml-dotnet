@@ -481,7 +481,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     loadingPath = FileUtils.GetParentFolder(path, filePath);
                 }
-                archive.ExtractToDirectory(path, true);
+                archive.ExtractToDirectory(path);
             }
             try
             {

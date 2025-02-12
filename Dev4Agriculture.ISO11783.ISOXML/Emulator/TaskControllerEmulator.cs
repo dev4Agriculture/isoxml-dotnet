@@ -514,7 +514,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 throw new NoTaskStartedException();
             }
 
-            var index = _currentTimeLog.Header.GetOrAddDataLogValue(ddi, (int)deviceElement!);
+            var index = _currentTimeLog.Header.GetOrAddDataLogValue(ddi, deviceElement.Value);
             if (index < _currentDataLine.Entries.Length && !_currentDataLine.Entries[index].IsSet)
             {
                 _currentDataLine.Entries[index].Value = value;
@@ -700,7 +700,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
 
 
-            var potentialDPDs = device.DeviceProcessData.Where(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == ddi);
+            var potentialDPDs = device.DeviceProcessData.Where(dpd2 => DDIUtils.ConvertDDI(dpd2.DeviceProcessDataDDI) == ddi);
             if (!potentialDPDs.Any())
             {
                 _factors.Add(new WorkSessionFactor()
