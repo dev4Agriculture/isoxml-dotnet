@@ -125,14 +125,46 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return result;
         }
 
+        /// <summary>
+        /// Check if the devicedescription includes a specific DDI as Total (Total & setable)
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <returns></returns>
         public bool IsTotal(ushort ddi)
         {
             return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == ddi)?.IsTotal() ?? false;
         }
 
+        /// <summary>
+        /// Check if the devicedescription includes a specific DDI as LifeTime (Total & not setable)
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <returns></returns>
         public bool IsLifetimeTotal(ushort ddi)
         {
             return DeviceProcessData.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.DeviceProcessDataDDI) == ddi)?.IsLifeTimeTotal() ?? false;
         }
+
+        /// <summary>
+        /// Check if a specific DDI is avaliable as DeviceProcessData within a Device
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <returns>true if DDI is found</returns>
+        public bool IsDeviceProcessData(ushort ddi)
+        {
+            return DeviceProcessData.Any(dpd => dpd.DeviceProcessDataDDI == DDIUtils.FormatDDI(ddi));
+        }
+
+        /// <summary>
+        /// Check if a specific DDI is avaliable as DeviceProperty within a device
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <returns>true if DDI is found</returns>
+        public bool IsDeviceProperty(ushort ddi)
+        {
+            return DeviceProperty.Any(dpd => dpd.DevicePropertyDDI == DDIUtils.FormatDDI(ddi));
+        }
+
+
     }
 }

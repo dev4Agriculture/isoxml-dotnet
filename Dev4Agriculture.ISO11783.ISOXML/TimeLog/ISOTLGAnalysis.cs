@@ -17,6 +17,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public const double TLG_GPS_FACTOR = 10000000.0;
         private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
 
+        private List<ISODevice> _devices = new List<ISODevice>();
 
         /// <summary>
         /// Trying to find the maximum value in the TimeLogFile for the corresponding parameters
@@ -330,6 +331,26 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
             return isoTime;
         }
+
+
+        public IEnumerable<ISODevice> GetDevicesForTimeLog(ISOXML isoxml)
+        {
+            if (_devices == null)
+            {
+                var detIds = Header.Ddis.Select(entry => entry.DeviceElement).ToList().Distinct();
+                _devices = detIds.Select(
+                    detId => isoxml.Data.Device.FirstOrDefault(
+                        dvc => dvc.DeviceElement.Any(
+                            det => det.DeviceElementId.Equals("DET" + detId)
+                            )
+                        )
+                ).Distinct().ToList();
+            }
+            return _devices;
+        }
+
+
+
     }
 
 }
