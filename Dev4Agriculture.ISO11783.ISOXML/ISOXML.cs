@@ -242,7 +242,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="path">The Path from where the data shall be loaded </param>
         /// <param name="loadBinData">Shall all binary data such as grids and TLGs be loaded? Default is true</param>
         /// <returns></returns>
-        public static ISOXML Load(string path, bool loadBinData = true)
+        public static ISOXML Load(string path, bool loadBinData = true, bool extendedAnalysis = true)
         {
             var resultTaskData = TaskData.LoadTaskData(path);
             var isoxml = new ISOXML(path)
@@ -281,6 +281,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 isoxml.LoadBinaryData();
             }
             isoxml.InitExtensionData();
+
+            if (extendedAnalysis)
+            {
+                foreach (var timeLog in isoxml.TimeLogs)
+                {
+                    try
+                    {
+                        timeLog.Value.Analyse(isoxml);
+                    }
+                    catch (Exception ex)
+                    {
+                        isoxml.Messages.AddError(ResultMessageCode.AnalysisError, ResultDetail.FromString(timeLog.Key));
+                    }
+                }
+            }
 
             return isoxml;
         }

@@ -400,11 +400,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public int GetDDIIndex(ushort ddi, int detId)
+        public int GetDDIIndex(ushort ddi, int? detId = null)
         {
             foreach (var entry in Ddis)
             {
-                if (entry.Ddi == ddi && (entry.DeviceElement == detId || detId == 0))
+                if (entry.Ddi == ddi && (entry.DeviceElement == detId || detId == null || detId == 0))
                 {
                     return entry.Index;
                 }

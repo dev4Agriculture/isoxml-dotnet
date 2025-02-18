@@ -177,4 +177,20 @@ public class TLGTest
         var isoxml = ISOXML.Load(path);
         Assert.AreEqual(isoxml.Messages.Count, 2);
     }
+
+
+    [TestMethod]
+    public void CanFindDevicePropertyValue()
+    {
+        var path = "./testdata/TimeLogs/ValidTimeLogs";
+        var isoxml = ISOXML.Load(path);
+        Assert.IsNotNull(isoxml);
+        var task = isoxml.Data.Task[0];
+        Assert.IsNotNull(task);
+        var timeLog = task.TimeLogs[0];
+        Assert.IsNotNull(timeLog);
+        Assert.AreEqual(true, timeLog.IsDeviceProperty(DDIUtils.ParseDDI("00B3")));
+        Assert.AreEqual(true, timeLog.TryGetPropertyValue(DDIUtils.ParseDDI("00B3"), out var type));
+        Assert.AreEqual(11, type);
+    }
 }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 {
@@ -32,6 +34,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public byte NumberOfSatellites;
         public uint GpsUTCTime;
         public ushort GpsUTCDate;
+
+        public DateTime DateTime
+        {
+            get => DateUtilities.GetDateTimeFromTimeLogInfos(Date, Time);
+            set
+            {
+                Date = DateUtilities.GetDaysSince1980(value);
+                Time = DateUtilities.GetMilliSecondsInDay(value);
+            }
+        }
+
+        public double Latitude
+        {
+            get => PosNorth / ISOTLG.TLG_GPS_FACTOR;
+            set => PosNorth = (int)(value * ISOTLG.TLG_GPS_FACTOR);
+        }
+
+        public double Longitude
+        {
+            get => PosEast / ISOTLG.TLG_GPS_FACTOR;
+            set => PosEast = (int)(value * ISOTLG.TLG_GPS_FACTOR);
+        }
+
+
 
         public byte NumberOfEntries;
         public byte ArraySize;

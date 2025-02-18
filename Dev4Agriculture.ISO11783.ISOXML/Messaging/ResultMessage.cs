@@ -91,6 +91,7 @@
                     Code == ResultMessageCode.ClientNameTooShort ? "Client Name invalid in Device %1: %2; Message: %3" :
                     Code == ResultMessageCode.ClientNameBroken ? "Client Name broken in Device %1: %2; Message: %3" :
                     Code == ResultMessageCode.ClientNameDeviceClassInvalid ? "Invalid DeviceClass %1 in ClientName: %2" :
+                    Code == ResultMessageCode.AnalysisError ? "Error during machinedata analysis in Timelog %1":
                     "Other");
             private set
             {
