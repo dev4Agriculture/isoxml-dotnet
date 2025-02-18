@@ -182,7 +182,7 @@ public class TLGTest
     [TestMethod]
     public void CanFindDevicePropertyValue()
     {
-        var path = "./testData/TimeLogs/ValidTimeLogs";
+        var path = "./testdata/TimeLogs/ValidTimeLogs";
         var isoxml = ISOXML.Load(path);
         Assert.IsNotNull(isoxml);
         var task = isoxml.Data.Task[0];
