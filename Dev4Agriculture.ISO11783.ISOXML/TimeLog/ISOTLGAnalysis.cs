@@ -17,7 +17,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public const double TLG_GPS_FACTOR = 10000000.0;
         private DDIAvailabilityStatus _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
 
-        private List<ISODevice> _devices = new List<ISODevice>();
+        private List<ISODevice> _devices = null;
+        private List<ISOTimeLogDeviceProperty> _properties = null;
 
         /// <summary>
         /// Trying to find the maximum value in the TimeLogFile for the corresponding parameters
@@ -28,6 +29,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns>True on success</returns>
         public bool TryGetMaximum(ushort ddi, int deviceElement, out int maximum)
         {
+            if (TryGetPropertyValue(ddi, out var maxLong, deviceElement))
+            {
+                maximum = (int)maxLong;
+                return true;
+            }
+
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
                 _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
@@ -57,6 +64,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns>True on success</returns>
         public bool TryGetMinimum(ushort ddi, int deviceElement, out int minimum)
         {
+            if (TryGetPropertyValue(ddi, out var minLong, deviceElement))
+            {
+                minimum = (int)minLong;
+                return true;
+            }
+
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
                 _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
@@ -89,6 +102,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns>True on success</returns>
         public bool TryGetFirstValue(ushort ddi, int deviceElement, out int firstValue)
         {
+            if (TryGetPropertyValue(ddi, out var firstLong, deviceElement))
+            {
+                firstValue = (int)firstLong;
+                return true;
+            }
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
                 _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
@@ -120,6 +138,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns>True on success</returns>
         public bool TryGetLastValue(ushort ddi, int deviceElement, out int lastValue)
         {
+            if (TryGetPropertyValue(ddi, out var lastLong, deviceElement))
+            {
+                lastValue = (int)lastLong;
+                return true;
+            }
+
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
                 _ddiAvailabilityStatus = DDIAvailabilityStatus.NOT_IN_HEADER;
@@ -296,7 +320,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// The List of Devices is required to filter the TimeLog DDI-Entries for Totals and Lifetime Totals
         /// </summary>
         /// <param name="devices"></param>
-        /// <returns></returns>
+        /// <returns>Time Elements from a TimeLog</returns>
         public ISOTime GenerateTimeElement(IEnumerable<ISODevice> devices)
         {
             var min = DateTime.MaxValue;
@@ -333,9 +357,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-        public IEnumerable<ISODevice> GetDevicesForTimeLog(ISOXML isoxml)
+        /// <summary>
+        /// Iterates over the Header for the TimeLog and returns all Devices associated  with the TimeLog
+        /// After the first call, a list is persisted and will directly be delivered. To force an update, set the optional parameter "update" to true
+        /// </summary>
+        /// <param name="isoxml">The associated ISOXML Element</param>
+        /// <param name="update">If true, the _deviceList is updated</param>
+        /// <returns></returns>
+        public IEnumerable<ISODevice> GetDevicesForTimeLog(ISOXML isoxml, bool update = false)
         {
-            if (_devices == null)
+            if (_devices == null || update)
             {
                 var detIds = Header.Ddis.Select(entry => entry.DeviceElement).ToList().Distinct();
                 _devices = detIds.Select(
@@ -350,6 +381,131 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
+        private void FillPropertiesFromUsedDevices()
+        {
+            if(_properties == null)
+            {
+                _properties = new List<ISOTimeLogDeviceProperty>();
+            }
+            foreach (var device in _devices)
+            {
+                foreach (var property in device.DeviceProperty)
+                {
+                    var det = device.DeviceElement.FirstOrDefault(deviceElement =>
+                        deviceElement.DeviceObjectReference.Any(dor =>
+                            dor.DeviceObjectId == property.DevicePropertyObjectId
+                            )
+                        );
+                    _properties.Add(new ISOTimeLogDeviceProperty(property)
+                    {
+                        DeviceElement = det
+                    });
+                }
+            }
+        }
+
+
+        public bool IsDeviceProcessData(ushort ddi, int? deviceElement = null)
+        {
+            foreach (var entry in Header.Ddis)
+            {
+                if (entry.Ddi == ddi && (deviceElement == null || entry.DeviceElement == deviceElement))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Returns true, if the DeviceProperty + DeviceElement exists
+        /// </summary>
+        /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net </param>
+        /// <param name="deviceElement">A DeviceElement</param>
+        /// <returns></returns>
+        public bool IsDeviceProperty(ushort ddi, int? deviceElement = null)
+        {
+            foreach (var entry in _properties)
+            {
+                if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElement.DeviceElementId == "DET" + deviceElement))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Returns true if a Property exists and also exports the rawValue. 
+        /// </summary>
+        /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net </param>
+        /// <param name="deviceElement">A DeviceElement</param>
+        /// <returns>True if found, False otherwise. If True, rawValue is filled. Otherwise it's 0</returns>
+        public bool TryGetPropertyValue(ushort ddi, out long rawValue, int? deviceElement = null)
+        {
+            foreach (var entry in _properties)
+            {
+                if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElementId == deviceElement))
+                {
+                    rawValue = entry.DevicePropertyValue;
+                    return true;
+                }
+            }
+            rawValue = 0;
+            return false;
+        }
+
+        /// <summary>
+        /// This function returns true, if a value can be found, no matter if its source is a Property or a ProcessData
+        /// ATTENTION: The performance of this function might not be suitable for you when iterating over every single data point. Better use a oneTime TryGetPropertyValue and a TryGetDDIEntryIndex
+        /// </summary>
+        /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net</param>
+        /// <param name="datalogLine">The Line within the DataSet</param>
+        /// <param name="rawValue">The found value</param>
+        /// <param name="deviceElement">A deviceElement (0 and null means "first Deviceelement with such DDI")</param>
+        /// <returns></returns>
+        public bool TryGetMachineValue(ushort ddi, int datalogLine, out long rawValue, int? deviceElement = null)
+        {
+            if (!TryGetPropertyValue(ddi, out rawValue, deviceElement))
+            {
+                if (Header.TryGetDDIIndex(ddi, deviceElement ?? 0, out var index))
+                {
+                    if (datalogLine < 0 || datalogLine >= Entries.Count)
+                    {
+                        return false;
+                    }
+                    if (Entries[datalogLine].TryGetValue(index, out var rawOutValue))
+                    {
+                        rawValue = rawOutValue;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Find the Index for a specific DDI within TimeLogData Headers
+        /// </summary>
+        /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net</param>
+        /// <param name="index"></param>
+        /// <param name="deviceElement"></param>
+        /// <returns></returns>
+        public bool TryGetDDIIndex(ushort ddi, out uint index, int? deviceElement = null)
+        {
+            return Header.TryGetDDIIndex(ddi, deviceElement ?? 0, out index);
+        }
+
+
+        internal void Analyse(ISOXML isoxml)
+        {
+            GetDevicesForTimeLog(isoxml);
+            FillPropertiesFromUsedDevices();
+        }
 
     }
 

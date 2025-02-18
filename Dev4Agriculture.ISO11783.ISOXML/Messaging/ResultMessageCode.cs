@@ -47,6 +47,7 @@
         ClientNameTooShort,
         ClientNameDeviceClassInvalid,
         ClientNameManufacturerInvalid,
+        AnalysisError = 1000
     }
 
     public enum ResultDetailType
