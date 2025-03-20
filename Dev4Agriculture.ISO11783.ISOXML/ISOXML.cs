@@ -185,8 +185,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 ManagementSoftwareManufacturer = "unknown",
                 ManagementSoftwareVersion = "unknown",
-                TaskControllerManufacturer = "unknown",
-                TaskControllerVersion = "unknown",
                 DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS
             };
             Grids = new Dictionary<string, ISOGridFile>();
