@@ -1,4 +1,7 @@
 v0.23.2.1:
+    -FIX: GuidancePattern Ids were not handled correctly
+    =OPT: The TaskController Version and manufacturer are not set on an initial TaskSet anymore.
+v0.23.2.1:
     +ADD: Add a function to calculate the area a Task was processed on.
 
 v0.23.1.1:

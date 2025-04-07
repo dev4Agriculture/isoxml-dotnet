@@ -18,6 +18,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 {
     public class ISOXML
     {
+        public static ISO11783TaskDataFileDataTransferOrigin DataTransferOrign = ISO11783TaskDataFileDataTransferOrigin.FMIS;
+        public static void SetDefaultDataTransferOrigin(ISO11783TaskDataFileDataTransferOrigin origin)
+        {
+            DataTransferOrign = origin;
+            IdList.DataOrign = origin;
+        }
+
         /// <summary>
         /// The List of all available Grids (Prescription Maps) within the ISOXML File
         /// </summary>
@@ -183,9 +190,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         {
             Data = new ISO11783TaskDataFile
             {
-                ManagementSoftwareManufacturer = "unknown",
-                ManagementSoftwareVersion = "unknown",
-                DataTransferOrigin = ISO11783TaskDataFileDataTransferOrigin.FMIS
+                ManagementSoftwareManufacturer = DataTransferOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ? "unknown" : null,
+                ManagementSoftwareVersion = DataTransferOrign == ISO11783TaskDataFileDataTransferOrigin.FMIS ? "unknown" : null,
+                TaskControllerManufacturer = DataTransferOrign == ISO11783TaskDataFileDataTransferOrigin.MICS ? "unknown" : null,
+                TaskControllerVersion = DataTransferOrign == ISO11783TaskDataFileDataTransferOrigin.MICS ? "unknown" : null,
+                DataTransferOrigin = DataTransferOrign
             };
             Grids = new Dictionary<string, ISOGridFile>();
             TimeLogs = new Dictionary<string, ISOTLG>();
