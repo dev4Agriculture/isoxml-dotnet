@@ -62,6 +62,13 @@ public class TaskDataAnalysisTests
         Assert.IsTrue(isoxml.Data.Task[0].Time[0].TryGetDDIValue(148, -1, out var result));
         Assert.AreEqual(result, 1000);
         Assert.IsFalse(isoxml.Data.Task[0].Time[0].TryGetDDIValue(148, 1, out var result2));
+        if(isoxml.Data.Task[0].TryGetBounds(out var bounds))
+        {
+            Assert.AreEqual(true, (double)bounds.MaxLat < 46.404);
+            Assert.AreEqual(true, (double)bounds.MinLat > 46.1198);
+            Assert.AreEqual(true, (double)bounds.MaxLong < 9.169);
+            Assert.AreEqual(true, (double)bounds.MinLong > 8.94);
+        }
     }
 }
 

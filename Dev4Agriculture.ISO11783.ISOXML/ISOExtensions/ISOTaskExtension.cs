@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
@@ -126,6 +127,33 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     }
                 }
             }
+            return found;
+        }
+
+
+        /// <summary>
+        /// Read the Area on which TimeLog Points are loaded 
+        /// </summary>
+        /// <param name="bounds"></param>
+        /// <returns>True if a Bound could be found</returns>
+        public bool TryGetBounds(out AreaBounds bounds)
+        {
+            bounds = new AreaBounds();
+            if (TimeLogs.Count == 0)
+            {
+                return false;
+            }
+            var found = false;
+            foreach (var timeLog in TimeLogs)
+            {
+                if (timeLog.TryGetTLGBounds(out var tlgBounds))
+                {
+                    found = true;
+                    bounds.Update(tlgBounds.MinLat, tlgBounds.MinLong);
+                    bounds.Update(tlgBounds.MaxLat, tlgBounds.MaxLong);
+                }
+            }
+
             return found;
         }
 

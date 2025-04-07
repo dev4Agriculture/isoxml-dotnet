@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
@@ -91,6 +93,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
+
+        /// <summary>
+        /// Get the Area bounds for a TimeLog; means the area in which points of this TimeLog show up
+        /// </summary>
+        /// <param name="bounds"></param>
+        /// <returns></returns>
+        public bool TryGetTLGBounds(out AreaBounds bounds)
+        {
+            bounds = new AreaBounds();
+            if ( Entries.Count == 0)
+            {
+                return false;
+            }
+            foreach (var entry in Entries)
+            {
+                if( (entry.PosStatus != (byte)ISOPositionStatus.Error) && (entry.PosStatus != (byte)ISOPositionStatus.noGPSfix))
+                {
+                    bounds.Update((decimal)entry.Latitude, (decimal)entry.Longitude);
+                }
+            }
+
+            return true;
+        }
 
 
         /// <summary>
@@ -506,6 +531,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             GetDevicesForTimeLog(isoxml);
             FillPropertiesFromUsedDevices();
         }
+
 
     }
 
