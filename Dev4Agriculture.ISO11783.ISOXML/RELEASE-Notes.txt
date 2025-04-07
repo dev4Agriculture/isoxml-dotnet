@@ -1,3 +1,6 @@
+v0.23.2.1:
+    +ADD: Add a function to calculate the area a Task was processed on.
+
 v0.23.1.1:
     +ADD: Add functions to find MachineData, no matter if it's a property or a ProcessData
     +ADD: New PseudoAttributes added to TimeLogDataLine to represent Position and Timestamp in correct format
