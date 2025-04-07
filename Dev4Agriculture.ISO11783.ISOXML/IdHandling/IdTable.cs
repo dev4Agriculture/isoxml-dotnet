@@ -26,6 +26,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.IdHandling
             AddList("DET", typeof(ISODeviceElement));
             AddList("FRM", typeof(ISOFarm));
             AddList("GGP", typeof(ISOGuidanceGroup));
+            AddList("GPN", typeof(ISOGuidancePattern));
             AddList("LSG", typeof(ISOLineString));
             AddList("OTQ", typeof(ISOOperationTechnique));
             AddList("PFD", typeof(ISOPartfield));
