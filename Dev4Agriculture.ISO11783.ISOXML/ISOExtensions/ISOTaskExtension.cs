@@ -171,7 +171,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var found = false;
             foreach (var tlg in TimeLogs)
             {
-                if (tlg.TryGetMaximum(ddi, deviceElement, out var compare))
+                if (tlg.TryGetMinimum(ddi, deviceElement, out var compare))
                 {
                     found = true;
                     if (minimum > compare)
