@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
@@ -297,7 +299,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             return DDIAvailabilityStatus.NO_VALUE;
         }
 
-
+        private bool IsRegisteredSpecialDDI(ushort ddi, ushort manufacturer, out DDIRegisterEntry ddiSetting)
+        {
+            if (DDIRegister.ManufacturersList.TryGetValue(manufacturer, out var manufacturerSettings) &&
+                            manufacturerSettings.DDIs.TryGetValue(ddi, out ddiSetting)
+                        )
+            {
+                return true;
+            }
+            ddiSetting = null;
+            return false;
+        }
 
         /// <summary>
         /// Creates a list of DLV-Elements with the totals values for all available Totals DDIs
@@ -312,31 +324,116 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             var totals = devices.SelectMany(device => device.GetAllTotalsProcessData());
             foreach (var (det, dpd) in totals)
             {
+                var ddi = DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI);
+                var detAsInt = IdList.ToIntId(det.DeviceElementId);
+                var dlv = new ISODataLogValue()
                 {
-                    var dlv = new ISODataLogValue()
+                    ProcessDataDDI = dpd.DeviceProcessDataDDI,
+                    DeviceElementIdRef = det.DeviceElementId,
+                };
+
+
+                try
+                {
+                    var device = devices.FirstOrDefault(entry => entry.DeviceElement.Any(deviceElement => deviceElement.DeviceElementId.Equals(det.DeviceElementId)));
+                    if (device == null)
                     {
-                        ProcessDataDDI = dpd.DeviceProcessDataDDI,
-                        DeviceElementIdRef = det.DeviceElementId,
-                    };
-                    if (dpd.IsLifeTimeTotal())
+                        continue;
+                    }
+
+                    var manufacturer = (ushort)device.ClientNameParsed.ManufacturerCode;
+                    if (IsRegisteredSpecialDDI(ddi, manufacturer, out var ddiSetting))
                     {
-                        if (TryGetLastValue(DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total))
+                        dlv.ProcessDataValue = ddiSetting.SingleTimelogCalculationCallback(new SingleTimelogDDICalculationCallbackParameters()
+                        {
+                            Device = device,
+                            Tlg = this
+                        });
+                    }
+                    else if (dpd.IsLifeTimeTotal())
+                    {
+                        if (TryGetLastValue(ddi, detAsInt, out var total))
                         {
                             dlv.ProcessDataValue = total;
                         }
                     }
                     else if (dpd.IsTotal())
                     {
-                        if (TryGetTotalValue(DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI), IdList.ToIntId(det.DeviceElementId), out var total, totalAlgorithmType))
+                        if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var weightDDIs))
                         {
-                            dlv.ProcessDataValue = total;
+                            if (TryGetWeightedAverage(
+                                ddi,
+                                detAsInt,
+                                device,
+                                weightDDIs,
+                                out var total))
+                            {
+                                dlv.ProcessDataValue = total;
+                            }
+                        }
+                        else
+                        {
+                            if (TryGetTotalValue(ddi, detAsInt, out var total, totalAlgorithmType))
+                            {
+                                dlv.ProcessDataValue = total;
+                            }
                         }
                     }
-                    list.Add(dlv);
                 }
+                catch (Exception ex)
+                {
+                    //TODO: What should we do in case this fails?
+                    dlv.ProcessDataValue = long.MaxValue;
+                }
+                list.Add(dlv);
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Some DDIs like AverageCropMoisture cannot just be summed up; they require an average algorithm; weighted by another DDI.
+        /// In some cases, there are multiple DDIs possible, as a specific DDI like TotalYield might not always exist.
+        /// Examples for weighted DDIs can be found in the DDIAlgorithms.cs file.
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="detAsInt"></param>
+        /// <param name="device"></param>
+        /// <param name="weightDDIs"></param>
+        /// <param name="totalValue"></param>
+        /// <returns></returns>
+        public bool TryGetWeightedAverage(ushort ddi, int detAsInt, ISODevice device, ushort[] weightDDIs, out long totalValue)
+        {
+            ushort weightDDI = 0;
+            foreach (var possibleDDI in weightDDIs)
+            {
+                if (device.DeviceProcessData.Any(dpd => dpd.DeviceProcessDataDDI == DDIUtils.FormatDDI(possibleDDI)))
+                {
+                    weightDDI = possibleDDI;
+                    break;
+                }
+            }
+
+            if (weightDDI == 0)
+            {
+                totalValue = 0;
+                return false;
+            }
+
+            if (!TryGetFirstValue(ddi, detAsInt, out var startAverage)||
+                !TryGetFirstValue(weightDDI, detAsInt, out var startCount) ||
+                !TryGetLastValue(ddi, detAsInt, out var endAverage) ||
+                !TryGetLastValue(weightDDI, detAsInt, out var endCount)
+                )
+            {
+                totalValue = 0;
+                return true;
+            }
+
+            totalValue = (long)MathUtils.CalculateCleanedWeightedAverage(startAverage, startCount, endAverage, endCount);
+
+            return true;
+
         }
 
 
@@ -430,6 +527,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
+        /// <summary>
+        /// Check if this DDI exists as ProcesseData in the TimeLog
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <returns></returns>
         public bool IsDeviceProcessData(ushort ddi, int? deviceElement = null)
         {
             foreach (var entry in Header.Ddis)

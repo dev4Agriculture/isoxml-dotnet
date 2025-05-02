@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
@@ -71,23 +72,58 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             foreach (var dlv in tim.DataLogValue)
             {
+                var ddi = DDIUtils.ConvertDDI(dlv.ProcessDataDDI);
                 var compare = lastTim.DataLogValue.FirstOrDefault(entry =>
-                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == DDIUtils.ConvertDDI(dlv.ProcessDataDDI) &&
+                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ddi &&
                                                             entry.DeviceElementIdRef == dlv.DeviceElementIdRef
                                                         );
                 if (compare != null)
                 {
                     var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == dlv.DeviceElementIdRef));
-                    if (device != null)
+                    if (device == null)
                     {
-                        if (device.IsLifetimeTotal(DDIUtils.ConvertDDI(dlv.ProcessDataDDI)))
+                        continue;
+                    }
+
+                    if (DDIRegister.TryGetManufacturerSpecificGroupedTotalCallback(ddi, device, out var groupingFunction))
+                    {
+
+                    }
+                    else if (device.IsLifetimeTotal(DDIUtils.ConvertDDI(dlv.ProcessDataDDI)))
+                    {
+                        dlv.ProcessDataValue = compare.ProcessDataValue;
+                    }
+                    else if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var weightDDIList))
+                    {
+                        long weightDDIValue = 0;
+                        long previousWeightDDIValue = 0;
+                        foreach (var weightDDI in weightDDIList)
                         {
-                            dlv.ProcessDataValue = compare.ProcessDataValue;
+                            var dlvEntry = tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI &&
+                                entry.DeviceElementIdRef == dlv.DeviceElementIdRef);
+                            if (dlvEntry != null)
+                            {
+                                weightDDIValue = dlvEntry.ProcessDataValue;
+
+                                dlvEntry = lastTim.DataLogValue.FirstOrDefault(entry =>
+                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI &&
+                                                            entry.DeviceElementIdRef == dlv.DeviceElementIdRef
+                                                        );
+                                if (dlvEntry != null)
+                                {
+                                    previousWeightDDIValue = 0;
+                                }
+                                break;
+                            }
                         }
-                        else
+                        if (weightDDIValue != 0 && previousWeightDDIValue != 0)
                         {
-                            dlv.ProcessDataValue += compare.ProcessDataValue;
+                            dlv.ProcessDataValue = (long)MathUtils.CalculateCleanedWeightedAverage(compare.ProcessDataValue, previousWeightDDIValue, dlv.ProcessDataValue, weightDDIValue);
                         }
+                    }
+                    else//It's a classic Total; just sum up
+                    {
+                        dlv.ProcessDataValue += compare.ProcessDataValue;
                     }
                 }
             }
