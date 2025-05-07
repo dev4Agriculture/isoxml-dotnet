@@ -115,7 +115,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                                        from dor in det.DeviceObjectReference
                                        from dpd in DeviceProcessData
                                        where dpd.DeviceProcessDataObjectId == dor.DeviceObjectId
-                                       where dpd.IsTotal() &&
+                                       where (dpd.IsTotal() || dpd.IsLifeTimeTotal()) &&
                                              (DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) != (ushort)DDIList.RequestDefaultProcessData)
                                        select (det, dpd))
             {

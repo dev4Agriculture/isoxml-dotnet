@@ -65,9 +65,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
         /// <param name="endAverage">Average value at end of measurement</param>
         /// <param name="countAtEnd">Total Number of values used for measurement; from 0 to start to end</param>
         /// <returns></returns>
-        public static double CalculateCleanedWeightedAverage(double startAverage, long countAtStart, double endAverage, long countAtEnd)
+        public static double CalculateCleanedContinousWeightedAverage(double startAverage, long countAtStart, double endAverage, long countAtEnd)
         {
             var count = countAtEnd - countAtStart;
+            if (count == 0)
+            {
+                return endAverage;
+            }
             var segmentSum = endAverage * countAtEnd - startAverage * countAtStart;
             return segmentSum / count;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dev4Agriculture.ISO11783.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
@@ -68,68 +69,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
-        internal static ISOTime CreateSummarizedTimeElement(ISOTime lastTim, ISOTime tim, IEnumerable<ISODevice> devices)
-        {
-            foreach (var dlv in tim.DataLogValue)
-            {
-                var ddi = DDIUtils.ConvertDDI(dlv.ProcessDataDDI);
-                var compare = lastTim.DataLogValue.FirstOrDefault(entry =>
-                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ddi &&
-                                                            entry.DeviceElementIdRef == dlv.DeviceElementIdRef
-                                                        );
-                if (compare != null)
-                {
-                    var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == dlv.DeviceElementIdRef));
-                    if (device == null)
-                    {
-                        continue;
-                    }
-
-                    if (DDIRegister.TryGetManufacturerSpecificGroupedTotalCallback(ddi, device, out var groupingFunction))
-                    {
-
-                    }
-                    else if (device.IsLifetimeTotal(DDIUtils.ConvertDDI(dlv.ProcessDataDDI)))
-                    {
-                        dlv.ProcessDataValue = compare.ProcessDataValue;
-                    }
-                    else if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var weightDDIList))
-                    {
-                        long weightDDIValue = 0;
-                        long previousWeightDDIValue = 0;
-                        foreach (var weightDDI in weightDDIList)
-                        {
-                            var dlvEntry = tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI &&
-                                entry.DeviceElementIdRef == dlv.DeviceElementIdRef);
-                            if (dlvEntry != null)
-                            {
-                                weightDDIValue = dlvEntry.ProcessDataValue;
-
-                                dlvEntry = lastTim.DataLogValue.FirstOrDefault(entry =>
-                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI &&
-                                                            entry.DeviceElementIdRef == dlv.DeviceElementIdRef
-                                                        );
-                                if (dlvEntry != null)
-                                {
-                                    previousWeightDDIValue = 0;
-                                }
-                                break;
-                            }
-                        }
-                        if (weightDDIValue != 0 && previousWeightDDIValue != 0)
-                        {
-                            dlv.ProcessDataValue = (long)MathUtils.CalculateCleanedWeightedAverage(compare.ProcessDataValue, previousWeightDDIValue, dlv.ProcessDataValue, weightDDIValue);
-                        }
-                    }
-                    else//It's a classic Total; just sum up
-                    {
-                        dlv.ProcessDataValue += compare.ProcessDataValue;
-                    }
-                }
-            }
-
-            return tim;
-        }
 
         /// <summary>
         /// Get the value for the defined combination of DDI + DeviceElement from a TIM-Element
@@ -140,14 +79,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <returns>True if a value was found</returns>
         public bool TryGetDDIValue(ushort ddi, int deviceElement, out int lastValue)
         {
-            var dlv = DataLogValue.ToList().FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ddi && IdList.ToIntId(entry.DeviceElementIdRef) == deviceElement)?.ProcessDataValue;
-            if (dlv != null)
+            if (TryGetDataLogValue(ddi, deviceElement, out var dataLogValue))
             {
-                lastValue = (int)dlv;
+                lastValue = (int)dataLogValue.ProcessDataValue;
                 return true;
             }
             lastValue = 0;
             return false;
+        }
+
+        /// <summary>
+        /// Find a DataLogValue in a Time Element
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="deviceElement"></param>
+        /// <param name="dataLogValue"></param>
+        /// <returns></returns>
+        public bool TryGetDataLogValue(ushort ddi, int deviceElement, out ISODataLogValue dataLogValue)
+        {
+            dataLogValue = DataLogValue.FirstOrDefault(entry =>
+                                                            DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ddi &&
+                                                            IdList.ToIntId(entry.DeviceElementIdRef) == deviceElement
+                                                        );
+            return dataLogValue != null;
         }
 
         internal void FixPositionDigits()

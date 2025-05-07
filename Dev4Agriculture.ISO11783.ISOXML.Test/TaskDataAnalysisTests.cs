@@ -36,10 +36,12 @@ public class TaskDataAnalysisTests
         Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0xB7, detId, out var totalDryMass, TLGTotalAlgorithmType.NO_RESETS));
         Assert.AreEqual(totalDryMass, 2000);
 
-        var timeElements = isoxml.Data.Task[0].GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+        var timeElements = isoxml.Data.Task[0].GenerateTimeElementsFromTimeLogs([.. isoxml.Data.Device]);
         Assert.AreEqual(timeElements.Count, 3);
-        Assert.AreEqual(timeElements[2].DataLogValue.First(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.IneffectiveTotalTime).ProcessDataValue, 4531);
-        Assert.AreEqual(timeElements[2].DataLogValue.First(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.LifetimeTotalArea).ProcessDataValue, 561780);
+        var inEffectiveTotalTime = timeElements[2].DataLogValue.First(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.IneffectiveTotalTime).ProcessDataValue;
+        Assert.AreEqual(inEffectiveTotalTime, 4531);
+        var totalArea = timeElements[2].DataLogValue.First(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.LifetimeTotalArea).ProcessDataValue;
+        Assert.AreEqual(totalArea, 561780);
     }
 
     [TestMethod]

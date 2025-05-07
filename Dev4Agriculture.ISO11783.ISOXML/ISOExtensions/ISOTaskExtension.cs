@@ -303,26 +303,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
         /// <summary>
-        /// Create a list of TimeElements with DataLogValue-Elements for the given Task. Only used when the TimeLogs were created in code; normally the TIM-Element exists
+        /// Create a list of TimeElements with DataLogValue-Elements for the given Task.
+        /// ATTENTION: Only used when the TimeLogs were created in code; normally the TIM-Element exists
         /// </summary>
         /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
         /// <returns>List of TIM-Elements with DataLogValues</returns>
-        public List<ISOTime> GenerateTimeElementsFromTimeLogs(IEnumerable<ISODevice> devices)
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices)
         {
             var list = new List<ISOTime>();
-
-            ISOTime lastTim = null;
-
-            foreach (var tlg in TimeLogs)
+            var singulator = new ISOTimeLogSingulator();
+            for (var index = 0; index < TimeLogs.Count; index++)
             {
-                var tim = tlg.GenerateTimeElement(devices);
-                if (lastTim != null)
-                {
-                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim, devices);
-                }
+                TimeLogs[index] = singulator.SingulateTimeLog(TimeLogs[index], devices);
+                var tim = TimeLogs[index].GenerateTimeElement(devices);
                 list.Add(tim);
-                lastTim = tim;
             }
+            ISOTimeListEnqueuer.EnqueueTimeElements(list, devices);
             return list;
 
         }
