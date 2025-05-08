@@ -43,25 +43,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         var listKey = $"{ddi}_{deviceElement}";
                         if (!DataLogValues.TryGetValue(listKey, out var dlvHandler))
                         {
-                            if (DDIRegister.TryGetManufacturerSpecificDDI(ddi, device, out var ddiRegistry))
-                            {
-                                dlvHandler = ddiRegistry.GetInstance(deviceElement);
-                                dlvHandler.SingulateDataLogValue(ddi, deviceElement, currentTim, previousTim, devices);
-                            }
-                            else if (!device.IsLifetimeTotal(ddi))
-                            {
-                                //TODO do we need anything here?
-                            }
-                            else if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var dvi))
-                            {
-                                dlvHandler = new WeightedAverageDDIFunctions(ddi, deviceElement, dvi.ToList());
-                                dlvHandler.SingulateDataLogValue(ddi, deviceElement, currentTim, previousTim, devices);
-                            }
-                            else
-                            {
-                                dlvHandler = new SumTotalDDIFunctions();
-                                dlvHandler.SingulateDataLogValue(ddi, deviceElement, currentTim, previousTim, devices);
-                            }
+                            dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
+                            dlvHandler.SingulateValueInISOTime(ddi, deviceElement, currentTim, previousTim, devices);
                         }
                     }
                 }

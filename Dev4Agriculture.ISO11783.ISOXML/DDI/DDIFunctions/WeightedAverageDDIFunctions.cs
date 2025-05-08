@@ -5,20 +5,27 @@ using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using static Dev4Agriculture.ISO11783.ISOXML.DDI.DDIAlgorithms;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
 {
     public class WeightedAverageDDIFunctions : IDDITotalsFunctions
     {
-        public List<ushort> WeightDDIs;
         public ushort AverageDDI;
         public int DeviceElementId;
-        public ushort RelevantWeightDDI;
+        public bool IsInitialized;
         public long StartValue;
+        public long LastValue;
+        public long BaseValue;
+
+        public bool IsWeightInitialized;
         public long StartWeightValue;
         public long LastWeightValue;
-        public bool IsInitialized;
-        public bool IsWeightInitialized;
+        public long BaseWeightValue;
+
+        public List<ushort> WeightDDIs;
+        public ushort RelevantWeightDDI;
+        public byte RelevantWeightIndex;
 
         public WeightedAverageDDIFunctions(ushort ddi, int deviceElementId, List<ushort> weightDDIs)
         {
@@ -43,7 +50,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             return false;
         }
 
-        public long EnqueueDataLogValue(long currentValue, ISOTime currentTimeEntry, int det, List<ISODevice> devices)
+        public long EnqueueValueAsDataLogValueInTime(long currentValue, ISOTime currentTimeEntry, int det, List<ISODevice> devices)
         {
             if (!IsInitialized)
             {
@@ -75,15 +82,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             return currentValue;
         }
 
-        public void InitSingulation(List<ISODevice> devices)
-        {
-            if (!FindWeightDDI(devices))
-            {
-                //Nothing to do here.maybe a log
-            }
-        }
-
-        public long SingulateDataLogValue(long currentValue, long previousValue, ISOTime currentTime, ISOTime previousTime, List<ISODevice> devices)
+        public long SingulateValueInISOTime(long currentValue, long previousValue, ISOTime currentTime, ISOTime previousTime, List<ISODevice> devices)
         {
             if (previousTime.TryGetDDIValue(RelevantWeightDDI, DeviceElementId, out var startWeightValue) &&
                 currentTime.TryGetDDIValue(RelevantWeightDDI, DeviceElementId, out var lastWeightValue)
@@ -94,7 +93,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             return currentValue;
         }
 
-        public long SingulateTimeLogValue(long currentValue, DateTime currentTime, List<LatestTLGEntry> latestTLGEntries)
+        public long SingulateValueInTimeLog(long currentValue, DateTime currentTime, List<LatestTLGEntry> latestTLGEntries)
         {
             if (!IsInitialized)
             {
@@ -122,7 +121,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             }
         }
 
-        public void StartSingulateTimeLogValue(List<TLGDataLogDDI> ddis, List<ISODevice> devices)
+        public void StartSingulateValueInTimeLog(List<TLGDataLogDDI> ddis, List<ISODevice> devices)
         {
             foreach (var wDDI in WeightDDIs)
             {
@@ -131,6 +130,69 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                     RelevantWeightDDI = wDDI;
                 }
             }
+        }
+
+        public TotalDDIAlgorithmEnum GetTotalType()
+        {
+            return TotalDDIAlgorithmEnum.Average;
+        }
+
+        public void UpdateTimeLogEnqueuerWithHeaderLine(List<TLGDataLogDDI> ddis, List<ISODevice> devices)
+        {
+            if (RelevantWeightDDI == 0)
+            {
+                if (!FindWeightDDI(devices))
+                {
+                    //TODO: What if we don't have a Weight DDI available?
+                }
+            }
+
+            var ddiEntry = ddis.FirstOrDefault(entry => entry.Ddi == RelevantWeightDDI && entry.DeviceElement == DeviceElementId);
+            if (ddiEntry != null)
+            {
+                RelevantWeightIndex = ddiEntry.Index;
+                BaseWeightValue = LastWeightValue;//The LastWeightValue is the leftOver from the previous TimeLog if any existed
+                BaseValue = LastValue;
+                IsInitialized = false;
+                IsWeightInitialized = false;
+            }
+
+
+        }
+
+        public void UpdateTimeLogEnqueuerWithDataLine(TLGDataLogLine line)
+        {
+            if (line.Entries.Length >= RelevantWeightIndex && line.Entries[RelevantWeightIndex].IsSet)
+            {
+                LastWeightValue = line.Entries[RelevantWeightIndex].Value;
+                if (!IsWeightInitialized)
+                {
+                    StartWeightValue = LastWeightValue;
+                    IsWeightInitialized = true;
+                }
+            }
+        }
+
+        public int EnqueueUpdatedValueInTimeLog(int value)
+        {
+            if (!IsInitialized)
+            {
+                StartValue = value;
+                IsInitialized = true;
+            }
+            if (StartWeightValue != LastWeightValue)
+            {
+                var weightWithInTLG = LastWeightValue - StartWeightValue;
+                var averageWithinTLG = (LastWeightValue * value - StartWeightValue * StartValue) / (LastWeightValue - StartWeightValue);
+                var cleanedAverage = (BaseValue * BaseWeightValue + averageWithinTLG * weightWithInTLG)/(BaseWeightValue + averageWithinTLG);
+                LastValue = value;
+                return (int)cleanedAverage;
+            }
+            else
+            {
+                LastValue = value;
+                return value;
+            } 
         }
     }
 }

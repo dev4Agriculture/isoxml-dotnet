@@ -70,27 +70,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     }
                     if (!DataLogValues.TryGetValue(key, out var dlvHandler))
                     {
-                        if (DDIRegister.TryGetManufacturerSpecificDDI(ddi, device, out var ddiRegistry))
-                        {
-                            dlvHandler = ddiRegistry.GetInstance(deviceElement);
-                        }
-                        else if (device.IsLifetimeTotal(ddi))
-                        {
-                            dlvHandler = new LifetimeTotalDDIFunctions();
-                        }
-                        else if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var dvi))
-                        {
-                            dlvHandler = new WeightedAverageDDIFunctions(ddi, deviceElement, dvi.ToList());
-                        }
-                        else
-                        {
-                            dlvHandler = new SumTotalDDIFunctions();
-                        }
+                        dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
+
                         DataLogValues.Add(key, dlvHandler);
                     }
                     if (dlvHandler != null)
                     {
-                        dlv.ProcessDataValue = dlvHandler.EnqueueDataLogValue(dlv.ProcessDataValue, currentTim, deviceElement, devices);
+                        dlv.ProcessDataValue = dlvHandler.EnqueueValueAsDataLogValueInTime(dlv.ProcessDataValue, currentTim, deviceElement, devices);
                     }
                 }
 
