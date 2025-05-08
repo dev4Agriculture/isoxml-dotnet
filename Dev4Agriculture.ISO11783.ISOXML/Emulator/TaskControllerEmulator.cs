@@ -139,7 +139,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
         }
 
-        public ISOXML ExportISOXML(DateTime timeStampOfExport)
+        public ISOXML ExportISOXML(DateTime timeStampOfExport, bool prepareForAnalysis = false)
         {
             foreach (var task in _isoxml.Data.Task)
             {
@@ -155,6 +155,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 {
                     finalDan.AllocationStamp.Stop = timeStampOfExport;
                 }
+            }
+
+            if (prepareForAnalysis)
+            {
+                _isoxml.PrepareDataAnalysis();
             }
 
             return _isoxml;
@@ -465,7 +470,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 PosNorth = (int)((double)position.PositionNorth * ISOTLG.TLG_GPS_FACTOR),
                 PosEast = (int)((double)position.PositionEast * ISOTLG.TLG_GPS_FACTOR),
                 PosStatus = (byte)position.PositionStatus,
-                ArraySize = 0,
                 GpsUTCDate = position.GpsUtcDate ?? 0,
                 GpsUTCTime = (uint)(position.GpsUtcTime ?? 0),
                 Hdop = (ushort)(position.HDOP ?? 0), //TODO Ensure that's correct
@@ -928,7 +932,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
                 EndTask(timeStamp, ISOTaskStatus.Completed);
             }
         }
-
 
     }
 }

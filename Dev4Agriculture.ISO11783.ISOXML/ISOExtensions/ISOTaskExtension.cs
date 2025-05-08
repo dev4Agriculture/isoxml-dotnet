@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
@@ -254,9 +255,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm, bool shallCheckTimeElements = true)
         {
             var found = false;
+            var timElements = Time.OrderBy(entry => entry.Start).ToList();
+            var index = timElements.Count() - 1;
+            while (!found && index > -1)
+            {
+                if (timElements[index].Type == ISOType2.Effective)
+                {
+                    var dlv = timElements[index].DataLogValue.FirstOrDefault(
+                        dlvEntry => DDIUtils.ConvertDDI(dlvEntry.ProcessDataDDI) == ddi &&
+                        IdList.ToIntId(dlvEntry.DeviceElementIdRef) == deviceElement);
+                    if (dlv != null)
+                    {
+                        totalValue = (int)dlv.ProcessDataValue;
+                        return true;
+                    }
+                }
+                index--;
+            }
+
             if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
             {
-                for (var index = TimeLogs.Count - 1; index >= 0; index--)
+                for (index = TimeLogs.Count - 1; index >= 0; index--)
                 {
                     if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
                     {

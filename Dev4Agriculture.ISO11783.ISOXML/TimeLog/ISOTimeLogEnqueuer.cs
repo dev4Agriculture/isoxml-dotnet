@@ -44,13 +44,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     var key = $"{entry.Ddi}_{entry.DeviceElement}";
                     if (!previousData.TryGetValue(key, out var enqueuerEntry))
                     {
-                        previousData[key] = new EnqueuerEntry()
+                        previousData[key] = new EnqueuerEntry
                         {
                             Index = index,
                             DDI = entry.Ddi,
-                            DeviceElementId = entry.DeviceElement
+                            DeviceElementId = entry.DeviceElement,
+                            Function = DDIAlgorithms.FindTotalDDIHandler(entry.Ddi, entry.DeviceElement, device)
                         };
-                        previousData[key].Function = DDIAlgorithms.FindTotalDDIHandler(entry.Ddi, entry.DeviceElement, device);
                     }
                     enqueuerEntry.Function.UpdateTimeLogEnqueuerWithHeaderLine(tlg.Header.Ddis, devices);
                 }
