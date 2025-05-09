@@ -3,7 +3,10 @@ using System.Globalization;
 using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
+using Dev4Agriculture.ISO11783.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.DDI.DDIRegistry;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,6 +24,15 @@ public class TLGTest
 
         Assert.AreEqual(isoxml.TimeLogs.Count, 21);
         Assert.AreEqual(isoxml.Messages.Count, 0);
+    }
+
+    [TestMethod]
+    public void CanRegisterProprietaryDDI()
+    {
+        //Idea: A DDI "Maximum"
+
+
+        DDIRegister.RegisterProprietaryDDI(0xEAAA, 111, new DDIRegisterWeightedAverageEntry([82,81,80]));
     }
 
 
@@ -108,7 +120,7 @@ public class TLGTest
         var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
         //Testing Totals
-        Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
+        Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, isoxml.Data.Device.First()));
         Assert.AreEqual(totalYield, 242461);
     }
 
@@ -154,7 +166,7 @@ public class TLGTest
         var isoxml = ISOXML.Load(path);
         foreach (var task in isoxml.Data.Task)
         {
-            var timList = task.GenerateTimeElementsFromTimeLogs(isoxml.Data.Device);
+            var timList = task.GenerateTimeElementsFromTimeLogs([.. isoxml.Data.Device]);
             Assert.IsNotNull(timList);
             Assert.AreEqual(timList.Count, 1);
             foreach (var entry in timList)

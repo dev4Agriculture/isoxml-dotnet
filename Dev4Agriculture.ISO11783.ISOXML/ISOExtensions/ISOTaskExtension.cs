@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
+using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
@@ -248,54 +249,70 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="ddi">The Data Dictionary Identifier</param>
         /// <param name="deviceElement">The Data Dictionary Identifier</param>
         /// <param name="totalValue">The RETURNED Total Value</param>
-        /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
+        /// <param name="devices">All available Devices; possible relevant for some Totals Functions</param>
         /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
         /// <returns>True if Value was found</returns>
-        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm, bool shallCheckTimeElements = true)
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, List<ISODevice> devices, bool shallCheckTimeElements = true)
         {
-            var found = false;
-            if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
+            if(deviceElement == 0)
             {
-                for (var index = TimeLogs.Count - 1; index >= 0; index--)
+                foreach(var curDevice in devices)
                 {
-                    if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
+                    if (curDevice.IsDeviceProcessData(ddi))
                     {
-                        return true;
+                        if(curDevice.TryFindDeviceElementForDDI(ddi, out var deviceElements))
+                        {
+                            deviceElement = IdList.ToIntId(deviceElements.First().DeviceElementId);
+                            break;
+                        }
                     }
                 }
+            }
 
-                if (shallCheckTimeElements)
-                {
-                    var endTime = Time.Max(entry => entry.Start);
-                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
-                    {
-                        return true;
-                    }
-                }
+            if(deviceElement == 0)
+            {
                 totalValue = 0;
+                return false;
             }
 
-            totalValue = 0;
-            foreach (var tlg in TimeLogs)
+            var found = false;
+            var timElements = Time.OrderBy(entry => entry.Start).ToList();
+            var index = timElements.Count() - 1;
+            while (!found && index > -1)
             {
-                if (tlg.TryGetTotalValue(ddi, deviceElement, out var additional, totalAlgorithm))
+                if (timElements[index].Type == ISOType2.Effective)
                 {
-                    totalValue += additional;
-                    found = true;
-                }
-            }
-            if (!found)
-            {
-                if (shallCheckTimeElements)
-                {
-                    var endTime = Time.Max(entry => entry.Start);
-                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
+                    var dlv = timElements[index].DataLogValue.FirstOrDefault(
+                        dlvEntry => DDIUtils.ConvertDDI(dlvEntry.ProcessDataDDI) == ddi &&
+                        IdList.ToIntId(dlvEntry.DeviceElementIdRef) == deviceElement);
+                    if (dlv != null)
                     {
+                        totalValue = (int)dlv.ProcessDataValue;
                         return true;
                     }
                 }
-
+                index--;
             }
+
+            var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => IdList.ToIntId(det.DeviceElementId) == deviceElement));
+
+            for (index = TimeLogs.Count - 1; index >= 0; index--)
+            {
+                if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, device))
+                {
+                    return true;
+                }
+            }
+
+            if (shallCheckTimeElements)
+            {
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
+                {
+                    return true;
+                }
+            }
+            totalValue = 0;
 
             return found;
 
@@ -303,26 +320,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
         /// <summary>
-        /// Create a list of TimeElements with DataLogValue-Elements for the given Task. Only used when the TimeLogs were created in code; normally the TIM-Element exists
+        /// Create a list of TimeElements with DataLogValue-Elements for the given Task.
+        /// ATTENTION: Only used when the TimeLogs were created in code; normally the TIM-Element exists
         /// </summary>
         /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
         /// <returns>List of TIM-Elements with DataLogValues</returns>
-        public List<ISOTime> GenerateTimeElementsFromTimeLogs(IEnumerable<ISODevice> devices)
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices)
         {
             var list = new List<ISOTime>();
-
-            ISOTime lastTim = null;
-
-            foreach (var tlg in TimeLogs)
+            var singulator = new ISOTimeLogSingulator();
+            for (var index = 0; index < TimeLogs.Count; index++)
             {
-                var tim = tlg.GenerateTimeElement(devices);
-                if (lastTim != null)
-                {
-                    tim = ISOTime.CreateSummarizedTimeElement(lastTim, tim, devices);
-                }
+                TimeLogs[index] = singulator.SingulateTimeLog(TimeLogs[index], devices);
+                var tim = TimeLogs[index].GenerateTimeElement(devices);
                 list.Add(tim);
-                lastTim = tim;
             }
+            ISOTimeListEnqueuer.EnqueueTimeElements(list, devices);
             return list;
 
         }

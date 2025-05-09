@@ -243,6 +243,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             FolderPath = folderPath;
         }
 
+
+        internal void PrepareDataAnalysis()
+        {
+            foreach (var timeLog in TimeLogs)
+            {
+                try
+                {
+                    timeLog.Value.Analyse(this);
+                }
+                catch (Exception ex)
+                {
+                    Messages.AddError(ResultMessageCode.AnalysisError, ResultDetail.FromString(timeLog.Key));
+                }
+            }
+        }
+
+
         /// <summary>
         /// Load an ISOXML TaskSet and return an ISOXML Object
         /// </summary>
@@ -291,17 +308,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             if (extendedAnalysis)
             {
-                foreach (var timeLog in isoxml.TimeLogs)
-                {
-                    try
-                    {
-                        timeLog.Value.Analyse(isoxml);
-                    }
-                    catch (Exception ex)
-                    {
-                        isoxml.Messages.AddError(ResultMessageCode.AnalysisError, ResultDetail.FromString(timeLog.Key));
-                    }
-                }
+                isoxml.PrepareDataAnalysis();
             }
 
             return isoxml;

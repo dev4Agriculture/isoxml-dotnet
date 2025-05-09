@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 {
@@ -52,6 +53,29 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
 
             // Calculate the angle.
             return (float)Math.Atan2(cross_product, dot_product);
+        }
+
+
+        /// <summary>
+        /// This function is used to calculate a cleaned Average for a single range of average values. It expects that at start, already a countAtStart amount of values have been
+        /// used to build the start average. We calculate the Average that was really generated over all values within the range of start to end, nothing before.
+        /// </summary>
+        /// <param name="startAverage">Average Value at start of measurement</param>
+        /// <param name="countAtStart">Number of values used to build this average</param>
+        /// <param name="endAverage">Average value at end of measurement</param>
+        /// <param name="countAtEnd">Total Number of values used for measurement; from 0 to start to end</param>
+        /// <returns></returns>
+        public static double CalculateCleanedContinousWeightedAverage(double startAverage, long countAtStart, double endAverage, long countAtEnd)
+        {
+            var count = countAtEnd - countAtStart;
+            if (count == 0)
+            {
+                return endAverage;
+            }
+            var segmentSum = endAverage * countAtEnd - startAverage * countAtStart;
+            return segmentSum / count;
+
+
         }
     }
 }
