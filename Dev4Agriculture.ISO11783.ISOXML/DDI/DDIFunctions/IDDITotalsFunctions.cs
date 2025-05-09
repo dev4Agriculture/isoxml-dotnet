@@ -101,5 +101,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         /// <param name="devices"></param>
         /// <returns></returns>
         long EnqueueValueAsDataLogValueInTime(long currentValue, ISOTime currentTimeEntry, int det, List<ISODevice> devices);
+
+        /// <summary>
+        /// This returns a cleaned (start to end of this timelog) TotalValue for the specific DDI
+        /// </summary>
+        /// <param name="iSOTLG"></param>
+        /// <param name="totalValue"></param>
+        /// <returns></returns>
+        bool GetCleanedTotalForTimeLog(ISOTLG iSOTLG, out int totalValue);
+
+
+        /// <summary>
+        /// This merges all cleaned TotalValues for TimeLogs for 1 specific DDI
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="totalValue"></param>
+        /// <returns></returns>
+        bool GetCleanedTotalForTask(ISOTask task, out int totalValue);
     }
 }

@@ -120,7 +120,7 @@ public class TLGTest
         var isoxml = ISOXML.Load("./testdata/TimeLogs/ValidTimeLogs");
 
         //Testing Totals
-        Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, TLGTotalAlgorithmType.NO_RESETS));
+        Assert.IsTrue(isoxml.TimeLogs["TLG00002"].TryGetTotalValue(90, 0, out var totalYield, isoxml.Data.Device.First()));
         Assert.AreEqual(totalYield, 242461);
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators;
@@ -304,7 +305,7 @@ public class TaskControllerEmulatorTests
         Assert.AreEqual(task.DeviceAllocation.Count, 4);
         Assert.AreEqual(task.TimeLogs.Count, 4);
 
-        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue, TLGTotalAlgorithmType.NO_RESETS), true);
+        Assert.AreEqual(task.TryGetTotalValue((ushort)DDIList.TotalFuelConsumption, -1, out var totalValue, loadedISOXML.Data.Device.ToList()), true);
         Assert.AreEqual(totalValue, 21664);
     }
 

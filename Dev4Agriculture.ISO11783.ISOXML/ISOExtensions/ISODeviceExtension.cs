@@ -103,6 +103,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        public bool TryFindDeviceElementForDDI(ushort DDI, out List<ISODeviceElement> deviceElements)
+        {
+            var objIds = new List<ushort>();
+            var dpds = DeviceProcessData.Where(checkDpd => DDIUtils.ConvertDDI(checkDpd.DeviceProcessDataDDI) == DDI);
+            var dpts = DeviceProperty.Where(checkDpt => DDIUtils.ConvertDDI(checkDpt.DevicePropertyDDI) == DDI);
+            objIds.AddRange(dpds.Select(dpd => dpd.DeviceProcessDataObjectId));
+            objIds.AddRange(dpts.Select(dpt => dpt.DevicePropertyObjectId));
+
+            deviceElements = DeviceElement.Where(det => det.DeviceObjectReference.Any(dor =>  objIds.Any(id => dor.DeviceObjectId == id))).ToList();
+            if (deviceElements.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         /// <summary>
         /// Returns a list of all Combinations of DeviceProcessData + DeviceElement that reflects a Total.
         /// </summary>
@@ -152,7 +169,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <returns>true if DDI is found</returns>
         public bool IsDeviceProcessData(ushort ddi)
         {
-            return DeviceProcessData.Any(dpd => dpd.DeviceProcessDataDDI == DDIUtils.FormatDDI(ddi));
+            return DeviceProcessData.Any(dpd => DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI) == ddi);
         }
 
         /// <summary>

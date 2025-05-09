@@ -231,9 +231,9 @@ public class EnqueuerSingulatorTests
         var firstEmulatedTaskData = emulator.ExportISOXML(DateTime.Now, true);
         firstEmulatedTaskData.Save();
         Assert.AreEqual(3,firstEmulatedTaskData.Data.Task.Count);//2 manually added, 1 AutoLogTask
-        Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.IneffectiveTotalTime, -1, out var ineffTime, TLGTotalAlgorithmType.NO_RESETS));
+        Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.IneffectiveTotalTime, -1, out var ineffTime, firstEmulatedTaskData.Data.Device.ToList()));
         Assert.AreEqual(inEffectiveTotalTime, ineffTime);
-        Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.AverageYieldMassPerArea, -1, out var avgYieldMassPerArea, TLGTotalAlgorithmType.NO_RESETS));
+        Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.AverageYieldMassPerArea, -1, out var avgYieldMassPerArea, firstEmulatedTaskData.Data.Device.ToList()));
         Assert.AreEqual(AverageMassPerArea, avgYieldMassPerArea);
 
         var timElements = firstEmulatedTaskData.Data.Task.First().Time.Where(entry => entry.Type == ISOType2.Effective).ToList();
@@ -252,7 +252,7 @@ public class EnqueuerSingulatorTests
         var singleTimElements = singulator.SingulateTimeElements(timElements, firstEmulatedTaskData.Data.Device.ToList());
         Assert.AreEqual(4, singleTimElements.Count);
         timIndex = 0;
-        foreach(var entry in singleTimElements)
+        foreach (var entry in singleTimElements)
         {
             Assert.AreEqual(7, entry.DataLogValue.Count);
             var funValue = entry.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ProprietaryAverageDDI);
@@ -265,7 +265,7 @@ public class EnqueuerSingulatorTests
 
         var connected = ISOTimeListEnqueuer.EnqueueTimeElements(singleTimElements, firstEmulatedTaskData.Data.Device.ToList());
         Assert.AreEqual(4, connected.Count);
-        foreach(var tim in timElements)
+        foreach (var tim in timElements)
         {
             var timCompare = connected.FirstOrDefault(entry => entry.Start == tim.Start);
             Assert.IsNotNull(timCompare);

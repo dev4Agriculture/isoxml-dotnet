@@ -205,7 +205,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <param name="totalValue">The RETURNED Total Value</param>
         /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
         /// <returns></returns>
-        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm)
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, ISODevice device)
         {
             if (!Header.TryGetDDIIndex(ddi, deviceElement, out var index))
             {
@@ -213,56 +213,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 totalValue = 0;
                 return false;
             }
-
-            _ddiAvailabilityStatus = DDIAvailabilityStatus.NO_VALUE;
-
-            if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
+            var handler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
+            if( handler.GetCleanedTotalForTimeLog(this, out totalValue))
             {
-                return TryGetLastValue(ddi, deviceElement, out totalValue);
-            }
-            else if (totalAlgorithm == TLGTotalAlgorithmType.NO_RESETS)
-            {
-                if (TryGetFirstValue(ddi, deviceElement, out var first))
-                {
-                    if (TryGetLastValue(ddi, deviceElement, out var last))
-                    {
-                        _ddiAvailabilityStatus = DDIAvailabilityStatus.HAS_VALUE;
-                        totalValue = last - first;
-                        return true;
-                    }
-                }
-                totalValue = 0;
-                return false;
-            }
-            else
-            {
-                var lastValue = 0;
-                var isStarted = false;
-                totalValue = 0;
-                foreach (var entry in Entries)
-                {
-                    if (entry.TryGetValue(index, out var curValue))
-                    {
-                        _ddiAvailabilityStatus = DDIAvailabilityStatus.HAS_VALUE;
-                        if (!isStarted)
-                        {
-                            isStarted = true;
-                            lastValue = curValue;
-                        }
-                        if (curValue >= lastValue)
-                        {
-                            totalValue += curValue - lastValue;
-                            lastValue = curValue;
-                        }
-                        else
-                        {
-                            lastValue = curValue;
-                        }
-                    }
-                }
                 return true;
-
             }
+            _ddiAvailabilityStatus = DDIAvailabilityStatus.NO_VALUE;
+            return false;
         }
 
 

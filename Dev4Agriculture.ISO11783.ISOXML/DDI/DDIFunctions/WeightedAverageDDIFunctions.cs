@@ -13,6 +13,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
     {
         public ushort AverageDDI;
         public int DeviceElementId;
+        public ISODevice Device;
         public bool IsInitialized;
         public long StartValue;
         public long LastValue;
@@ -27,11 +28,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         public ushort RelevantWeightDDI;
         public byte RelevantWeightIndex;
 
-        public WeightedAverageDDIFunctions(ushort ddi, int deviceElementId, List<ushort> weightDDIs)
+        private int TaskTotalLatestWeight;
+
+
+        public WeightedAverageDDIFunctions(ushort ddi, int deviceElementId, ISODevice device, List<ushort> weightDDIs)
         {
             AverageDDI = ddi;
             WeightDDIs = weightDDIs;
             DeviceElementId = deviceElementId;
+            Device = device;
         }
 
 
@@ -201,6 +206,59 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                 LastValue = value;
                 return value;
             } 
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iSOTLG"></param>
+        /// <param name="totalValue"></param>
+        /// <returns></returns>
+        public bool GetCleanedTotalForTimeLog(ISOTLG iSOTLG, out int totalValue)
+        {
+
+            if (
+                iSOTLG.TryGetLastValue(AverageDDI, DeviceElementId, out var intEndValue) &&
+                iSOTLG.TryGetFirstValue(AverageDDI, DeviceElementId, out var intStartValue) &&
+                iSOTLG.TryGetFirstValue(RelevantWeightDDI, DeviceElementId, out var intStartWeightValue) &&
+                iSOTLG.TryGetLastValue(RelevantWeightDDI, DeviceElementId, out var intEndWeightValue)
+                )
+            {
+                totalValue = (int)MathUtils.CalculateCleanedContinousWeightedAverage(intStartValue, intStartWeightValue, intEndValue, intEndWeightValue);
+                TaskTotalLatestWeight = intEndWeightValue - intStartWeightValue;
+                return true;
+            }
+            totalValue = 0;
+            return false;
+        }
+
+        /// <summary>
+        ///   Get a Total for the full Task. here it's an Average Value
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="totalValue"></param>
+        /// <returns></returns>
+        public bool GetCleanedTotalForTask(ISOTask task, out int totalValue)
+        {
+            var avgSum = 0;
+            var valueSum = 0;
+            foreach (var tlg in task.TimeLogs)
+            {
+                if(GetCleanedTotalForTimeLog(tlg, out var curAverage))
+                {
+                    avgSum += curAverage * TaskTotalLatestWeight;
+                    valueSum += curAverage * TaskTotalLatestWeight;
+                }
+            }
+
+            if (valueSum > 0)
+            {
+                totalValue = avgSum / valueSum;
+                return true;
+            }
+            totalValue = 0;
+            return false;
         }
     }
 }

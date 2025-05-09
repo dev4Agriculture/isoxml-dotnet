@@ -51,21 +51,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI
 
         internal static IDDITotalsFunctions FindTotalDDIHandler(ushort ddi, int deviceElement, ISODevice device)
         {
+            if (device == null)
+            {
+                return new SumTotalDDIFunctions(ddi,deviceElement,null);
+            }
             if (DDIRegister.TryGetManufacturerSpecificDDI(ddi, device, out var ddiRegistry))
             {
-                return ddiRegistry.GetInstance(deviceElement);
+                return ddiRegistry.GetInstance(ddi, deviceElement, device);
             }
             else if (device.IsLifetimeTotal(ddi))
             {
-                return new LifetimeTotalDDIFunctions();
+                return new LifetimeTotalDDIFunctions(ddi, deviceElement, device);
             }
             else if (DDIAlgorithms.AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var dvi))
             {
-                return new WeightedAverageDDIFunctions(ddi, deviceElement, dvi.ToList());
+                return new WeightedAverageDDIFunctions(ddi, deviceElement, device, dvi.ToList());
             }
             else
             {
-                return new SumTotalDDIFunctions();
+                return new SumTotalDDIFunctions(ddi, deviceElement, device);
             }
 
         }

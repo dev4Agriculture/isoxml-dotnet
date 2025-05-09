@@ -249,11 +249,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// <param name="ddi">The Data Dictionary Identifier</param>
         /// <param name="deviceElement">The Data Dictionary Identifier</param>
         /// <param name="totalValue">The RETURNED Total Value</param>
-        /// <param name="totalAlgorithm">The Algorithm to use for this Total</param>
+        /// <param name="devices">All available Devices; possible relevant for some Totals Functions</param>
         /// <param name="shallCheckTimeElements">If true (Default!), the TIM-Elements is checked if no data was found in the TimeLogs</param>
         /// <returns>True if Value was found</returns>
-        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, TLGTotalAlgorithmType totalAlgorithm, bool shallCheckTimeElements = true)
+        public bool TryGetTotalValue(ushort ddi, int deviceElement, out int totalValue, List<ISODevice> devices, bool shallCheckTimeElements = true)
         {
+            if(deviceElement == 0)
+            {
+                foreach(var curDevice in devices)
+                {
+                    if (curDevice.IsDeviceProcessData(ddi))
+                    {
+                        if(curDevice.TryFindDeviceElementForDDI(ddi, out var deviceElements))
+                        {
+                            deviceElement = IdList.ToIntId(deviceElements.First().DeviceElementId);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(deviceElement == 0)
+            {
+                totalValue = 0;
+                return false;
+            }
+
             var found = false;
             var timElements = Time.OrderBy(entry => entry.Start).ToList();
             var index = timElements.Count() - 1;
@@ -273,48 +294,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 index--;
             }
 
-            if (totalAlgorithm == TLGTotalAlgorithmType.LIFETIME)
-            {
-                for (index = TimeLogs.Count - 1; index >= 0; index--)
-                {
-                    if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, totalAlgorithm))
-                    {
-                        return true;
-                    }
-                }
+            var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => IdList.ToIntId(det.DeviceElementId) == deviceElement));
 
-                if (shallCheckTimeElements)
+            for (index = TimeLogs.Count - 1; index >= 0; index--)
+            {
+                if (TimeLogs[index].TryGetTotalValue(ddi, deviceElement, out totalValue, device))
                 {
-                    var endTime = Time.Max(entry => entry.Start);
-                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                totalValue = 0;
             }
 
+            if (shallCheckTimeElements)
+            {
+                var endTime = Time.Max(entry => entry.Start);
+                if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
+                {
+                    return true;
+                }
+            }
             totalValue = 0;
-            foreach (var tlg in TimeLogs)
-            {
-                if (tlg.TryGetTotalValue(ddi, deviceElement, out var additional, totalAlgorithm))
-                {
-                    totalValue += additional;
-                    found = true;
-                }
-            }
-            if (!found)
-            {
-                if (shallCheckTimeElements)
-                {
-                    var endTime = Time.Max(entry => entry.Start);
-                    if (Time.FirstOrDefault(entry => entry.Start == endTime)?.TryGetDDIValue(ddi, deviceElement, out totalValue) ?? false)
-                    {
-                        return true;
-                    }
-                }
-
-            }
 
             return found;
 

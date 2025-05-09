@@ -15,7 +15,7 @@ public class TaskDataAnalysisTests
     {
         var isoxml = ISOXML.Load("./testdata/TimeLogs/TotalsTests");
         //Testing LifeTime Totals
-        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x114, 0, out var totalFuelLifeTime, TLGTotalAlgorithmType.LIFETIME));
+        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x114, 0, out var totalFuelLifeTime, isoxml.Data.Device.ToList()));
         Assert.AreEqual(totalFuelLifeTime, 1294 / 0.5);
 
 
@@ -24,7 +24,7 @@ public class TaskDataAnalysisTests
         //We know it's all the same DET in this case, so we only call it once for all DDIs
         var detList = analysis.FindDeviceElementsForDDI(isoxml.Data.Task[0], 0x0078);
         var detId = IdList.ToIntId(detList[0].DeviceElementId);
-        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x78, detId, out var totalInEffectiveTime, TLGTotalAlgorithmType.NO_RESETS))
+        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0x78, detId, out var totalInEffectiveTime, isoxml.Data.Device.ToList()))
         ;
         Assert.AreEqual(totalInEffectiveTime, 4531 /*Close to 75.5 minutes*/);
 
@@ -33,7 +33,7 @@ public class TaskDataAnalysisTests
         Assert.AreEqual(maximum, 12000);
 
 
-        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0xB7, detId, out var totalDryMass, TLGTotalAlgorithmType.NO_RESETS));
+        Assert.IsTrue(isoxml.Data.Task[0].TryGetTotalValue(0xB7, detId, out var totalDryMass, isoxml.Data.Device.ToList()));
         Assert.AreEqual(totalDryMass, 2000);
 
         var timeElements = isoxml.Data.Task[0].GenerateTimeElementsFromTimeLogs([.. isoxml.Data.Device]);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIRegistry
 {
@@ -12,9 +13,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIRegistry
             WeightDDIs = weightDDIs;
         }
 
-        public override IDDITotalsFunctions GetInstance(int deviceElementId)
+        public override IDDITotalsFunctions GetInstance(ushort ddi, int deviceElementId, ISODevice device)
         {
-            return new WeightedAverageDDIFunctions(DDI, deviceElementId, WeightDDIs);
+            return new WeightedAverageDDIFunctions(DDI, deviceElementId, device, WeightDDIs);
         }
     }
 }
