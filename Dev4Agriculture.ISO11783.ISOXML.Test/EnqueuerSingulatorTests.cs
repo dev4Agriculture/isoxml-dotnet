@@ -161,6 +161,7 @@ public class EnqueuerSingulatorTests
         for (var taskStepCount = 0; taskStepCount < 4; taskStepCount++)
         {
             emulator.StartTask(startTime.AddSeconds(stepMax*taskStepCount), task1);
+            curWorkstate = 0;
             for (var index = 0; index < stepMax; index++)
             {
                 emulator.AddTimeAndPosition(startTime.AddSeconds((stepMax + breakTime) * taskStepCount + index), new ISOPosition()
@@ -190,9 +191,20 @@ public class EnqueuerSingulatorTests
                 FunCount++;
                 FunSum += taskStepCount*10;
 
-                emulator.UpdateRawMachineValue(ProprietaryAverageDDI, FunSum/FunCount);
-                emulator.UpdateRawMachineValue(ProprietaryWeightDDI, FunCount);
 
+                if (totalArea > 0)
+                {
+                    AverageMassPerArea = totalMass / totalArea * 10;
+                }
+                effectiveTotalTime += curWorkstate;
+                inEffectiveTotalTime += 1 - curWorkstate;
+                totalArea += curAreaPerSecond * curWorkstate;
+                totalMass += curYieldPerSecond * curWorkstate;
+                lifetimeTotalArea += curAreaPerSecond * curWorkstate;
+
+
+                emulator.UpdateRawMachineValue(ProprietaryAverageDDI, FunSum / FunCount);
+                emulator.UpdateRawMachineValue(ProprietaryWeightDDI, FunCount);
 
                 if (curWorkstate == 1)
                 {
@@ -209,17 +221,6 @@ public class EnqueuerSingulatorTests
                     emulator.UpdateRawMachineValue(DDIList.IneffectiveTotalTime, inEffectiveTotalTime);
                 }
 
-                if (totalArea > 0)
-                {
-                    AverageMassPerArea = totalMass / totalArea * 10;
-                }
-                effectiveTotalTime += curWorkstate;
-                inEffectiveTotalTime += 1 - curWorkstate;
-                totalArea += curAreaPerSecond * curWorkstate;
-                totalMass += curYieldPerSecond * curWorkstate;
-                lifetimeTotalArea += curAreaPerSecond * curWorkstate;
-
-
             }
             emulator.PauseTask();
         }
@@ -231,31 +232,35 @@ public class EnqueuerSingulatorTests
         firstEmulatedTaskData.Save();
         Assert.AreEqual(3,firstEmulatedTaskData.Data.Task.Count);//2 manually added, 1 AutoLogTask
         Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.IneffectiveTotalTime, -1, out var ineffTime, TLGTotalAlgorithmType.NO_RESETS));
-        Assert.AreEqual(inEffectiveTotalTime - 1, ineffTime);
+        Assert.AreEqual(inEffectiveTotalTime, ineffTime);
         Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.AverageYieldMassPerArea, -1, out var avgYieldMassPerArea, TLGTotalAlgorithmType.NO_RESETS));
         Assert.AreEqual(AverageMassPerArea, avgYieldMassPerArea);
 
         var timElements = firstEmulatedTaskData.Data.Task.First().Time.Where(entry => entry.Type == ISOType2.Effective).ToList();
         Assert.AreEqual(4, timElements.Count);
+        var timIndex = 0;
         foreach (var entry in timElements)
         {
             Assert.AreEqual(7, entry.DataLogValue.Count);
+            var effTime = entry.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime);
+            Assert.AreEqual(240 * (timIndex+1), effTime.ProcessDataValue);
+            timIndex++;
         }
 
         var singulator = new ISOTimeListSingulator();
 
         var singleTimElements = singulator.SingulateTimeElements(timElements, firstEmulatedTaskData.Data.Device.ToList());
         Assert.AreEqual(4, singleTimElements.Count);
-        var timIndex = 0;
+        timIndex = 0;
         foreach(var entry in singleTimElements)
         {
             Assert.AreEqual(7, entry.DataLogValue.Count);
             var funValue = entry.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ProprietaryAverageDDI);
             Assert.AreEqual(timIndex * 10, funValue.ProcessDataValue);
+            var effTime = entry.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == (ushort)DDIList.EffectiveTotalTime);
+            Assert.AreEqual(240, effTime.ProcessDataValue);
             timIndex++;
         }
-
-        //TODO Asserts
 
 
         var connected = ISOTimeListEnqueuer.EnqueueTimeElements(singleTimElements, firstEmulatedTaskData.Data.Device.ToList());
@@ -264,7 +269,7 @@ public class EnqueuerSingulatorTests
         {
             var timCompare = connected.FirstOrDefault(entry => entry.Start == tim.Start);
             Assert.IsNotNull(timCompare);
-            Assert.AreEqual(7,tim.DataLogValue.Count);
+            Assert.AreEqual(7, tim.DataLogValue.Count);
             foreach( var dlv in tim.DataLogValue)
             {
                 var dlvCompare = timCompare.DataLogValue.FirstOrDefault(compareDLV => compareDLV.ProcessDataDDI == dlv.ProcessDataDDI && dlv.DeviceElementIdRef == compareDLV.DeviceElementIdRef);
