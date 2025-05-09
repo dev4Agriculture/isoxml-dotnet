@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using de.dev4Agriculture.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.DDI;
+using Dev4Agriculture.ISO11783.ISOXML.DDI.DDIRegistry;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator;
 using Dev4Agriculture.ISO11783.ISOXML.Emulator.Generators;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,9 +18,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 [TestClass]
 public class EnqueuerSingulatorTests
 {
+    private const ushort ProprietaryAverageDDI = 0xEAAA;
+    private const ushort ProprietaryWeightDDI = 0xEAAB;
+    private const ushort Manufacturer = 47;
+
+
     private ISODevice GenerateHarvester(ISOXML isoxml, int serialNumber)
     {
-        var generator = new DeviceGenerator(isoxml, "Harvester", "V1", new byte[] { 1, 2, 3, 4, 5, 6, 7 }, DeviceClass.Harvesters, 111, serialNumber);
+        var generator = new DeviceGenerator(isoxml, "Harvester", "V1", new byte[] { 1, 2, 3, 4, 5, 6, 7 }, DeviceClass.Harvesters, Manufacturer, serialNumber);
         generator.AddDeviceProperty(new ISODeviceProperty()
         {
             DevicePropertyDDI = DDIUtils.FormatDDI(DDIList.DeviceElementOffsetX),
@@ -83,6 +91,22 @@ public class EnqueuerSingulatorTests
         });
 
 
+        generator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(ProprietaryAverageDDI),
+            DeviceProcessDataDesignator = "Average Fun per Time",
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet,
+            DeviceProcessDataTriggerMethods = (byte)(ISODeviceProcessDataTriggerMethodType.Total | ISODeviceProcessDataTriggerMethodType.OnTime)
+        });
+
+        generator.AddDeviceProcessData(new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(ProprietaryWeightDDI),
+            DeviceProcessDataDesignator = "Fun count",
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.BelongsToDefaultSet,
+            DeviceProcessDataTriggerMethods = (byte)(ISODeviceProcessDataTriggerMethodType.Total | ISODeviceProcessDataTriggerMethodType.OnTime)
+        });
+
         return generator.GetDevice();
 
     }
@@ -91,6 +115,9 @@ public class EnqueuerSingulatorTests
     [TestMethod]
     public void CanCreateSingulateAndEnqueueTimesAndTimeLogs()
     {
+        DDIRegister.Clear();
+        DDIRegister.RegisterProprietaryDDI(ProprietaryAverageDDI, Manufacturer, new DDIRegisterWeightedAverageEntry(new() { ProprietaryWeightDDI }));
+        DDIRegister.RegisterProprietaryDDI(ProprietaryWeightDDI, Manufacturer, new DDIRegisterSumTotalEntry());
         var isoxml = ISOXML.Create("C:/data/isoxml_test");
         var task1 = new ISOTask()
         {
@@ -107,9 +134,6 @@ public class EnqueuerSingulatorTests
         isoxml.Data.Task.Add(task2);
 
 
-        
-
-
         var emulator = new TaskControllerEmulator(isoxml);
         emulator.ConnectDevice(GenerateHarvester(isoxml, 12345));
 
@@ -121,6 +145,8 @@ public class EnqueuerSingulatorTests
         var totalArea = 0;
         var lifetimeTotalArea = 600000;
         var AverageMassPerArea = 0;
+        var FunSum = 0;
+        var FunCount = 0;
         var totalMass = 0;
 
         var curWorkstate = 0;
@@ -132,15 +158,15 @@ public class EnqueuerSingulatorTests
         var stepMax = 400;
         var breakTime = 200;
 
-        for (var taskCount = 0; taskCount < 4; taskCount++)
+        for (var taskStepCount = 0; taskStepCount < 4; taskStepCount++)
         {
-            emulator.StartTask(startTime.AddSeconds(stepMax*taskCount), task1);
+            emulator.StartTask(startTime.AddSeconds(stepMax*taskStepCount), task1);
             for (var index = 0; index < stepMax; index++)
             {
-                emulator.AddTimeAndPosition(startTime.AddSeconds((stepMax + breakTime) * taskCount + index), new ISOPosition()
+                emulator.AddTimeAndPosition(startTime.AddSeconds((stepMax + breakTime) * taskStepCount + index), new ISOPosition()
                 {
-                    PositionEast = (decimal)(7.3 + taskCount * 0.001),
-                    PositionNorth = taskCount % 2 == 0 ? (decimal)(52.3 + index * 0.0001) : (decimal)(52.3 + (stepMax - index) * 0.0001)
+                    PositionEast = (decimal)(7.3 + taskStepCount * 0.001),
+                    PositionNorth = taskStepCount % 2 == 0 ? (decimal)(52.3 + index * 0.0001) : (decimal)(52.3 + (stepMax - index) * 0.0001)
                 });
 
                 if (index % 80 == 0)
@@ -161,13 +187,19 @@ public class EnqueuerSingulatorTests
                     curAreaPerSecond -= 3;
                 }
 
+                FunCount++;
+                FunSum += taskStepCount*10;
+
+                emulator.UpdateRawMachineValue(ProprietaryAverageDDI, FunSum/FunCount);
+                emulator.UpdateRawMachineValue(ProprietaryWeightDDI, FunCount);
+
 
                 if (curWorkstate == 1)
                 {
                     emulator.UpdateRawMachineValue(DDIList.TotalArea, totalArea);
                     emulator.UpdateRawMachineValue(DDIList.YieldTotalMass, totalMass);
                     emulator.UpdateRawMachineValue(DDIList.EffectiveTotalTime, effectiveTotalTime);
-                    if(totalArea > 0)
+                    if (totalArea > 0)
                     {
                         emulator.UpdateRawMachineValue(DDIList.AverageYieldMassPerArea, AverageMassPerArea);
                     }
@@ -203,5 +235,42 @@ public class EnqueuerSingulatorTests
         Assert.AreEqual(true, task1.TryGetTotalValue((ushort)DDIList.AverageYieldMassPerArea, -1, out var avgYieldMassPerArea, TLGTotalAlgorithmType.NO_RESETS));
         Assert.AreEqual(AverageMassPerArea, avgYieldMassPerArea);
 
+        var timElements = firstEmulatedTaskData.Data.Task.First().Time.Where(entry => entry.Type == ISOType2.Effective).ToList();
+        Assert.AreEqual(4, timElements.Count);
+        foreach (var entry in timElements)
+        {
+            Assert.AreEqual(7, entry.DataLogValue.Count);
+        }
+
+        var singulator = new ISOTimeListSingulator();
+
+        var singleTimElements = singulator.SingulateTimeElements(timElements, firstEmulatedTaskData.Data.Device.ToList());
+        Assert.AreEqual(4, singleTimElements.Count);
+        var timIndex = 0;
+        foreach(var entry in singleTimElements)
+        {
+            Assert.AreEqual(7, entry.DataLogValue.Count);
+            var funValue = entry.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == ProprietaryAverageDDI);
+            Assert.AreEqual(timIndex * 10, funValue.ProcessDataValue);
+            timIndex++;
+        }
+
+        //TODO Asserts
+
+
+        var connected = ISOTimeListEnqueuer.EnqueueTimeElements(singleTimElements, firstEmulatedTaskData.Data.Device.ToList());
+        Assert.AreEqual(4, connected.Count);
+        foreach(var tim in timElements)
+        {
+            var timCompare = connected.FirstOrDefault(entry => entry.Start == tim.Start);
+            Assert.IsNotNull(timCompare);
+            Assert.AreEqual(7,tim.DataLogValue.Count);
+            foreach( var dlv in tim.DataLogValue)
+            {
+                var dlvCompare = timCompare.DataLogValue.FirstOrDefault(compareDLV => compareDLV.ProcessDataDDI == dlv.ProcessDataDDI && dlv.DeviceElementIdRef == compareDLV.DeviceElementIdRef);
+                Assert.IsNotNull(dlvCompare);
+                Assert.AreEqual(dlvCompare.ProcessDataValue, dlv.ProcessDataValue);
+            }
+        }
     }
 }

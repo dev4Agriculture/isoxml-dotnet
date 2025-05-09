@@ -84,10 +84,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
 
         public long SingulateValueInISOTime(long currentValue, long previousValue, ISOTime currentTime, ISOTime previousTime, List<ISODevice> devices)
         {
+            if(RelevantWeightDDI == 0)
+            {
+                FindWeightDDI(devices);
+            }
+
             if (previousTime.TryGetDDIValue(RelevantWeightDDI, DeviceElementId, out var startWeightValue) &&
                 currentTime.TryGetDDIValue(RelevantWeightDDI, DeviceElementId, out var lastWeightValue)
                 )
             {
+                StartValue = previousValue;
+                StartWeightValue = startWeightValue;
+                LastWeightValue = lastWeightValue;
                 return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, LastWeightValue);
             }
             return currentValue;

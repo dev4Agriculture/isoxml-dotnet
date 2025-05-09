@@ -5,10 +5,22 @@ using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.DDI
 {
+
+    public class ManufacturerSettings
+    {
+        public Dictionary<ushort, DDIRegisterEntry> DDIs = new Dictionary<ushort, DDIRegisterEntry>();
+    }
+
     public static class DDIRegister
     {
         public static Dictionary<ushort, ManufacturerSettings> ManufacturersList = new Dictionary<ushort, ManufacturerSettings>();
 
+        /// <summary>
+        /// Add a new, manufacturer specific proprietary DDI. Each RegisterEntry describes how such DDI is handled during processing; e.g. when generating Totals
+        /// </summary>
+        /// <param name="ddi"></param>
+        /// <param name="manufacturer"></param>
+        /// <param name="registerEntry"></param>
         public static void RegisterProprietaryDDI(
             ushort ddi,
             ushort manufacturer,
@@ -45,12 +57,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI
             return true;
         }
 
+
+        public static void Clear()
+        {
+            ManufacturersList.Clear();
+        }
+
     }
 
-    public class ManufacturerSettings
-    {
-        public Dictionary<ushort, DDIRegisterEntry> DDIs = new Dictionary<ushort, DDIRegisterEntry>();
-    }
 
 
 }

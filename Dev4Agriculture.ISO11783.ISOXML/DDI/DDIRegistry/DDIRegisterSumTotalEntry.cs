@@ -5,7 +5,7 @@ using Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIRegistry
 {
-    internal class DDIRegisterSumTotalEntry : DDIRegisterEntry
+    public class DDIRegisterSumTotalEntry : DDIRegisterEntry
     {
         public override IDDITotalsFunctions GetInstance(int deviceElementId)
         {

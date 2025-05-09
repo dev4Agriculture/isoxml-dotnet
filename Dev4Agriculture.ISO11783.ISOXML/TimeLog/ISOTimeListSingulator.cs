@@ -44,7 +44,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         if (!DataLogValues.TryGetValue(listKey, out var dlvHandler))
                         {
                             dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
-                            dlvHandler.SingulateValueInISOTime(ddi, deviceElement, currentTim, previousTim, devices);
+                        }
+                        var previousValue = previousDataLogValues.FirstOrDefault(prevDLV => DDIUtils.ConvertDDI(prevDLV.ProcessDataDDI) == ddi && prevDLV.DeviceElementIdRef == dlv.DeviceElementIdRef);
+                        if (previousValue != null)
+                        {
+                          dlv.ProcessDataValue = dlvHandler.SingulateValueInISOTime(dlv.ProcessDataValue, previousValue.ProcessDataValue, currentTim, previousTim, devices);
                         }
                     }
                 }
