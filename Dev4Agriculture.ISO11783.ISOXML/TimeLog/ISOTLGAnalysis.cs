@@ -412,7 +412,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 });
             }
 
-            if (oldestPosition != null)
+            if (oldestPosition != null && oldestPosition.PosEast != latestPosition.PosEast && oldestPosition.PosNorth != latestPosition.PosNorth)
             {
                 isoTime.Position.Add(new ISOPosition
                 {

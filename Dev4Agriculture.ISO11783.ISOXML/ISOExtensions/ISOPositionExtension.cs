@@ -21,6 +21,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             set => PositionEast = (int)(value * (decimal)ISOTLG.TLG_GPS_FACTOR);
         }
 
+        [XmlIgnore]
+        public DateTime DateTime
+        {
+            get => DateUtilities.GetDateTimeFromTimeLogInfos(GpsUtcDateValue, (uint)GpsUtcTimeValue);
+            set
+            {
+                GpsUtcDate = DateUtilities.GetDaysSince1980(value);
+                GpsUtcTime = DateUtilities.GetMilliSecondsInDay(value);
+            }
+        }
+
         public void FixDigits()
         {
             PositionEast = decimal.Round(PositionEast, Constants.NUMBER_OF_DIGITS_FOR_POSITIONS, MidpointRounding.ToEven);
