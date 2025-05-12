@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using de.dev4Agriculture.ISOXML.DDI;
@@ -366,6 +367,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
+
+            var isoTime = new ISOTime()
+            {
+                Type = ISOType2.Effective
+            };
+
             foreach (var entry in Entries)
             {
                 var date = DateUtilities.GetDateTimeFromTimeLogInfos(entry.Date, entry.Time);
@@ -378,16 +385,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     max = date;
                 }
+
+                isoTime.Position.Add(new ISOPosition
+                {
+                    PositionEast = entry.PosEast,
+                    PositionNorth = entry.PosNorth,
+                    PositionUp = entry.PosUp,
+                    GpsUtcDate = entry.Date,
+                    GpsUtcTime = entry.Time,
+                    PDOP = entry.Pdop,
+                    HDOP = entry.Hdop,
+                    NumberOfSatellites = entry.NumberOfSatellites
+                });
             }
 
-            var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
+            isoTime.Start = min;
+            isoTime.Stop = max;
 
-            var isoTime = new ISOTime()
-            {
-                Start = min,
-                Stop = max,
-                Type = ISOType2.Effective,
-            };
+            var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
 
             foreach (var entry in dataLogValues)
             {
