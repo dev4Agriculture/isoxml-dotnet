@@ -388,8 +388,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
                 isoTime.Position.Add(new ISOPosition
                 {
-                    PositionEast = entry.PosEast,
-                    PositionNorth = entry.PosNorth,
+                    PositionEast = Convert.ToDecimal(entry.PosEast / TLG_GPS_FACTOR),
+                    PositionNorth = Convert.ToDecimal(entry.PosNorth / TLG_GPS_FACTOR),
                     PositionUp = entry.PosUp,
                     GpsUtcDate = entry.Date,
                     GpsUtcTime = entry.Time,
