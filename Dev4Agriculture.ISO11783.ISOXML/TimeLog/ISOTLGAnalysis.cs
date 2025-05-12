@@ -416,8 +416,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 isoTime.Position.Add(new ISOPosition
                 {
-                    PositionEast = oldestPosition.PosEast,
-                    PositionNorth = oldestPosition.PosNorth,
+                    PositionEast = (decimal)oldestPosition.Longitude,
+                    PositionNorth = (decimal)oldestPosition.Latitude,
                     PositionUp = oldestPosition.PosUp,
                     GpsUtcDate = oldestPosition.Date,
                     GpsUtcTime = oldestPosition.Time,
