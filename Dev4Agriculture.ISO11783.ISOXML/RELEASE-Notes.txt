@@ -1,4 +1,7 @@
 v0.24.1.1:
+    +ADD: GenerateTIMElement now adds a PositionElement 
+
+v0.24.1.1:
     +ADD: Handling of known AverageDDIs and a possibility to add Proprietary DDIs
 
 v0.23.2.3:
