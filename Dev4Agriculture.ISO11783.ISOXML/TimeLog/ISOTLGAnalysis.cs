@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using de.dev4Agriculture.ISOXML.DDI;
@@ -366,6 +367,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
+
             foreach (var entry in Entries)
             {
                 var date = DateUtilities.GetDateTimeFromTimeLogInfos(entry.Date, entry.Time);
@@ -380,14 +382,52 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
             }
 
-            var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
-
             var isoTime = new ISOTime()
             {
-                Start = min,
-                Stop = max,
                 Type = ISOType2.Effective,
+                Start = min,
+                Stop = max
             };
+
+            var validEntries = Entries
+                .Where(e => e.PosEast != 0 && e.PosNorth != 0)
+                .OrderByDescending(e => DateUtilities.GetDateTimeFromTimeLogInfos(e.Date, e.Time))
+                .ToList();
+
+            var latestPosition = validEntries.FirstOrDefault();
+            var oldestPosition = validEntries.LastOrDefault();
+
+            if (latestPosition != null)
+            {
+                isoTime.Position.Add(new ISOPosition
+                {
+                    PositionEast = (decimal)latestPosition.Longitude,
+                    PositionNorth = (decimal)latestPosition.Latitude,
+                    PositionUp = latestPosition.PosUp,
+                    GpsUtcDate = latestPosition.Date,
+                    GpsUtcTime = latestPosition.Time,
+                    PDOP = latestPosition.Pdop,
+                    HDOP = latestPosition.Hdop,
+                    NumberOfSatellites = latestPosition.NumberOfSatellites
+                });
+            }
+
+            if (oldestPosition != null && oldestPosition.PosEast != latestPosition.PosEast && oldestPosition.PosNorth != latestPosition.PosNorth)
+            {
+                isoTime.Position.Add(new ISOPosition
+                {
+                    PositionEast = (decimal)oldestPosition.Longitude,
+                    PositionNorth = (decimal)oldestPosition.Latitude,
+                    PositionUp = oldestPosition.PosUp,
+                    GpsUtcDate = oldestPosition.Date,
+                    GpsUtcTime = oldestPosition.Time,
+                    PDOP = oldestPosition.Pdop,
+                    HDOP = oldestPosition.Hdop,
+                    NumberOfSatellites = oldestPosition.NumberOfSatellites
+                });
+            }
+
+            var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
 
             foreach (var entry in dataLogValues)
             {

@@ -1,9 +1,36 @@
 ﻿using System;
+using System.Xml.Serialization;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
+using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
     public partial class ISOPosition
     {
+        [XmlIgnore]
+        public decimal Latitude
+        {
+            get => PositionNorth / (decimal)ISOTLG.TLG_GPS_FACTOR;
+            set => PositionNorth = (int)(value * (decimal)ISOTLG.TLG_GPS_FACTOR);
+        }
+
+        [XmlIgnore]
+        public decimal Longitude
+        {
+            get => PositionEast / (decimal)ISOTLG.TLG_GPS_FACTOR;
+            set => PositionEast = (int)(value * (decimal)ISOTLG.TLG_GPS_FACTOR);
+        }
+
+        [XmlIgnore]
+        public DateTime DateTime
+        {
+            get => DateUtilities.GetDateTimeFromTimeLogInfos(GpsUtcDateValue, (uint)GpsUtcTimeValue);
+            set
+            {
+                GpsUtcDate = DateUtilities.GetDaysSince1980(value);
+                GpsUtcTime = DateUtilities.GetMilliSecondsInDay(value);
+            }
+        }
 
         public void FixDigits()
         {
