@@ -389,25 +389,42 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Stop = max
             };
 
-            for (var i = Entries.Count - 1; i >= 0; i--)
-            {
-                var entry = Entries[i];
-                if (entry.PosEast != 0 && entry.PosNorth != 0)
-                {
-                    isoTime.Position.Add(new ISOPosition
-                    {
-                        PositionEast = entry.PosEast,
-                        PositionNorth = entry.PosNorth,
-                        PositionUp = entry.PosUp,
-                        GpsUtcDate = entry.Date,
-                        GpsUtcTime = entry.Time,
-                        PDOP = entry.Pdop,
-                        HDOP = entry.Hdop,
-                        NumberOfSatellites = entry.NumberOfSatellites
-                    });
+            var validEntries = Entries
+                .Where(e => e.PosEast != 0 && e.PosNorth != 0)
+                .OrderByDescending(e => DateUtilities.GetDateTimeFromTimeLogInfos(e.Date, e.Time))
+                .ToList();
 
-                    break;
-                }
+            var latestPosition = validEntries.FirstOrDefault();
+            var oldestPosition = validEntries.LastOrDefault();
+
+            if (latestPosition != null)
+            {
+                isoTime.Position.Add(new ISOPosition
+                {
+                    PositionEast = latestPosition.PosEast,
+                    PositionNorth = latestPosition.PosNorth,
+                    PositionUp = latestPosition.PosUp,
+                    GpsUtcDate = latestPosition.Date,
+                    GpsUtcTime = latestPosition.Time,
+                    PDOP = latestPosition.Pdop,
+                    HDOP = latestPosition.Hdop,
+                    NumberOfSatellites = latestPosition.NumberOfSatellites
+                });
+            }
+
+            if (oldestPosition != null)
+            {
+                isoTime.Position.Add(new ISOPosition
+                {
+                    PositionEast = oldestPosition.PosEast,
+                    PositionNorth = oldestPosition.PosNorth,
+                    PositionUp = oldestPosition.PosUp,
+                    GpsUtcDate = oldestPosition.Date,
+                    GpsUtcTime = oldestPosition.Time,
+                    PDOP = oldestPosition.Pdop,
+                    HDOP = oldestPosition.Hdop,
+                    NumberOfSatellites = oldestPosition.NumberOfSatellites
+                });
             }
 
             var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
