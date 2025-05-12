@@ -368,11 +368,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
 
-            var isoTime = new ISOTime()
-            {
-                Type = ISOType2.Effective
-            };
-
             foreach (var entry in Entries)
             {
                 var date = DateUtilities.GetDateTimeFromTimeLogInfos(entry.Date, entry.Time);
@@ -385,22 +380,35 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     max = date;
                 }
-
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = Convert.ToDecimal(entry.PosEast / TLG_GPS_FACTOR),
-                    PositionNorth = Convert.ToDecimal(entry.PosNorth / TLG_GPS_FACTOR),
-                    PositionUp = entry.PosUp,
-                    GpsUtcDate = entry.Date,
-                    GpsUtcTime = entry.Time,
-                    PDOP = entry.Pdop,
-                    HDOP = entry.Hdop,
-                    NumberOfSatellites = entry.NumberOfSatellites
-                });
             }
 
-            isoTime.Start = min;
-            isoTime.Stop = max;
+            var isoTime = new ISOTime()
+            {
+                Type = ISOType2.Effective,
+                Start = min,
+                Stop = max
+            };
+
+            for (var i = Entries.Count - 1; i >= 0; i--)
+            {
+                var entry = Entries[i];
+                if (entry.PosEast != 0 && entry.PosNorth != 0)
+                {
+                    isoTime.Position.Add(new ISOPosition
+                    {
+                        PositionEast = entry.PosEast,
+                        PositionNorth = entry.PosNorth,
+                        PositionUp = entry.PosUp,
+                        GpsUtcDate = entry.Date,
+                        GpsUtcTime = entry.Time,
+                        PDOP = entry.Pdop,
+                        HDOP = entry.Hdop,
+                        NumberOfSatellites = entry.NumberOfSatellites
+                    });
+
+                    break;
+                }
+            }
 
             var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
 
