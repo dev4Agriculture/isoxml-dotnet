@@ -1,4 +1,7 @@
-v0.24.1.1:
+v0.24.2.2:
+    -FIX: PositionElement had Attributes Latitude and Longitude that applied a wrong factor
+
+v0.24.2.1:
     +ADD: GenerateTIMElement now adds a PositionElement 
 
 v0.24.1.1:
