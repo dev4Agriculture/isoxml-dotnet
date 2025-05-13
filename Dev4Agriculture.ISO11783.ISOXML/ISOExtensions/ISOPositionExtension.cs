@@ -8,17 +8,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
     public partial class ISOPosition
     {
         [XmlIgnore]
-        public decimal Latitude
+        public decimal Latitude//This Value should not really be needed, but as we have the same in TimeLogs, we added it here for better usability of the library.
         {
-            get => PositionNorth / (decimal)ISOTLG.TLG_GPS_FACTOR;
-            set => PositionNorth = (int)(value * (decimal)ISOTLG.TLG_GPS_FACTOR);
+            get => PositionNorth;
+            set => PositionNorth = value;
         }
 
         [XmlIgnore]
-        public decimal Longitude
+        public decimal Longitude//This Value should not really be needed, but as we have the same in TimeLogs, we added it here for better usability of the library.
         {
-            get => PositionEast / (decimal)ISOTLG.TLG_GPS_FACTOR;
-            set => PositionEast = (int)(value * (decimal)ISOTLG.TLG_GPS_FACTOR);
+            get => PositionEast;
+            set => PositionEast = value;
         }
 
         [XmlIgnore]
