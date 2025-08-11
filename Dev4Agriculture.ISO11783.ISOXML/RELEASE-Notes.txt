@@ -1,3 +1,6 @@
+v0.24.2.3:
+    -FIX: When the second TIM-Element had less DLV entries than the first one, the missing DLVs were not added to the second TIM
+
 v0.24.2.2:
     -FIX: PositionElement had Attributes Latitude and Longitude that applied a wrong factor
 
