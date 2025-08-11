@@ -87,7 +87,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             }
             if(CurrentWeightValue == 0)
             {
-                return currentValue;
+                return StartValue;
             }
             if (IsWeightInitialized && IsInitialized)
             {
