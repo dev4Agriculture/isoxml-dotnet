@@ -22,6 +22,9 @@ public class EnqueuerSingulatorTests
     private const ushort ProprietaryWeightDDI = 0xEAAB;
     private const ushort Manufacturer = 47;
 
+    private ushort averageDDI = 0;
+    private ushort weightDDI = 0;
+
 
     private ISODevice GenerateHarvester(ISOXML isoxml, int serialNumber)
     {
@@ -347,5 +350,128 @@ public class EnqueuerSingulatorTests
             Assert.IsTrue(last.TryGetDDIValue((ushort)a, -1, out var lastValue));
             Assert.AreEqual(lastValue, a);
         }
+    }
+
+
+
+    private ISOTime GenerateTimeForAveragesTest(int timeOffsetInHours, bool active = true, int? average = null, int? weight = null)
+    {
+        var tim = new ISOTime()
+        {
+            Start = DateTime.Now.AddHours(-timeOffsetInHours),
+            Stop = DateTime.Now.AddHours(-timeOffsetInHours).AddMinutes(10),
+            Type = active ? ISOType2.Effective : ISOType2.Planned
+        };
+        if (active)
+        {
+            if (average != null)
+            {
+                tim.DataLogValue.Add(
+                    new ISODataLogValue()
+                    {
+                        ProcessDataDDI = DDIUtils.FormatDDI(averageDDI),
+                        DeviceElementIdRef = "DET-1",
+                        ProcessDataValue = average ?? 0
+                    }
+                    );
+            }
+            if (weight != null)
+            {
+                tim.DataLogValue.Add(
+                    new ISODataLogValue()
+                    {
+                        ProcessDataDDI = DDIUtils.FormatDDI(weightDDI),
+                        DeviceElementIdRef = "DET-1",
+                        ProcessDataValue = weight ?? 0
+                    }
+                    );
+            }
+        }
+        return tim;
+    }
+
+    private IEnumerable<ISODataLogValue> SwitchOrderOfDLVEntries(IEnumerable<ISODataLogValue> logs) {
+        return logs.Reverse();
+    }
+
+    [TestMethod]
+    public void CanCorrectlyMergeAverageValues()
+    {
+        var dvc = new ISODevice()
+        {
+            DeviceId = "DVC-1",
+            DeviceDesignator = "Chopper"
+        };
+
+        var det = new ISODeviceElement()
+        {
+            DeviceElementId = "DET-1"
+        };
+        averageDDI = (ushort)DDIList.AverageCropMoisture;
+        var dpdMoisture = new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(averageDDI),
+            DeviceProcessDataDesignator = "Moisture",
+            DeviceProcessDataObjectId = 1,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.Setable,
+            DeviceProcessDataTriggerMethods = (byte)ISODeviceProcessDataTriggerMethodType.Total
+        };
+        weightDDI = DDIAlgorithms.FindWeightDDIs((ushort)DDIList.AverageCropMoisture).First();
+        dvc.DeviceProcessData.Add(dpdMoisture);
+        det.DeviceObjectReference.Add(new ISODeviceObjectReference() { DeviceObjectId = 1 });
+
+        var dpdTotalMass = new ISODeviceProcessData()
+        {
+            DeviceProcessDataDDI = DDIUtils.FormatDDI(weightDDI),
+            DeviceProcessDataDesignator = "Mass",
+            DeviceProcessDataObjectId = 2,
+            DeviceProcessDataProperty = (byte)ISODeviceProcessDataPropertyType.Setable,
+            DeviceProcessDataTriggerMethods = (byte)ISODeviceProcessDataTriggerMethodType.Total
+        };
+        dvc.DeviceProcessData.Add(dpdTotalMass);
+        det.DeviceObjectReference.Add(new ISODeviceObjectReference() { DeviceObjectId = 2 });
+        dvc.DeviceElement.Add(det);
+        var devices = new List<ISODevice>() { dvc };
+
+
+        var timList = new List<ISOTime>
+        {
+            GenerateTimeForAveragesTest(9, false),
+            GenerateTimeForAveragesTest(8, true, 20000, 100),
+            GenerateTimeForAveragesTest(7, true, 50000, 50),
+            GenerateTimeForAveragesTest(4, true, null, 100),
+            GenerateTimeForAveragesTest(3, true, null, null),
+            GenerateTimeForAveragesTest(2, true, 40000, null),
+            GenerateTimeForAveragesTest(1, false),
+            GenerateTimeForAveragesTest(0, true, 40000, 200),
+            GenerateTimeForAveragesTest(6, true, 60000, 100),
+            GenerateTimeForAveragesTest(5, true, 20000, 30)
+        };
+
+        var entries = SwitchOrderOfDLVEntries(timList[4].DataLogValue);
+        timList[4].DataLogValue.Clear();
+        foreach (var entry in entries)
+        {
+            timList[0].DataLogValue.Add(entry);
+        }
+
+        var sortedTim = ISOTimeListEnqueuer.EnqueueTimeElements(timList,devices );
+
+        Assert.AreEqual(8, sortedTim.Where(entry => entry.Type == ISOType2.Effective).Count());
+        foreach(var tim in sortedTim)
+        {
+            var resultWeight = tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI);
+            var resultAverage = tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == averageDDI);
+            Console.WriteLine($"Weight = {resultWeight?.ProcessDataValue} Average = {resultAverage?.ProcessDataValue}");
+        }
+        var lastResult = sortedTim.Last();
+        var lastResultWeight = lastResult.DataLogValue.First(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI);
+        Assert.AreEqual(lastResultWeight.ProcessDataValue, 580);
+
+
+        var lastResultAverage = lastResult.DataLogValue.First(entry =>  DDIUtils.ConvertDDI(entry.ProcessDataDDI) ==  averageDDI);
+        Assert.AreEqual(lastResultAverage.ProcessDataValue, 39790, 90);
+
+
     }
 }
