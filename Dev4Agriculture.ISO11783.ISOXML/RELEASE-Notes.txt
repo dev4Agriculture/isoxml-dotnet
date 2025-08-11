@@ -1,6 +1,7 @@
-v0.24.2.3:
+v0.24.2.4:
     -FIX: When the second TIM-Element had less DLV entries than the first one, the missing DLVs were not added to the second TIM
-
+v0.24.2.3:
+    BURNED: Burned Version Number; do not use
 v0.24.2.2:
     -FIX: PositionElement had Attributes Latitude and Longitude that applied a wrong factor
 
