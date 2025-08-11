@@ -49,12 +49,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public static List<ISOTime> EnqueueTimeElements(List<ISOTime> times, List<ISODevice> devices)
         {
+            var completeDLVList = new List<ISODataLogValue>();
             times = times.OrderBy(entry => entry.Start).ToList();
-            Dictionary<string, IDDITotalsFunctions> DataLogValues = new Dictionary<string, IDDITotalsFunctions>();
-            ISOTime previousTim = null;
-            foreach( var currentTim in times)
+            var dataLogValues = new Dictionary<string, IDDITotalsFunctions>();
+            foreach (var currentTim in times)
             {
-                if(currentTim.Type != ISOType2.Effective)
+                if (currentTim.Type != ISOType2.Effective)
                 {
                     continue;
                 }
@@ -68,18 +68,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     {
                         continue;
                     }
-                    if (!DataLogValues.TryGetValue(key, out var dlvHandler))
+                    if (!dataLogValues.TryGetValue(key, out var dlvHandler))
                     {
                         dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
 
-                        DataLogValues.Add(key, dlvHandler);
+                        dataLogValues.Add(key, dlvHandler);
                     }
                     if (dlvHandler != null)
                     {
                         dlv.ProcessDataValue = dlvHandler.EnqueueValueAsDataLogValueInTime(dlv.ProcessDataValue, currentTim, deviceElement, devices);
                     }
                 }
-
+                foreach (var dlv in completeDLVList)
+                {
+                    if (!currentTim.TryGetDataLogValue(DDIUtils.ConvertDDI(dlv.ProcessDataDDI), IdList.ToIntId(dlv.DeviceElementIdRef), out _))
+                    {
+                        currentTim.DataLogValue.Add(dlv);
+                    }
+                }
+                completeDLVList.Clear();
+                foreach (var dlv in currentTim.DataLogValue)
+                {
+                    completeDLVList.Add( new ISODataLogValue()
+                    {
+                        ProcessDataDDI = dlv.ProcessDataDDI,
+                        DataLogPGN = dlv.DataLogPGN,
+                        DataLogPGNStartBit = dlv.DataLogPGNStartBit,
+                        DataLogPGNStopBit = dlv.DataLogPGNStopBit,
+                        DataLogPGNValue = dlv.DataLogPGNValue,
+                        ProcessDataValue = dlv.ProcessDataValue,
+                        DeviceElementIdRef = dlv.DeviceElementIdRef,
+                    });
+                }
             }
             return times;
         }

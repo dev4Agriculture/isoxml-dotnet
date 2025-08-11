@@ -278,4 +278,74 @@ public class EnqueuerSingulatorTests
             }
         }
     }
+
+
+    [TestMethod]
+    public void AddingTimsWithPartialDLVListLeadsToFullDLVList()
+    {
+        //Generate Device just for completness to call the Enqueue-Function with it
+        var device = new ISODevice()
+        {
+            DeviceDesignator = "Test",
+            DeviceId = "DVC-1"
+        };
+        var deviceElement = new ISODeviceElement()
+        {
+            DeviceElementDesignator = "Test",
+            DeviceElementId = "DET-1"
+        };
+
+        device.DeviceElement.Add(deviceElement);
+        for (var a = 0; a < 10; a++)
+        {
+            device.DeviceProcessData.Add(
+                new ISODeviceProcessData()
+                {
+                    DeviceProcessDataDDI = DDIUtils.FormatDDI((ushort)(a + 1)),
+                    DeviceProcessDataDesignator = $"{a + 1}",
+                    DeviceProcessDataObjectId = (ushort)(a + 1),
+                    DeviceProcessDataProperty = (int)ISODeviceProcessDataPropertyType.Setable,
+                    DeviceProcessDataTriggerMethods = (int)ISODeviceProcessDataTriggerMethodType.Total,
+                });
+            deviceElement.DeviceObjectReference.Add(new ISODeviceObjectReference()
+            {
+                DeviceObjectId = (ushort)(a + 1)
+            });
+        }
+        var deviceList = new List<ISODevice>() { device };
+
+        //Create 10 TIM-Elements; the first having 10 DLVs, the second only 9 DLVs, ....
+        var tims = new List<ISOTime>();
+        for (var a = 0; a < 10; a++)
+        {
+            var tim = new ISOTime()
+            {
+                Start = DateTime.Now.AddDays(-1 * a - 1),
+                Stop = DateTime.Now.AddDays(-1 * a),
+                Type = ISOType2.Effective
+            };
+            for (var b = 10; b > a; b--)
+            {
+                var dlv = new ISODataLogValue()
+                {
+                    ProcessDataDDI = DDIUtils.FormatDDI((ushort)b),
+                    ProcessDataValue = 1,
+                    DeviceElementIdRef = "DET-1"
+                };
+                tim.DataLogValue.Add(dlv);
+            }
+            tims.Add(tim);
+        }
+        Assert.AreEqual(tims.Last().DataLogValue.Count, 1);
+        Assert.AreEqual(tims.First().DataLogValue.Count, 10);
+        Assert.IsTrue(tims.First().DataLogValue.All(entry => entry.ProcessDataValue == 1));
+        var resultList = ISOTimeListEnqueuer.EnqueueTimeElements(tims, deviceList);
+        var last = resultList.Last();
+        Assert.AreEqual(last.DataLogValue.Count, 10);
+        for (var a = 1; a < 11; a++)
+        {
+            Assert.IsTrue(last.TryGetDDIValue((ushort)a, -1, out var lastValue));
+            Assert.AreEqual(lastValue, a);
+        }
+    }
 }
