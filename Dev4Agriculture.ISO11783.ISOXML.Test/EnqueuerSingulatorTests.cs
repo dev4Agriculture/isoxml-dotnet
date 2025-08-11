@@ -436,8 +436,8 @@ public class EnqueuerSingulatorTests
 
         var timList = new List<ISOTime>
         {
-            GenerateTimeForAveragesTest(9, false),
-            GenerateTimeForAveragesTest(8, true, 20000, 100),
+            GenerateTimeForAveragesTest(10, false),
+            GenerateTimeForAveragesTest(9, true, 20000, 100),
             GenerateTimeForAveragesTest(7, true, 50000, 50),
             GenerateTimeForAveragesTest(4, true, null, 100),
             GenerateTimeForAveragesTest(3, true, null, null),
@@ -445,7 +445,8 @@ public class EnqueuerSingulatorTests
             GenerateTimeForAveragesTest(1, false),
             GenerateTimeForAveragesTest(0, true, 40000, 200),
             GenerateTimeForAveragesTest(6, true, 60000, 100),
-            GenerateTimeForAveragesTest(5, true, 20000, 30)
+            GenerateTimeForAveragesTest(5, true, 20000, 30),
+            GenerateTimeForAveragesTest(8, true, 40000, 0),
         };
 
         var entries = SwitchOrderOfDLVEntries(timList[4].DataLogValue);
@@ -457,7 +458,7 @@ public class EnqueuerSingulatorTests
 
         var sortedTim = ISOTimeListEnqueuer.EnqueueTimeElements(timList,devices );
 
-        Assert.AreEqual(8, sortedTim.Where(entry => entry.Type == ISOType2.Effective).Count());
+        Assert.AreEqual(9, sortedTim.Where(entry => entry.Type == ISOType2.Effective).Count());
         foreach(var tim in sortedTim)
         {
             var resultWeight = tim.DataLogValue.FirstOrDefault(entry => DDIUtils.ConvertDDI(entry.ProcessDataDDI) == weightDDI);
