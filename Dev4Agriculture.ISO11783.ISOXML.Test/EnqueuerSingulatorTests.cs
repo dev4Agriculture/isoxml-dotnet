@@ -320,8 +320,8 @@ public class EnqueuerSingulatorTests
         {
             var tim = new ISOTime()
             {
-                Start = DateTime.Now.AddDays(-1 * a - 1),
-                Stop = DateTime.Now.AddDays(-1 * a),
+                Start = DateTime.Now.AddDays(-1 * (10 - a)),
+                Stop = DateTime.Now.AddDays(-1 * (9 - a)).AddSeconds(-1),
                 Type = ISOType2.Effective
             };
             for (var b = 10; b > a; b--)

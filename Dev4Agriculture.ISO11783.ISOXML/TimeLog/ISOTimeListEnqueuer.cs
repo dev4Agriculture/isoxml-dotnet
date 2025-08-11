@@ -79,6 +79,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         dlv.ProcessDataValue = dlvHandler.EnqueueValueAsDataLogValueInTime(dlv.ProcessDataValue, currentTim, deviceElement, devices);
                     }
                 }
+                //Fill up all DLVs that were in the previous but not in the current TIM
                 foreach (var dlv in completeDLVList)
                 {
                     if (!currentTim.TryGetDataLogValue(DDIUtils.ConvertDDI(dlv.ProcessDataDDI), IdList.ToIntId(dlv.DeviceElementIdRef), out _))
@@ -86,20 +87,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         currentTim.DataLogValue.Add(dlv);
                     }
                 }
-                completeDLVList.Clear();
-                foreach (var dlv in currentTim.DataLogValue)
-                {
-                    completeDLVList.Add( new ISODataLogValue()
-                    {
-                        ProcessDataDDI = dlv.ProcessDataDDI,
-                        DataLogPGN = dlv.DataLogPGN,
-                        DataLogPGNStartBit = dlv.DataLogPGNStartBit,
-                        DataLogPGNStopBit = dlv.DataLogPGNStopBit,
-                        DataLogPGNValue = dlv.DataLogPGNValue,
-                        ProcessDataValue = dlv.ProcessDataValue,
-                        DeviceElementIdRef = dlv.DeviceElementIdRef,
-                    });
-                }
+                completeDLVList = currentTim.DataLogValue.ToList();
             }
             return times;
         }
