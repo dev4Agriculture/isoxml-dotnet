@@ -1,4 +1,6 @@
 v0.24.2.4:
+    -FIX: Average-Calculation failed if not all TIM-Elements include the Same DataLogValues
+v0.24.2.4:
     -FIX: When the second TIM-Element had less DLV entries than the first one, the missing DLVs were not added to the second TIM
 v0.24.2.3:
     BURNED: Burned Version Number; do not use
