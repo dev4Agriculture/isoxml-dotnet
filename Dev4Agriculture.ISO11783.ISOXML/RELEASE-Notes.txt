@@ -1,7 +1,9 @@
+v0.24.2.6:
+    -FIX: Average-Calculation failed if not all TIM-Elements include the Same DataLogValues or a Value 0 for the weight was detected
+v0.24.2.5:
+    BURNED: Fixed the bug only half
 v0.24.2.4:
-    -FIX: Average-Calculation failed if not all TIM-Elements include the Same DataLogValues
-v0.24.2.4:
-    -FIX: When the second TIM-Element had less DLV entries than the first one, the missing DLVs were not added to the second TIM
+    BURNED: Fixed the bug only half
 v0.24.2.3:
     BURNED: Burned Version Number; do not use
 v0.24.2.2:
