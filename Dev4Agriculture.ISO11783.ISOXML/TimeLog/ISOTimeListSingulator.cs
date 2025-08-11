@@ -18,7 +18,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
 
             times = times.OrderBy(entry => entry.Start).ToList();
-            var DataLogValues = new Dictionary<string, IDDITotalsFunctions>();
+            var dataLogValues = new Dictionary<string, IDDITotalsFunctions>();
 
             ISOTime currentTim = null;
             for (var index = times.Count - 1; index >= 0; index--)
@@ -41,14 +41,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                             continue;
                         }
                         var listKey = $"{ddi}_{deviceElement}";
-                        if (!DataLogValues.TryGetValue(listKey, out var dlvHandler))
+                        if (!dataLogValues.TryGetValue(listKey, out var dlvHandler))
                         {
                             dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
                         }
                         var previousValue = previousDataLogValues.FirstOrDefault(prevDLV => DDIUtils.ConvertDDI(prevDLV.ProcessDataDDI) == ddi && prevDLV.DeviceElementIdRef == dlv.DeviceElementIdRef);
                         if (previousValue != null)
                         {
-                          dlv.ProcessDataValue = dlvHandler.SingulateValueInISOTime(dlv.ProcessDataValue, previousValue.ProcessDataValue, currentTim, previousTim, devices);
+                            dlv.ProcessDataValue = dlvHandler.SingulateValueInISOTime(dlv.ProcessDataValue, previousValue.ProcessDataValue, currentTim, previousTim, devices);
                         }
                     }
                 }

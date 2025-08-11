@@ -49,6 +49,16 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI
             [(ushort)DDIList.AverageCoefficientOfVariationOfSeedSpacingPercentage] = new ushort[] { 82, 81, 80 }
         };
 
+        public static IEnumerable<ushort> FindWeightDDIs(ushort ddi)
+        {
+            if (AveragesDDIWeightedDdiMap.TryGetValue(ddi, out var results))
+            {
+                return results;
+            }
+            return new List<ushort>();
+            ;
+        }
+
         internal static IDDITotalsFunctions FindTotalDDIHandler(ushort ddi, int deviceElement, ISODevice device)
         {
             if (device == null)

@@ -21,7 +21,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
 
         public bool IsWeightInitialized;
         public long StartWeightValue;
-        public long LastWeightValue;
+        public long CurrentWeightValue;
         public long BaseWeightValue;
 
         public List<ushort> WeightDDIs;
@@ -55,33 +55,45 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             return false;
         }
 
+        /// <summary>
+        /// Updates the AverageValue based on the Weight and new Weight values. If no new Weight value is found, the currentValue persists and becomes the new value
+        /// </summary>
+        /// <param name="currentValue"></param>
+        /// <param name="currentTimeEntry"></param>
+        /// <param name="det"></param>
+        /// <param name="devices"></param>
+        /// <returns></returns>
         public long EnqueueValueAsDataLogValueInTime(long currentValue, ISOTime currentTimeEntry, int det, List<ISODevice> devices)
         {
             if (!IsInitialized)
             {
                 StartValue = currentValue;
+                IsInitialized = true;
             }
 
             if (!IsWeightInitialized)
             {
-                IsWeightInitialized = true;
                 if (!FindWeightDDI(devices))
                 {
-                    //What would be the default here?
+                    return currentValue;
                 }
+                IsWeightInitialized = true;
             }
 
             if (currentTimeEntry.TryGetDDIValue(RelevantWeightDDI, det, out var weightValue))
             {
-                LastWeightValue = weightValue;
+                CurrentWeightValue = weightValue;
                 IsWeightInitialized = true;
             }
-
+            if(CurrentWeightValue == 0)
+            {
+                return currentValue;
+            }
             if (IsWeightInitialized && IsInitialized)
             {
-                currentValue = (StartValue * StartWeightValue + currentValue * LastWeightValue) / (StartWeightValue + LastWeightValue);
+                currentValue = (StartValue * StartWeightValue + currentValue * CurrentWeightValue) / (StartWeightValue + CurrentWeightValue);
                 StartValue = currentValue;
-                StartWeightValue += LastWeightValue;
+                StartWeightValue += CurrentWeightValue;
             }
 
             return currentValue;
@@ -100,8 +112,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             {
                 StartValue = previousValue;
                 StartWeightValue = startWeightValue;
-                LastWeightValue = lastWeightValue;
-                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, LastWeightValue);
+                CurrentWeightValue = lastWeightValue;
+                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, CurrentWeightValue);
             }
             return currentValue;
         }
@@ -121,12 +133,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                     IsWeightInitialized = true;
                     StartWeightValue = entry.Value ?? 0;
                 }
-                LastWeightValue = entry.Value ?? 0;
+                CurrentWeightValue = entry.Value ?? 0;
             }
 
             if (IsInitialized && IsWeightInitialized)
             {
-                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, LastWeightValue);
+                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, CurrentWeightValue);
             }
             else
             {
@@ -164,7 +176,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             if (ddiEntry != null)
             {
                 RelevantWeightIndex = ddiEntry.Index;
-                BaseWeightValue = LastWeightValue;//The LastWeightValue is the leftOver from the previous TimeLog if any existed
+                BaseWeightValue = CurrentWeightValue;//The LastWeightValue is the leftOver from the previous TimeLog if any existed
                 BaseValue = LastValue;
                 IsInitialized = false;
                 IsWeightInitialized = false;
@@ -177,10 +189,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         {
             if (line.Entries.Length >= RelevantWeightIndex && line.Entries[RelevantWeightIndex].IsSet)
             {
-                LastWeightValue = line.Entries[RelevantWeightIndex].Value;
+                CurrentWeightValue = line.Entries[RelevantWeightIndex].Value;
                 if (!IsWeightInitialized)
                 {
-                    StartWeightValue = LastWeightValue;
+                    StartWeightValue = CurrentWeightValue;
                     IsWeightInitialized = true;
                 }
             }
@@ -193,10 +205,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                 StartValue = value;
                 IsInitialized = true;
             }
-            if (StartWeightValue != LastWeightValue)
+            if (StartWeightValue != CurrentWeightValue)
             {
-                var weightWithInTLG = LastWeightValue - StartWeightValue;
-                var averageWithinTLG = (LastWeightValue * value - StartWeightValue * StartValue) / (LastWeightValue - StartWeightValue);
+                var weightWithInTLG = CurrentWeightValue - StartWeightValue;
+                var averageWithinTLG = (CurrentWeightValue * value - StartWeightValue * StartValue) / (CurrentWeightValue - StartWeightValue);
                 var cleanedAverage = (BaseValue * BaseWeightValue + averageWithinTLG * weightWithInTLG)/(BaseWeightValue + averageWithinTLG);
                 LastValue = value;
                 return (int)cleanedAverage;
