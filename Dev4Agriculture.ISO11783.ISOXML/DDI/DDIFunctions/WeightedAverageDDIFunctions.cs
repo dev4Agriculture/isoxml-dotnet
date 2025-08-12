@@ -15,9 +15,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         public int DeviceElementId;
         public ISODevice Device;
         public bool IsInitialized;
-        public long StartValue;
-        public long LastValue;
-        public long BaseValue;
+        public double StartValue;
+        public double LastValue;
+        public double BaseValue;
 
         public bool IsWeightInitialized;
         public long StartWeightValue;
@@ -65,6 +65,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         /// <returns></returns>
         public long EnqueueValueAsDataLogValueInTime(long currentValue, ISOTime currentTimeEntry, int det, List<ISODevice> devices)
         {
+            if (currentValue == 0)
+            {
+                return (long)StartValue;
+            }
+
             if (!IsInitialized)
             {
                 StartValue = currentValue;
@@ -87,12 +92,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             }
             if(CurrentWeightValue == 0)
             {
-                return StartValue;
+                return (long)StartValue;
             }
             if (IsWeightInitialized && IsInitialized)
             {
-                currentValue = (StartValue * StartWeightValue + currentValue * CurrentWeightValue) / (StartWeightValue + CurrentWeightValue);
-                StartValue = currentValue;
+                StartValue = (StartValue * StartWeightValue + currentValue * CurrentWeightValue) / (StartWeightValue + CurrentWeightValue);
+                currentValue = (long) StartValue;
                 StartWeightValue += CurrentWeightValue;
             }
 

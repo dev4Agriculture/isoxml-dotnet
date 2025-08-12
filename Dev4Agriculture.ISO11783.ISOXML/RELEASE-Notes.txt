@@ -1,3 +1,6 @@
+v0.24.2.7:
+    -FIX: Average-Calculation still failed as we received an average of 0 sometimes
+
 v0.24.2.6:
     -FIX: Average-Calculation failed if not all TIM-Elements include the Same DataLogValues or a Value 0 for the weight was detected
 v0.24.2.5:
