@@ -340,6 +340,84 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
+        public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskTLGCombos, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+
+        }
+
+
+        public void SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+            var splitPoints = new Dictionary<ISOTLG,List<int>>();
+            foreach (var tlg in TimeLogs)
+            {
+                splitPoints.Add(tlg, new List<int>());
+            }
+            splitTimes.Sort();
+            foreach (var time in splitTimes)
+            {
+                foreach (var timeLog in TimeLogs)
+                {
+                    if (timeLog.TryFindClosestIndex(time, out var index))
+                    {
+                        splitPoints[timeLog].Add(index);
+                        break;
+                    }
+                }
+            }
+
+            var generatedTLGs = new List<ISOTLG>();
+            foreach (var entry in splitPoints)
+            {
+                if (entry.Value.Count > 0)
+                {
+                    generatedTLGs.AddRange(
+                        entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo)
+                        );
+                }
+            }
+
+            ReplaceTimeLogs(generatedTLGs);
+
+
+        }
+
+        /// <summary>
+        /// Replace the current TimeLogs within a Task with new TimeLogs and - potentially - update all Effective TIM-Elements
+        /// </summary>
+        /// <param name="timeLogs"></param>
+        /// <param name="updateTimeElements"></param>
+        /// <param name="devices"></param>
+        public void ReplaceTimeLogs(List<ISOTLG> timeLogs, bool updateTimeElements = true, List<ISODevice> devices = null)
+        {
+            TimeLog.Clear();
+            TimeLogs.Clear();
+            foreach (var timeLog in timeLogs)
+            {
+                TimeLog.Add(new ISOTimeLog()
+                {
+                    Filename = timeLog.Name,
+                    TimeLogType = ISOTimeLogType.Binarytimelogfiletype1
+                });
+
+                TimeLogs.Add(timeLog);
+            }
+
+            if (updateTimeElements && devices != null)
+            {
+                var tims = Time.Where(tim => tim.Type != ISOType2.Effective).ToList();
+                var effectiveTims = GenerateTimeElementsFromTimeLogs(devices);
+                tims.AddRange(effectiveTims);
+                tims = tims.OrderBy(entry => entry.Start).ToList();
+                Time.Clear();
+                foreach (var tim in tims)
+                {
+                    Time.Add(tim);
+                }
+            }
+
+        }
+
 
         /// <summary>
         /// TimeStamps tend to have a lot of Milliseconds. We intend to lower the maximum digits of Milliseconds to 3

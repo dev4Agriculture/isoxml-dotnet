@@ -595,6 +595,81 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
+        /// <summary>
+        /// Get First Timestamp for a TimeLog
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetStartTime()
+        {
+            return Entries[0].DateTime;
+        }
+
+        /// <summary>
+        /// Get the Last Timestamp for a TimeLog
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndTime()
+        {
+            return Entries[Entries.Count - 1].DateTime;
+        }
+
+        /// <summary>
+        /// Checks if the given Timestamp is within this TimeLog.
+        /// ATTENTION: This does not mean, that this explicit timestamp is inside the timelog, it just means it starts before and ends after this TimeStamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool ContainsTime(DateTime time)
+        {
+            if (time < GetStartTime())
+            {
+                return false;
+            }
+            if (time > GetEndTime())
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        /// <summary>
+        /// Finds the Index in the Entries List closest to the given Timestamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool TryFindClosestIndex(DateTime time, out int index)
+        {
+            if (!ContainsTime(time))
+            {
+                index = -1;
+                return false;
+            }
+
+            var half = Entries.Count / 2;
+            var currentIndex = half;
+            while (true)
+            {
+                half /= 2;
+                if (half == 0)
+                {
+                    index = currentIndex;
+                    return true;
+                }
+                if (Entries[half].DateTime < time)
+                {
+                    currentIndex += half;
+
+                }
+                else
+                {
+                    currentIndex -= half;
+                }
+            }
+        }
+
+
+
     }
 
 }

@@ -11,5 +11,21 @@
         public bool NumberOfSatellites;
         public bool GpsUTCTime;
         public bool GpsUTCDate;
+
+        public TLGGPSOptions() { }
+
+
+        public TLGGPSOptions(TLGGPSOptions gpsOptions)
+        {
+            Hdop = gpsOptions.Hdop;
+            GpsUTCDate = gpsOptions.GpsUTCDate;
+            GpsUTCTime = gpsOptions.GpsUTCTime;
+            NumberOfSatellites = gpsOptions.NumberOfSatellites;
+            Pdop = gpsOptions.Pdop;
+            PosEast = gpsOptions.PosEast;
+            PosNorth = gpsOptions.PosNorth;
+            PosStatus = gpsOptions.PosStatus;
+            PosUp = gpsOptions.PosUp;
+        }
     }
 }

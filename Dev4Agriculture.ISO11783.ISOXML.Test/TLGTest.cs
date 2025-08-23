@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
@@ -205,4 +206,25 @@ public class TLGTest
         Assert.AreEqual(true, timeLog.TryGetPropertyValue(DDIUtils.ParseDDI("00B3"), out var type));
         Assert.AreEqual(11, type);
     }
+
+    [TestMethod]
+    public void CanSplitTimeLogs()
+    {
+        var path = "./testdata/TimeLogs/ValidTimeLogs";
+        var isoxml = ISOXML.Load(path);
+        Assert.IsNotNull(isoxml);
+        var splitpoints = new List<int>() { 100, 500, 1200 };
+        var task = isoxml.Data.Task[0];
+        var tlg = task.TimeLogs[0];
+        var timeLogs = tlg.SplitTimeLog(isoxml.Data.Device.ToList(), splitpoints, 1000);
+        Assert.AreEqual(timeLogs.Count, 4);
+        isoxml.TimeLogs.Remove(tlg.Name);
+        task.ClearTimeLogs();
+        foreach (var tlgs in timeLogs)
+        {
+            isoxml.TimeLogs.Add(tlgs.Name, tlgs);
+        }
+
+    }
+
 }

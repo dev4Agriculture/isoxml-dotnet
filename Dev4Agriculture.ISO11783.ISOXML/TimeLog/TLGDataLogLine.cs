@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -70,6 +71,32 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             for (byte index = 0; index < arraySize; index++)
             {
                 Entries[index] = new TLGDataLogEntry();
+            }
+        }
+
+        public TLGDataLogLine(TLGDataLogLine input)
+        {
+            Date = input.Date;
+            GpsUTCDate = input.GpsUTCDate;
+            GpsUTCTime = input.GpsUTCTime;
+            NumberOfEntries = input.NumberOfEntries;
+            NumberOfSatellites = input.NumberOfSatellites;
+            Hdop = input.Hdop;
+            Pdop = input.Pdop;
+            Time = input.Time;
+            PosStatus = input.PosStatus;
+            PosUp = input.PosUp;
+            PosEast = input.PosEast;
+            PosNorth = input.PosNorth;
+            ArraySize = input.ArraySize;
+            Entries = new TLGDataLogEntry[ArraySize];
+            for (byte index = 0; index < ArraySize; index++)
+            {
+                Entries[index] = new TLGDataLogEntry()
+                {
+                    IsSet = input.Entries[index].IsSet,
+                    Value = input.Entries[index].Value
+                };
             }
         }
 
