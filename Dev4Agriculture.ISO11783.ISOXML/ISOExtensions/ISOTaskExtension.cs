@@ -478,42 +478,41 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 return new List<ISOTask>();
             }
             List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
-            foreach (var entry in assignments)
+            var assignmentIndex = 0;
+            var resultEntryList = new List<TaskSplitEntry>();
+            var splittedTLGIndex = 0;
+            var loopShallEnd = false;
+            while (splitted[splittedTLGIndex].GetEndTime() < assignments[assignmentIndex].Timestamp)
             {
-                //We are not using "Contains" here as it might be, that the actual split time is not a value within any TimeLog.
-                //E.g. Your splittime is 12:00:00 but the closest Timelog starts at 12:00:05
-                //We also need to filter out all these TLGs that happened before our Timestamp
-                var tlg = splitted
-                    .Where(split => split.GetEndTime() > entry.Timestamp)
-                    .OrderBy(split => split.GetStartTime() - entry.Timestamp)
-                    .First();
-                if (tlg != null && tlg.GetEndTime() > entry.Timestamp)
+                splittedTLGIndex++;
+            }
+            while (assignmentIndex < assignments.Count && splittedTLGIndex < splitted.Count)
+            {
+                while (splitted[splittedTLGIndex].GetStartTime() > assignments[assignmentIndex].Timestamp)
                 {
-                    entry.TimeLog = tlg;
-                    entry.Index = 0;
-                    //entry.Timestamp = tlg.GetStartTime();
-                }
-                else
-                {
-                    // If no TLG contains this timestamp, find the next available one
-                    tlg = splitted
-                        .Where(split => split.GetStartTime() > entry.Timestamp)
-                        .OrderBy(split => split.GetStartTime())
-                        .FirstOrDefault();
-
-                    if (tlg != null)
+                    assignmentIndex++;
+                    if (assignmentIndex >= assignments.Count)
                     {
-                        entry.TimeLog = tlg;
-                        entry.Index = 0;
-                    }
-                    else
-                    {
-                        entry.TimeLog = null;
+                        loopShallEnd = true;
+                        break;
                     }
                 }
+                if (loopShallEnd)
+                {
+                    break;
+                }
+                var toAdd = new TaskSplitEntry()
+                {
+                    Timestamp = splitted[splittedTLGIndex].GetStartTime(),
+                    TimeLog = splitted[splittedTLGIndex],
+                    Index = 0,
+                    Task = assignments[assignmentIndex].Task
+                };
+                resultEntryList.Add(toAdd);
+                splittedTLGIndex++;
             }
 
-            var taskGroups = assignments.GroupBy(entry => entry.Task);
+            var taskGroups = resultEntryList.GroupBy(entry => entry.Task);
             var taskList = new List<ISOTask>();
             foreach (var groupEntry in taskGroups)
             {

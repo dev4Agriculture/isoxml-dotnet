@@ -49,7 +49,10 @@ public class TaskSplitterTests
         };
         var task = isoxml.Data.Task.First();
         isoxml.SplitTaskAtTimeStamps(task, splitpoints);
-        isoxml.Data.Task.Remove(task);
+        if (isoxml.Data.Task.Contains(task))
+        {
+            isoxml.Data.Task.Remove(task);
+        }
         isoxml.SetFolderPath("C:\\src\\dev4Agriculture\\isodotnet2\\isoxml-dotnet\\Dev4Agriculture.ISO11783.ISOXML.Test\\testdata\\TaskSplitting");
         isoxml.Save();
         Assert.AreEqual(isoxml.Data.Task.Count, 2);

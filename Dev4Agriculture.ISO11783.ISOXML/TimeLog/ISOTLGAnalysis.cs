@@ -642,6 +642,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 half /= 2;
                 if (half == 0)
                 {
+                    if (Entries[currentIndex].DateTime > time)
+                    {
+                        currentIndex--;
+                    }
                     index = currentIndex;
                     return true;
                 }
