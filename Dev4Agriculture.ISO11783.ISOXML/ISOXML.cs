@@ -654,7 +654,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// TSK3
         ///     - 21:25
         ///     - 23:15
-        ///     
+        ///
         ///Output
         ///
         /// TSK 2
@@ -685,7 +685,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 foreach (var tlg in entry.TimeLogs)
                 {
-                    TimeLogs.Add(tlg.Name, tlg);
+                    // Fix: Use TryAdd to avoid duplicate key exceptions
+                    if (!TimeLogs.ContainsKey(tlg.Name))
+                    {
+                        TimeLogs.Add(tlg.Name, tlg);
+                    }
                 }
             }
         }
@@ -831,7 +835,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
-        /// Load all binary Data for an ISOXML DataSet async 
+        /// Load all binary Data for an ISOXML DataSet async
         /// </summary>
         /// <returns></returns>
         public Task LoadBinaryDataAsync()

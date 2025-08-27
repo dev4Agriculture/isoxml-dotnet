@@ -143,7 +143,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
         /// <summary>
-        /// Read the Area on which TimeLog Points are loaded 
+        /// Read the Area on which TimeLog Points are loaded
         /// </summary>
         /// <param name="bounds"></param>
         /// <returns>True if a Bound could be found</returns>
@@ -389,24 +389,40 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 return new List<ISOTask>();
             }
             List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
+
+            // Fix: Properly assign each split point to the correct TLG segment
+            // Sort assignments by timestamp to ensure proper ordering
+            assignments = assignments.OrderBy(entry => entry.Timestamp).ToList();
+
             foreach (var entry in assignments)
             {
-                //We are not using "Contains" here as it might be, that the actual split time is not a value within any TimeLog.
-                //E.g. Your splittime is 12:00:00 but the closest Timelog starts at 12:00:05
-                //We also need to filter out all these TLGs that happened before our Timestamp
+                // Find the TLG segment that contains this timestamp
                 var tlg = splitted
-                    .Where(split => split.GetEndTime() > entry.Timestamp)
-                    .OrderBy(split => split.GetStartTime() - entry.Timestamp)
-                    .First();
-                if (tlg != null && tlg.GetEndTime() > entry.Timestamp)
+                    .Where(split => split.GetStartTime() <= entry.Timestamp && split.GetEndTime() > entry.Timestamp)
+                    .FirstOrDefault();
+
+                if (tlg != null)
                 {
                     entry.TimeLog = tlg;
                     entry.Index = 0;
-                    //entry.Timestamp = tlg.GetStartTime();
                 }
                 else
                 {
-                    entry.TimeLog = null;
+                    // If no TLG contains this timestamp, find the next available one
+                    tlg = splitted
+                        .Where(split => split.GetStartTime() > entry.Timestamp)
+                        .OrderBy(split => split.GetStartTime())
+                        .FirstOrDefault();
+
+                    if (tlg != null)
+                    {
+                        entry.TimeLog = tlg;
+                        entry.Index = 0;
+                    }
+                    else
+                    {
+                        entry.TimeLog = null;
+                    }
                 }
             }
 
@@ -415,11 +431,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             foreach (var groupEntry in taskGroups)
             {
                 var task = groupEntry.First().Task;
-                var tlgList = groupEntry.OrderBy(entry => entry.Timestamp).Select(entry => entry.TimeLog).ToList();
+                // Fix: Remove duplicates and ensure proper ordering
+                // Group by TLG to avoid duplicates while maintaining order
+                var tlgList = groupEntry
+                    .Where(entry => entry.TimeLog != null)
+                    .OrderBy(entry => entry.Timestamp)
+                    .GroupBy(entry => entry.TimeLog.Name)
+                    .Select(g => g.First().TimeLog)
+                    .ToList();
                 task.ReplaceTimeLogs(tlgList, true, devices);
                 taskList.Add(task);
             }
-
 
             return taskList;
         }

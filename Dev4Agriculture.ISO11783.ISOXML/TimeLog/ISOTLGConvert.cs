@@ -113,9 +113,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             var latestEntries = new TLGDataLogEntry[Header.Ddis.Count];
             var gpsOptions = Header.GpsOptions;
 
-
             var splittedTLGs = new List<ISOTLG>();
-            ISOTLG currentTLG = new ISOTLG(int.Parse(Name.Substring(3)), FolderPath);
+            // Fix: Use nextTLGNo for the first TLG to ensure unique names
+            ISOTLG currentTLG = new ISOTLG(nextTLGNo, FolderPath);
+            nextTLGNo++;
             currentTLG.Header.GpsOptions = new TLGGPSOptions(gpsOptions);
             for (var index = 0; index < Entries.Count; index++)
             {
