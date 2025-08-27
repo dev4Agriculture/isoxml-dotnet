@@ -10,6 +10,16 @@ using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
+    internal class TaskSplitEntry
+    {
+        public ISOTLG TimeLog;
+        public int Index;
+        public DateTime Timestamp;
+        public ISOTask Task;
+    }
+
+
+
     public partial class ISOTask
     {
 
@@ -340,15 +350,83 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         }
 
-        public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskTLGCombos, List<ISODevice> devices, int nextTLGNo = 0)
+        public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
         {
+            var splitPoints = new Dictionary<ISOTLG, List<int>>();
+            var assignments = new List<TaskSplitEntry>();
 
+            foreach (var tlg in TimeLogs)
+            {
+                splitPoints.Add(tlg, new List<int>());
+            }
+
+            foreach (var entry in taskSplitTimeCombos)
+            {
+                foreach (var time in entry.Value)
+                {
+                    foreach (var timeLog in TimeLogs)
+                    {
+                        if (timeLog.TryFindClosestIndex(time, out var index))
+                        {
+                            splitPoints[timeLog].Add(index);
+                            assignments.Add(new TaskSplitEntry()
+                            {
+                                Timestamp = time,
+                                Task = entry.Key,
+                                Index = index,
+                                TimeLog = timeLog
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+            assignments = assignments.OrderBy(entry => entry.Timestamp).ToList();
+            var times = assignments.Select(entry => entry.Timestamp).ToList();
+            var splitted = SplitAtDateTimes(times, devices, nextTLGNo);
+            if(splitted.Count == 0)
+            {
+                return new List<ISOTask>();
+            }
+            List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
+            foreach (var entry in assignments)
+            {
+                //We are not using "Contains" here as it might be, that the actual split time is not a value within any TimeLog.
+                //E.g. Your splittime is 12:00:00 but the closest Timelog starts at 12:00:05
+                //We also need to filter out all these TLGs that happened before our Timestamp
+                var tlg = splitted
+                    .Where(split => split.GetEndTime() > entry.Timestamp)
+                    .OrderBy(split => split.GetStartTime() - entry.Timestamp)
+                    .First();
+                if (tlg != null && tlg.GetEndTime() > entry.Timestamp)
+                {
+                    entry.TimeLog = tlg;
+                    entry.Index = 0;
+                    //entry.Timestamp = tlg.GetStartTime();
+                }
+                else
+                {
+                    entry.TimeLog = null;
+                }
+            }
+
+            var taskGroups = assignments.GroupBy(entry => entry.Task);
+            var taskList = new List<ISOTask>();
+            foreach (var groupEntry in taskGroups)
+            {
+                var task = groupEntry.First().Task;
+                var tlgList = groupEntry.OrderBy(entry => entry.Timestamp).Select(entry => entry.TimeLog).ToList();
+                task.ReplaceTimeLogs(tlgList, true, devices);
+                taskList.Add(task);
+            }
+
+
+            return taskList;
         }
 
-
-        public void SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        private List<ISOTLG> SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
         {
-            var splitPoints = new Dictionary<ISOTLG,List<int>>();
+            var splitPoints = new Dictionary<ISOTLG, List<int>>();
             foreach (var tlg in TimeLogs)
             {
                 splitPoints.Add(tlg, new List<int>());
@@ -371,12 +449,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 if (entry.Value.Count > 0)
                 {
-                    generatedTLGs.AddRange(
-                        entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo)
-                        );
+                    var tlgsToAdd = entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo);
+                    nextTLGNo += tlgsToAdd.Count;
+                    generatedTLGs.AddRange(tlgsToAdd);
+                } else
+                {
+                    generatedTLGs.Add(entry.Key);
                 }
             }
+            return generatedTLGs;
+        }
 
+
+        public void SplitTaskAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+            var generatedTLGs = SplitAtDateTimes(splitTimes, devices, nextTLGNo);
             ReplaceTimeLogs(generatedTLGs);
 
 

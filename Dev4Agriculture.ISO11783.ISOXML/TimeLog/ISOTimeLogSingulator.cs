@@ -52,10 +52,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 for (var ddiIndex = 0; ddiIndex < line.Entries.Length; ddiIndex++)
                 {
-                    if (line.Entries[ddiIndex].IsSet && previousEntries.Count < ddiIndex)
+                    if (line.Entries[ddiIndex].IsSet && previousEntries.Count > ddiIndex)
                     {
-                        previousEntries[index].TimeStamp = line.DateTime;
-                        previousEntries[index].Value = line.Entries[ddiIndex].Value;
+                        previousEntries[ddiIndex].TimeStamp = line.DateTime;
+                        previousEntries[ddiIndex].Value = line.Entries[ddiIndex].Value;
                     }
                 }
 

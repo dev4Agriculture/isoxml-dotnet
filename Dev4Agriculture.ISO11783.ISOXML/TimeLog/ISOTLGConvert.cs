@@ -110,21 +110,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             splitIndices.Sort();
             var splitIndicesIndex = 0;
-            var latestEntries = new TLGDataLogEntry[this.Header.Ddis.Count];
-            var gpsOptions = this.Header.GpsOptions;
+            var latestEntries = new TLGDataLogEntry[Header.Ddis.Count];
+            var gpsOptions = Header.GpsOptions;
 
 
             var splittedTLGs = new List<ISOTLG>();
-            ISOTLG currentTLG = new ISOTLG(int.Parse(this.Name.Substring(3)), this.FolderPath);
+            ISOTLG currentTLG = new ISOTLG(int.Parse(Name.Substring(3)), FolderPath);
             currentTLG.Header.GpsOptions = new TLGGPSOptions(gpsOptions);
-            for (var index = 0; index < this.Entries.Count; index++)
+            for (var index = 0; index < Entries.Count; index++)
             {
-                var curTLGLine = this.Entries[index];
+                var curTLGLine = Entries[index];
                 var copiedTLGLine = new TLGDataLogLine(curTLGLine);
-                if (splitIndicesIndex< splitIndices.Count && index == splitIndices[splitIndicesIndex])
+                if (splitIndicesIndex < splitIndices.Count && index == splitIndices[splitIndicesIndex])
                 {
-                    splittedTLGs.Add(currentTLG);
-                    currentTLG = new ISOTLG(nextTLGNo, this.FolderPath);
+                    if (currentTLG.Entries.Count > 0)
+                    {
+                        splittedTLGs.Add(currentTLG);
+                    }
+                    currentTLG = new ISOTLG(nextTLGNo, FolderPath);
+                    nextTLGNo++;
                     currentTLG.Header.GpsOptions = new TLGGPSOptions(gpsOptions);
                     var maxDDIEntries = curTLGLine.Entries.Length < latestEntries.Length ? curTLGLine.Entries.Length : latestEntries.Length;
                     for (var ddiEntryIndex = 0; ddiEntryIndex < maxDDIEntries; ddiEntryIndex++)

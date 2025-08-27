@@ -216,10 +216,10 @@ public class TLGTest
         var splitpoints = new List<int>() { 100, 500, 1200 };
         var task = isoxml.Data.Task[0];
         var tlg = task.TimeLogs[0];
-        var timeLogs = tlg.SplitTimeLog(isoxml.Data.Device.ToList(), splitpoints, 1000);
+        var timeLogs = tlg.SplitTimeLog([.. isoxml.Data.Device], splitpoints, 1000);
         Assert.AreEqual(timeLogs.Count, 4);
         isoxml.TimeLogs.Remove(tlg.Name);
-        task.ClearTimeLogs();
+        task.ReplaceTimeLogs(timeLogs,true, [.. isoxml.Data.Device]);
         foreach (var tlgs in timeLogs)
         {
             isoxml.TimeLogs.Add(tlgs.Name, tlgs);

@@ -641,6 +641,54 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return counts;
         }
 
+        /// <summary>
+        /// Input:
+        /// TSK1 (To Split)
+        ///   - TLG00001 20:18 - 21:30
+        ///   - TLG00006 22:05 - 23:30
+        ///
+        /// Goal:
+        /// TSK2
+        ///     - 20:18
+        ///     - 22:50
+        /// TSK3
+        ///     - 21:25
+        ///     - 23:15
+        ///     
+        ///Output
+        ///
+        /// TSK 2
+        ///     - TLG00002 20:18-21:25
+        ///     - TLG00004 22:50-23:15
+        /// TSK 3
+        ///     - TLG00003 21:25-21:30
+        ///     - TLG00007 22:05-22:50
+        ///     - TLG00005 23:15-23:30
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="taskSplitTimeCombos"></param>
+
+        public void SplitTaskAtTimeStamps(ISOTask task, Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos)
+        {
+            var nextTLGNo = TimeLogs.Keys.Max(entry =>
+            {
+                if (int.TryParse(entry.Substring(3), out var value))
+                {
+                    return value;
+                }
+                return null;
+            }) ?? 0;
+            nextTLGNo++;
+            var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), nextTLGNo);
+            TimeLogs.Clear();
+            foreach (var entry in Data.Task)
+            {
+                foreach (var tlg in entry.TimeLogs)
+                {
+                    TimeLogs.Add(tlg.Name, tlg);
+                }
+            }
+        }
 
         /// <summary>
         /// This generates a new, empty ISOXML TaskSet
