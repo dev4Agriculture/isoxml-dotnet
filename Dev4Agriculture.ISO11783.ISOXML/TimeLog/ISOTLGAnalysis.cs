@@ -399,32 +399,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
             if (latestPosition != null)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)latestPosition.Longitude,
-                    PositionNorth = (decimal)latestPosition.Latitude,
-                    PositionUp = latestPosition.PosUp,
-                    GpsUtcDate = latestPosition.Date,
-                    GpsUtcTime = latestPosition.Time,
-                    PDOP = latestPosition.Pdop,
-                    HDOP = latestPosition.Hdop,
-                    NumberOfSatellites = latestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(latestPosition, Header));
             }
 
             if (oldestPosition != null && oldestPosition.PosEast != latestPosition.PosEast && oldestPosition.PosNorth != latestPosition.PosNorth)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)oldestPosition.Longitude,
-                    PositionNorth = (decimal)oldestPosition.Latitude,
-                    PositionUp = oldestPosition.PosUp,
-                    GpsUtcDate = oldestPosition.Date,
-                    GpsUtcTime = oldestPosition.Time,
-                    PDOP = oldestPosition.Pdop,
-                    HDOP = oldestPosition.Hdop,
-                    NumberOfSatellites = oldestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(oldestPosition, Header));
             }
 
             var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
@@ -513,6 +493,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public bool IsDeviceProperty(ushort ddi, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElement.DeviceElementId == "DET" + deviceElement))
@@ -532,6 +516,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns>True if found, False otherwise. If True, rawValue is filled. Otherwise it's 0</returns>
         public bool TryGetPropertyValue(ushort ddi, out long rawValue, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                rawValue = 0;
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElementId == deviceElement))

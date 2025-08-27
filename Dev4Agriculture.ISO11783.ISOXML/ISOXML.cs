@@ -680,8 +680,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }) ?? 0;
             nextTLGNo++;
             var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), nextTLGNo);
+
+            // Add the new split tasks to the Data.Task list
+            foreach (var newTask in tasks)
+            {
+                if (!Data.Task.Contains(newTask))
+                {
+                    Data.Task.Add(newTask);
+                }
+            }
+
             TimeLogs.Clear();
-            foreach (var entry in Data.Task)
+            foreach (var entry in tasks)
             {
                 foreach (var tlg in entry.TimeLogs)
                 {

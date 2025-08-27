@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
@@ -334,9 +335,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// ATTENTION: Only used when the TimeLogs were created in code; normally the TIM-Element exists
         /// </summary>
         /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
+        /// <param name="assign">If true, the generated TIM-List replaces the TIM-List in the task. All Non-Effective TIM-Elements are kept</param>
         /// <returns>List of TIM-Elements with DataLogValues</returns>
-        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices)
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices, bool assign = false)
         {
+            if (assign)
+            {
+                var keptTims = Time.Where(tim => tim.Type != ISOType2.Effective);
+                Time.Clear();
+                foreach (var tim in keptTims)
+                {
+                    Time.Add(tim);
+                }
+            }
             var list = new List<ISOTime>();
             var singulator = new ISOTimeLogSingulator();
             for (var index = 0; index < TimeLogs.Count; index++)
@@ -344,10 +355,88 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 TimeLogs[index] = singulator.SingulateTimeLog(TimeLogs[index], devices);
                 var tim = TimeLogs[index].GenerateTimeElement(devices);
                 list.Add(tim);
+                if (assign)
+                {
+                    Time.Add(tim);
+                }
             }
             ISOTimeListEnqueuer.EnqueueTimeElements(list, devices);
             return list;
 
+        }
+
+        /// <summary>
+        /// Create a list of DeviceAllocation elements for the given Task based on TimeLog DDI entries.
+        /// Only creates DeviceAllocations for devices that have DeviceElements matching the DDI entries in TimeLog headers.
+        /// </summary>
+        /// <param name="devices">The list of devices to check for matching DeviceElements</param>
+        /// <returns>List of DeviceAllocation elements with AllocationStamps</returns>
+        public List<ISODeviceAllocation> GenerateDeviceAllocationsFromTimeLogs(List<ISODevice> devices, bool assign = true)
+        {
+            var deviceAllocations = new List<ISODeviceAllocation>();
+
+            if (assign)
+            {
+                DeviceAllocation.Clear();
+            }
+
+            // Get all unique DeviceElementIds from TimeLog headers
+            foreach (var tlg in TimeLogs)
+            {
+                var deviceElementIds = tlg.Header.Ddis.Select(entry => entry.DeviceElement).Distinct().ToList();
+
+                // Find devices that have DeviceElements matching the DDI entries in TimeLog headers
+                var usedDevices = devices.Where(device =>
+                    device.DeviceElement.Any(det =>
+                        deviceElementIds.Contains(IdList.ToIntId(det.DeviceElementId))
+                    )
+                ).Distinct().ToList();
+
+                foreach(var dvc in usedDevices)
+                {
+                    var deviceAllocation = new ISODeviceAllocation()
+                    {
+                        DeviceIdRef = dvc.DeviceId,
+                        ClientNAMEValue = dvc.ClientNAME,
+                        AllocationStamp = new ISOAllocationStamp()
+                        {
+                            Start = tlg.GetStartTime(),
+                            Stop = tlg.GetEndTime(),
+                            Type = ISOType.Effective_Realized
+                        }
+                    };
+                    deviceAllocations.Add(deviceAllocation);
+                    if (assign)
+                    {
+                        DeviceAllocation.Add(deviceAllocation);
+                    }
+                }
+            }
+            return deviceAllocations;
+        }
+
+        /// <summary>
+        /// Get the start time of the task from its TimeLogs
+        /// </summary>
+        /// <returns>Start time of the task</returns>
+        private DateTime GetTaskStartTime()
+        {
+            if (TimeLogs.Count == 0)
+                return DateTime.MinValue;
+
+            return TimeLogs.Min(tlg => tlg.GetStartTime());
+        }
+
+        /// <summary>
+        /// Get the end time of the task from its TimeLogs
+        /// </summary>
+        /// <returns>End time of the task</returns>
+        private DateTime GetTaskEndTime()
+        {
+            if (TimeLogs.Count == 0)
+                return DateTime.MinValue;
+
+            return TimeLogs.Max(tlg => tlg.GetEndTime());
         }
 
         public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
@@ -389,22 +478,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 return new List<ISOTask>();
             }
             List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
-
-            // Fix: Properly assign each split point to the correct TLG segment
-            // Sort assignments by timestamp to ensure proper ordering
-            assignments = assignments.OrderBy(entry => entry.Timestamp).ToList();
-
             foreach (var entry in assignments)
             {
-                // Find the TLG segment that contains this timestamp
+                //We are not using "Contains" here as it might be, that the actual split time is not a value within any TimeLog.
+                //E.g. Your splittime is 12:00:00 but the closest Timelog starts at 12:00:05
+                //We also need to filter out all these TLGs that happened before our Timestamp
                 var tlg = splitted
-                    .Where(split => split.GetStartTime() <= entry.Timestamp && split.GetEndTime() > entry.Timestamp)
-                    .FirstOrDefault();
-
-                if (tlg != null)
+                    .Where(split => split.GetEndTime() > entry.Timestamp)
+                    .OrderBy(split => split.GetStartTime() - entry.Timestamp)
+                    .First();
+                if (tlg != null && tlg.GetEndTime() > entry.Timestamp)
                 {
                     entry.TimeLog = tlg;
                     entry.Index = 0;
+                    //entry.Timestamp = tlg.GetStartTime();
                 }
                 else
                 {
@@ -431,16 +518,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             foreach (var groupEntry in taskGroups)
             {
                 var task = groupEntry.First().Task;
-                // Fix: Remove duplicates and ensure proper ordering
-                // Group by TLG to avoid duplicates while maintaining order
-                var tlgList = groupEntry
-                    .Where(entry => entry.TimeLog != null)
-                    .OrderBy(entry => entry.Timestamp)
-                    .GroupBy(entry => entry.TimeLog.Name)
-                    .Select(g => g.First().TimeLog)
-                    .ToList();
+                var tlgList = groupEntry.OrderBy(entry => entry.Timestamp).Select(entry => entry.TimeLog).ToList();
                 task.ReplaceTimeLogs(tlgList, true, devices);
                 taskList.Add(task);
+            }
+
+
+            foreach (var task in taskList)
+            {
+                // Generate DeviceAllocations and TimeElements after replacing TimeLogs
+                task.GenerateDeviceAllocationsFromTimeLogs(devices, true);
+                task.GenerateTimeElementsFromTimeLogs(devices, true);
             }
 
             return taskList;
@@ -488,7 +576,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var generatedTLGs = SplitAtDateTimes(splitTimes, devices, nextTLGNo);
             ReplaceTimeLogs(generatedTLGs);
 
-
+            // Generate DeviceAllocations and TimeElements after replacing TimeLogs
+            GenerateDeviceAllocationsFromTimeLogs(devices, true);
+            GenerateTimeElementsFromTimeLogs(devices, true);
         }
 
         /// <summary>

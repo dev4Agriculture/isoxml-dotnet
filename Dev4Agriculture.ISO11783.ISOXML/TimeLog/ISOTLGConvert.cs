@@ -117,7 +117,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             // Fix: Use nextTLGNo for the first TLG to ensure unique names
             ISOTLG currentTLG = new ISOTLG(nextTLGNo, FolderPath);
             nextTLGNo++;
-            currentTLG.Header.GpsOptions = new TLGGPSOptions(gpsOptions);
+            currentTLG.Header = new TLGDataLogHeader(Header);
             for (var index = 0; index < Entries.Count; index++)
             {
                 var curTLGLine = Entries[index];
@@ -130,7 +130,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     }
                     currentTLG = new ISOTLG(nextTLGNo, FolderPath);
                     nextTLGNo++;
-                    currentTLG.Header.GpsOptions = new TLGGPSOptions(gpsOptions);
+                    currentTLG.Header = new TLGDataLogHeader(Header);
                     var maxDDIEntries = curTLGLine.Entries.Length < latestEntries.Length ? curTLGLine.Entries.Length : latestEntries.Length;
                     for (var ddiEntryIndex = 0; ddiEntryIndex < maxDDIEntries; ddiEntryIndex++)
                     {

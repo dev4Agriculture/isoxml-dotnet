@@ -32,6 +32,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
+        internal static ISOPosition FromTimeLogLine(TLGDataLogLine latestPosition, TLGDataLogHeader header)
+        {
+            var gps = header.GpsOptions;
+            return new ISOPosition()
+            {
+                PositionEast = (decimal)latestPosition.Longitude,
+                PositionNorth = (decimal)latestPosition.Latitude,
+                PositionUp = gps.PosUp ? (long?)latestPosition.PosUp : null,
+                GpsUtcDate = gps.GpsUTCDate ? (ushort?)latestPosition.Date : null,
+                GpsUtcTime = gps.GpsUTCTime ? (uint?)latestPosition.Time : null,
+                PDOP = gps.Pdop ? (long?)latestPosition.Pdop : null,
+                HDOP = gps.Hdop ? (long?)latestPosition.Hdop : null,
+                NumberOfSatellites = gps.NumberOfSatellites ? (byte?)latestPosition.NumberOfSatellites : null
+            };
+
+        }
+
         public void FixDigits()
         {
             PositionEast = decimal.Round(PositionEast, Constants.NUMBER_OF_DIGITS_FOR_POSITIONS, MidpointRounding.ToEven);

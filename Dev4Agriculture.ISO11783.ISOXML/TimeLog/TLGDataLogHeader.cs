@@ -30,6 +30,40 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             DefaultValues = new TLGDataLogLine(byte.MaxValue);//TODO: As we do not know the value yet, we start with the maximum
             MaximumNumberOfEntries = 0;
         }
+
+        public TLGDataLogHeader(TLGDataLogHeader source)
+        {
+            GpsOptions = new TLGGPSOptions(source.GpsOptions);
+            Ddis = new List<TLGDataLogDDI>();
+            foreach(var entry in source.Ddis)
+            {
+                Ddis.Add(new TLGDataLogDDI()
+                {
+                    Ddi = entry.Ddi,
+                    Index = entry.Index,
+                    DeviceElement = entry.DeviceElement,
+                    DefaultValue = entry.DefaultValue,
+                    HasDefaultValue = entry.HasDefaultValue
+                });
+            }
+
+            Pgns = new List<TLGDataLogPGN>();
+            foreach (var entry in source.Pgns)
+            {
+                Pgns.Add(new TLGDataLogPGN()
+                {
+                    Index = entry.Index,
+                    DataLogPGN = entry.DataLogPGN,
+                    StartBit = entry.StartBit,
+                    StopBit = entry.StopBit,
+                    DefaultValue = entry.DefaultValue,
+                    HasDefaultValue = entry.HasDefaultValue
+                });
+            }
+            MaximumNumberOfEntries = source.MaximumNumberOfEntries;
+
+        }
+
         internal void ReadElement(XmlNode xmlNode)
         {
             switch (xmlNode.Name)
