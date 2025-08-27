@@ -8,6 +8,7 @@ using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using System.Diagnostics;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
@@ -478,6 +479,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 return new List<ISOTask>();
             }
             List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
+
+            // DEBUG: Log all pairs entries in a table format
+            Debug.WriteLine("=== DEBUG: All Pairs Entries Table ===");
+            Debug.WriteLine("| Index | Name     | Start Time        | End Time          |");
+            Debug.WriteLine("|-------|----------|-------------------|-------------------|");
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                var pair = pairs[i];
+                Debug.WriteLine($"| {i,5} | {pair.Item1,-8} | {pair.Item2:HH:mm:ss.fff} | {pair.Item3:HH:mm:ss.fff} |");
+            }
+
+            // DEBUG: Log all assignments with timestamps and expected task designators
+            Debug.WriteLine("=== DEBUG: All Assignments ===");
+            Debug.WriteLine("| Index | Task Designator | Timestamp        |");
+            Debug.WriteLine("|-------|-----------------|------------------|");
+            for (int i = 0; i < assignments.Count; i++)
+            {
+                var assignment = assignments[i];
+                Debug.WriteLine($"| {i,5} | {assignment.Task.TaskDesignator,-15} | {assignment.Timestamp:HH:mm:ss.fff} |");
+            }
+
             var assignmentIndex = 0;
             var resultEntryList = new List<TaskSplitEntry>();
             var splittedTLGIndex = 0;

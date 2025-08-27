@@ -15,7 +15,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     /// <summary>
     /// ISOTLG is the class to read and write TimeLog Files (TLG....bin/.xml)
-    /// This partial class hosts the 
+    /// This partial class hosts the
     /// </summary>
     public partial class ISOTLG
     {
@@ -509,7 +509,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
         /// <summary>
-        /// Returns true if a Property exists and also exports the rawValue. 
+        /// Returns true if a Property exists and also exports the rawValue.
         /// </summary>
         /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net </param>
         /// <param name="deviceElement">A DeviceElement</param>
@@ -642,8 +642,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 half /= 2;
                 if (half == 0)
                 {
-                    if (Entries[currentIndex].DateTime > time)
-                    {
+                    while(currentIndex > 0 && Entries[currentIndex].DateTime > time){
                         currentIndex--;
                     }
                     index = currentIndex;
@@ -660,6 +659,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
                 else
                 {
+                    currentIndex--;
                     index = currentIndex;
                     return true;
                 }
