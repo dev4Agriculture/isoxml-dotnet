@@ -62,6 +62,33 @@ public class TaskSplitterTests
             Assert.AreNotEqual(tsk.DeviceAllocation.Count, 0);
         }
 
+        // Find the tasks by their designator
+        var halloTask = isoxml.Data.Task.FirstOrDefault(t => t.TaskDesignator == "Hallo");
+        var weltTask = isoxml.Data.Task.FirstOrDefault(t => t.TaskDesignator == "Welt");
+
+        Assert.IsNotNull(halloTask, "Hallo task should exist");
+        Assert.IsNotNull(weltTask, "Welt task should exist");
+
+        // Verify that Task1 (Hallo) includes TLG00005, TLG00007, TLG00009, TLG00011
+        var halloTLGNames = halloTask.TimeLogs.Select(tlg => tlg.Name).ToList();
+        Console.WriteLine($"Hallo task TimeLogs: {string.Join(", ", halloTLGNames)}");
+
+        Assert.IsTrue(halloTLGNames.Contains("TLG00005"), "Hallo task should contain TLG00005");
+        Assert.IsTrue(halloTLGNames.Contains("TLG00007"), "Hallo task should contain TLG00007");
+        Assert.IsTrue(halloTLGNames.Contains("TLG00009"), "Hallo task should contain TLG00009");
+        Assert.IsTrue(halloTLGNames.Contains("TLG00011"), "Hallo task should contain TLG00011");
+
+        // Verify that Task2 (Welt) includes TLG00006, TLG00008, TLG00010
+        var weltTLGNames = weltTask.TimeLogs.Select(tlg => tlg.Name).ToList();
+        Console.WriteLine($"Welt task TimeLogs: {string.Join(", ", weltTLGNames)}");
+
+        Assert.IsTrue(weltTLGNames.Contains("TLG00006"), "Welt task should contain TLG00006");
+        Assert.IsTrue(weltTLGNames.Contains("TLG00008"), "Welt task should contain TLG00008");
+        Assert.IsTrue(weltTLGNames.Contains("TLG00010"), "Welt task should contain TLG00010");
+
+        // Additional verification: check the total count
+        Assert.AreEqual(4, halloTask.TimeLogs.Count, "Hallo task should have exactly 4 TimeLogs");
+        Assert.AreEqual(3, weltTask.TimeLogs.Count, "Welt task should have exactly 3 TimeLogs");
     }
 
     [TestMethod]
