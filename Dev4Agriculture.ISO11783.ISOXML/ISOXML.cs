@@ -663,14 +663,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         internal int GetNextFreeTimeLogIndex()
         {
-            return TimeLogs.Keys.Max(entry =>
+            return (TimeLogs.Keys.Max(entry =>
             {
                 if (int.TryParse(entry.Substring(3), out var value))
                 {
                     return value;
                 }
                 return null;
-            }) ?? 1;
+            }) ?? 0)+1;
         }
 
         /// <summary>

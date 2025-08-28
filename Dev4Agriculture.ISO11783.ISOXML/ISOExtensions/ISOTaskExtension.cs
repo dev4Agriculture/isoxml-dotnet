@@ -625,15 +625,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             if (updateTimeElements && devices != null)
             {
-                var tims = Time.Where(tim => tim.Type != ISOType2.Effective).ToList();
-                var effectiveTims = GenerateTimeElementsFromTimeLogs(devices);
-                tims.AddRange(effectiveTims);
-                tims = tims.OrderBy(entry => entry.Start).ToList();
-                Time.Clear();
-                foreach (var tim in tims)
-                {
-                    Time.Add(tim);
-                }
+                GenerateTimeElementsFromTimeLogs(devices, true);
+                GenerateDeviceAllocationsFromTimeLogs(devices, true);
             }
 
         }
