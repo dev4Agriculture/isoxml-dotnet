@@ -641,7 +641,40 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return counts;
         }
 
+
         /// <summary>
+        /// After changing existing TimeLogs based on Tasks, we need to update the main object to delete potentially obsolete TimeLogs
+        /// </summary>
+        private void UpdateISOXMLTimeLogsFromTasksTimeLogs()
+        {
+            TimeLogs.Clear();
+            foreach (var entry in Data.Task)
+            {
+                foreach (var tlg in entry.TimeLogs)
+                {
+                    if (!TimeLogs.ContainsKey(tlg.Name))
+                    {
+                        TimeLogs.Add(tlg.Name, tlg);
+                    }
+                }
+            }
+        }
+
+
+        internal int GetNextFreeTimeLogIndex()
+        {
+            return TimeLogs.Keys.Max(entry =>
+            {
+                if (int.TryParse(entry.Substring(3), out var value))
+                {
+                    return value;
+                }
+                return null;
+            }) ?? 1;
+        }
+
+        /// <summary>
+        /// This function splits a given Task at given points in time
         /// Input:
         /// TSK1 (To Split)
         ///   - TLG00001 20:18 - 21:30
@@ -667,19 +700,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// </summary>
         /// <param name="task"></param>
         /// <param name="taskSplitTimeCombos"></param>
-
         public void SplitTaskAtTimeStamps(ISOTask task, Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos)
         {
-            var nextTLGNo = TimeLogs.Keys.Max(entry =>
-            {
-                if (int.TryParse(entry.Substring(3), out var value))
-                {
-                    return value;
-                }
-                return null;
-            }) ?? 0;
-            nextTLGNo++;
-            var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), nextTLGNo);
+            
+            var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), GetNextFreeTimeLogIndex());
 
             // Add the new split tasks to the Data.Task list
             foreach (var newTask in tasks)
@@ -690,18 +714,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 }
             }
 
-            TimeLogs.Clear();
-            foreach (var entry in tasks)
-            {
-                foreach (var tlg in entry.TimeLogs)
-                {
-                    // Fix: Use TryAdd to avoid duplicate key exceptions
-                    if (!TimeLogs.ContainsKey(tlg.Name))
-                    {
-                        TimeLogs.Add(tlg.Name, tlg);
-                    }
-                }
-            }
+            UpdateISOXMLTimeLogsFromTasksTimeLogs();
         }
 
         /// <summary>
@@ -1017,5 +1030,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 return "";
             }
         }
+
     }
 }
