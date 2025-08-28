@@ -8,14 +8,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Verify commit exists in origin/main
-      run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-        git branch --remote --contains | grep origin/main
     - name: Set VERSION variable from csproj
       run: |
         VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Dev4Agriculture.ISO11783.ISOXML/Dev4Agriculture.ISO11783.ISOXML.csproj)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: CheckOut Beta
+      run: git checkout beta
     - name: Build
       run: dotnet build --configuration Release /p:Version=${VERSION}
     - name: Test
