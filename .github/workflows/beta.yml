@@ -19,7 +19,7 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
     - name: Pack
-      run: dotnet pack Dev4Agriculture.ISO11783.ISOXML/Dev4Agriculture.ISO11783.ISOXML.csproj --configuration Release /p:Version=${VERSION} --no-build --output .
+      run: dotnet pack Dev4Agriculture.ISO11783.ISOXML/Dev4Agriculture.ISO11783.ISOXML.csproj --configuration Release /p:Version=${VERSION} --no-build -o ./nupkg
     - name: Login to own Nuget Store  
       run: dotnet nuget add source "https://nuget.dev4ag.com/repository/nuget.dev4ag/index.json" --username ${{ secrets.DEV4AG_NUGET_USER }} --password ${{ secrets.DEV4AG_NUGET_PASSWORD }} --store-password-in-clear-text
     - name: Push to Nuget Store
