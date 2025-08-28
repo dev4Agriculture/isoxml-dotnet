@@ -1,15 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using de.dev4Agriculture.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DTO;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using System.Diagnostics;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
+    internal class TaskSplitEntry
+    {
+        public ISOTLG TimeLog;
+        public int Index;
+        public DateTime Timestamp;
+        public ISOTask Task;
+    }
+
+
+
     public partial class ISOTask
     {
 
@@ -133,7 +145,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
 
         /// <summary>
-        /// Read the Area on which TimeLog Points are loaded 
+        /// Read the Area on which TimeLog Points are loaded
         /// </summary>
         /// <param name="bounds"></param>
         /// <returns>True if a Bound could be found</returns>
@@ -324,9 +336,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// ATTENTION: Only used when the TimeLogs were created in code; normally the TIM-Element exists
         /// </summary>
         /// <param name="devices">The list of devices; used to differentiate between Totals and LifeTimetotals; based on the DeviceDescriptions</param>
+        /// <param name="assign">If true, the generated TIM-List replaces the TIM-List in the task. All Non-Effective TIM-Elements are kept</param>
         /// <returns>List of TIM-Elements with DataLogValues</returns>
-        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices)
+        public List<ISOTime> GenerateTimeElementsFromTimeLogs(List<ISODevice> devices, bool assign = false)
         {
+            if (assign)
+            {
+                var keptTims = Time.Where(tim => tim.Type != ISOType2.Effective);
+                Time.Clear();
+                foreach (var tim in keptTims)
+                {
+                    Time.Add(tim);
+                }
+            }
             var list = new List<ISOTime>();
             var singulator = new ISOTimeLogSingulator();
             for (var index = 0; index < TimeLogs.Count; index++)
@@ -334,9 +356,278 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 TimeLogs[index] = singulator.SingulateTimeLog(TimeLogs[index], devices);
                 var tim = TimeLogs[index].GenerateTimeElement(devices);
                 list.Add(tim);
+                if (assign)
+                {
+                    Time.Add(tim);
+                }
             }
             ISOTimeListEnqueuer.EnqueueTimeElements(list, devices);
             return list;
+
+        }
+
+        /// <summary>
+        /// Create a list of DeviceAllocation elements for the given Task based on TimeLog DDI entries.
+        /// Only creates DeviceAllocations for devices that have DeviceElements matching the DDI entries in TimeLog headers.
+        /// </summary>
+        /// <param name="devices">The list of devices to check for matching DeviceElements</param>
+        /// <returns>List of DeviceAllocation elements with AllocationStamps</returns>
+        public List<ISODeviceAllocation> GenerateDeviceAllocationsFromTimeLogs(List<ISODevice> devices, bool assign = true)
+        {
+            var deviceAllocations = new List<ISODeviceAllocation>();
+
+            if (assign)
+            {
+                DeviceAllocation.Clear();
+            }
+
+            // Get all unique DeviceElementIds from TimeLog headers
+            foreach (var tlg in TimeLogs)
+            {
+                var deviceElementIds = tlg.Header.Ddis.Select(entry => entry.DeviceElement).Distinct().ToList();
+
+                // Find devices that have DeviceElements matching the DDI entries in TimeLog headers
+                var usedDevices = devices.Where(device =>
+                    device.DeviceElement.Any(det =>
+                        deviceElementIds.Contains(IdList.ToIntId(det.DeviceElementId))
+                    )
+                ).Distinct().ToList();
+
+                foreach(var dvc in usedDevices)
+                {
+                    var deviceAllocation = new ISODeviceAllocation()
+                    {
+                        DeviceIdRef = dvc.DeviceId,
+                        ClientNAMEValue = dvc.ClientNAME,
+                        AllocationStamp = new ISOAllocationStamp()
+                        {
+                            Start = tlg.GetStartTime(),
+                            Stop = tlg.GetEndTime(),
+                            Type = ISOType.Effective_Realized
+                        }
+                    };
+                    deviceAllocations.Add(deviceAllocation);
+                    if (assign)
+                    {
+                        DeviceAllocation.Add(deviceAllocation);
+                    }
+                }
+            }
+            return deviceAllocations;
+        }
+
+        /// <summary>
+        /// Get the start time of the task from its TimeLogs
+        /// </summary>
+        /// <returns>Start time of the task</returns>
+        private DateTime GetTaskStartTime()
+        {
+            if (TimeLogs.Count == 0)
+                return DateTime.MinValue;
+
+            return TimeLogs.Min(tlg => tlg.GetStartTime());
+        }
+
+        /// <summary>
+        /// Get the end time of the task from its TimeLogs
+        /// </summary>
+        /// <returns>End time of the task</returns>
+        private DateTime GetTaskEndTime()
+        {
+            if (TimeLogs.Count == 0)
+                return DateTime.MinValue;
+
+            return TimeLogs.Max(tlg => tlg.GetEndTime());
+        }
+
+        public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+            var splitPoints = new Dictionary<ISOTLG, List<int>>();
+            var assignments = new List<TaskSplitEntry>();
+
+            foreach (var tlg in TimeLogs)
+            {
+                splitPoints.Add(tlg, new List<int>());
+            }
+
+            foreach (var entry in taskSplitTimeCombos)
+            {
+                foreach (var time in entry.Value)
+                {
+                    foreach (var timeLog in TimeLogs)
+                    {
+                        if (timeLog.TryFindClosestIndex(time, out var index))
+                        {
+                            splitPoints[timeLog].Add(index);
+                            assignments.Add(new TaskSplitEntry()
+                            {
+                                Timestamp = time,
+                                Task = entry.Key,
+                                Index = index,
+                                TimeLog = timeLog
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+            assignments = assignments.OrderBy(entry => entry.Timestamp).ToList();
+            var times = assignments.Select(entry => entry.Timestamp).ToList();
+            var splitted = SplitAtDateTimes(times, devices, nextTLGNo);
+            if(splitted.Count == 0)
+            {
+                return new List<ISOTask>();
+            }
+            List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
+
+            // DEBUG: Log all pairs entries in a table format
+            Debug.WriteLine("=== DEBUG: All Pairs Entries Table ===");
+            Debug.WriteLine("| Index | Name     | Start Time        | End Time          |");
+            Debug.WriteLine("|-------|----------|-------------------|-------------------|");
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                var pair = pairs[i];
+                Debug.WriteLine($"| {i,5} | {pair.Item1,-8} | {pair.Item2:HH:mm:ss.fff} | {pair.Item3:HH:mm:ss.fff} |");
+            }
+
+            // DEBUG: Log all assignments with timestamps and expected task designators
+            Debug.WriteLine("=== DEBUG: All Assignments ===");
+            Debug.WriteLine("| Index | Task Designator | Timestamp        |");
+            Debug.WriteLine("|-------|-----------------|------------------|");
+            for (int i = 0; i < assignments.Count; i++)
+            {
+                var assignment = assignments[i];
+                Debug.WriteLine($"| {i,5} | {assignment.Task.TaskDesignator,-15} | {assignment.Timestamp:HH:mm:ss.fff} |");
+            }
+
+            var assignmentIndex = 0;
+            var resultEntryList = new List<TaskSplitEntry>();
+            var splittedTLGIndex = 0;
+            var loopShallEnd = false;
+            while (splitted[splittedTLGIndex].GetEndTime() < assignments[assignmentIndex].Timestamp)
+            {
+                splittedTLGIndex++;
+            }
+            while (assignmentIndex < assignments.Count && splittedTLGIndex < splitted.Count)
+            {
+                while (splitted[splittedTLGIndex].GetStartTime() > assignments[assignmentIndex].Timestamp)
+                {
+                    assignmentIndex++;
+                    if (assignmentIndex >= assignments.Count)
+                    {
+                        loopShallEnd = true;
+                        break;
+                    }
+                }
+                if (loopShallEnd)
+                {
+                    break;
+                }
+                var toAdd = new TaskSplitEntry()
+                {
+                    Timestamp = splitted[splittedTLGIndex].GetStartTime(),
+                    TimeLog = splitted[splittedTLGIndex],
+                    Index = 0,
+                    Task = assignments[assignmentIndex].Task
+                };
+                resultEntryList.Add(toAdd);
+                splittedTLGIndex++;
+            }
+
+            var taskGroups = resultEntryList.GroupBy(entry => entry.Task);
+            var taskList = new List<ISOTask>();
+            foreach (var groupEntry in taskGroups)
+            {
+                var task = groupEntry.First().Task;
+                var tlgList = groupEntry.OrderBy(entry => entry.Timestamp).Select(entry => entry.TimeLog).ToList();
+                task.ReplaceTimeLogs(tlgList, true, devices);
+                taskList.Add(task);
+            }
+
+
+            foreach (var task in taskList)
+            {
+                // Generate DeviceAllocations and TimeElements after replacing TimeLogs
+                task.GenerateDeviceAllocationsFromTimeLogs(devices, true);
+                task.GenerateTimeElementsFromTimeLogs(devices, true);
+            }
+
+            return taskList;
+        }
+
+        private List<ISOTLG> SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+            var splitPoints = new Dictionary<ISOTLG, List<int>>();
+            foreach (var tlg in TimeLogs)
+            {
+                splitPoints.Add(tlg, new List<int>());
+            }
+            splitTimes.Sort();
+            foreach (var time in splitTimes)
+            {
+                foreach (var timeLog in TimeLogs)
+                {
+                    if (timeLog.TryFindClosestIndex(time, out var index))
+                    {
+                        splitPoints[timeLog].Add(index);
+                        break;
+                    }
+                }
+            }
+
+            var generatedTLGs = new List<ISOTLG>();
+            foreach (var entry in splitPoints)
+            {
+                if (entry.Value.Count > 0)
+                {
+                    var tlgsToAdd = entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo);
+                    nextTLGNo += tlgsToAdd.Count;
+                    generatedTLGs.AddRange(tlgsToAdd);
+                } else
+                {
+                    generatedTLGs.Add(entry.Key);
+                }
+            }
+            return generatedTLGs;
+        }
+
+
+        public void SplitTaskAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        {
+            var generatedTLGs = SplitAtDateTimes(splitTimes, devices, nextTLGNo);
+            ReplaceTimeLogs(generatedTLGs);
+
+            // Generate DeviceAllocations and TimeElements after replacing TimeLogs
+            GenerateDeviceAllocationsFromTimeLogs(devices, true);
+            GenerateTimeElementsFromTimeLogs(devices, true);
+        }
+
+        /// <summary>
+        /// Replace the current TimeLogs within a Task with new TimeLogs and - potentially - update all Effective TIM-Elements
+        /// </summary>
+        /// <param name="timeLogs"></param>
+        /// <param name="updateTimeElements"></param>
+        /// <param name="devices"></param>
+        public void ReplaceTimeLogs(List<ISOTLG> timeLogs, bool updateTimeElements = true, List<ISODevice> devices = null)
+        {
+            TimeLog.Clear();
+            TimeLogs.Clear();
+            foreach (var timeLog in timeLogs)
+            {
+                TimeLog.Add(new ISOTimeLog()
+                {
+                    Filename = timeLog.Name,
+                    TimeLogType = ISOTimeLogType.Binarytimelogfiletype1
+                });
+
+                TimeLogs.Add(timeLog);
+            }
+
+            if (updateTimeElements && devices != null)
+            {
+                GenerateTimeElementsFromTimeLogs(devices, true);
+                GenerateDeviceAllocationsFromTimeLogs(devices, true);
+            }
 
         }
 

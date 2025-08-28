@@ -643,6 +643,81 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
         /// <summary>
+        /// After changing existing TimeLogs based on Tasks, we need to update the main object to delete potentially obsolete TimeLogs
+        /// </summary>
+        private void UpdateISOXMLTimeLogsFromTasksTimeLogs()
+        {
+            TimeLogs.Clear();
+            foreach (var entry in Data.Task)
+            {
+                foreach (var tlg in entry.TimeLogs)
+                {
+                    if (!TimeLogs.ContainsKey(tlg.Name))
+                    {
+                        TimeLogs.Add(tlg.Name, tlg);
+                    }
+                }
+            }
+        }
+
+
+        internal int GetNextFreeTimeLogIndex()
+        {
+            return (TimeLogs.Keys.Max(entry =>
+            {
+                if (int.TryParse(entry.Substring(3), out var value))
+                {
+                    return value;
+                }
+                return null;
+            }) ?? 0)+1;
+        }
+
+        /// <summary>
+        /// This function splits a given Task at given points in time
+        /// Input:
+        /// TSK1 (To Split)
+        ///   - TLG00001 20:18 - 21:30
+        ///   - TLG00006 22:05 - 23:30
+        ///
+        /// Goal:
+        /// TSK2
+        ///     - 20:18
+        ///     - 22:50
+        /// TSK3
+        ///     - 21:25
+        ///     - 23:15
+        ///
+        ///Output
+        ///
+        /// TSK 2
+        ///     - TLG00002 20:18-21:25
+        ///     - TLG00004 22:50-23:15
+        /// TSK 3
+        ///     - TLG00003 21:25-21:30
+        ///     - TLG00007 22:05-22:50
+        ///     - TLG00005 23:15-23:30
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="taskSplitTimeCombos"></param>
+        public void SplitTaskAtTimeStamps(ISOTask task, Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos)
+        {
+            
+            var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), GetNextFreeTimeLogIndex());
+
+            // Add the new split tasks to the Data.Task list
+            foreach (var newTask in tasks)
+            {
+                if (!Data.Task.Contains(newTask))
+                {
+                    Data.Task.Add(newTask);
+                }
+            }
+
+            UpdateISOXMLTimeLogsFromTasksTimeLogs();
+        }
+
+        /// <summary>
         /// This generates a new, empty ISOXML TaskSet
         /// </summary>
         /// <param name="outPath"></param>
@@ -783,7 +858,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
-        /// Load all binary Data for an ISOXML DataSet async 
+        /// Load all binary Data for an ISOXML DataSet async
         /// </summary>
         /// <returns></returns>
         public Task LoadBinaryDataAsync()
@@ -955,5 +1030,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 return "";
             }
         }
+
     }
 }

@@ -15,7 +15,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     /// <summary>
     /// ISOTLG is the class to read and write TimeLog Files (TLG....bin/.xml)
-    /// This partial class hosts the 
+    /// This partial class hosts the
     /// </summary>
     public partial class ISOTLG
     {
@@ -399,32 +399,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
             if (latestPosition != null)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)latestPosition.Longitude,
-                    PositionNorth = (decimal)latestPosition.Latitude,
-                    PositionUp = latestPosition.PosUp,
-                    GpsUtcDate = latestPosition.Date,
-                    GpsUtcTime = latestPosition.Time,
-                    PDOP = latestPosition.Pdop,
-                    HDOP = latestPosition.Hdop,
-                    NumberOfSatellites = latestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(latestPosition, Header));
             }
 
             if (oldestPosition != null && oldestPosition.PosEast != latestPosition.PosEast && oldestPosition.PosNorth != latestPosition.PosNorth)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)oldestPosition.Longitude,
-                    PositionNorth = (decimal)oldestPosition.Latitude,
-                    PositionUp = oldestPosition.PosUp,
-                    GpsUtcDate = oldestPosition.Date,
-                    GpsUtcTime = oldestPosition.Time,
-                    PDOP = oldestPosition.Pdop,
-                    HDOP = oldestPosition.Hdop,
-                    NumberOfSatellites = oldestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(oldestPosition, Header));
             }
 
             var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
@@ -513,6 +493,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public bool IsDeviceProperty(ushort ddi, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElement.DeviceElementId == "DET" + deviceElement))
@@ -525,13 +509,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
         /// <summary>
-        /// Returns true if a Property exists and also exports the rawValue. 
+        /// Returns true if a Property exists and also exports the rawValue.
         /// </summary>
         /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net </param>
         /// <param name="deviceElement">A DeviceElement</param>
         /// <returns>True if found, False otherwise. If True, rawValue is filled. Otherwise it's 0</returns>
         public bool TryGetPropertyValue(ushort ddi, out long rawValue, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                rawValue = 0;
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElementId == deviceElement))
@@ -593,6 +582,90 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             GetDevicesForTimeLog(isoxml);
             FillPropertiesFromUsedDevices();
         }
+
+
+        /// <summary>
+        /// Get First Timestamp for a TimeLog
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetStartTime()
+        {
+            return Entries[0].DateTime;
+        }
+
+        /// <summary>
+        /// Get the Last Timestamp for a TimeLog
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndTime()
+        {
+            return Entries[Entries.Count - 1].DateTime;
+        }
+
+        /// <summary>
+        /// Checks if the given Timestamp is within this TimeLog.
+        /// ATTENTION: This does not mean, that this explicit timestamp is inside the timelog, it just means it starts before and ends after this TimeStamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool ContainsTime(DateTime time)
+        {
+            if (time < GetStartTime())
+            {
+                return false;
+            }
+            if (time > GetEndTime())
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        /// <summary>
+        /// Finds the Index in the Entries List closest to the given Timestamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool TryFindClosestIndex(DateTime time, out int index)
+        {
+            if (!ContainsTime(time))
+            {
+                index = -1;
+                return false;
+            }
+
+            var half = Entries.Count / 2;
+            var currentIndex = half;
+            while (true)
+            {
+                half /= 2;
+                if (half == 0)
+                {
+                    while(currentIndex > 0 && Entries[currentIndex].DateTime > time){
+                        currentIndex--;
+                    }
+                    index = currentIndex;
+                    return true;
+                }
+                if (Entries[currentIndex].DateTime < time)
+                {
+                    currentIndex += half;
+
+                }
+                else if (Entries[currentIndex].DateTime > time)
+                {
+                    currentIndex -= half;
+                }
+                else
+                {
+                    currentIndex--;
+                    index = currentIndex;
+                    return true;
+                }
+            }
+        }
+
 
 
     }
