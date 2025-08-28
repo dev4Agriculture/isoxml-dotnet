@@ -1,3 +1,5 @@
+v0.25.1.1:
+    -ADD: Task Splitting
 v0.24.2.7:
     -FIX: Average-Calculation still failed as we received an average of 0 sometimes
 
