@@ -1,3 +1,5 @@
+v0.25.2.1:
+    -ADD: Saving TaskSet to Zip
 v0.25.1.1:
     -ADD: Task Splitting
 v0.24.2.7:

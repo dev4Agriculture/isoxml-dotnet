@@ -632,6 +632,60 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         }
 
 
+        public List<ISOTreatmentZone> GenerateTreatmentZones(GridZoneDTO zone, bool assign = true)
+        {
+            switch (zone.Type)
+            {
+                case ISOGridType.gridtype1:
+                    var tznList = new List<ISOTreatmentZone>();
+                    var listOfValidIndizes = zone.Layer.SelectMany(layer => layer.GridType1Values.Keys).Distinct();
+                    foreach (var index in listOfValidIndizes)
+                    {
+                        var treatmentZone = new ISOTreatmentZone()
+                        {
+                            TreatmentZoneCode = index
+                        };
+                        foreach (var layer in zone.Layer)
+                        {
+                            treatmentZone.ProcessDataVariable.Add(new ISOProcessDataVariable()
+                            {
+                                ProcessDataValue = layer.GridType1Values[index],
+                                ProcessDataDDI = DDIUtils.FormatDDI(layer.DDI),
+                                DeviceElementIdRef = layer.DeviceElement != null ? IdList.BuildID("DET", layer.DeviceElement ?? 0) : null
+                            });
+                        }
+                        tznList.Add(treatmentZone);
+                        if (assign)
+                        {
+                            TreatmentZone.Add(treatmentZone);
+                        }
+                    }
+
+                    return tznList;
+                case ISOGridType.gridtype2:
+                    var tzn = new ISOTreatmentZone()
+                    {
+                        TreatmentZoneCode = 0
+                    };
+                    foreach (var layer in zone.Layer)
+                    {
+                        tzn.ProcessDataVariable.Add(new ISOProcessDataVariable()
+                        {
+                            ProcessDataValue = 0,
+                            ProcessDataDDI = DDIUtils.FormatDDI(layer.DDI),
+                            DeviceElementIdRef = layer.DeviceElement != null ? IdList.BuildID("DET", layer.DeviceElement ?? 0) : null
+                        });
+                    }
+                    if (assign)
+                    {
+                        TreatmentZone.Add(tzn);
+                    }
+                    return new List<ISOTreatmentZone>() { tzn };
+                default:
+                    return new List<ISOTreatmentZone>();
+            }
+        }
+
         /// <summary>
         /// TimeStamps tend to have a lot of Milliseconds. We intend to lower the maximum digits of Milliseconds to 3
         /// </summary>
