@@ -6,6 +6,8 @@ Creates a visual representation of TimeLogs over time.
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from data import input_data, output_data, split_points
+
 from datetime import datetime, time
 import numpy as np
 
@@ -16,19 +18,14 @@ def time_to_minutes(t):
 def create_timeline_diagram():
     """Create the timeline diagram"""
     
-    # Initial data from the user's table
-    time_logs_data = [
-        ("TLG00001", 1, 8, 0, 8, 45),
-        ("TLG00002", 3, 8, 45, 9, 30),
-        ("TLG00003", 1, 9, 30, 10, 15),
-        ("TLG00004", 2, 10, 45, 11, 30),
-        ("TLG00005", 1, 11, 30, 12, 15),
-        ("TLG00006", 4, 12, 15, 13, 0),
-        ("TLG00007", 4, 13, 30, 14, 15),
-        ("TLG00008", 2, 14, 15, 15, 0),
-        ("TLG00009", 2, 15, 5, 15, 45),
-        ("TLG00010", 3, 16, 0, 16, 45)
-    ]
+    # Import initial data from data.py
+    from data import input_data
+    
+    # Convert input_data to the format expected by the plotting function
+    time_logs_data = []
+    for task_no, time_logs in input_data.items():
+        for tlg_id, start_h, start_m, end_h, end_m in time_logs:
+            time_logs_data.append((tlg_id, task_no, start_h, start_m, end_h, end_m))
     
     # Create figure and axis
     fig, ax = plt.subplots(figsize=(15, 10))
@@ -127,32 +124,8 @@ def create_timeline_diagram():
 def create_combined_diagram():
     """Create combined diagram showing both original TimeLogs and new task assignments"""
     
-    # Split points data
-    split_points = [
-        (5, 7, 45, "Task 5 active"),
-        (5, 11, 0, "Task 5 active"),
-        (5, 13, 45, "Task 5 active"),
-        (6, 8, 30, "Task 6 active"),
-        (6, 12, 0, "Task 6 active"),
-        (6, 14, 30, "Task 6 active"),
-        (7, 8, 15, "Task 7 active"),
-        (7, 10, 0, "Task 7 active"),
-        (7, 15, 30, "Task 7 active")
-    ]
-    
-    # New task TLG assignments at each specific activation point
-    # Format: (task_no, hour, minute): [TLGs created at this point]
-    split_point_tlgs = {
-        (5, 7, 45): ["TLG00011"],  # Task 5 starts - gets TLG00011 (split from TLG00001)
-        (5, 11, 0): ["TLG00012", "TLG00013"],  # Task 5 resumes - gets TLG00012, TLG00013
-        (5, 13, 45): ["TLG00014", "TLG00015"],  # Task 5 resumes - gets TLG00014, TLG00015
-        (6, 8, 30): ["TLG00016"],  # Task 6 starts - gets TLG00016 (split from TLG00001)
-        (6, 12, 0): ["TLG00017", "TLG00018"],  # Task 6 resumes - gets TLG00017, TLG00018
-        (6, 14, 30): ["TLG00019", "TLG00020", "TLG00021"],  # Task 6 resumes - gets TLG00019, TLG00020, TLG00021
-        (7, 8, 15): ["TLG00022"],  # Task 7 starts - gets TLG00022 (split from TLG00001)
-        (7, 10, 0): ["TLG00023"],  # Task 7 resumes - gets TLG00023 (split from TLG00003)
-        (7, 15, 30): ["TLG00024"]  # Task 7 resumes - gets TLG00024 (split from TLG00009)
-    }
+    # Import data from data.py
+    from data import split_points, output_data, input_data
     
     # Create figure with subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 12), height_ratios=[1, 2])
@@ -172,36 +145,8 @@ def create_combined_diagram():
         # Add vertical line for split point
         ax1.axvline(x=time_minutes, color=color, linestyle='-', linewidth=3, alpha=0.7)
     
-    # Define the actual TLGs for each new task with their time ranges (CORRECTED)
-    new_task_tlg_data = {
-        5: [  # Task 5 TLGs
-            ("TLG00001_1", 8, 0, 8, 15, "split"),       # Split from TLG00001
-            ("TLG00004_2", 11, 0, 11, 30, "split"),     # Split from TLG00004
-            ("TLG00005_1", 11, 30, 12, 0, "split"), # First half of TLG00005 split
-            ("TLG00007_2", 13, 45, 14, 15, "split"), # Second half of TLG00007 split
-            ("TLG00008_2", 14, 15, 14, 30, "split"), # Second half of TLG00008 split
-        ],
-        6: [  # Task 6 TLGs
-            ("TLG00016", 8, 30, 8, 45, "split"),      # Split from TLG00001
-            ("TLG00002", 8, 45, 9, 30, "preserved"),  # Preserved from original (moved to Task 6)
-            ("TLG00003_1", 9, 30, 10, 0, "split"), # First half of TLG00003 split
-            ("TLG00005_2", 12, 0, 12, 15, "split"),     # Split from TLG00005
-            ("TLG00006", 12, 15, 13, 0, "preserved"),     # Split from TLG00006
-            ("TLG00007_1", 13, 30, 13, 45, "split"), # First half of TLG00007 split
-            ("TLG00008_2", 14, 30, 15, 0, "split"), # Second half of TLG00008 split
-            ("TLG00009_1", 15, 5, 15, 30, "split")  # First half of TLG00009 split
-        ],
-        7: [  # Task 7 TLGs
-            ("TLG00001_2", 8, 15, 8, 30, "split"),      # Split from TLG00001 (corrected end time)
-            ("TLG00003_2", 10, 0, 10, 15, "split"),     # Split from TLG00003
-            ("TLG00004_1", 10, 45, 11, 00, "split"),     # Split from TLG00003
-            ("TLG00009_2", 15, 30, 15, 45, "split"),     # Split from TLG00009
-            ("TLG000010", 16, 00, 16, 45, "preserved")     # Split from TLG00009
-        ]
-    }
-    
-    # Plot TLG bars for each new task
-    for task_no, tlgs in new_task_tlg_data.items():
+    # Plot TLG bars for each new task using output_data
+    for task_no, tlgs in output_data.items():
         y_position = task_no - 0.3  # Adjust Y position for each task
         
         for tlg_id, start_h, start_m, end_h, end_m, tlg_type in tlgs:
@@ -269,19 +214,11 @@ def create_combined_diagram():
     ax1.legend(handles=legend_elements, loc='upper right', title='New Task Colors')
     
     # Bottom subplot: Original TimeLogs timeline
-    # Initial data from the user's table
-    time_logs_data = [
-        ("TLG00001", 1, 8, 0, 8, 45),
-        ("TLG00002", 3, 8, 45, 9, 30),
-        ("TLG00003", 1, 9, 30, 10, 15),
-        ("TLG00004", 2, 10, 45, 11, 30),
-        ("TLG00005", 1, 11, 30, 12, 15),
-        ("TLG00006", 4, 12, 15, 13, 0),
-        ("TLG00007", 4, 13, 30, 14, 15),
-        ("TLG00008", 2, 14, 15, 15, 0),
-        ("TLG00009", 2, 15, 5, 15, 45),
-        ("TLG00010", 3, 16, 0, 16, 45)
-    ]
+    # Convert input_data to the format expected by the plotting function
+    time_logs_data = []
+    for task_no, time_logs in input_data.items():
+        for tlg_id, start_h, start_m, end_h, end_m in time_logs:
+            time_logs_data.append((tlg_id, task_no, start_h, start_m, end_h, end_m))
     
     # Color scheme for original tasks
     task_colors = {
