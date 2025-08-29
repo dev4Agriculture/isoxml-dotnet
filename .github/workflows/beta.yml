@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: ["beta"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set VERSION variable from csproj
+      run: |
+        VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Dev4Agriculture.ISO11783.ISOXML/Dev4Agriculture.ISO11783.ISOXML.csproj)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+    - name: CheckOut Beta
+      run: git checkout beta
+    - name: Build
+      run: dotnet build --configuration Release /p:Version=${VERSION}
+    - name: Test
+      run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
+    - name: Pack
+      run: dotnet pack Dev4Agriculture.ISO11783.ISOXML/Dev4Agriculture.ISO11783.ISOXML.csproj --configuration Release /p:Version=${VERSION} --no-build -o ./nupkg
+    - name: Login to own Nuget Store  
+      run: dotnet nuget add source "https://nuget.dev4ag.com/repository/nuget.dev4ag/index.json" --username ${{ secrets.DEV4AG_NUGET_USER }} --password ${{ secrets.DEV4AG_NUGET_PASSWORD }} --store-password-in-clear-text
+    - name: Push to Nuget Store
+      run: |
+        for pkg in ./nupkg/*.nupkg; do
+        dotnet nuget push "$pkg" -s https://nuget.dev4ag.com/repository/nuget.dev4ag/index.json --api-key ${{ secrets.DEV4AG_NUGET_API_KEY }}
+        done
