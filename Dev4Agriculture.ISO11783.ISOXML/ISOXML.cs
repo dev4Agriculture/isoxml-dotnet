@@ -489,7 +489,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public static ISOXML LoadFromArchive(Stream stream, bool loadBinData = true)
         {
             var id = Guid.NewGuid().ToString();
-            var path = Path.Combine(FileUtils.GetLibraryTempFolder(), id);
+            var path = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
             ResultMessage archiveWarning = null;
             var loadingPath = path;
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
@@ -913,7 +913,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     }
                     if (layers == 0)
                     {
-                        layers = (byte)task.TreatmentZone.Max(tzn => tzn.ProcessDataVariable.Count());
+                        layers = (byte)task.TreatmentZone.Max(entry => entry.ProcessDataVariable.Count());
                     }
                     var index = uint.Parse(grid.Filename.Substring(3, 5));
                     if (index > _maxGridIndex)
@@ -1035,16 +1035,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
         }
 
-        /// <summary>
-        /// Helper method to get relative path between two paths (compatible with older .NET versions)
-        /// </summary>
         private string GetRelativePath(string basePath, string fullPath)
         {
             var baseUri = new Uri(basePath);
             var fullUri = new Uri(fullPath);
-            return Uri.UnescapeDataString(baseUri.MakeRelativeUri(fullUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+            return baseUri.MakeRelativeUri(fullUri).ToString().Replace('/', Path.DirectorySeparatorChar);
         }
-
 
         /// <summary>
         /// Creates a FileStream containing a zipped version of the ISOXML files in a TASKDATA folder
@@ -1053,7 +1049,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         public MemoryStream SaveToStream()
         {
             var id = Guid.NewGuid().ToString();
-            var tempPath = Path.Combine(FileUtils.GetLibraryTempFolder(), id);
+            var tempPath = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
 
             try
             {
@@ -1069,8 +1065,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     var files = Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories);
                     foreach (var file in files)
                     {
-                        var relativePath = GetRelativePath(tempPath, file);
-                        var entry = archive.CreateEntry(relativePath);
+                        // Get the relative path from the temp folder, but place everything in "TaskData" folder
+                        var relativePath = Path.GetFileName(file);
+                        var zipEntryPath = Path.Combine("TaskData", relativePath);
+
+                        var entry = archive.CreateEntry(zipEntryPath);
 
                         using (var entryStream = entry.Open())
                         using (var fileStream = File.OpenRead(file))

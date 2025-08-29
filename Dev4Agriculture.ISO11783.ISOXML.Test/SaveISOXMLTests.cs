@@ -165,7 +165,11 @@ public class SaveISOXMLTests
 
 
         task1.GenerateTreatmentZones(gridZone);
-        task2.GenerateTreatmentZones(new GridZoneDTO(ISOGridType.gridtype2, 3));
+        var zones = new GridZoneDTO(ISOGridType.gridtype2, 3);
+        zones.Layer[0].DDI = (ushort)DDIList.SetpointApplicationRateOfAmmonium;
+        zones.Layer[1].DDI = (ushort)DDIList.SetpointApplicationRateOfDryMatter;
+        zones.Layer[2].DDI = (ushort)DDIList.SetpointApplicationRateOfNitrogenN2;
+        task2.GenerateTreatmentZones(zones);
 
         // Fill grid data - fix the logic to properly fill each grid
         var grid1File = isoxml.Grids["GRD00001"];
@@ -202,8 +206,6 @@ public class SaveISOXMLTests
 
         var isoxml = GenerateISOXMLForStreamSaveTesting(tempPath);
 
-        // Save to stream (this creates the zip in memory)
-        isoxml.SaveToArchive("C:\\src\\dev4Agriculture\\isodotnet2\\isoxml-dotnet\\Dev4Agriculture.ISO11783.ISOXML.Test\\Beispiel.zip");
         MemoryStream zipStream = null;
         try
         {
