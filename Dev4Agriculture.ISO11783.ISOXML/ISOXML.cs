@@ -670,7 +670,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     return value;
                 }
                 return null;
-            }) ?? 0)+1;
+            }) ?? 0) + 1;
         }
 
         /// <summary>
@@ -702,7 +702,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         /// <param name="taskSplitTimeCombos"></param>
         public void SplitTaskAtTimeStamps(ISOTask task, Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos)
         {
-            
+
             var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), GetNextFreeTimeLogIndex());
 
             // Add the new split tasks to the Data.Task list
@@ -911,6 +911,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             break;
                         }
                     }
+                    if (layers == 0)
+                    {
+                        layers = (byte)task.TreatmentZone.Max(entry => entry.ProcessDataVariable.Count());
+                    }
                     var index = uint.Parse(grid.Filename.Substring(3, 5));
                     if (index > _maxGridIndex)
                     {
@@ -1028,6 +1032,99 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             catch (Exception)
             {
                 return "";
+            }
+        }
+
+        private string GetRelativePath(string basePath, string fullPath)
+        {
+            var baseUri = new Uri(basePath);
+            var fullUri = new Uri(fullPath);
+            return baseUri.MakeRelativeUri(fullUri).ToString().Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Creates a FileStream containing a zipped version of the ISOXML files in a TASKDATA folder
+        /// </summary>
+        /// <returns>MemoryStream containing the zipped ISOXML archive</returns>
+        public MemoryStream SaveToStream()
+        {
+            var id = Guid.NewGuid().ToString();
+            var tempPath = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
+
+            try
+            {
+                // Set temporary folder path and save files
+                SetFolderPath(tempPath);
+                Save();
+
+                // Create memory stream and zip the temporary folder
+                var memoryStream = new MemoryStream();
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    // Add all files from the temporary folder to the zip
+                    var files = Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories);
+                    foreach (var file in files)
+                    {
+                        // Get the relative path from the temp folder, but place everything in "TaskData" folder
+                        var relativePath = Path.GetFileName(file);
+                        var zipEntryPath = Path.Combine("TaskData", relativePath);
+
+                        var entry = archive.CreateEntry(zipEntryPath);
+
+                        using (var entryStream = entry.Open())
+                        using (var fileStream = File.OpenRead(file))
+                        {
+                            fileStream.CopyTo(entryStream);
+                        }
+                    }
+                }
+
+                memoryStream.Position = 0;
+                return memoryStream;
+            }
+            finally
+            {
+                // Clean up temporary folder
+                if (Directory.Exists(tempPath))
+                {
+                    Directory.Delete(tempPath, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a FileStream containing a zipped version of the ISOXML files in a TASKDATA folder asynchronously
+        /// </summary>
+        /// <returns>Task containing MemoryStream with the zipped ISOXML archive</returns>
+        public async Task<MemoryStream> SaveToStreamAsync()
+        {
+            return await Task.Run(() => SaveToStream());
+        }
+
+        /// <summary>
+        /// Saves the ISOXML as a zipped archive to the specified file path
+        /// </summary>
+        /// <param name="path">Path where the ISOXML.zip file should be saved</param>
+        public void SaveToArchive(string path)
+        {
+            using (var stream = SaveToStream())
+            using (var fileStream = File.Create(path))
+            {
+                stream.CopyTo(fileStream);
+            }
+        }
+
+        /// <summary>
+        /// Saves the ISOXML as a zipped archive to the specified file path asynchronously
+        /// </summary>
+        /// <param name="path">Path where the ISOXML.zip file should be saved</param>
+        /// <returns>Task representing the asynchronous operation</returns>
+        public async Task SaveToArchiveAsync(string path)
+        {
+            using (var stream = await SaveToStreamAsync())
+            using (var fileStream = File.Create(path))
+            {
+                await stream.CopyToAsync(fileStream);
             }
         }
 

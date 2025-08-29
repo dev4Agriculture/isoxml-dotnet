@@ -64,5 +64,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
             path = "";
             return false;
         }
+
+
+        public static string GetLibraryTempFolder()
+        {
+            return Path.Combine(Path.GetTempPath(), "isoxmltmp");
+        }
     }
 }
