@@ -682,5 +682,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
         }
 
+        internal DateTime GetStartTime()
+        {
+            if (TimeLogs.Count == 0)
+            {
+                return DateTime.MaxValue;
+            }
+            return TimeLogs.Min(tlg => tlg.GetStartTime());
+        }
+
+        internal bool IsInActiveWorkTime(DateTime time)
+        {
+            foreach (var tlg in TimeLogs)
+            {
+                if (time >= tlg.GetStartTime() && time <= tlg.GetEndTime())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
