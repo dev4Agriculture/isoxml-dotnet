@@ -673,6 +673,63 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }) ?? 0) + 1;
         }
 
+
+        private class TaskTimeCombo
+        {
+            public ISOTask Task;
+            public DateTime Time;
+        }
+
+        public List<ISOTask> SplitTaskSetAtTimeStamps(Dictionary<ISOTask, List<DateTime>> combos)
+        {
+            var assignedTaskSplits = new Dictionary<ISOTask, Dictionary<ISOTask, List<DateTime>>>();
+            var timeTaskCombos = combos.SelectMany(entry => entry.Value.Select(time => new TaskTimeCombo() { Task = entry.Key, Time = time })).OrderBy(entry => entry.Time).ToArray();
+            var taskList = Data.Task.OrderBy(task => task.GetStartTime()).ToArray();
+            var timeIndex = 0;
+            var taskIndex = 0;
+            Dictionary<ISOTask, List<DateTime>> activeList = null;
+            ISOTask activeTask = null;
+            while (timeIndex < timeTaskCombos.Count() && taskIndex < taskList.Count())
+            {
+                if (activeTask == null || activeTask.IsInActiveWorkTime(timeTaskCombos[timeIndex].Time))
+                {
+                    foreach (var task in taskList)
+                    {
+                        if (task.IsInActiveWorkTime(timeTaskCombos[timeIndex].Time))
+                        {
+                            activeTask = task;
+                            if (assignedTaskSplits.TryGetValue(activeTask, out activeList))
+                            {
+                                activeList = new Dictionary<ISOTask, List<DateTime>>();
+                                assignedTaskSplits.Add(activeTask, activeList);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (activeTask != null && activeList != null)
+                {
+                    if (!activeList.TryGetValue(activeTask, out var timeList))
+                    {
+                        timeList = new List<DateTime>();
+                        activeList.Add(activeTask, timeList);
+                    }
+                    timeList.Add(timeTaskCombos[timeIndex].Time);
+                }
+
+                timeIndex++;
+            }
+            var resultTaskList = new List<ISOTask>();
+
+            foreach (var taskCombo in assignedTaskSplits)
+            {
+                SplitTaskAtTimeStamps(taskCombo.Key, taskCombo.Value);
+                resultTaskList.Add(taskCombo.Key);
+            }
+
+            return resultTaskList;
+        }
+
         /// <summary>
         /// This function splits a given Task at given points in time
         /// Input:
