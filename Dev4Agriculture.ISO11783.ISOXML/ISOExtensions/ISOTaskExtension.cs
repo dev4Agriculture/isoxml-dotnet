@@ -12,13 +12,6 @@ using System.Diagnostics;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
-    internal class TaskSplitEntry
-    {
-        public ISOTLG TimeLog;
-        public int Index;
-        public DateTime Timestamp;
-        public ISOTask Task;
-    }
 
 
 
@@ -440,6 +433,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return TimeLogs.Max(tlg => tlg.GetEndTime());
         }
 
+
+
+
         public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
         {
             var splitPoints = new Dictionary<ISOTLG, List<int>>();
@@ -480,25 +476,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
             List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
 
-            // DEBUG: Log all pairs entries in a table format
-            Debug.WriteLine("=== DEBUG: All Pairs Entries Table ===");
-            Debug.WriteLine("| Index | Name     | Start Time        | End Time          |");
-            Debug.WriteLine("|-------|----------|-------------------|-------------------|");
-            for (int i = 0; i < pairs.Count; i++)
-            {
-                var pair = pairs[i];
-                Debug.WriteLine($"| {i,5} | {pair.Item1,-8} | {pair.Item2:HH:mm:ss.fff} | {pair.Item3:HH:mm:ss.fff} |");
-            }
-
-            // DEBUG: Log all assignments with timestamps and expected task designators
-            Debug.WriteLine("=== DEBUG: All Assignments ===");
-            Debug.WriteLine("| Index | Task Designator | Timestamp        |");
-            Debug.WriteLine("|-------|-----------------|------------------|");
-            for (int i = 0; i < assignments.Count; i++)
-            {
-                var assignment = assignments[i];
-                Debug.WriteLine($"| {i,5} | {assignment.Task.TaskDesignator,-15} | {assignment.Timestamp:HH:mm:ss.fff} |");
-            }
 
             var assignmentIndex = 0;
             var resultEntryList = new List<TaskSplitEntry>();
@@ -555,7 +532,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return taskList;
         }
 
-        private List<ISOTLG> SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
+        public List<ISOTLG> SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
         {
             var splitPoints = new Dictionary<ISOTLG, List<int>>();
             foreach (var tlg in TimeLogs)
@@ -602,6 +579,55 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             GenerateTimeElementsFromTimeLogs(devices, true);
         }
 
+
+        /// <summary>
+        /// Trys to add a TimeLog to a Task; returns 0 if it already exists
+        /// </summary>
+        /// <param name="timeLog"></param>
+        /// <returns></returns>
+        public bool TryAddTimeLog(ISOTLG timeLog)
+        {
+            if (TimeLogs.Any(entry => entry.Name == timeLog.Name))
+            {
+                return false;
+            }
+
+            if (!TimeLog.Any(entry => entry.Filename == timeLog.Name))
+            {
+                TimeLog.Add(new ISOTimeLog()
+                {
+                    Filename = timeLog.Name,
+                    TimeLogType = ISOTimeLogType.Binarytimelogfiletype1
+                });
+            }
+
+            TimeLogs.Add(timeLog);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Try to remove a TimeLog from a Task; especially usefull for Task Splitting
+        /// </summary>
+        /// <param name="timeLog"></param>
+        /// <returns></returns>
+        public bool TryRemoveTimeLog(ISOTLG timeLog)
+        {
+            if (TimeLog.Any(entry => entry.Filename == timeLog.Name))
+            {
+                TimeLog.Remove(TimeLog.First(entry => entry.Filename == timeLog.Name));
+
+                if (TimeLogs.Any(entry => entry.Name == timeLog.Name))
+                {
+                    TimeLogs.Remove(TimeLogs.First(entry => entry.Name == timeLog.Name));
+                }
+                return true;
+            }
+            return false;
+        }
+
+
+
         /// <summary>
         /// Replace the current TimeLogs within a Task with new TimeLogs and - potentially - update all Effective TIM-Elements
         /// </summary>
@@ -614,13 +640,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             TimeLogs.Clear();
             foreach (var timeLog in timeLogs)
             {
-                TimeLog.Add(new ISOTimeLog()
-                {
-                    Filename = timeLog.Name,
-                    TimeLogType = ISOTimeLogType.Binarytimelogfiletype1
-                });
-
-                TimeLogs.Add(timeLog);
+                TryAddTimeLog(timeLog);
             }
 
             if (updateTimeElements && devices != null)
@@ -756,5 +776,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             }
             return false;
         }
+
+        internal bool HasTimeLog(string key)
+        {
+            return TimeLogs.Any(entry => entry.Name == key);
+        }
+
     }
 }
