@@ -781,5 +781,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             return TimeLogs.Any(entry => entry.Name == key);
         }
+
     }
 }
