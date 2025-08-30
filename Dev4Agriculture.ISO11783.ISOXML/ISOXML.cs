@@ -13,6 +13,7 @@ using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Converters;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using System.Diagnostics;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -674,61 +675,142 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
-        private class TaskTimeCombo
+        public List<ISOTask> RedistributeTaskSetTimeLogs(Dictionary<ISOTask, List<DateTime>> timeCombos, bool assign = true)
         {
-            public ISOTask Task;
-            public DateTime Time;
-        }
-
-        public List<ISOTask> SplitTaskSetAtTimeStamps(Dictionary<ISOTask, List<DateTime>> combos)
-        {
-            var assignedTaskSplits = new Dictionary<ISOTask, Dictionary<ISOTask, List<DateTime>>>();
-            var timeTaskCombos = combos.SelectMany(entry => entry.Value.Select(time => new TaskTimeCombo() { Task = entry.Key, Time = time })).OrderBy(entry => entry.Time).ToArray();
-            var taskList = Data.Task.OrderBy(task => task.GetStartTime()).ToArray();
-            var timeIndex = 0;
-            var taskIndex = 0;
-            Dictionary<ISOTask, List<DateTime>> activeList = null;
-            ISOTask activeTask = null;
-            while (timeIndex < timeTaskCombos.Count() && taskIndex < taskList.Count())
-            {
-                if (activeTask == null || activeTask.IsInActiveWorkTime(timeTaskCombos[timeIndex].Time))
+            var resultTasks = new List<ISOTask>();
+            var timeLogIndex = 0;
+            var splitIndex = 0;
+            ISOTask oldTask = null;
+            var splitPoints = timeCombos.SelectMany(entry =>
+                entry.Value.Select(dt => new TaskSplitEntry
                 {
-                    foreach (var task in taskList)
+                    Task = entry.Key,
+                    Timestamp = dt
+                })
+            ).OrderBy(entry => entry.Timestamp).ToList();
+            var sortedTimeLogs = TimeLogs.OrderBy(entry => entry.Value.GetStartTime()).ToList();
+
+            if (splitPoints.First().Timestamp > sortedTimeLogs.Last().Value.GetEndTime())
+            {
+                //TODO: If the Splitting does not match the Times in our data anyhow, is it OK to just return an empty list
+                return new List<ISOTask>();
+            }
+
+            //First skip all - for us - irrelevant Timelogs
+            while (splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetEndTime())
+            {
+                timeLogIndex++;
+            }
+            oldTask = Data.Task.FirstOrDefault(tsk => tsk.HasTimeLog(sortedTimeLogs[timeLogIndex].Key));
+            while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count())
+            {
+                //In case our next splitpoint is after this TimeLogs end, we can just fully add it
+                if (splitPoints[splitIndex].Timestamp >= sortedTimeLogs[timeLogIndex].Value.GetEndTime())
+                {
+                    if (oldTask != null)
                     {
-                        if (task.IsInActiveWorkTime(timeTaskCombos[timeIndex].Time))
+                        oldTask.TryAddTimeLog(sortedTimeLogs[timeLogIndex].Value);
+                        if (!resultTasks.Contains(oldTask))
                         {
-                            activeTask = task;
-                            if (assignedTaskSplits.TryGetValue(activeTask, out activeList))
-                            {
-                                activeList = new Dictionary<ISOTask, List<DateTime>>();
-                                assignedTaskSplits.Add(activeTask, activeList);
-                                break;
-                            }
+                            resultTasks.Add(oldTask);
                         }
                     }
+                    timeLogIndex++;
                 }
-                if (activeTask != null && activeList != null)
+                //In this case, the Splitpoint was set outside any TimeLog or at the very beginning of the next TimeLog
+                else if (splitPoints[splitIndex].Timestamp <= sortedTimeLogs[timeLogIndex].Value.GetStartTime())
                 {
-                    if (!activeList.TryGetValue(activeTask, out var timeList))
+                    oldTask = splitPoints[splitIndex].Task;
+                    splitIndex++;
+                }
+                //In this case, the Timestamp is set somewhere in the TimeLog, so we need to split it
+                else if (
+                    splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetStartTime() &&
+                    splitPoints[splitIndex].Timestamp < sortedTimeLogs[timeLogIndex].Value.GetEndTime()
+                    )
+                {
+                    var tlgToSplit = sortedTimeLogs[timeLogIndex].Value;
+                    if (tlgToSplit.TryFindClosestIndex(splitPoints[splitIndex].Timestamp, out var timeIndex))
                     {
-                        timeList = new List<DateTime>();
-                        activeList.Add(activeTask, timeList);
+                        var splittedTLGs = tlgToSplit.SplitTimeLog(Data.Device.ToList(), new List<int>() { timeIndex }, GetNextFreeTimeLogIndex());
+                        splittedTLGs = splittedTLGs.OrderBy(entry => entry.GetStartTime()).ToList();
+                        if (splittedTLGs.Count() > 0 && oldTask != null)
+                        {
+                            if (oldTask.TryAddTimeLog(splittedTLGs[0]) && !resultTasks.Contains(oldTask))
+                            {
+                                resultTasks.Add(oldTask);
+                            }
+                            oldTask.TryRemoveTimeLog(tlgToSplit);
+                        }
+
+                        if (splittedTLGs.Count() > 1 && splitPoints[splitIndex].Task != null)
+                        {
+                            if (splitPoints[splitIndex].Task.TryAddTimeLog(splittedTLGs[1])
+                                && !resultTasks.Contains(oldTask))
+                            {
+                                resultTasks.Add(oldTask);
+                            }
+                        }
+                        TimeLogs.Remove(tlgToSplit.Name);
+                        foreach (var entry in splittedTLGs)
+                        {
+                            TimeLogs.Add(entry.Name, entry);
+                        }
+
+                        sortedTimeLogs = TimeLogs.OrderBy(entry => entry.Value.GetStartTime()).ToList();
+                        oldTask = splitPoints[splitIndex].Task;
+                        splitIndex++;
+                        timeLogIndex++;
                     }
-                    timeList.Add(timeTaskCombos[timeIndex].Time);
+                    else
+                    {
+                        Debug.WriteLine("We found a SplitPoint that is within a TimeLog but does not have a corresponding index!");
+                        //TODO, this can theoritically not happen
+                    }
+                }
+                Debug.WriteLine("============================================");
+                Debug.WriteLine($"SplitIndex: {splitIndex} / {splitPoints.Count()}");
+                Debug.WriteLine($"TimeLogIndex: {timeLogIndex} / {sortedTimeLogs.Count()}");
+                Debug.WriteLine("SplitPoints To Do: ");
+                for (var index = splitIndex; index < splitPoints.Count(); index++)
+                {
+                    var point = splitPoints[index];
+                    Debug.WriteLine($"   {point.Task.TaskDesignator}:  {point.Timestamp.ToString()}");
+                }
+                Debug.WriteLine("TaskList:");
+                foreach(var task in resultTasks)
+                {
+                    Debug.WriteLine($"   {task.TaskDesignator}: TLGs: {task.TimeLogs.Count()}");
+                    foreach (var tlg in task.TimeLogs)
+                    {
+                        Debug.WriteLine($"      {tlg.Name}: {tlg.GetStartTime().ToString()} . {tlg.GetEndTime().ToString()}");
+                    }
+                }
+                Debug.WriteLine("TimeLogs:");
+                foreach(var tlg in sortedTimeLogs)
+                {
+                    Debug.WriteLine($"    {tlg.Value.Name} : {tlg.Value.GetStartTime()} - {tlg.Value.GetEndTime()} : {tlg.Value.Entries.Count()}");
+                }
+                Debug.WriteLine($"Total Lines: {sortedTimeLogs.Sum(entry => entry.Value.Entries.Count)}");
+            }
+
+            Data.Task.Clear();
+
+            foreach (var task in resultTasks)
+            {
+                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(),true);
+                task.GenerateDeviceAllocationsFromTimeLogs(Data.Device.ToList());
+
+                if (assign && !Data.Task.Contains(task))
+                {
+                    Data.Task.Add(task);
                 }
 
-                timeIndex++;
-            }
-            var resultTaskList = new List<ISOTask>();
-
-            foreach (var taskCombo in assignedTaskSplits)
-            {
-                SplitTaskAtTimeStamps(taskCombo.Key, taskCombo.Value);
-                resultTaskList.Add(taskCombo.Key);
             }
 
-            return resultTaskList;
+            return resultTasks;
         }
+
 
         /// <summary>
         /// This function splits a given Task at given points in time
@@ -1125,6 +1207,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         // Get the relative path from the temp folder, but place everything in "TaskData" folder
                         var relativePath = Path.GetFileName(file);
                         var zipEntryPath = Path.Combine("TaskData", relativePath);
+                        // Ensure forward slashes for zip compatibility
+                        zipEntryPath = zipEntryPath.Replace('\\', '/');
 
                         var entry = archive.CreateEntry(zipEntryPath);
 

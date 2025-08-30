@@ -166,4 +166,161 @@ public class TaskSplitterTests
             Assert.IsTrue(hasMatchingDeviceElement, $"Device {allocation.DeviceIdRef} should have a matching DeviceElement");
         }
     }
+
+
+    [TestMethod]
+    public void CanSplitExampleTaskset()
+    {
+        var path = "C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\07_CUSTOMERS\\059_HSC\\03_Projects\\02_ISOXML_Analysis\\02_Development\\2025-08-29-SplitTasks";
+        // Load test data using the existing autolog1.zip file
+        var file = File.Open(Path.Combine(path, "UnSplit.zip"), FileMode.Open);
+        var isoxml = ISOXML.LoadFromArchive(file);
+
+        // Create tasks with the given names (handling duplicates)
+        // TSK12 appears multiple times, so we'll use consistent IDs
+        var taskTSK12 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK12 (Road)"
+        };
+        var taskTSK11 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK11 (Field Vriescheloo)"
+        };
+        var taskTSK18 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK18 (Field Gruenweiss)"
+        };
+        var taskTSK17 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK17 (Field AmParkplatz)"
+        };
+        var taskTSK19 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK19 (Field NorthMost)"
+        };
+        var taskTSK13 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK13 (Field D an Flusskurve)"
+        };
+        var taskTSK14 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK14 (Field LongTriangle)"
+        };
+        var taskTSK15 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK15 (Field Aa-West)"
+        };
+        var taskTSK16 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK16 (Field AmBurgGraben)"
+        };
+
+        var taskTSK20 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK17 (Field RiverSouth)"
+        };
+
+        // Add tasks to ISOXML and assign IDs
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK12);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK11);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK18);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK17);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK19);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK13);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK14);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK15);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK16);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK20);
+
+        // Create the splitCombos with the given timestamps
+        var splitCombos = new Dictionary<ISOTask, List<DateTime>>()
+        {
+            { taskTSK12, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 13, 18, 44,DateTimeKind.Utc),  // 2025-08-20T15:18:44
+                    new DateTime(2025, 8, 20, 17, 53, 34,DateTimeKind.Utc),  // 2025-08-20T19:53:34
+                    new DateTime(2025, 8, 20, 7, 44, 32, DateTimeKind.Utc),   // 2025-08-20T09:44:32
+                    new DateTime(2025, 8, 20, 8, 47, 37,DateTimeKind.Utc),  // 2025-08-20T10:47:37
+                    new DateTime(2025, 8, 20, 6, 42, 49, DateTimeKind.Utc)    // 2025-08-20T08:42:49
+                }
+            },
+            { taskTSK11, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 12, 9, 13,DateTimeKind.Utc)   // 2025-08-20T14:09:13
+                }
+            },
+            { taskTSK18, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 15, 14, 28,DateTimeKind.Utc), // 2025-08-20T17:14:28
+                    new DateTime(2025, 8, 20, 17, 28, 55,DateTimeKind.Utc)  // 2025-08-20T19:28:55
+                }
+            },
+            { taskTSK17, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 14, 6, 32,DateTimeKind.Utc)   // 2025-08-20T16:06:32
+                }
+            },
+            { taskTSK19, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 16, 18, 10,DateTimeKind.Utc)  // 2025-08-20T18:18:10
+                }
+            },
+            { taskTSK13, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 11, 0, 4, DateTimeKind.Utc)    // 2025-08-20T13:00:04
+                }
+            },
+            { taskTSK14, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 7, 7, 26,DateTimeKind.Utc)    // 2025-08-20T09:07:26
+                }
+            },
+            { taskTSK15, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 7, 45, 3, DateTimeKind.Utc)    // 2025-08-20T09:45:03
+                }
+            },
+            { taskTSK16, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 8, 6, 33, DateTimeKind.Utc)   // 2025-08-20T10:06:33
+                }
+            },
+            { taskTSK20, new List<DateTime>
+                {
+                    new DateTime(2025, 8, 20, 8, 49, 55,DateTimeKind.Utc),  // 2025-08-20T10:49:55
+                }
+            }
+        };
+
+        // Split the task set at the specified timestamps
+        var splitted = isoxml.RedistributeTaskSetTimeLogs(splitCombos);
+
+
+        // Save the archive to "FrankSplit.zip" in the same folder
+        var frankSplitPath = Path.Combine(path, "FrankSplit.zip");
+        isoxml.SaveToArchive(frankSplitPath);
+
+        // Verify that the splitting was successful
+        Assert.IsNotNull(splitted, "Split operation should return a result");
+        Assert.IsTrue(splitted.Count > 0, "Should have created split tasks");
+
+        // Verify that the FrankSplit.zip file was created
+        Assert.IsTrue(File.Exists(frankSplitPath), "FrankSplit.zip should be created");
+
+        Console.WriteLine($"Successfully created {splitted.Count} split tasks");
+        Console.WriteLine($"Archive saved to: {frankSplitPath}");
+
+        // Clean up the file handle
+        file.Close();
+    }
 }
