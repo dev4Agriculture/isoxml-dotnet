@@ -49,7 +49,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             {
                 IsInitialized = true;
                 StartValue = currentValue;
-                return currentValue;
             }
             return currentValue - StartValue;
         }
@@ -67,6 +66,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
         public void UpdateTimeLogEnqueuerWithHeaderLine(List<TLGDataLogDDI> ddis, List<ISODevice> devices)
         {
             StartValue = LatestValue;
+            IsInitialized = false;
         }
 
         public void UpdateTimeLogEnqueuerWithDataLine(TLGDataLogLine line)
@@ -79,6 +79,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
             if (!IsInitialized)
             {
                 TLGBaseValue = value;
+                IsInitialized = true;
             }
             LatestValue = value + StartValue - TLGBaseValue;
             return (int)LatestValue;

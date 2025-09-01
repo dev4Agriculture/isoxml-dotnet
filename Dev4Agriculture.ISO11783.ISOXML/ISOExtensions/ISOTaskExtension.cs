@@ -346,7 +346,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var singulator = new ISOTimeLogSingulator();
             for (var index = 0; index < TimeLogs.Count; index++)
             {
-                TimeLogs[index] = singulator.SingulateTimeLog(TimeLogs[index], devices);
                 var tim = TimeLogs[index].GenerateTimeElement(devices);
                 list.Add(tim);
                 if (assign)

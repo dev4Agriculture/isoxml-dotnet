@@ -796,9 +796,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             Data.Task.Clear();
 
+            var enqueuer = new ISOTimeLogEnqueuer();
             foreach (var task in resultTasks)
             {
-                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(),true);
+                var devices = Data.Device.ToList();
+                enqueuer.EnqeueTimeLogs(task.TimeLogs, devices);
+                var timeLIst = ISOTimeListEnqueuer.EnqueueTimeElements(task.Time.ToList(), devices);
+            }
+
+            foreach (var task in resultTasks)
+            {
+                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(), true);
                 task.GenerateDeviceAllocationsFromTimeLogs(Data.Device.ToList());
 
                 if (assign && !Data.Task.Contains(task))
