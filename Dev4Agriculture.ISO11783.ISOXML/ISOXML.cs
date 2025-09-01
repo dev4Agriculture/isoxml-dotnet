@@ -675,6 +675,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
 
+
         public List<ISOTask> SplitTaskSet(Dictionary<ISOTask, List<DateTime>> timeCombos, bool assign = true)
         {
             var resultTasks = new List<ISOTask>();
@@ -818,6 +819,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
             return resultTasks;
         }
+
+
 
 
         /// <summary>
