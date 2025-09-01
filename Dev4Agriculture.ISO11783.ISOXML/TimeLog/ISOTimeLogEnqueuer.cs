@@ -36,7 +36,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public (ISOTLG, Dictionary<string, EnqueuerEntry>) EnqueueTimeLog(ISOTLG tlg, List<ISODevice> devices, Dictionary<string, EnqueuerEntry> previousData)
         {
             var index = 0;
-            foreach(var entry in tlg.Header.Ddis)
+            foreach (var entry in tlg.Header.Ddis)
             {
                 var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => IdList.ToIntId(det.DeviceElementId) == entry.DeviceElement));
                 if (device != null && device.IsTotal(entry.Ddi) && !device.IsLifetimeTotal(entry.Ddi))
@@ -51,6 +51,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                             DeviceElementId = entry.DeviceElement,
                             Function = DDIAlgorithms.FindTotalDDIHandler(entry.Ddi, entry.DeviceElement, device)
                         };
+                        enqueuerEntry = previousData[key];
                     }
                     enqueuerEntry.Function.UpdateTimeLogEnqueuerWithHeaderLine(tlg.Header.Ddis, devices);
                 }

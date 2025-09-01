@@ -743,7 +743,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             }
                             oldTask.TryRemoveTimeLog(tlgToSplit);
                         }
-
                         if (splittedTLGs.Count() > 1 && splitPoints[splitIndex].Task != null)
                         {
                             if (splitPoints[splitIndex].Task.TryAddTimeLog(splittedTLGs[1])
@@ -778,28 +777,21 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     var point = splitPoints[index];
                     Debug.WriteLine($"   {point.Task.TaskDesignator}:  {point.Timestamp.ToString()}");
                 }
-                Debug.WriteLine("TaskList:");
-                foreach(var task in resultTasks)
-                {
-                    Debug.WriteLine($"   {task.TaskDesignator}: TLGs: {task.TimeLogs.Count()}");
-                    foreach (var tlg in task.TimeLogs)
-                    {
-                        Debug.WriteLine($"      {tlg.Name}: {tlg.GetStartTime().ToString()} . {tlg.GetEndTime().ToString()}");
-                    }
-                }
-                Debug.WriteLine("TimeLogs:");
-                foreach(var tlg in sortedTimeLogs)
-                {
-                    Debug.WriteLine($"    {tlg.Value.Name} : {tlg.Value.GetStartTime()} - {tlg.Value.GetEndTime()} : {tlg.Value.Entries.Count()}");
-                }
-                Debug.WriteLine($"Total Lines: {sortedTimeLogs.Sum(entry => entry.Value.Entries.Count)}");
             }
 
             Data.Task.Clear();
 
+            var enqueuer = new ISOTimeLogEnqueuer();
             foreach (var task in resultTasks)
             {
-                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(),true);
+                var devices = Data.Device.ToList();
+                enqueuer.EnqeueTimeLogs(task.TimeLogs, devices);
+                var timeLIst = ISOTimeListEnqueuer.EnqueueTimeElements(task.Time.ToList(), devices);
+            }
+
+            foreach (var task in resultTasks)
+            {
+                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(), true);
                 task.GenerateDeviceAllocationsFromTimeLogs(Data.Device.ToList());
 
                 if (assign && !Data.Task.Contains(task))
