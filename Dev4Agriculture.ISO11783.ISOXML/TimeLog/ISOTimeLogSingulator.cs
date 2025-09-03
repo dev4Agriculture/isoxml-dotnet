@@ -50,23 +50,23 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
             foreach (var line in isoTLG.Entries)
             {
-                for (var ddiIndex = 0; ddiIndex < line.Entries.Length; ddiIndex++)
+                for (var ddiIndex = 0; ddiIndex < line.CountEntries(); ddiIndex++)
                 {
-                    if (line.Entries[ddiIndex].IsSet && previousEntries.Count > ddiIndex)
+                    if (line.IsEntrySet(ddiIndex) && previousEntries.Count > ddiIndex)
                     {
                         previousEntries[ddiIndex].TimeStamp = line.DateTime;
-                        previousEntries[ddiIndex].Value = line.Entries[ddiIndex].Value;
+                        previousEntries[ddiIndex].Value = line.GetEntryValue(ddiIndex);
                     }
                 }
 
                 foreach (var pair in totalsIndex)
                 {
-                    if (line.Entries.Length >= pair.Key && line.Entries[pair.Key].IsSet)
+                    if (line.CountEntries() >= pair.Key && line.IsEntrySet(pair.Key))
                     {
-                        line.Entries[pair.Key].Value = (int)pair.Value.SingulateValueInTimeLog(
-                            line.Entries[pair.Key].Value,
+                        line.SetEntryValue(pair.Key, (int)pair.Value.SingulateValueInTimeLog(
+                            line.GetEntryValue(pair.Key),
                             line.DateTime,
-                            previousEntries);
+                            previousEntries));
                     }
                 }
             }

@@ -519,10 +519,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
             }
 
             var index = _currentTimeLog.Header.GetOrAddDataLogValue(ddi, deviceElement.Value);
-            if (index < _currentDataLine.Entries.Length && !_currentDataLine.Entries[index].IsSet)
+            if (index < _currentDataLine.CountEntries() && !_currentDataLine.IsEntrySet(index))
             {
-                _currentDataLine.Entries[index].Value = value;
-                _currentDataLine.Entries[index].IsSet = true;
+                _currentDataLine.SetEntryValue(index, value);
                 _currentDataLine.NumberOfEntries++;
             }
 

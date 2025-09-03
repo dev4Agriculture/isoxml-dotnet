@@ -192,9 +192,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
 
         public void UpdateTimeLogEnqueuerWithDataLine(TLGDataLogLine line)
         {
-            if (line.Entries.Length >= RelevantWeightIndex && line.Entries[RelevantWeightIndex].IsSet)
+            if (line.CountEntries() >= RelevantWeightIndex && line.IsEntrySet(RelevantWeightIndex))
             {
-                CurrentWeightValue = line.Entries[RelevantWeightIndex].Value;
+                CurrentWeightValue = line.GetEntryValue(RelevantWeightIndex);
                 if (!IsWeightInitialized)
                 {
                     StartWeightValue = CurrentWeightValue;

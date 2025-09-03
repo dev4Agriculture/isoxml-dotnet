@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
 
@@ -324,5 +325,183 @@ public class TaskSplitterTests
         // Clean up the file handle
         file.Close();
         */
+    }
+
+
+    [TestMethod]
+    public void CanSplitExampleTaskset2()
+    {
+        var path = "C:\\home\\OneDrive - dev4Agriculture\\dev4Ag\\07_CUSTOMERS\\059_HSC\\03_Projects\\02_ISOXML_Analysis\\02_Development\\2025-08-29-SplitTasks";
+        // Load test data using the existing autolog1.zip file
+        var file = File.Open(Path.Combine(path, "Unsplit.zip"), FileMode.Open);
+        var isoxml = ISOXML.LoadFromArchive(file);
+
+        // Create tasks with the given names (handling duplicates)
+        // TSK12 appears multiple times, so we'll use consistent IDs
+        var taskTSK1 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK1 (Road)"
+        };
+        var taskTSK2 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK2 (Field Vriescheloo)"
+        };
+        var taskTSK3 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK3 (Field Gruenweiss)"
+        };
+        var taskTSK4 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK4 (Field AmParkplatz)"
+        };
+        var taskTSK5 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK5 (Field NorthMost)"
+        };
+        var taskTSK6 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK6 (Field D an Flusskurve)"
+        };
+        var taskTSK7 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK7 (Field LongTriangle)"
+        };
+        var taskTSK8 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK8 (Field Aa-West)"
+        };
+        var taskTSK9 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK9 (Field AmBurgGraben)"
+        };
+
+        var taskTSK10 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK10 (Field RiverSouth)"
+        };
+
+        // Add tasks to ISOXML and assign IDs
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK1);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK2);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK3);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK4);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK5);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK6);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK7);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK8);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK9);
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK10);
+
+        // Create the splitCombos with the given timestamps
+        var splitCombos = new Dictionary<ISOTask, List<DateTime>>()
+        {
+            { taskTSK1, new List<DateTime>
+                {
+                new DateTime(2025,08,20,06,42,49),
+                new DateTime(2025,08,20,06,56,48),
+                new DateTime(2025,08,20,07,44,37),
+                new DateTime(2025,08,20,08,06,34),
+                new DateTime(2025,08,20,08,47,36),
+                new DateTime(2025,08,20,08,48,23),
+                new DateTime(2025,08,20,11,00,08),
+                new DateTime(2025,08,20,13,19,28),
+                new DateTime(2025,08,20,14,08,17),
+                new DateTime(2025,08,20,16,16,11),
+                new DateTime(2025,08,20,16,18,10),
+                new DateTime(2025,08,20,17,28,55),
+                new DateTime(2025,08,20,17,30,25),
+                new DateTime(2025,08,20,17,54,07),
+                new DateTime(2025,08,20,18,18,04)
+                }
+            },
+            { taskTSK2, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,06,55,18),
+                    new DateTime(2025,08,20,12,09,18),
+                    new DateTime(2025,08,20,12,19,53),
+                    new DateTime(2025,08,20,18,16,48)
+                }
+            },
+            { taskTSK3, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,06,56,38),
+                    new DateTime(2025,08,20,11,01,20),
+                    new DateTime(2025,08,20,12,19,42),
+                    new DateTime(2025,08,20,13,18,45),
+                    new DateTime(2025,08,20,18,16,42)
+                }
+            },
+            { taskTSK4, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,07,07,23),
+                    new DateTime(2025,08,20,08,48,05)
+                }
+            },
+            { taskTSK5, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,07,45,04)
+                }
+            },
+            { taskTSK6, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,08,06,50)
+                }
+            },
+            { taskTSK7, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,08,49,55)
+                }
+            },
+            { taskTSK8, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,14,06,34),
+                    new DateTime(2025,08,20,14,08,40),
+                    new DateTime(2025,08,20,17,53,37)
+                }
+            },
+            { taskTSK9, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,15,14,28),
+                    new DateTime(2025,08,20,16,17,06),
+                    new DateTime(2025,08,20,17,28,57)
+                }
+            },
+            { taskTSK10, new List<DateTime>
+                {
+                    new DateTime(2025,08,20,16,18,12)
+                }
+            }
+        };
+
+        // Split the task set at the specified timestamps
+        var splittedTasks = isoxml.SplitTaskSet(splitCombos);
+
+
+        // Save the archive to "FrankSplit.zip" in the same folder
+        var frankSplitPath = Path.Combine(path, "FrankSplit.zip");
+        isoxml.SaveToArchive(frankSplitPath);
+
+        // Verify that the splitting was successful
+        Assert.IsNotNull(splittedTasks, "Split operation should return a result");
+        Assert.IsTrue(splittedTasks.Count > 0, "Should have created split tasks");
+
+        // Verify that the FrankSplit.zip file was created
+        Assert.IsTrue(File.Exists(frankSplitPath), "FrankSplit.zip should be created");
+
+        Console.WriteLine($"Successfully created {splittedTasks.Count} split tasks");
+        Console.WriteLine($"Archive saved to: {frankSplitPath}");
+
+        // Clean up the file handle
+        file.Close();
     }
 }

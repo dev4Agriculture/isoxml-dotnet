@@ -21,6 +21,53 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         public int Value;
     }
 
+                // Stateless accessor class for zero-allocation API compatibility
+    public class TLGDataLogEntryAccessor
+    {
+        private readonly TLGDataLogLine _parent;
+        private readonly int _index;
+
+        public TLGDataLogEntryAccessor(TLGDataLogLine parent, int index)
+        {
+            _parent = parent;
+            _index = index;
+        }
+
+        public bool IsSet
+        {
+            get => _parent.EntrySet[_index];
+            set => _parent.EntrySet[_index] = value;
+        }
+
+        public int Value
+        {
+            get => _parent.EntryValues[_index];
+            set
+            {
+                _parent.EntryValues[_index] = value;
+                _parent.EntrySet[_index] = true;
+            }
+        }
+
+        /// <summary>
+        /// Unsets this entry (marks as not set). This method provides zero-allocation access.
+        /// </summary>
+        public void UnSet() => _parent.EntrySet[_index] = false;
+    }
+
+    // Zero-allocation collection wrapper
+    public class TLGDataLogEntriesCollection
+    {
+        private readonly TLGDataLogLine _parent;
+
+        public TLGDataLogEntriesCollection(TLGDataLogLine parent)
+        {
+            _parent = parent;
+        }
+
+        public TLGDataLogEntryAccessor this[int index] => new TLGDataLogEntryAccessor(_parent, index);
+        public int Length => _parent.ArraySize;
+    }
 
     public partial class TLGDataLogLine
     {
@@ -58,20 +105,68 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             set => PosEast = (int)(value * ISOTLG.TLG_GPS_FACTOR);
         }
 
-
-
         public byte NumberOfEntries;
         public byte ArraySize;
-        public TLGDataLogEntry[] Entries;
+
+        // Parallel arrays (Approach 2) - internal to allow accessor access
+        internal int[] EntryValues;
+        internal bool[] EntrySet;
+
+        // Zero-allocation collection wrapper
+        private TLGDataLogEntriesCollection _entriesCollection;
+
+
+        /// <summary>
+        /// Provides array-like access to TLG data log entries.
+        /// WARNING: This property creates temporary accessor objects on each access, which can impact performance.
+        /// For better performance, use the direct access methods: IsEntrySet(), GetEntryValue(), SetEntryValue(), UnSetValue()
+        /// </summary>
+        [Obsolete("This property creates temporary accessor objects on each access, which can impact performance. Use direct access methods (IsEntrySet, GetEntryValue, SetEntryValue, UnSetValue) for better performance.", false)]
+        public TLGDataLogEntriesCollection Entries
+        {
+            get
+            {
+                if (_entriesCollection == null)
+                {
+                    _entriesCollection = new TLGDataLogEntriesCollection(this);
+                }
+                return _entriesCollection;
+            }
+        }
+
+        // Direct access methods for zero-allocation access (recommended for performance)
+        /// <summary>
+        /// Gets whether the entry at the specified index is set. This method provides zero-allocation access.
+        /// </summary>
+        public bool IsEntrySet(int index) => EntrySet[index];
+
+        /// <summary>
+        /// Gets the value of the entry at the specified index. This method provides zero-allocation access.
+        /// </summary>
+        public int GetEntryValue(int index) => EntryValues[index];
+
+        /// <summary>
+        /// Sets the value of the entry at the specified index and automatically marks it as set. This method provides zero-allocation access.
+        /// </summary>
+        public void SetEntryValue(int index, int value)
+        {
+            EntryValues[index] = value;
+            EntrySet[index] = true;
+        }
+
+        /// <summary>
+        /// Unsets the entry at the specified index (marks as not set). This method provides zero-allocation access.
+        /// </summary>
+        public void UnSetValue(int index) => EntrySet[index] = false;
+
+
+        public int CountEntries() => EntryValues.Length;
 
         public TLGDataLogLine(byte arraySize)
         {
             ArraySize = arraySize;
-            Entries = new TLGDataLogEntry[arraySize];
-            for (byte index = 0; index < arraySize; index++)
-            {
-                Entries[index] = new TLGDataLogEntry();
-            }
+            EntryValues = new int[arraySize];
+            EntrySet = new bool[arraySize];
         }
 
         public TLGDataLogLine(TLGDataLogLine input)
@@ -89,14 +184,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             PosEast = input.PosEast;
             PosNorth = input.PosNorth;
             ArraySize = input.ArraySize;
-            Entries = new TLGDataLogEntry[ArraySize];
+            EntryValues = new int[ArraySize];
+            EntrySet = new bool[ArraySize];
             for (byte index = 0; index < ArraySize; index++)
             {
-                Entries[index] = new TLGDataLogEntry()
-                {
-                    IsSet = input.Entries[index].IsSet,
-                    Value = input.Entries[index].Value
-                };
+                EntrySet[index] = input.EntrySet[index];
+                EntryValues[index] = input.EntryValues[index];
             }
         }
 
@@ -250,8 +343,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     return TLGDataLogReadResults.MORE_DATA_THAN_IN_HEADER;
                 }
-                Entries[dataLogIndex].IsSet = true;
-                Entries[dataLogIndex].Value = binaryReader.ReadInt32();
+                EntrySet[dataLogIndex] = true;
+                EntryValues[dataLogIndex] = binaryReader.ReadInt32();
             }
 
 
@@ -318,12 +411,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             }
 
             binaryWriter.Write(NumberOfEntries);
-            for (byte index = 0; index < Entries.Length; index++)
+            for (byte index = 0; index < ArraySize; index++)
             {
-                if (Entries[index].IsSet)
+                if (EntrySet[index])
                 {
                     binaryWriter.Write(index);
-                    binaryWriter.Write(Entries[index].Value);
+                    binaryWriter.Write(EntryValues[index]);
                 }
             }
 
@@ -332,20 +425,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public bool Has(uint index)
         {
-            return index < ArraySize && Entries[index].IsSet;
+            return index < ArraySize && EntrySet[index];
         }
 
 
         public int Get(uint index)
         {
-            return Entries[index].Value;
+            return EntryValues[index];
         }
 
         public bool TryGetValue(uint index, out int value)
         {
-            if (index >= 0 && index < ArraySize && Entries[index].IsSet)
+            if (index >= 0 && index < ArraySize && EntrySet[index])
             {
-                value = Entries[index].Value;
+                value = EntryValues[index];
                 return true;
             }
             value = 0;

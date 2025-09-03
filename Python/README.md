@@ -148,3 +148,6 @@ When converting to C#:
 - Replace Python's optional types with C# nullable types
 - Convert Python string formatting to C# string interpolation
 - Consider using C# properties instead of Python's direct attribute access
+
+
+

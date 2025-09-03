@@ -241,13 +241,16 @@ public class TaskControllerEmulatorTests
         {
             Assert.AreEqual(timeLog.Entries[a - 1].NumberOfEntries, a % 2 == 0 ? 2 : 1);
             Assert.AreEqual(timeLog.Entries[a - 1].Entries[currentFuelIndex].Value, (int)Math.Round(a / Mm3persTolperh));
+            Assert.AreEqual(timeLog.Entries[a - 1].GetEntryValue(currentFuelIndex), (int)Math.Round(a / Mm3persTolperh));
             if (a % 2 == 0)
             {
                 Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].Value, a);
+                Assert.AreEqual(timeLog.Entries[a - 1].GetEntryValue(totalFuelIndex), a);
             }
             else
             {
                 Assert.AreEqual(timeLog.Entries[a - 1].Entries[totalFuelIndex].IsSet, false);
+                Assert.AreEqual(timeLog.Entries[a - 1].IsEntrySet(totalFuelIndex), false);
             }
         }
     }

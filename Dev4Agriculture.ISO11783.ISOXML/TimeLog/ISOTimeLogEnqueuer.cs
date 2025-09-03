@@ -63,9 +63,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 foreach (var pair in previousData)
                 {
                     pair.Value.Function.UpdateTimeLogEnqueuerWithDataLine(line);
-                    if (line.Entries.Length >= pair.Value.Index && line.Entries[pair.Value.Index].IsSet)
+                    if (line.CountEntries() >= pair.Value.Index && line.IsEntrySet(pair.Value.Index))
                     {
-                        line.Entries[pair.Value.Index].Value = pair.Value.Function.EnqueueUpdatedValueInTimeLog(line.Entries[pair.Value.Index].Value);
+                        line.SetEntryValue(pair.Value.Index, pair.Value.Function.EnqueueUpdatedValueInTimeLog(line.GetEntryValue(pair.Value.Index)));
                     }
                 }
             }
