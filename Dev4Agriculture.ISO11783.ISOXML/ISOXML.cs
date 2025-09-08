@@ -682,28 +682,36 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             var timeLogIndex = 0;
             var splitIndex = 0;
             ISOTask oldTask = null;
-            var splitPoints = timeCombos.SelectMany(entry =>
-                entry.Value.Select(dt => new TaskSplitEntry
-                {
-                    Task = entry.Key,
-                    Timestamp = dt
-                })
-            ).OrderBy(entry => entry.Timestamp).ToList();
-            var sortedTimeLogs = TimeLogs.OrderBy(entry => entry.Value.GetStartTime()).ToList();
+
+            var splitPoints = timeCombos
+                .SelectMany(entry => entry.Value
+                    .Select(dt => new TaskSplitEntry {
+                        Task = entry.Key,
+                        Timestamp = dt
+                    })
+                )
+                .OrderBy(entry => entry.Timestamp)
+                .ToList();
+
+            var sortedTimeLogs = TimeLogs
+                .OrderBy(entry => entry.Value.GetStartTime())
+                .ToList();
 
             if (splitPoints.First().Timestamp > sortedTimeLogs.Last().Value.GetEndTime())
             {
-                //TODO: If the Splitting does not match the Times in our data anyhow, is it OK to just return an empty list
+                // TODO: If the Splitting does not match the Times in our data anyhow, is it OK to just return an empty list
                 return new List<ISOTask>();
             }
 
-            //First skip all - for us - irrelevant Timelogs
+            // First skip all - for us - irrelevant Timelogs
             while (splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetEndTime())
             {
                 timeLogIndex++;
             }
+
             oldTask = Data.Task.FirstOrDefault(tsk => tsk.HasTimeLog(sortedTimeLogs[timeLogIndex].Key));
-            while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count())
+
+            while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count)
             {
                 //In case our next splitpoint is after this TimeLogs end, we can just fully add it
                 if (splitPoints[splitIndex].Timestamp >= sortedTimeLogs[timeLogIndex].Value.GetEndTime())
@@ -716,6 +724,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             resultTasks.Add(oldTask);
                         }
                     }
+
                     timeLogIndex++;
                 }
                 //In this case, the Splitpoint was set outside any TimeLog or at the very beginning of the next TimeLog
@@ -728,22 +737,30 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 else if (
                     splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetStartTime() &&
                     splitPoints[splitIndex].Timestamp < sortedTimeLogs[timeLogIndex].Value.GetEndTime()
-                    )
-                {
+                ) {
                     var tlgToSplit = sortedTimeLogs[timeLogIndex].Value;
                     if (tlgToSplit.TryFindClosestIndex(splitPoints[splitIndex].Timestamp, out var timeIndex))
                     {
-                        var splittedTLGs = tlgToSplit.SplitTimeLog(Data.Device.ToList(), new List<int>() { timeIndex }, GetNextFreeTimeLogIndex());
-                        splittedTLGs = splittedTLGs.OrderBy(entry => entry.GetStartTime()).ToList();
-                        if (splittedTLGs.Count() > 0 && oldTask != null)
+                        var splittedTLGs = tlgToSplit.SplitTimeLog(
+                            Data.Device.ToList(),
+                            new List<int> { timeIndex },
+                            GetNextFreeTimeLogIndex());
+
+                        splittedTLGs = splittedTLGs
+                            .OrderBy(entry => entry.GetStartTime())
+                            .ToList();
+
+                        if (splittedTLGs.Count > 0 && oldTask != null)
                         {
                             if (oldTask.TryAddTimeLog(splittedTLGs[0]) && !resultTasks.Contains(oldTask))
                             {
                                 resultTasks.Add(oldTask);
                             }
+
                             oldTask.TryRemoveTimeLog(tlgToSplit);
                         }
-                        if (splittedTLGs.Count() > 1 && splitPoints[splitIndex].Task != null)
+
+                        if (splittedTLGs.Count > 1 && splitPoints[splitIndex].Task != null)
                         {
                             if (splitPoints[splitIndex].Task.TryAddTimeLog(splittedTLGs[1])
                                 && !resultTasks.Contains(oldTask))
@@ -751,13 +768,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                                 resultTasks.Add(oldTask);
                             }
                         }
-                        TimeLogs.Remove(tlgToSplit.Name);
-                        foreach (var entry in splittedTLGs)
-                        {
-                            TimeLogs.Add(entry.Name, entry);
-                        }
 
-                        sortedTimeLogs = TimeLogs.OrderBy(entry => entry.Value.GetStartTime()).ToList();
+                        TimeLogs.Remove(tlgToSplit.Name);
+                        splittedTLGs.ForEach(tlg => TimeLogs.Add(tlg.Name, tlg));
+
+                        sortedTimeLogs = TimeLogs
+                            .OrderBy(entry => entry.Value.GetStartTime())
+                            .ToList();
+
                         oldTask = splitPoints[splitIndex].Task;
                         splitIndex++;
                         timeLogIndex++;
@@ -765,9 +783,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                     else
                     {
                         Debug.WriteLine("We found a SplitPoint that is within a TimeLog but does not have a corresponding index!");
-                        //TODO, this can theoritically not happen
+                        // TODO, this can theoritically not happen
                     }
                 }
+
                 Debug.WriteLine("============================================");
                 Debug.WriteLine($"SplitIndex: {splitIndex} / {splitPoints.Count()}");
                 Debug.WriteLine($"TimeLogIndex: {timeLogIndex} / {sortedTimeLogs.Count()}");
@@ -785,8 +804,8 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             foreach (var task in resultTasks)
             {
                 var devices = Data.Device.ToList();
-                enqueuer.EnqeueTimeLogs(task.TimeLogs, devices);
-                var timeLIst = ISOTimeListEnqueuer.EnqueueTimeElements(task.Time.ToList(), devices);
+                enqueuer.EnqueueTimeLogs(task.TimeLogs, devices);
+                var timeList = ISOTimeListEnqueuer.EnqueueTimeElements(task.Time.ToList(), devices);
             }
 
             foreach (var task in resultTasks)
@@ -798,7 +817,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 {
                     Data.Task.Add(task);
                 }
-
             }
 
             return resultTasks;

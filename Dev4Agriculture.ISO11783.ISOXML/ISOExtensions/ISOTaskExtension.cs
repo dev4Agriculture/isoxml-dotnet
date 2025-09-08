@@ -335,13 +335,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             if (assign)
             {
-                var keptTims = Time.Where(tim => tim.Type != ISOType2.Effective);
+                var keptTims = Time
+                    .Where(tim => tim.Type != ISOType2.Effective)
+                    .ToList();
+
                 Time.Clear();
-                foreach (var tim in keptTims)
-                {
-                    Time.Add(tim);
-                }
+                keptTims.ForEach(Time.Add);
             }
+
             var list = new List<ISOTime>();
             var singulator = new ISOTimeLogSingulator();
             for (var index = 0; index < TimeLogs.Count; index++)
@@ -354,11 +355,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                     Time.Add(tim);
                 }
             }
+
             ISOTimeListEnqueuer.EnqueueTimeElements(list, devices);
             var enqueuer = new ISOTimeLogEnqueuer();
-            enqueuer.EnqeueTimeLogs(TimeLogs, devices);
+            enqueuer.EnqueueTimeLogs(TimeLogs, devices);
             return list;
-
         }
 
         /// <summary>
