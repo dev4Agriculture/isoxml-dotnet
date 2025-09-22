@@ -694,6 +694,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 .ToList();
 
             var sortedTimeLogs = TimeLogs
+                .Where(x => x.Value.Entries.Count > 0)
                 .OrderBy(entry => entry.Value.GetStartTime())
                 .ToList();
 
@@ -747,6 +748,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             GetNextFreeTimeLogIndex());
 
                         splittedTLGs = splittedTLGs
+                            .Where(tlg => tlg.Entries.Count > 0)
                             .OrderBy(entry => entry.GetStartTime())
                             .ToList();
 
@@ -773,6 +775,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         splittedTLGs.ForEach(tlg => TimeLogs.Add(tlg.Name, tlg));
 
                         sortedTimeLogs = TimeLogs
+                            .Where(tlg => tlg.Value.Entries.Count > 0)
                             .OrderBy(entry => entry.Value.GetStartTime())
                             .ToList();
 
@@ -785,16 +788,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         Debug.WriteLine("We found a SplitPoint that is within a TimeLog but does not have a corresponding index!");
                         // TODO, this can theoritically not happen
                     }
-                }
-
-                Debug.WriteLine("============================================");
-                Debug.WriteLine($"SplitIndex: {splitIndex} / {splitPoints.Count()}");
-                Debug.WriteLine($"TimeLogIndex: {timeLogIndex} / {sortedTimeLogs.Count()}");
-                Debug.WriteLine("SplitPoints To Do: ");
-                for (var index = splitIndex; index < splitPoints.Count(); index++)
-                {
-                    var point = splitPoints[index];
-                    Debug.WriteLine($"   {point.Task.TaskDesignator}:  {point.Timestamp.ToString()}");
                 }
             }
 

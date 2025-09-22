@@ -590,6 +590,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public DateTime GetStartTime()
         {
+            if (Entries.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
+
             return Entries[0].DateTime;
         }
 
@@ -599,6 +604,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public DateTime GetEndTime()
         {
+            if (Entries.Count == 0)
+            {
+                return DateTime.MaxValue;
+            }
+
             return Entries[Entries.Count - 1].DateTime;
         }
 
@@ -610,16 +620,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public bool ContainsTime(DateTime time)
         {
+            if (Entries.Count == 0)
+            {
+                return false;
+            }
+
             if (time < GetStartTime())
             {
                 return false;
             }
+
             if (time > GetEndTime())
             {
                 return false;
             }
-            return true;
 
+            return true;
         }
 
         /// <summary>
@@ -629,7 +645,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public bool TryFindClosestIndex(DateTime time, out int index)
         {
-            if (!ContainsTime(time))
+            if (Entries.Count == 0 || !ContainsTime(time))
             {
                 index = -1;
                 return false;
