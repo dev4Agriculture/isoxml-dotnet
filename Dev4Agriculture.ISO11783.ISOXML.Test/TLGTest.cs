@@ -253,4 +253,26 @@ public class TLGTest
         var containsTime = tlg.ContainsTime(DateTime.Today);
         Assert.IsFalse(containsTime);
     }
+
+    [TestMethod]
+    public void GetStartTime_Should_ReturnValue_IfTlgHasEntries()
+    {
+        var timestamp = new DateTime(2000, 1, 1, 10, 0, 0, 0);
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        tlg.Entries.Add(new TLGDataLogLine(0) { DateTime = timestamp });
+
+        var startTime = tlg.GetStartTime();
+        Assert.AreEqual(timestamp, startTime);
+    }
+
+    [TestMethod]
+    public void GetEndTime_Should_ReturnValue_IfTlgHasEntries()
+    {
+        var timestamp = new DateTime(2000, 1, 1, 10, 0, 0, 0);
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        tlg.Entries.Add(new TLGDataLogLine(0) { DateTime = timestamp });
+
+        var endTime = tlg.GetEndTime();
+        Assert.AreEqual(timestamp, endTime);
+    }
 }
