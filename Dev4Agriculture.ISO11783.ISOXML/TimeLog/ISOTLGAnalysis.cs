@@ -587,7 +587,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <summary>
         /// Get First Timestamp for a TimeLog
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// First Timestamp or DateTime.MinValue if no Entries exist
+        /// </returns>
         public DateTime GetStartTime()
         {
             if (Entries.Count == 0)
@@ -601,7 +603,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <summary>
         /// Get the Last Timestamp for a TimeLog
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///Last Timestamp or DateTime.MaxValue if no Entries exist
+        /// </returns>
         public DateTime GetEndTime()
         {
             if (Entries.Count == 0)
