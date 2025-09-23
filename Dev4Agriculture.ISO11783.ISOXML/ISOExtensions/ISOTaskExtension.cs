@@ -380,6 +380,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             // Get all unique DeviceElementIds from TimeLog headers
             foreach (var tlg in TimeLogs)
             {
+                if (tlg.Entries.Count == 0)
+                {
+                    continue;
+                }
+
                 var deviceElementIds = tlg.Header.Ddis.Select(entry => entry.DeviceElement).Distinct().ToList();
 
                 // Find devices that have DeviceElements matching the DDI entries in TimeLog headers
@@ -421,7 +426,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             if (TimeLogs.Count == 0)
                 return DateTime.MinValue;
 
-            return TimeLogs.Min(tlg => tlg.GetStartTime());
+            return TimeLogs
+                .Where(tlg => tlg.Entries.Count > 0)
+                .Min(tlg => tlg.GetStartTime());
         }
 
         /// <summary>
@@ -433,16 +440,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             if (TimeLogs.Count == 0)
                 return DateTime.MinValue;
 
-            return TimeLogs.Max(tlg => tlg.GetEndTime());
+            return TimeLogs
+                .Where(tlg => tlg.Entries.Count > 0)
+                .Max(tlg => tlg.GetEndTime());
         }
-
-
-
 
         public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
         {
             var splitPoints = new Dictionary<ISOTLG, List<int>>();
             var assignments = new List<TaskSplitEntry>();
+
+            TimeLogs = TimeLogs
+                .Where(tlg => tlg.Entries.Count > 0)
+                .ToList();
 
             foreach (var tlg in TimeLogs)
             {
@@ -477,8 +487,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 return new List<ISOTask>();
             }
-            List<(string, DateTime, DateTime)> pairs = splitted.Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime())).ToList();
 
+            List<(string, DateTime, DateTime)> pairs = splitted
+                .Where(tlg => tlg.Entries.Count > 0)
+                .Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime()))
+                .ToList();
 
             var assignmentIndex = 0;
             var resultEntryList = new List<TaskSplitEntry>();
@@ -538,14 +551,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         public List<ISOTLG> SplitAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
         {
             var splitPoints = new Dictionary<ISOTLG, List<int>>();
-            foreach (var tlg in TimeLogs)
+            var validTimeLogs = TimeLogs
+                .Where(tlg => tlg.Entries.Count > 0)
+                .ToList();
+
+            foreach (var tlg in validTimeLogs)
             {
                 splitPoints.Add(tlg, new List<int>());
             }
+
             splitTimes.Sort();
             foreach (var time in splitTimes)
             {
-                foreach (var timeLog in TimeLogs)
+                foreach (var timeLog in validTimeLogs)
                 {
                     if (timeLog.TryFindClosestIndex(time, out var index))
                     {
@@ -765,18 +783,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 return DateTime.MaxValue;
             }
-            return TimeLogs.Min(tlg => tlg.GetStartTime());
+
+            return TimeLogs
+                .Where(tlg => tlg.Entries.Count > 0)
+                .Min(tlg => tlg.GetStartTime());
         }
 
         internal bool IsInActiveWorkTime(DateTime time)
         {
             foreach (var tlg in TimeLogs)
             {
-                if (time >= tlg.GetStartTime() && time <= tlg.GetEndTime())
+                if (tlg.Entries.Count > 0 && time >= tlg.GetStartTime() && time <= tlg.GetEndTime())
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -784,6 +806,5 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         {
             return TimeLogs.Any(entry => entry.Name == key);
         }
-
     }
 }
