@@ -227,4 +227,30 @@ public class TLGTest
 
     }
 
+    [TestMethod]
+    public void GetStartTime_Should_ReturnMinValue_IfNoEntries()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        var startTime = tlg.GetStartTime();
+
+        Assert.AreEqual(startTime, DateTime.MinValue);
+    }
+
+    [TestMethod]
+    public void GetEndTime_Should_ReturnMaxValue_IfNoEntries()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        var endTime = tlg.GetEndTime();
+
+        Assert.AreEqual(endTime, DateTime.MaxValue);
+    }
+
+    [TestMethod]
+    public void ContainsTime_Should_ReturnFalse_IfTlgEmpty()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+
+        var containsTime = tlg.ContainsTime(DateTime.Today);
+        Assert.IsFalse(containsTime);
+    }
 }
