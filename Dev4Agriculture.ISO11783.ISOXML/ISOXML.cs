@@ -711,7 +711,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
 
             oldTask = Data.Task.FirstOrDefault(tsk => tsk.HasTimeLog(sortedTimeLogs[timeLogIndex].Key));
-
+            if(oldTask == null)
+            {
+                return new List<ISOTask>();
+            }
             while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count)
             {
                 //In case our next splitpoint is after this TimeLogs end, we can just fully add it
