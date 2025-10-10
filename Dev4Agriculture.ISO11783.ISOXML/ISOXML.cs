@@ -765,9 +765,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         if (splittedTLGs.Count > 1 && splitPoints[splitIndex].Task != null)
                         {
                             if (splitPoints[splitIndex].Task.TryAddTimeLog(splittedTLGs[1])
-                                && !resultTasks.Contains(oldTask))
+                                && !resultTasks.Contains(splitPoints[splitIndex].Task))
                             {
-                                resultTasks.Add(oldTask);
+                                resultTasks.Add(splitPoints[splitIndex].Task);
                             }
                         }
 
@@ -789,6 +789,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         // TODO, this can theoritically not happen
                     }
                 }
+            }
+
+            while( timeLogIndex < sortedTimeLogs.Count)
+            {
+                if(!oldTask.TryAddTimeLog(sortedTimeLogs[timeLogIndex].Value)){
+                    Debug.WriteLine($"Could not add timeLog {timeLogIndex}");
+                }
+                timeLogIndex++;
             }
 
             Data.Task.Clear();
