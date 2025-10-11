@@ -676,7 +676,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
 
-        public List<ISOTask> SplitTaskSet(Dictionary<ISOTask, List<DateTime>> timeCombos, bool assign = true)
+        /// <summary>
+        /// Splits the Task in a TaskSet, adding new Tasks due to the split policy
+        /// IMPORTANT: For now, this splitting only persists TIM and DeviceAllocations. 
+        /// </summary>
+        /// <param name="timeCombos"></param>
+        /// <param name="assign"></param>
+        /// <returns></returns>
+        public List<ISOTask> SplitTaskSet(Dictionary<ISOTask, List<DateTime>> timeCombos, bool assign = true, bool copySubElements = true)
         {
             var resultTasks = new List<ISOTask>();
             var timeLogIndex = 0;
@@ -684,8 +691,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             ISOTask oldTask = null;
 
             var splitPoints = timeCombos
-                .SelectMany(entry => entry.Value
-                    .Select(dt => new TaskSplitEntry {
+                .SelectMany(entry => entry.Value.Distinct()
+                    .Select(dt => new TaskSplitEntry
+                    {
                         Task = entry.Key,
                         Timestamp = dt
                     })
@@ -802,6 +810,17 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 timeLogIndex++;
             }
 
+            if (oldTask != null && !resultTasks.Contains(oldTask))
+            {
+                resultTasks.Add(oldTask);
+            }
+
+            //Assign Products, Grids, etc. from old Task to new Task
+            if (copySubElements)
+            {
+                TryCopySubElementsFromOldToNewTasks(resultTasks);
+            }
+
             Data.Task.Clear();
 
             var enqueuer = new ISOTimeLogEnqueuer();
@@ -824,6 +843,63 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             }
 
             return resultTasks;
+        }
+
+        private void TryCopySubElementsFromOldToNewTasks(List<ISOTask> resultTasks)
+        {
+
+            foreach (var tsk in Data.Task)
+            {
+                var start = tsk.GetTaskStartTime();
+                var end = tsk.GetTaskEndTime();
+                foreach (var cta in tsk.CommentAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        cta.AllocationStamp != null ? cta.AllocationStamp.Start : start
+                        );
+                    taskToUse?.CommentAllocation.Add(cta);
+                }
+                foreach (var pdta in tsk.ProductAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        pdta.AllocationStamp != null ? pdta.AllocationStamp.Start : start
+                        );
+                    taskToUse?.ProductAllocation.Add(pdta);
+                }
+                foreach (var gda in tsk.GuidanceAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        gda.AllocationStamp != null && gda.AllocationStamp.Count > 0 ?
+                            gda.AllocationStamp.First().Start :
+                            start
+                        );
+                    taskToUse?.GuidanceAllocation.Add(gda);
+                }
+                foreach (var wrka in tsk.WorkerAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        wrka.AllocationStamp != null ? wrka.AllocationStamp.Start : start
+                        );
+                    taskToUse?.WorkerAllocation.Add(wrka);
+                }
+
+                if (tsk.GridSpecified && tsk.Grid.Count() > 0 && tsk.TreatmentZone != null)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        start
+                        );
+                    taskToUse?.Grid.Add(tsk.Grid.First());
+                    foreach (var tzn in tsk.TreatmentZone)
+                    {
+                        taskToUse.TreatmentZone.Add(tzn);
+                    }
+                }
+            }
         }
 
 

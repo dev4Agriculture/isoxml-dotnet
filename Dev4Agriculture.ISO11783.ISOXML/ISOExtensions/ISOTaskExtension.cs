@@ -421,7 +421,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// Get the start time of the task from its TimeLogs
         /// </summary>
         /// <returns>Start time of the task</returns>
-        private DateTime GetTaskStartTime()
+        public DateTime GetTaskStartTime()
         {
             if (TimeLogs.Count == 0)
                 return DateTime.MinValue;
@@ -435,7 +435,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         /// Get the end time of the task from its TimeLogs
         /// </summary>
         /// <returns>End time of the task</returns>
-        private DateTime GetTaskEndTime()
+        public DateTime GetTaskEndTime()
         {
             if (TimeLogs.Count == 0)
                 return DateTime.MinValue;
@@ -805,6 +805,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
         internal bool HasTimeLog(string key)
         {
             return TimeLogs.Any(entry => entry.Name == key);
+        }
+
+        internal static ISOTask FindTaskThatContainsTime(List<ISOTask> resultTasks, DateTime timeStamp)
+        {
+            return resultTasks.FirstOrDefault(entry => entry.GetTaskEndTime() >= timeStamp && entry.GetTaskStartTime() <= timeStamp); 
         }
     }
 }

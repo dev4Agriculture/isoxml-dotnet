@@ -325,4 +325,196 @@ public class TaskSplitterTests
         file.Close();
         */
     }
+
+
+    [TestMethod]
+    public void CanSplitExampleBaleTaskset()
+    {
+        /*
+                var path = "C:\\data\\isoxml_test\\";
+                // Load test data using the existing autolog1.zip file
+                var file = File.Open(Path.Combine(path, "BALE2.zip"), FileMode.Open);
+                var isoxml = ISOXML.LoadFromArchive(file);
+
+                // var path = "C:\\data\\isoxml-analysis\\a8d23c06-c856-4e01-9f37-c8214ed49a1f\\tasksets";
+                // Load test data using the existing autolog1.zip file
+                //var file = File.Open(Path.Combine(path, "10c1910c-5c62-4abb-bd60-63fe6d5ae34b.zip"), FileMode.Open);
+                //var isoxml = ISOXML.LoadFromArchive(file);
+
+                // Create tasks with the given names (handling duplicates)
+                // TSK12 appears multiple times, so we'll use consistent IDs
+                var taskTSK1 = new ISOTask()
+                {
+                    TaskStatus = ISOTaskStatus.Paused,
+                    TaskDesignator = "TSK1 (Road)"
+                };
+                var taskTSK2 = new ISOTask()
+                {
+                    TaskStatus = ISOTaskStatus.Paused,
+                    TaskDesignator = "TSK2 (Field)"
+                };
+
+
+                // Add tasks to ISOXML and assign IDs
+                isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK1);
+                isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK2);
+
+
+                // Create the splitCombos with the given timestamps
+                var splitCombos = new Dictionary<ISOTask, List<DateTime>>()
+            {
+                { taskTSK1, new List<DateTime>
+                    {
+                        new DateTime(638860788513709999),
+                    }
+                },
+                { taskTSK2, new List<DateTime>
+                    {
+                        new DateTime(638860818681589998),
+                    }
+                },
+            };
+
+                // Split the task set at the specified timestamps
+                var splittedTasks = isoxml.SplitTaskSet(splitCombos);
+
+                // Save the archive to "FrankSplit.zip" in the same folder
+                var frankSplitPath = Path.Combine(path, "FrankSplit.zip");
+                isoxml.SaveToArchive(frankSplitPath);
+
+                // Verify that the splitting was successful
+                Assert.IsNotNull(splittedTasks, "Split operation should return a result");
+                Assert.IsTrue(splittedTasks.Count > 0, "Should have created split tasks");
+
+                // Verify that the FrankSplit.zip file was created
+                Assert.IsTrue(File.Exists(frankSplitPath), "FrankSplit.zip should be created");
+
+                Console.WriteLine($"Successfully created {splittedTasks.Count} split tasks");
+                Console.WriteLine($"Archive saved to: {frankSplitPath}");
+
+                // Clean up the file handle
+                file.Close();
+            */
+    }
+
+
+    [TestMethod]
+    public void CanSplitMiniTaskset()
+    {
+        var splitTime = new DateTime(2025, 10, 8, 8, 24, 35, 628).AddTicks(1);
+        var path = "./testdata/TaskSplitting/";
+        // Load test data using the existing autolog1.zip file
+        var file = File.Open(Path.Combine(path, "MiniTaskSetThatJustAddsAPartfield.zip"), FileMode.Open);
+        var isoxml = ISOXML.LoadFromArchive(file);
+        var task = isoxml.Data.Task.FirstOrDefault();
+
+        var allocationStamp = new ISOAllocationStamp()
+        {
+            Start = splitTime
+        };
+
+        var workerNoTime = new ISOWorker()
+        {
+            WorkerFirstName = "Peter",
+            WorkerLastName = "Parker_NoTime"
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(workerNoTime);
+        isoxml.Data.Worker.Add(workerNoTime);
+
+        var wan = new ISOWorkerAllocation()
+        {
+            WorkerIdRef = workerNoTime.WorkerId
+        };
+        task.WorkerAllocation.Add(wan);
+
+
+        var workerTime = new ISOWorker()
+        {
+            WorkerFirstName = "Peter",
+            WorkerLastName = "Parker"
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(workerTime);
+        isoxml.Data.Worker.Add(workerTime);
+
+        var wanTime = new ISOWorkerAllocation()
+        {
+            WorkerIdRef = workerNoTime.WorkerId
+        };
+        wanTime.AllocationStamp = allocationStamp;
+        task.WorkerAllocation.Add(wanTime);
+
+        var product = new ISOProduct()
+        {
+            ProductDesignator = "Corn"
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(product);
+        isoxml.Data.Product.Add(product);
+        var pan = new ISOProductAllocation()
+        {
+            ProductIdRef = product.ProductId
+        };
+        task.ProductAllocation.Add(pan);
+
+        var pfd = new ISOPartfield()
+        {
+            PartfieldDesignator = "Betriebsgelände",
+            PartfieldArea = 255
+        };
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(pfd);
+        isoxml.Data.Partfield.Add(pfd);
+        // var path = "C:\\data\\isoxml-analysis\\a8d23c06-c856-4e01-9f37-c8214ed49a1f\\tasksets";
+        // Load test data using the existing autolog1.zip file
+        //var file = File.Open(Path.Combine(path, "10c1910c-5c62-4abb-bd60-63fe6d5ae34b.zip"), FileMode.Open);
+        //var isoxml = ISOXML.LoadFromArchive(file);
+
+        // Create tasks with the given names (handling duplicates)
+        // TSK12 appears multiple times, so we'll use consistent IDs
+        var taskTSK1 = new ISOTask()
+        {
+            TaskStatus = ISOTaskStatus.Paused,
+            TaskDesignator = "TSK1 (Road)",
+            PartfieldIdRef = pfd.PartfieldId
+        };
+
+
+
+        // Add tasks to ISOXML and assign IDs
+        isoxml.IdTable.AddObjectAndAssignIdIfNone(taskTSK1);
+
+
+        // Create the splitCombos with the given timestamps
+        var splitCombos = new Dictionary<ISOTask, List<DateTime>>()
+    {
+        { taskTSK1, new List<DateTime>
+            {
+                splitTime,
+                splitTime
+            }
+        }
+    };
+
+        // Split the task set at the specified timestamps
+        var splittedTasks = isoxml.SplitTaskSet(splitCombos);
+
+        // Save the archive to "FrankSplit.zip" in the same folder
+        var frankSplitPath = Path.Combine(path, "FrankMiniTaskSetSplit.zip");
+        isoxml.SaveToArchive(frankSplitPath);
+
+        // Verify that the splitting was successful
+        Assert.IsNotNull(splittedTasks, "Split operation should return a result");
+        Assert.IsTrue(splittedTasks.Count ==1, "Should have created split tasks");
+
+        task = isoxml.Data.Task.First();
+        // Verify that the FrankSplit.zip file was created
+        Assert.IsTrue(File.Exists(frankSplitPath), "FrankSplit.zip should be created");
+        Assert.IsTrue(task.ProductAllocation.Count == 1, "Product not moved");
+        Assert.IsTrue(task.WorkerAllocation.Count == 2, "Allocation");
+        Assert.IsTrue(isoxml.Data.Task.First().PartfieldIdRef == "PFD1", "PartfieldID wrong");
+        Assert.IsTrue(isoxml.Data.Partfield.Count() == 1, "Partfield not added to TaskSet");
+        Console.WriteLine($"Successfully created {splittedTasks.Count} split tasks");
+        Console.WriteLine($"Archive saved to: {frankSplitPath}");
+
+        // Clean up the file handle
+        file.Close();
+    }
 }
