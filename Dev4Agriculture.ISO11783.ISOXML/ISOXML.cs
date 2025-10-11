@@ -821,7 +821,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 TryCopySubElementsFromOldToNewTasks(resultTasks);
             }
 
-
             Data.Task.Clear();
 
             var enqueuer = new ISOTimeLogEnqueuer();
