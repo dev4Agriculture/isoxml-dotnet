@@ -277,21 +277,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var ddi = DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI);
                 var detAsInt = IdList.ToIntId(det.DeviceElementId);
-                var dlv = new ISODataLogValue()
+                var dlv = new ISODataLogValue
                 {
                     ProcessDataDDI = dpd.DeviceProcessDataDDI,
                     DeviceElementIdRef = det.DeviceElementId,
+                    DeviceElementNumber = det.DeviceElementNumber,
                 };
-
 
                 try
                 {
-                    var device = devices.FirstOrDefault(entry => entry.DeviceElement.Any(deviceElement => deviceElement.DeviceElementId.Equals(det.DeviceElementId)));
+                    var device = devices.FirstOrDefault(entry =>
+                        entry.DeviceElement.Any(deviceElement =>
+                            deviceElement.DeviceElementId.Equals(det.DeviceElementId)));
+
                     if (device == null)
                     {
                         continue;
                     }
-                    if(TryGetLastValue(ddi,detAsInt,out var value))
+
+                    if (TryGetLastValue(ddi,detAsInt,out var value))
                     {
                         dlv.ProcessDataValue = value;
                     }
@@ -305,6 +309,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     //TODO: What should we do in case this fails?
                     dlv.ProcessDataValue = long.MaxValue;
                 }
+
                 list.Add(dlv);
             }
 
