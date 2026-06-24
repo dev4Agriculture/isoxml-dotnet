@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.ConstrainedExecution;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
