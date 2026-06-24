@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
@@ -98,6 +101,61 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 }
             }
             return content;
+        }
+
+
+
+
+        public List<ISOTLG> SplitTimeLog(List<ISODevice> devices, List<int> splitIndices, int nextTLGNo)
+        {
+            splitIndices.Sort();
+            var splitIndicesIndex = 0;
+            var latestEntries = new TLGDataLogEntry[Header.Ddis.Count];
+            var gpsOptions = Header.GpsOptions;
+
+            var splittedTLGs = new List<ISOTLG>();
+            // Fix: Use nextTLGNo for the first TLG to ensure unique names
+            ISOTLG currentTLG = new ISOTLG(nextTLGNo, FolderPath);
+            nextTLGNo++;
+            currentTLG.Header = new TLGDataLogHeader(Header);
+            for (var index = 0; index < Entries.Count; index++)
+            {
+                var curTLGLine = Entries[index];
+                if (splitIndicesIndex < splitIndices.Count && index == splitIndices[splitIndicesIndex])
+                {
+                    if (currentTLG.Entries.Count > 0)
+                    {
+                        splittedTLGs.Add(currentTLG);
+                    }
+                    currentTLG = new ISOTLG(nextTLGNo, FolderPath);
+                    nextTLGNo++;
+                    currentTLG.Header = new TLGDataLogHeader(Header);
+                    var maxDDIEntries = curTLGLine.Entries.Length < latestEntries.Length ? curTLGLine.Entries.Length : latestEntries.Length;
+                    for (var ddiEntryIndex = 0; ddiEntryIndex < maxDDIEntries; ddiEntryIndex++)
+                    {
+                        if (!curTLGLine.Entries[ddiEntryIndex].IsSet && latestEntries[ddiEntryIndex].IsSet)
+                        {
+                            curTLGLine.Entries[ddiEntryIndex].Value = latestEntries[ddiEntryIndex].Value;
+                            curTLGLine.Entries[ddiEntryIndex].IsSet = true;
+                            curTLGLine.NumberOfEntries++;
+                        }
+                    }
+                    splitIndicesIndex++;
+                }
+                var copiedTLGLine = new TLGDataLogLine(curTLGLine);
+                currentTLG.Entries.Add(copiedTLGLine);
+                for (var ddiEntryIndex = 0; ddiEntryIndex < curTLGLine.Entries.Length; ddiEntryIndex++)
+                {
+                    if (curTLGLine.Entries[ddiEntryIndex].IsSet)
+                    {
+                        latestEntries[ddiEntryIndex].IsSet = true;
+                        latestEntries[ddiEntryIndex].Value = curTLGLine.Entries[ddiEntryIndex].Value;
+                    }
+                }
+
+            }
+            splittedTLGs.Add(currentTLG);
+            return splittedTLGs;
         }
     }
 }

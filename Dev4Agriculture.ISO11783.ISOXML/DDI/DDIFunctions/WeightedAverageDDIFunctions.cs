@@ -130,7 +130,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                 StartValue = currentValue;
                 IsInitialized = true;
             }
-            var entry = latestTLGEntries.FirstOrDefault(dlv => dlv.DDI == RelevantWeightDDI && dlv.DeviceElement == DeviceElementId);
+
+            var entry = latestTLGEntries.FirstOrDefault(dlv =>
+                dlv.DDI == RelevantWeightDDI &&
+                dlv.DeviceElement == DeviceElementId);
+
             if (entry != null && entry.Value != null)
             {
                 if (!IsWeightInitialized)
@@ -138,26 +142,27 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                     IsWeightInitialized = true;
                     StartWeightValue = entry.Value ?? 0;
                 }
+
                 CurrentWeightValue = entry.Value ?? 0;
             }
 
             if (IsInitialized && IsWeightInitialized)
             {
-                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(StartValue, StartWeightValue, currentValue, CurrentWeightValue);
+                return (long)MathUtils.CalculateCleanedContinousWeightedAverage(
+                    StartValue, StartWeightValue,
+                    currentValue, CurrentWeightValue);
             }
-            else
-            {
-                return currentValue;
-            }
+
+            return currentValue;
         }
 
         public void StartSingulateValueInTimeLog(List<TLGDataLogDDI> ddis, List<ISODevice> devices)
         {
-            foreach (var wDDI in WeightDDIs)
+            foreach (var weightDdi in WeightDDIs)
             {
-                if (ddis.Any(entry => entry.Ddi == wDDI && entry.DeviceElement == DeviceElementId))
+                if (ddis.Any(entry => entry.Ddi == weightDdi && entry.DeviceElement == DeviceElementId))
                 {
-                    RelevantWeightDDI = wDDI;
+                    RelevantWeightDDI = weightDdi;
                 }
             }
         }
@@ -210,24 +215,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions
                 StartValue = value;
                 IsInitialized = true;
             }
-            if (StartWeightValue != CurrentWeightValue)
+            if (StartWeightValue != CurrentWeightValue && CurrentWeightValue > 0)
             {
-                var weightWithInTLG = CurrentWeightValue - StartWeightValue;
-                var averageWithinTLG = (CurrentWeightValue * value - StartWeightValue * StartValue) / (CurrentWeightValue - StartWeightValue);
-                var cleanedAverage = (BaseValue * BaseWeightValue + averageWithinTLG * weightWithInTLG)/(BaseWeightValue + averageWithinTLG);
-                LastValue = value;
-                return (int)cleanedAverage;
+                double restored = ((double)value * (CurrentWeightValue - StartWeightValue) + StartValue * StartWeightValue) / CurrentWeightValue;
+                LastValue = restored;
+                return (int)Math.Round(restored);
             }
             else
             {
                 LastValue = value;
                 return value;
-            } 
+            }
         }
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="iSOTLG"></param>
         /// <param name="totalValue"></param>

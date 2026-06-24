@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Dev4Agriculture.ISO11783.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
-using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 {
     public partial class ISOTime
     {
-
         public ulong GetSeconds()
         {
             if (Stop != null)
@@ -67,8 +63,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             stop = (DateTime)(GetStopTime() ?? null);
             return stop != null;
         }
-
-
 
         /// <summary>
         /// Get the value for the defined combination of DDI + DeviceElement from a TIM-Element

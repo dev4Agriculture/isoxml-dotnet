@@ -13,6 +13,7 @@ using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Dev4Agriculture.ISO11783.ISOXML.Converters;
 using Dev4Agriculture.ISO11783.ISOXML.Utils;
+using System.Diagnostics;
 
 namespace Dev4Agriculture.ISO11783.ISOXML
 {
@@ -643,6 +644,312 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
 
         /// <summary>
+        /// After changing existing TimeLogs based on Tasks, we need to update the main object to delete potentially obsolete TimeLogs
+        /// </summary>
+        private void UpdateISOXMLTimeLogsFromTasksTimeLogs()
+        {
+            TimeLogs.Clear();
+            foreach (var entry in Data.Task)
+            {
+                foreach (var tlg in entry.TimeLogs)
+                {
+                    if (!TimeLogs.ContainsKey(tlg.Name))
+                    {
+                        TimeLogs.Add(tlg.Name, tlg);
+                    }
+                }
+            }
+        }
+
+
+        internal int GetNextFreeTimeLogIndex()
+        {
+            return (TimeLogs.Keys.Max(entry =>
+            {
+                if (int.TryParse(entry.Substring(3), out var value))
+                {
+                    return value;
+                }
+                return null;
+            }) ?? 0) + 1;
+        }
+
+
+
+        /// <summary>
+        /// Splits the Task in a TaskSet, adding new Tasks due to the split policy
+        /// IMPORTANT: For now, this splitting only persists TIM and DeviceAllocations. 
+        /// </summary>
+        /// <param name="timeCombos"></param>
+        /// <param name="assign"></param>
+        /// <returns></returns>
+        public List<ISOTask> SplitTaskSet(Dictionary<ISOTask, List<DateTime>> timeCombos, bool assign = true, bool copySubElements = true)
+        {
+            var resultTasks = new List<ISOTask>();
+            var timeLogIndex = 0;
+            var splitIndex = 0;
+            ISOTask oldTask = null;
+
+            var splitPoints = timeCombos
+                .SelectMany(entry => entry.Value.Distinct()
+                    .Select(dt => new TaskSplitEntry
+                    {
+                        Task = entry.Key,
+                        Timestamp = dt
+                    })
+                )
+                .OrderBy(entry => entry.Timestamp)
+                .ToList();
+
+            var sortedTimeLogs = TimeLogs
+                .Where(x => x.Value.Entries.Count > 0)
+                .OrderBy(entry => entry.Value.GetStartTime())
+                .ToList();
+
+            if (splitPoints.First().Timestamp > sortedTimeLogs.Last().Value.GetEndTime())
+            {
+                // TODO: If the Splitting does not match the Times in our data anyhow, is it OK to just return an empty list
+                return new List<ISOTask>();
+            }
+
+            // First skip all - for us - irrelevant Timelogs
+            while (splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetEndTime())
+            {
+                timeLogIndex++;
+            }
+
+            oldTask = Data.Task.FirstOrDefault(tsk => tsk.HasTimeLog(sortedTimeLogs[timeLogIndex].Key));
+            if(oldTask == null)
+            {
+                return new List<ISOTask>();
+            }
+            while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count)
+            {
+                //In case our next splitpoint is after this TimeLogs end, we can just fully add it
+                if (splitPoints[splitIndex].Timestamp >= sortedTimeLogs[timeLogIndex].Value.GetEndTime())
+                {
+                    if (oldTask != null)
+                    {
+                        oldTask.TryAddTimeLog(sortedTimeLogs[timeLogIndex].Value);
+                        if (!resultTasks.Contains(oldTask))
+                        {
+                            resultTasks.Add(oldTask);
+                        }
+                    }
+
+                    timeLogIndex++;
+                }
+                //In this case, the Splitpoint was set outside any TimeLog or at the very beginning of the next TimeLog
+                else if (splitPoints[splitIndex].Timestamp <= sortedTimeLogs[timeLogIndex].Value.GetStartTime())
+                {
+                    oldTask = splitPoints[splitIndex].Task;
+                    splitIndex++;
+                }
+                //In this case, the Timestamp is set somewhere in the TimeLog, so we need to split it
+                else if (
+                    splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetStartTime() &&
+                    splitPoints[splitIndex].Timestamp < sortedTimeLogs[timeLogIndex].Value.GetEndTime()
+                ) {
+                    var tlgToSplit = sortedTimeLogs[timeLogIndex].Value;
+                    if (tlgToSplit.TryFindClosestIndex(splitPoints[splitIndex].Timestamp, out var timeIndex))
+                    {
+                        var splittedTLGs = tlgToSplit.SplitTimeLog(
+                            Data.Device.ToList(),
+                            new List<int> { timeIndex },
+                            GetNextFreeTimeLogIndex());
+
+                        splittedTLGs = splittedTLGs
+                            .Where(tlg => tlg.Entries.Count > 0)
+                            .OrderBy(entry => entry.GetStartTime())
+                            .ToList();
+
+                        if (splittedTLGs.Count > 0 && oldTask != null)
+                        {
+                            if (oldTask.TryAddTimeLog(splittedTLGs[0]) && !resultTasks.Contains(oldTask))
+                            {
+                                resultTasks.Add(oldTask);
+                            }
+
+                            oldTask.TryRemoveTimeLog(tlgToSplit);
+                        }
+
+                        if (splittedTLGs.Count > 1 && splitPoints[splitIndex].Task != null)
+                        {
+                            if (splitPoints[splitIndex].Task.TryAddTimeLog(splittedTLGs[1])
+                                && !resultTasks.Contains(splitPoints[splitIndex].Task))
+                            {
+                                resultTasks.Add(splitPoints[splitIndex].Task);
+                            }
+                        }
+
+                        TimeLogs.Remove(tlgToSplit.Name);
+                        splittedTLGs.ForEach(tlg => TimeLogs.Add(tlg.Name, tlg));
+
+                        sortedTimeLogs = TimeLogs
+                            .Where(tlg => tlg.Value.Entries.Count > 0)
+                            .OrderBy(entry => entry.Value.GetStartTime())
+                            .ToList();
+
+                        oldTask = splitPoints[splitIndex].Task;
+                        splitIndex++;
+                        timeLogIndex++;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("We found a SplitPoint that is within a TimeLog but does not have a corresponding index!");
+                        // TODO, this can theoritically not happen
+                    }
+                }
+            }
+
+            while( timeLogIndex < sortedTimeLogs.Count)
+            {
+                if(!oldTask.TryAddTimeLog(sortedTimeLogs[timeLogIndex].Value)){
+                    Debug.WriteLine($"Could not add timeLog {timeLogIndex}");
+                }
+                timeLogIndex++;
+            }
+
+            if (oldTask != null && !resultTasks.Contains(oldTask))
+            {
+                resultTasks.Add(oldTask);
+            }
+
+            //Assign Products, Grids, etc. from old Task to new Task
+            if (copySubElements)
+            {
+                TryCopySubElementsFromOldToNewTasks(resultTasks);
+            }
+
+            Data.Task.Clear();
+
+            var enqueuer = new ISOTimeLogEnqueuer();
+            foreach (var task in resultTasks)
+            {
+                var devices = Data.Device.ToList();
+                enqueuer.EnqueueTimeLogs(task.TimeLogs, devices);
+                var timeList = ISOTimeListEnqueuer.EnqueueTimeElements(task.Time.ToList(), devices);
+            }
+
+            foreach (var task in resultTasks)
+            {
+                task.GenerateTimeElementsFromTimeLogs(Data.Device.ToList(), true);
+                task.GenerateDeviceAllocationsFromTimeLogs(Data.Device.ToList());
+
+                if (assign && !Data.Task.Contains(task))
+                {
+                    Data.Task.Add(task);
+                }
+            }
+
+            return resultTasks;
+        }
+
+        private void TryCopySubElementsFromOldToNewTasks(List<ISOTask> resultTasks)
+        {
+
+            foreach (var tsk in Data.Task)
+            {
+                var start = tsk.GetTaskStartTime();
+                var end = tsk.GetTaskEndTime();
+                foreach (var cta in tsk.CommentAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        cta.AllocationStamp != null ? cta.AllocationStamp.Start : start
+                        );
+                    taskToUse?.CommentAllocation.Add(cta);
+                }
+                foreach (var pdta in tsk.ProductAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        pdta.AllocationStamp != null ? pdta.AllocationStamp.Start : start
+                        );
+                    taskToUse?.ProductAllocation.Add(pdta);
+                }
+                foreach (var gda in tsk.GuidanceAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        gda.AllocationStamp != null && gda.AllocationStamp.Count > 0 ?
+                            gda.AllocationStamp.First().Start :
+                            start
+                        );
+                    taskToUse?.GuidanceAllocation.Add(gda);
+                }
+                foreach (var wrka in tsk.WorkerAllocation)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        wrka.AllocationStamp != null ? wrka.AllocationStamp.Start : start
+                        );
+                    taskToUse?.WorkerAllocation.Add(wrka);
+                }
+
+                if (tsk.GridSpecified && tsk.Grid.Count() > 0 && tsk.TreatmentZone != null)
+                {
+                    var taskToUse = ISOTask.FindTaskThatContainsTime(
+                        resultTasks,
+                        start
+                        );
+                    taskToUse?.Grid.Add(tsk.Grid.First());
+                    foreach (var tzn in tsk.TreatmentZone)
+                    {
+                        taskToUse.TreatmentZone.Add(tzn);
+                    }
+                }
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// This function splits a given Task at given points in time
+        /// Input:
+        /// TSK1 (To Split)
+        ///   - TLG00001 20:18 - 21:30
+        ///   - TLG00006 22:05 - 23:30
+        ///
+        /// Goal:
+        /// TSK2
+        ///     - 20:18
+        ///     - 22:50
+        /// TSK3
+        ///     - 21:25
+        ///     - 23:15
+        ///
+        ///Output
+        ///
+        /// TSK 2
+        ///     - TLG00002 20:18-21:25
+        ///     - TLG00004 22:50-23:15
+        /// TSK 3
+        ///     - TLG00003 21:25-21:30
+        ///     - TLG00007 22:05-22:50
+        ///     - TLG00005 23:15-23:30
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="taskSplitTimeCombos"></param>
+        public void SplitTaskAtTimeStamps(ISOTask task, Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos)
+        {
+
+            var tasks = task.SplitAtDateTimes(taskSplitTimeCombos, Data.Device.ToList(), GetNextFreeTimeLogIndex());
+
+            // Add the new split tasks to the Data.Task list
+            foreach (var newTask in tasks)
+            {
+                if (!Data.Task.Contains(newTask))
+                {
+                    Data.Task.Add(newTask);
+                }
+            }
+
+            UpdateISOXMLTimeLogsFromTasksTimeLogs();
+        }
+
+        /// <summary>
         /// This generates a new, empty ISOXML TaskSet
         /// </summary>
         /// <param name="outPath"></param>
@@ -783,7 +1090,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
         }
 
         /// <summary>
-        /// Load all binary Data for an ISOXML DataSet async 
+        /// Load all binary Data for an ISOXML DataSet async
         /// </summary>
         /// <returns></returns>
         public Task LoadBinaryDataAsync()
@@ -835,6 +1142,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             layers = (byte)tzn.ProcessDataVariable.Count;
                             break;
                         }
+                    }
+                    if (layers == 0)
+                    {
+                        layers = (byte)task.TreatmentZone.Max(entry => entry.ProcessDataVariable.Count());
                     }
                     var index = uint.Parse(grid.Filename.Substring(3, 5));
                     if (index > _maxGridIndex)
@@ -955,5 +1266,101 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 return "";
             }
         }
+
+        private string GetRelativePath(string basePath, string fullPath)
+        {
+            var baseUri = new Uri(basePath);
+            var fullUri = new Uri(fullPath);
+            return baseUri.MakeRelativeUri(fullUri).ToString().Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Creates a FileStream containing a zipped version of the ISOXML files in a TASKDATA folder
+        /// </summary>
+        /// <returns>MemoryStream containing the zipped ISOXML archive</returns>
+        public MemoryStream SaveToStream()
+        {
+            var id = Guid.NewGuid().ToString();
+            var tempPath = Path.Combine(Path.GetTempPath(), "isoxmltmp", id);
+
+            try
+            {
+                // Set temporary folder path and save files
+                SetFolderPath(tempPath);
+                Save();
+
+                // Create memory stream and zip the temporary folder
+                var memoryStream = new MemoryStream();
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    // Add all files from the temporary folder to the zip
+                    var files = Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories);
+                    foreach (var file in files)
+                    {
+                        // Get the relative path from the temp folder, but place everything in "TaskData" folder
+                        var relativePath = Path.GetFileName(file);
+                        var zipEntryPath = Path.Combine("TaskData", relativePath);
+                        // Ensure forward slashes for zip compatibility
+                        zipEntryPath = zipEntryPath.Replace('\\', '/');
+
+                        var entry = archive.CreateEntry(zipEntryPath);
+
+                        using (var entryStream = entry.Open())
+                        using (var fileStream = File.OpenRead(file))
+                        {
+                            fileStream.CopyTo(entryStream);
+                        }
+                    }
+                }
+
+                memoryStream.Position = 0;
+                return memoryStream;
+            }
+            finally
+            {
+                // Clean up temporary folder
+                if (Directory.Exists(tempPath))
+                {
+                    Directory.Delete(tempPath, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a FileStream containing a zipped version of the ISOXML files in a TASKDATA folder asynchronously
+        /// </summary>
+        /// <returns>Task containing MemoryStream with the zipped ISOXML archive</returns>
+        public async Task<MemoryStream> SaveToStreamAsync()
+        {
+            return await Task.Run(() => SaveToStream());
+        }
+
+        /// <summary>
+        /// Saves the ISOXML as a zipped archive to the specified file path
+        /// </summary>
+        /// <param name="path">Path where the ISOXML.zip file should be saved</param>
+        public void SaveToArchive(string path)
+        {
+            using (var stream = SaveToStream())
+            using (var fileStream = File.Create(path))
+            {
+                stream.CopyTo(fileStream);
+            }
+        }
+
+        /// <summary>
+        /// Saves the ISOXML as a zipped archive to the specified file path asynchronously
+        /// </summary>
+        /// <param name="path">Path where the ISOXML.zip file should be saved</param>
+        /// <returns>Task representing the asynchronous operation</returns>
+        public async Task SaveToArchiveAsync(string path)
+        {
+            using (var stream = await SaveToStreamAsync())
+            using (var fileStream = File.Create(path))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+        }
+
     }
 }

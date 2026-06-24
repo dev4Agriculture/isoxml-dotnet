@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
+using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dev4Agriculture.ISO11783.ISOXML.Test;
@@ -125,5 +126,16 @@ public class TaskAnalyzerTest
         Assert.AreEqual(timeWithStop.GetSeconds(), (ulong)4924);
 
 
+    }
+
+    [TestMethod]
+    public void GetDeviceAllocation_Should_ReturnEmpty_IfTlgsEmpty()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        var task = new ISOTask();
+        task.TimeLogs.Add(tlg);
+
+        var deviceAllocations = task.GenerateDeviceAllocationsFromTimeLogs([]);
+        Assert.AreEqual(0, deviceAllocations.Count);
     }
 }

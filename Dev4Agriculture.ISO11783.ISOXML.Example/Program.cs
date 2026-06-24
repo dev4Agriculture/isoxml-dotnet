@@ -283,6 +283,100 @@ public static class Program
     }
 
 
+    /// <summary>
+    /// Loads an ISOXML TaskSet, splits it at two timestamps per TimeLog using SplitTaskSet,
+    /// and saves the result next to the input with a _Split.zip extension.
+    /// </summary>
+    public static void SplitTaskSetExample(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            Console.WriteLine("No path provided.");
+            return;
+        }
+
+        ISOXML isoxml;
+        if (path.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            using var stream = File.OpenRead(path);
+            isoxml = ISOXML.LoadFromArchive(stream);
+        }
+        else
+        {
+            isoxml = ISOXML.Load(path);
+        }
+
+        var splitCombos = new Dictionary<ISOTask, List<DateTime>>();
+        var splitTaskIndex = 1;
+
+        foreach (var tlgEntry in isoxml.TimeLogs
+                     .Where(entry => entry.Value.Entries.Count > 0)
+                     .OrderBy(entry => entry.Value.GetStartTime()))
+        {
+            var tlg = tlgEntry.Value;
+            var timestamps = GetTwoTimestampsWithinTlg(tlg);
+            if (timestamps.Count < 2)
+            {
+                Console.WriteLine($"Skipping {tlg.Name}: not enough entries for two split points ({tlg.Entries.Count}).");
+                continue;
+            }
+
+            foreach (var timestamp in timestamps)
+            {
+                var splitTask = new ISOTask
+                {
+                    TaskStatus = ISOTaskStatus.Paused,
+                    TaskDesignator = $"Split {splitTaskIndex} ({tlg.Name})"
+                };
+                isoxml.IdTable.AddObjectAndAssignIdIfNone(splitTask);
+                splitCombos[splitTask] = new List<DateTime> { timestamp };
+                Console.WriteLine($"Split point {splitTaskIndex}: {tlg.Name} at {timestamp:O} -> {splitTask.TaskDesignator}");
+                splitTaskIndex++;
+            }
+        }
+
+        if (splitCombos.Count == 0)
+        {
+            Console.WriteLine("No split points could be determined from the TimeLogs.");
+            return;
+        }
+
+        var splittedTasks = isoxml.SplitTaskSet(splitCombos);
+        var outputPath = GetSplitOutputPath(path);
+        isoxml.SaveToArchive(outputPath);
+
+        Console.WriteLine($"Created {splittedTasks.Count} task(s) from {splitCombos.Count} split point(s).");
+        Console.WriteLine($"Saved to: {outputPath}");
+    }
+
+    private static List<DateTime> GetTwoTimestampsWithinTlg(ISOTLG tlg)
+    {
+        var entries = tlg.Entries;
+        if (entries.Count < 2)
+        {
+            return new List<DateTime>();
+        }
+
+        if (entries.Count == 2)
+        {
+            return new List<DateTime> { entries[0].DateTime, entries[1].DateTime };
+        }
+
+        var index1 = entries.Count / 3;
+        var index2 = 2 * entries.Count / 3;
+        return new List<DateTime> { entries[index1].DateTime, entries[index2].DateTime };
+    }
+
+    private static string GetSplitOutputPath(string inputPath)
+    {
+        if (inputPath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+        {
+            return inputPath[..^4] + "_Split.zip";
+        }
+
+        return inputPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + "_Split.zip";
+    }
+
     public static void CheckISOXML(string? path3)
     {
         ISOXML isoxml;
@@ -532,7 +626,8 @@ public static class Program
             "5: Create FieldSize Comparison for 2 ISOXML DataSets\n" +
             "6: Check ISOXML\n" +
             "7: Convert to JSON\n" +
-            "8: Generate ISOXML Machine Data");
+            "8: Generate ISOXML Machine Data\n" +
+            "9: Split TaskSet at TimeLog timestamps");
         var entry = Console.ReadLine();
         if (!int.TryParse(entry, out var nr))
         {
@@ -603,6 +698,11 @@ public static class Program
                 Console.WriteLine("Select ISOXML to convert");
                 var path5 = Console.ReadLine();
                 CreateDeviceAndWriteSomeTimeLogs(path5);
+                break;
+            case 9:
+                Console.WriteLine("Enter path to ISOXML TaskSet (.zip or folder)");
+                var path6 = Console.ReadLine();
+                SplitTaskSetExample(path6);
                 break;
         }
 

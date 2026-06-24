@@ -236,7 +236,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Emulator
 
         private void AddTimeLog()
         {
-            _currentTimeLog = ISOTLG.Generate(_isoxml.TimeLogs.Count, _isoxml.FolderPath);
+            _currentTimeLog = ISOTLG.Generate(_isoxml.GetNextFreeTimeLogIndex(), _isoxml.FolderPath);
             _currentTask.TimeLogs.Add(_currentTimeLog);
             _currentTask.TimeLog.Add(new ISOTimeLog()
             {
