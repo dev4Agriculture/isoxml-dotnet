@@ -121,7 +121,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             for (var index = 0; index < Entries.Count; index++)
             {
                 var curTLGLine = Entries[index];
-                var copiedTLGLine = new TLGDataLogLine(curTLGLine);
                 if (splitIndicesIndex < splitIndices.Count && index == splitIndices[splitIndicesIndex])
                 {
                     if (currentTLG.Entries.Count > 0)
@@ -137,10 +136,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         if (!curTLGLine.Entries[ddiEntryIndex].IsSet && latestEntries[ddiEntryIndex].IsSet)
                         {
                             curTLGLine.Entries[ddiEntryIndex].Value = latestEntries[ddiEntryIndex].Value;
+                            curTLGLine.Entries[ddiEntryIndex].IsSet = true;
+                            curTLGLine.NumberOfEntries++;
                         }
                     }
                     splitIndicesIndex++;
                 }
+                var copiedTLGLine = new TLGDataLogLine(curTLGLine);
                 currentTLG.Entries.Add(copiedTLGLine);
                 for (var ddiEntryIndex = 0; ddiEntryIndex < curTLGLine.Entries.Length; ddiEntryIndex++)
                 {

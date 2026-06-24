@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dev4Agriculture.ISO11783.ISOXML;
 using Dev4Agriculture.ISO11783.ISOXML.TaskFile;
 using Dev4Agriculture.ISO11783.ISOXML.TimeLog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -104,7 +105,7 @@ public class TaskSplitterTests
 
 
 
-                // Test the GenerateDeviceAllocationsFromTimeLogs method
+        // Test the GenerateDeviceAllocationsFromTimeLogs method
         var deviceAllocations = task.GenerateDeviceAllocationsFromTimeLogs(isoxml.Data.Device.ToList());
 
         // Verify that DeviceAllocations were generated
@@ -516,5 +517,62 @@ public class TaskSplitterTests
 
         // Clean up the file handle
         file.Close();
+    }
+
+    [TestMethod]
+    public void SplitTimeLog_SparseDdiCarryForward_SurvivesSaveReload()
+    {
+        var tempPath = Path.Combine(Path.GetTempPath(), "isoxml-split-ddi-test-" + Guid.NewGuid());
+        Directory.CreateDirectory(tempPath);
+
+        try
+        {
+            var tlg = ISOTLG.Generate(1, tempPath);
+            const ushort ddi = 67;
+            const int det = 1;
+            var ddiIndex = tlg.Header.GetOrAddDataLogValue(ddi, det);
+
+            for (var i = 0; i < 5; i++)
+            {
+                var line = new TLGDataLogLine(tlg.Header.MaximumNumberOfEntries)
+                {
+                    DateTime = new DateTime(2025, 6, 22, 10, i, 0),
+                    PosNorth = 100,
+                    PosEast = 200,
+                    PosStatus = 1
+                };
+                if (i == 0)
+                {
+                    line.Entries[ddiIndex].IsSet = true;
+                    line.Entries[ddiIndex].Value = 10000;
+                    line.NumberOfEntries = 1;
+                }
+                tlg.Entries.Add(line);
+            }
+
+            var splitted = tlg.SplitTimeLog([], new List<int> { 3 }, 2);
+            Assert.AreEqual(2, splitted.Count);
+
+            var secondPart = splitted[1];
+            Assert.IsTrue(secondPart.Header.TryGetDDIIndex(ddi, det, out var index));
+            Assert.IsTrue(secondPart.Entries[0].TryGetValue(index, out var value));
+            Assert.AreEqual(10000, value);
+
+            var isoxml = ISOXML.Create(tempPath);
+            isoxml.TimeLogs.Add(secondPart.Name, secondPart);
+            isoxml.Save();
+
+            var reloaded = ISOTLG.LoadTLG(secondPart.Name, tempPath).Result;
+            Assert.IsTrue(reloaded.Header.TryGetDDIIndex(ddi, det, out var reloadedIndex));
+            Assert.IsTrue(reloaded.Entries[0].TryGetValue(reloadedIndex, out var reloadedValue));
+            Assert.AreEqual(10000, reloadedValue);
+        }
+        finally
+        {
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
+        }
     }
 }

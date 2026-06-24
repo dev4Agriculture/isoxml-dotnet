@@ -1,3 +1,5 @@
+v0.25.4-Beta8:
+   - FIX: When - during TLG Splitting a value was added only from the previous TLG, the Value was not written to the File 
 v0.25.2.1:
     -ADD: Saving TaskSet to Zip
 v0.25.1.1:
