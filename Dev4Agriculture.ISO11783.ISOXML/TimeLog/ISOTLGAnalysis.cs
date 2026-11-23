@@ -372,6 +372,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
+            TLGDataLogLine latestPosition = null;
+            TLGDataLogLine oldestPosition = null;
+            var latestPositionTime = DateTime.MinValue;
+            var oldestPositionTime = DateTime.MaxValue;
 
             foreach (var entry in Entries)
             {
@@ -385,6 +389,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     max = date;
                 }
+
+                if (entry.PosEast != 0 && entry.PosNorth != 0)
+                {
+                    // Match the stable descending sort: first row wins the newest
+                    // timestamp tie, last row wins the oldest timestamp tie.
+                    if (latestPosition == null || date > latestPositionTime)
+                    {
+                        latestPosition = entry;
+                        latestPositionTime = date;
+                    }
+                    if (oldestPosition == null || date <= oldestPositionTime)
+                    {
+                        oldestPosition = entry;
+                        oldestPositionTime = date;
+                    }
+                }
             }
 
             var isoTime = new ISOTime()
@@ -393,14 +413,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Start = min,
                 Stop = max
             };
-
-            var validEntries = Entries
-                .Where(e => e.PosEast != 0 && e.PosNorth != 0)
-                .OrderByDescending(e => DateUtilities.GetDateTimeFromTimeLogInfos(e.Date, e.Time))
-                .ToList();
-
-            var latestPosition = validEntries.FirstOrDefault();
-            var oldestPosition = validEntries.LastOrDefault();
 
             if (latestPosition != null)
             {
@@ -660,39 +672,24 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 return false;
             }
 
-            var half = Entries.Count / 2;
-            var currentIndex = half;
-            while (true)
+            // Preserve the preceding-sample convention between timestamps. For an
+            // exact match, use the first matching row, including repeated timestamps.
+            var low = 0;
+            var high = Entries.Count;
+            while (low < high)
             {
-                half /= 2;
-                if (half == 0)
+                var middle = low + (high - low) / 2;
+                if (Entries[middle].DateTime < time)
                 {
-                    while(currentIndex > 0 && Entries[currentIndex].DateTime > time){
-                        currentIndex--;
-                    }
-                    index = currentIndex;
-                    return true;
-                }
-                if (Entries[currentIndex].DateTime < time)
-                {
-                    currentIndex += half;
-
-                }
-                else if (Entries[currentIndex].DateTime > time)
-                {
-                    currentIndex -= half;
+                    low = middle + 1;
                 }
                 else
                 {
-                    currentIndex--;
-                    index = currentIndex;
-                    return true;
+                    high = middle;
                 }
             }
+            index = low < Entries.Count && Entries[low].DateTime == time ? low : low - 1;
+            return index >= 0;
         }
-
-
-
     }
-
 }

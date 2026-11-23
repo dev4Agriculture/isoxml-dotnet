@@ -450,11 +450,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             var splitPoints = new Dictionary<ISOTLG, List<int>>();
             var assignments = new List<TaskSplitEntry>();
 
-            TimeLogs = TimeLogs
+            var validTimeLogs = TimeLogs
                 .Where(tlg => tlg.Entries.Count > 0)
                 .ToList();
 
-            foreach (var tlg in TimeLogs)
+            foreach (var tlg in validTimeLogs)
             {
                 splitPoints.Add(tlg, new List<int>());
             }
@@ -463,24 +463,43 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 foreach (var time in entry.Value)
                 {
-                    foreach (var timeLog in TimeLogs)
+                    // Boundaries before the first log or in a gap still determine
+                    // ownership of subsequent logs, even though no row needs cutting.
+                    if (!validTimeLogs.Any(tlg => tlg.GetEndTime() >= time))
+                    {
+                        continue;
+                    }
+
+                    var assignment = new TaskSplitEntry
+                    {
+                        Timestamp = time,
+                        Task = entry.Key
+                    };
+
+                    foreach (var timeLog in validTimeLogs)
                     {
                         if (timeLog.TryFindClosestIndex(time, out var index))
                         {
                             splitPoints[timeLog].Add(index);
-                            assignments.Add(new TaskSplitEntry()
-                            {
-                                Timestamp = time,
-                                Task = entry.Key,
-                                Index = index,
-                                TimeLog = timeLog
-                            });
+                            assignment.Index = index;
+                            assignment.TimeLog = timeLog;
+                            // Assignment and cutting must use the same effective row.
+                            assignment.Timestamp = timeLog.Entries[index].DateTime;
                             break;
                         }
                     }
+                    assignments.Add(assignment);
                 }
             }
-            assignments = assignments.OrderBy(entry => entry.Timestamp).ToList();
+            assignments = assignments
+                .OrderBy(entry => entry.Timestamp)
+                .ToList();
+
+            if (assignments.Count == 0)
+            {
+                return new List<ISOTask>();
+            }
+
             var times = assignments.Select(entry => entry.Timestamp).ToList();
             var splitted = SplitAtDateTimes(times, devices, nextTLGNo);
             if(splitted.Count == 0)
@@ -495,36 +514,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
             var assignmentIndex = 0;
             var resultEntryList = new List<TaskSplitEntry>();
-            var splittedTLGIndex = 0;
-            var loopShallEnd = false;
-            while (splitted[splittedTLGIndex].GetEndTime() < assignments[assignmentIndex].Timestamp)
+            foreach (var timeLog in splitted.Where(tlg => tlg.Entries.Count > 0).OrderBy(tlg => tlg.GetStartTime()))
             {
-                splittedTLGIndex++;
-            }
-            while (assignmentIndex < assignments.Count && splittedTLGIndex < splitted.Count)
-            {
-                while (splitted[splittedTLGIndex].GetStartTime() > assignments[assignmentIndex].Timestamp)
+                var start = timeLog.GetStartTime();
+                if (start < assignments[0].Timestamp)
+                {
+                    continue;
+                }
+                // A segment belongs to the latest boundary at or before its start,
+                // not the next boundary (which may be in a later log).
+                while (assignmentIndex + 1 < assignments.Count &&
+                       assignments[assignmentIndex + 1].Timestamp <= start)
                 {
                     assignmentIndex++;
-                    if (assignmentIndex >= assignments.Count)
-                    {
-                        loopShallEnd = true;
-                        break;
-                    }
                 }
-                if (loopShallEnd)
+
+                resultEntryList.Add(new TaskSplitEntry
                 {
-                    break;
-                }
-                var toAdd = new TaskSplitEntry()
-                {
-                    Timestamp = splitted[splittedTLGIndex].GetStartTime(),
-                    TimeLog = splitted[splittedTLGIndex],
+                    Timestamp = start,
+                    TimeLog = timeLog,
                     Index = 0,
                     Task = assignments[assignmentIndex].Task
-                };
-                resultEntryList.Add(toAdd);
-                splittedTLGIndex++;
+                });
             }
 
             var taskGroups = resultEntryList.GroupBy(entry => entry.Task);
@@ -560,7 +571,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 splitPoints.Add(tlg, new List<int>());
             }
 
-            splitTimes.Sort();
+            splitTimes = splitTimes
+                .OrderBy(time => time)
+                .ToList();
+
             foreach (var time in splitTimes)
             {
                 foreach (var timeLog in validTimeLogs)
@@ -573,15 +587,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 }
             }
 
+            var reservedNames = new HashSet<string>(TimeLogs.Select(tlg => tlg.Name));
             var generatedTLGs = new List<ISOTLG>();
             foreach (var entry in splitPoints)
             {
                 if (entry.Value.Count > 0)
                 {
+                    var fragmentCount = entry.Value.Where(index => index > 0 && index < entry.Key.Entries.Count).Distinct().Count() + 1;
+                    while (Enumerable.Range(nextTLGNo, fragmentCount)
+                        .Any(number => reservedNames.Contains("TLG" + number.ToString().PadLeft(5, '0'))))
+                    {
+                        nextTLGNo++;
+                    }
+
                     var tlgsToAdd = entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo);
                     nextTLGNo += tlgsToAdd.Count;
                     generatedTLGs.AddRange(tlgsToAdd);
-                } else
+                    foreach (var tlg in tlgsToAdd)
+                    {
+                        reservedNames.Add(tlg.Name);
+                    }
+                }
+                else
                 {
                     generatedTLGs.Add(entry.Key);
                 }
@@ -809,7 +836,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         internal static ISOTask FindTaskThatContainsTime(List<ISOTask> resultTasks, DateTime timeStamp)
         {
-            return resultTasks.FirstOrDefault(entry => entry.GetTaskEndTime() >= timeStamp && entry.GetTaskStartTime() <= timeStamp); 
+            return resultTasks.FirstOrDefault(entry => entry.GetTaskEndTime() >= timeStamp && entry.GetTaskStartTime() <= timeStamp);
         }
     }
 }
