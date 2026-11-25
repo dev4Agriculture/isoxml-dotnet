@@ -108,7 +108,38 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public List<ISOTLG> SplitTimeLog(List<ISODevice> devices, List<int> splitIndices, int nextTLGNo)
         {
-            splitIndices.Sort();
+            return SplitTimeLogCore(splitIndices, nextTLGNo, false);
+        }
+
+        // Equivalent to repeatedly splitting the remaining suffix. Preserve the
+        // filenames and mutate only the first boundary in the original source;
+        // subsequent sequential cuts would have mutated copies, not that source.
+        internal List<ISOTLG> SplitTimeLogSequentially(List<int> splitIndices, int nextTLGNo)
+        {
+            return SplitTimeLogCore(splitIndices, nextTLGNo, true);
+        }
+
+        private List<ISOTLG> SplitTimeLogCore(List<int> splitIndices, int nextTLGNo, bool sequentialCompatibility)
+        {
+            if (splitIndices == null)
+            {
+                throw new ArgumentNullException(nameof(splitIndices));
+            }
+
+            if (splitIndices.Any(index => index < 0 || index > Entries.Count))
+            {
+                throw new ArgumentOutOfRangeException(nameof(splitIndices), "Split indices must be between zero and the row count.");
+            }
+
+            // Endpoints do not create fragments. Normalize a copy so duplicate cuts
+            // cannot leave the cursor stuck, and the caller's list is unchanged.
+            splitIndices = splitIndices
+                .Where(index => index > 0 && index < Entries.Count)
+                .Distinct()
+                .OrderBy(index => index)
+                .ToList();
+
+            var firstTLGNo = nextTLGNo;
             var splitIndicesIndex = 0;
             var latestEntries = new TLGDataLogEntry[Header.Ddis.Count];
             var gpsOptions = Header.GpsOptions;
@@ -126,6 +157,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     if (currentTLG.Entries.Count > 0)
                     {
                         splittedTLGs.Add(currentTLG);
+                    }
+                    if (sequentialCompatibility)
+                    {
+                        // Intermediate suffix names are consumed by the sequential
+                        // implementation even though those suffixes are split again.
+                        nextTLGNo = firstTLGNo + 2 * (splitIndicesIndex + 1)
+                            - (splitIndicesIndex + 1 == splitIndices.Count ? 1 : 0);
+                        if (splitIndicesIndex > 0)
+                            curTLGLine = new TLGDataLogLine(curTLGLine);
                     }
                     currentTLG = new ISOTLG(nextTLGNo, FolderPath);
                     nextTLGNo++;

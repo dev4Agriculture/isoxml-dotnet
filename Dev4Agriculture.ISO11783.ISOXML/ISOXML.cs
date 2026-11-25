@@ -678,7 +678,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML
 
         /// <summary>
         /// Splits the Task in a TaskSet, adding new Tasks due to the split policy
-        /// IMPORTANT: For now, this splitting only persists TIM and DeviceAllocations. 
+        /// IMPORTANT: For now, this splitting only persists TIM and DeviceAllocations.
         /// </summary>
         /// <param name="timeCombos"></param>
         /// <param name="assign"></param>
@@ -706,6 +706,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 .OrderBy(entry => entry.Value.GetStartTime())
                 .ToList();
 
+            if (splitPoints.Count == 0 || sortedTimeLogs.Count == 0)
+            {
+                return resultTasks;
+            }
+
             if (splitPoints.First().Timestamp > sortedTimeLogs.Last().Value.GetEndTime())
             {
                 // TODO: If the Splitting does not match the Times in our data anyhow, is it OK to just return an empty list
@@ -723,10 +728,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             {
                 return new List<ISOTask>();
             }
+            // Moving a boundary can empty an original task. Untimed allocations
+            // must still use its original start, not the mutated log collection.
+            var originalStartTimes = copySubElements
+                ? Data.Task.ToDictionary(task => task, task => task.TimeLogs
+                    .Where(tlg => tlg.Entries.Count > 0).Select(tlg => tlg.GetStartTime())
+                    .DefaultIfEmpty(DateTime.MinValue).Min())
+                : null;
+
             while (timeLogIndex < sortedTimeLogs.Count && splitIndex < splitPoints.Count)
             {
                 //In case our next splitpoint is after this TimeLogs end, we can just fully add it
-                if (splitPoints[splitIndex].Timestamp >= sortedTimeLogs[timeLogIndex].Value.GetEndTime())
+                if (splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetEndTime())
                 {
                     if (oldTask != null)
                     {
@@ -748,11 +761,44 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                 //In this case, the Timestamp is set somewhere in the TimeLog, so we need to split it
                 else if (
                     splitPoints[splitIndex].Timestamp > sortedTimeLogs[timeLogIndex].Value.GetStartTime() &&
-                    splitPoints[splitIndex].Timestamp < sortedTimeLogs[timeLogIndex].Value.GetEndTime()
+                    splitPoints[splitIndex].Timestamp <= sortedTimeLogs[timeLogIndex].Value.GetEndTime()
                 ) {
                     var tlgToSplit = sortedTimeLogs[timeLogIndex].Value;
                     if (tlgToSplit.TryFindClosestIndex(splitPoints[splitIndex].Timestamp, out var timeIndex))
                     {
+                        // Between the first two samples the preceding-sample rule
+                        // places the boundary at row zero; transfer the entire log.
+                        if (timeIndex == 0)
+                        {
+                            oldTask.TryRemoveTimeLog(tlgToSplit);
+                            oldTask = splitPoints[splitIndex].Task;
+                            splitIndex++;
+                            continue;
+                        }
+                        var batchIndices = GetSequentialBatchIndices(tlgToSplit, sortedTimeLogs, splitPoints, splitIndex);
+                        if (batchIndices.Count > 1)
+                        {
+                            var fragments = tlgToSplit.SplitTimeLogSequentially(batchIndices, GetNextFreeTimeLogIndex());
+                            if (oldTask.TryAddTimeLog(fragments[0]) && !resultTasks.Contains(oldTask))
+                                resultTasks.Add(oldTask);
+                            oldTask.TryRemoveTimeLog(tlgToSplit);
+                            for (var fragmentIndex = 1; fragmentIndex < fragments.Count; fragmentIndex++)
+                            {
+                                var destination = splitPoints[splitIndex + fragmentIndex - 1].Task;
+                                if (destination.TryAddTimeLog(fragments[fragmentIndex]) && !resultTasks.Contains(destination))
+                                    resultTasks.Add(destination);
+                            }
+                            TimeLogs.Remove(tlgToSplit.Name);
+                            foreach (var fragment in fragments)
+                                TimeLogs.Add(fragment.Name, fragment);
+                            sortedTimeLogs = TimeLogs.Where(entry => entry.Value.Entries.Count > 0)
+                                .OrderBy(entry => entry.Value.GetStartTime()).ToList();
+                            oldTask = splitPoints[splitIndex + batchIndices.Count - 1].Task;
+                            splitIndex += batchIndices.Count;
+                            timeLogIndex = sortedTimeLogs.FindIndex(entry => entry.Value == fragments.Last()) + 1;
+                            continue;
+                        }
+
                         var splittedTLGs = tlgToSplit.SplitTimeLog(
                             Data.Device.ToList(),
                             new List<int> { timeIndex },
@@ -818,10 +864,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             //Assign Products, Grids, etc. from old Task to new Task
             if (copySubElements)
             {
-                TryCopySubElementsFromOldToNewTasks(resultTasks);
+                TryCopySubElementsFromOldToNewTasks(resultTasks, originalStartTimes);
             }
 
-            Data.Task.Clear();
+            if (assign)
+            {
+                Data.Task.Clear();
+            }
 
             var enqueuer = new ISOTimeLogEnqueuer();
             foreach (var task in resultTasks)
@@ -845,20 +894,49 @@ namespace Dev4Agriculture.ISO11783.ISOXML
             return resultTasks;
         }
 
-        private void TryCopySubElementsFromOldToNewTasks(List<ISOTask> resultTasks)
+        private static List<int> GetSequentialBatchIndices(ISOTLG timeLog,
+            List<KeyValuePair<string, ISOTLG>> sortedTimeLogs, List<TaskSplitEntry> splitPoints, int splitIndex)
+        {
+            var indices = new List<int>();
+            var start = timeLog.GetStartTime();
+            var end = timeLog.GetEndTime();
+            // With overlapping files, re-sorting after each cut can change which
+            // file receives the next boundary. Retain that existing path exactly.
+            if (sortedTimeLogs.Any(entry => entry.Value != timeLog &&
+                entry.Value.GetStartTime() <= end && entry.Value.GetEndTime() >= start))
+                return indices;
+            for (var index = splitIndex; index < splitPoints.Count && splitPoints[index].Timestamp <= end; index++)
+            {
+                if (!timeLog.TryFindClosestIndex(splitPoints[index].Timestamp, out var row) || row == 0 ||
+                    (indices.Count > 0 && row <= indices[indices.Count - 1]))
+                {
+                    // Same-row boundaries have observable task membership effects
+                    // in the sequential implementation; do not coalesce them.
+                    indices.Clear();
+                    return indices;
+                }
+                indices.Add(row);
+            }
+            return indices;
+        }
+
+        private void TryCopySubElementsFromOldToNewTasks(List<ISOTask> resultTasks, Dictionary<ISOTask, DateTime> originalStartTimes)
         {
 
             foreach (var tsk in Data.Task)
             {
-                var start = tsk.GetTaskStartTime();
-                var end = tsk.GetTaskEndTime();
+                var start = originalStartTimes[tsk];
                 foreach (var cta in tsk.CommentAllocation)
                 {
                     var taskToUse = ISOTask.FindTaskThatContainsTime(
                         resultTasks,
                         cta.AllocationStamp != null ? cta.AllocationStamp.Start : start
                         );
-                    taskToUse?.CommentAllocation.Add(cta);
+
+                    if (taskToUse != null && taskToUse != tsk && !taskToUse.CommentAllocation.Contains(cta))
+                    {
+                        taskToUse.CommentAllocation.Add(cta);
+                    }
                 }
                 foreach (var pdta in tsk.ProductAllocation)
                 {
@@ -866,7 +944,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         resultTasks,
                         pdta.AllocationStamp != null ? pdta.AllocationStamp.Start : start
                         );
-                    taskToUse?.ProductAllocation.Add(pdta);
+
+                    if (taskToUse != null && taskToUse != tsk && !taskToUse.ProductAllocation.Contains(pdta))
+                    {
+                        taskToUse.ProductAllocation.Add(pdta);
+                    }
                 }
                 foreach (var gda in tsk.GuidanceAllocation)
                 {
@@ -876,7 +958,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                             gda.AllocationStamp.First().Start :
                             start
                         );
-                    taskToUse?.GuidanceAllocation.Add(gda);
+
+                    if (taskToUse != null && taskToUse != tsk && !taskToUse.GuidanceAllocation.Contains(gda))
+                    {
+                        taskToUse.GuidanceAllocation.Add(gda);
+                    }
                 }
                 foreach (var wrka in tsk.WorkerAllocation)
                 {
@@ -884,7 +970,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         resultTasks,
                         wrka.AllocationStamp != null ? wrka.AllocationStamp.Start : start
                         );
-                    taskToUse?.WorkerAllocation.Add(wrka);
+
+                    if (taskToUse != null && taskToUse != tsk && !taskToUse.WorkerAllocation.Contains(wrka))
+                    {
+                        taskToUse.WorkerAllocation.Add(wrka);
+                    }
                 }
 
                 if (tsk.GridSpecified && tsk.Grid.Count() > 0 && tsk.TreatmentZone != null)
@@ -893,10 +983,20 @@ namespace Dev4Agriculture.ISO11783.ISOXML
                         resultTasks,
                         start
                         );
-                    taskToUse?.Grid.Add(tsk.Grid.First());
-                    foreach (var tzn in tsk.TreatmentZone)
+                    if (taskToUse != null && taskToUse != tsk)
                     {
-                        taskToUse.TreatmentZone.Add(tzn);
+                        if (!taskToUse.Grid.Contains(tsk.Grid.First()))
+                        {
+                            taskToUse.Grid.Add(tsk.Grid.First());
+                        }
+
+                        foreach (var tzn in tsk.TreatmentZone)
+                        {
+                            if (!taskToUse.TreatmentZone.Contains(tzn))
+                            {
+                                taskToUse.TreatmentZone.Add(tzn);
+                            }
+                        }
                     }
                 }
             }

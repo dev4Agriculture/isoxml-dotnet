@@ -65,7 +65,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
                 foreach (var pair in totalsIndex)
                 {
-                    if (line.Entries.Length >= pair.Key && line.Entries[pair.Key].IsSet)
+                    if (line.Entries.Length > pair.Key && line.Entries[pair.Key].IsSet)
                     {
                         line.Entries[pair.Key].Value = (int)pair.Value.SingulateValueInTimeLog(
                             line.Entries[pair.Key].Value,

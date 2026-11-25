@@ -32,6 +32,12 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             ISOTLG tlg, List<ISODevice> devices,
             Dictionary<string, EnqueuerEntry> previousData)
         {
+            // Keep accumulated totals, but never reuse a position from another header.
+            foreach (var previous in previousData.Values)
+            {
+                previous.Index = -1;
+            }
+
             var index = 0;
             foreach (var entry in tlg.Header.Ddis)
             {
@@ -55,6 +61,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                         enqueuerEntry = previousData[key];
                     }
 
+                    enqueuerEntry.Index = index;
                     enqueuerEntry.Function.UpdateTimeLogEnqueuerWithHeaderLine(tlg.Header.Ddis, devices);
                 }
 
@@ -65,8 +72,13 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 foreach (var pair in previousData)
                 {
+                    if (pair.Value.Index < 0)
+                    {
+                        continue;
+                    }
+
                     pair.Value.Function.UpdateTimeLogEnqueuerWithDataLine(line);
-                    if (line.Entries.Length >= pair.Value.Index && line.Entries[pair.Value.Index].IsSet)
+                    if (pair.Value.Index < line.Entries.Length && line.Entries[pair.Value.Index].IsSet)
                     {
                         line.Entries[pair.Value.Index].Value = pair.Value.Function.EnqueueUpdatedValueInTimeLog(
                             line.Entries[pair.Value.Index].Value);
