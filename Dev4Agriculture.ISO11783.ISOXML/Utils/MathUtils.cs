@@ -72,10 +72,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.Utils
             {
                 return endAverage;
             }
+
             var segmentSum = endAverage * countAtEnd - startAverage * countAtStart;
             return segmentSum / count;
-
-
         }
     }
 }

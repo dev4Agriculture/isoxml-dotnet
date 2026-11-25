@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using de.dev4Agriculture.ISOXML.DDI;
@@ -204,5 +205,74 @@ public class TLGTest
         Assert.AreEqual(true, timeLog.IsDeviceProperty(DDIUtils.ParseDDI("00B3")));
         Assert.AreEqual(true, timeLog.TryGetPropertyValue(DDIUtils.ParseDDI("00B3"), out var type));
         Assert.AreEqual(11, type);
+    }
+
+    [TestMethod]
+    public void CanSplitTimeLogs()
+    {
+        var path = "./testdata/TimeLogs/ValidTimeLogs";
+        var isoxml = ISOXML.Load(path);
+        Assert.IsNotNull(isoxml);
+        var splitpoints = new List<int>() { 100, 500, 1200 };
+        var task = isoxml.Data.Task[0];
+        var tlg = task.TimeLogs[0];
+        var timeLogs = tlg.SplitTimeLog([.. isoxml.Data.Device], splitpoints, 1000);
+        Assert.AreEqual(timeLogs.Count, 4);
+        isoxml.TimeLogs.Remove(tlg.Name);
+        task.ReplaceTimeLogs(timeLogs,true, [.. isoxml.Data.Device]);
+        foreach (var tlgs in timeLogs)
+        {
+            isoxml.TimeLogs.Add(tlgs.Name, tlgs);
+        }
+
+    }
+
+    [TestMethod]
+    public void GetStartTime_Should_ReturnMinValue_IfNoEntries()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        var startTime = tlg.GetStartTime();
+
+        Assert.AreEqual(startTime, DateTime.MinValue);
+    }
+
+    [TestMethod]
+    public void GetEndTime_Should_ReturnMaxValue_IfNoEntries()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        var endTime = tlg.GetEndTime();
+
+        Assert.AreEqual(endTime, DateTime.MaxValue);
+    }
+
+    [TestMethod]
+    public void ContainsTime_Should_ReturnFalse_IfTlgEmpty()
+    {
+        var tlg = ISOTLG.Generate(0, string.Empty);
+
+        var containsTime = tlg.ContainsTime(DateTime.Today);
+        Assert.IsFalse(containsTime);
+    }
+
+    [TestMethod]
+    public void GetStartTime_Should_ReturnValue_IfTlgHasEntries()
+    {
+        var timestamp = new DateTime(2000, 1, 1, 10, 0, 0, 0);
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        tlg.Entries.Add(new TLGDataLogLine(0) { DateTime = timestamp });
+
+        var startTime = tlg.GetStartTime();
+        Assert.AreEqual(timestamp, startTime);
+    }
+
+    [TestMethod]
+    public void GetEndTime_Should_ReturnValue_IfTlgHasEntries()
+    {
+        var timestamp = new DateTime(2000, 1, 1, 10, 0, 0, 0);
+        var tlg = ISOTLG.Generate(0, string.Empty);
+        tlg.Entries.Add(new TLGDataLogLine(0) { DateTime = timestamp });
+
+        var endTime = tlg.GetEndTime();
+        Assert.AreEqual(timestamp, endTime);
     }
 }

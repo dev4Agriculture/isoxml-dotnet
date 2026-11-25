@@ -15,7 +15,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
     /// <summary>
     /// ISOTLG is the class to read and write TimeLog Files (TLG....bin/.xml)
-    /// This partial class hosts the 
+    /// This partial class hosts the
     /// </summary>
     public partial class ISOTLG
     {
@@ -277,21 +277,25 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
             {
                 var ddi = DDIUtils.ConvertDDI(dpd.DeviceProcessDataDDI);
                 var detAsInt = IdList.ToIntId(det.DeviceElementId);
-                var dlv = new ISODataLogValue()
+                var dlv = new ISODataLogValue
                 {
                     ProcessDataDDI = dpd.DeviceProcessDataDDI,
                     DeviceElementIdRef = det.DeviceElementId,
+                    DeviceElementNumber = det.DeviceElementNumber,
                 };
-
 
                 try
                 {
-                    var device = devices.FirstOrDefault(entry => entry.DeviceElement.Any(deviceElement => deviceElement.DeviceElementId.Equals(det.DeviceElementId)));
+                    var device = devices.FirstOrDefault(entry =>
+                        entry.DeviceElement.Any(deviceElement =>
+                            deviceElement.DeviceElementId.Equals(det.DeviceElementId)));
+
                     if (device == null)
                     {
                         continue;
                     }
-                    if(TryGetLastValue(ddi,detAsInt,out var value))
+
+                    if (TryGetLastValue(ddi,detAsInt,out var value))
                     {
                         dlv.ProcessDataValue = value;
                     }
@@ -305,6 +309,7 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                     //TODO: What should we do in case this fails?
                     dlv.ProcessDataValue = long.MaxValue;
                 }
+
                 list.Add(dlv);
             }
 
@@ -367,6 +372,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         {
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
+            TLGDataLogLine latestPosition = null;
+            TLGDataLogLine oldestPosition = null;
+            var latestPositionTime = DateTime.MinValue;
+            var oldestPositionTime = DateTime.MaxValue;
 
             foreach (var entry in Entries)
             {
@@ -380,6 +389,22 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     max = date;
                 }
+
+                if (entry.PosEast != 0 && entry.PosNorth != 0)
+                {
+                    // Match the stable descending sort: first row wins the newest
+                    // timestamp tie, last row wins the oldest timestamp tie.
+                    if (latestPosition == null || date > latestPositionTime)
+                    {
+                        latestPosition = entry;
+                        latestPositionTime = date;
+                    }
+                    if (oldestPosition == null || date <= oldestPositionTime)
+                    {
+                        oldestPosition = entry;
+                        oldestPositionTime = date;
+                    }
+                }
             }
 
             var isoTime = new ISOTime()
@@ -389,42 +414,14 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 Stop = max
             };
 
-            var validEntries = Entries
-                .Where(e => e.PosEast != 0 && e.PosNorth != 0)
-                .OrderByDescending(e => DateUtilities.GetDateTimeFromTimeLogInfos(e.Date, e.Time))
-                .ToList();
-
-            var latestPosition = validEntries.FirstOrDefault();
-            var oldestPosition = validEntries.LastOrDefault();
-
             if (latestPosition != null)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)latestPosition.Longitude,
-                    PositionNorth = (decimal)latestPosition.Latitude,
-                    PositionUp = latestPosition.PosUp,
-                    GpsUtcDate = latestPosition.Date,
-                    GpsUtcTime = latestPosition.Time,
-                    PDOP = latestPosition.Pdop,
-                    HDOP = latestPosition.Hdop,
-                    NumberOfSatellites = latestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(latestPosition, Header));
             }
 
             if (oldestPosition != null && oldestPosition.PosEast != latestPosition.PosEast && oldestPosition.PosNorth != latestPosition.PosNorth)
             {
-                isoTime.Position.Add(new ISOPosition
-                {
-                    PositionEast = (decimal)oldestPosition.Longitude,
-                    PositionNorth = (decimal)oldestPosition.Latitude,
-                    PositionUp = oldestPosition.PosUp,
-                    GpsUtcDate = oldestPosition.Date,
-                    GpsUtcTime = oldestPosition.Time,
-                    PDOP = oldestPosition.Pdop,
-                    HDOP = oldestPosition.Hdop,
-                    NumberOfSatellites = oldestPosition.NumberOfSatellites
-                });
+                isoTime.Position.Add(ISOPosition.FromTimeLogLine(oldestPosition, Header));
             }
 
             var dataLogValues = GenerateTotalsDataLogValues(TLGTotalAlgorithmType.NO_RESETS, devices);
@@ -513,6 +510,10 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         /// <returns></returns>
         public bool IsDeviceProperty(ushort ddi, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElement.DeviceElementId == "DET" + deviceElement))
@@ -525,13 +526,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
 
         /// <summary>
-        /// Returns true if a Property exists and also exports the rawValue. 
+        /// Returns true if a Property exists and also exports the rawValue.
         /// </summary>
         /// <param name="ddi">The DataDictionary Identifier, see https://isobus.net </param>
         /// <param name="deviceElement">A DeviceElement</param>
         /// <returns>True if found, False otherwise. If True, rawValue is filled. Otherwise it's 0</returns>
         public bool TryGetPropertyValue(ushort ddi, out long rawValue, int? deviceElement = null)
         {
+            if (_properties == null)
+            {
+                rawValue = 0;
+                return false;
+            }
             foreach (var entry in _properties)
             {
                 if (DDIUtils.ConvertDDI(entry.DevicePropertyDDI) == ddi && (deviceElement == null || entry.DeviceElementId == deviceElement))
@@ -595,6 +601,95 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
         }
 
 
-    }
+        /// <summary>
+        /// Get First Timestamp for a TimeLog
+        /// </summary>
+        /// <returns>
+        /// First Timestamp or DateTime.MinValue if no Entries exist
+        /// </returns>
+        public DateTime GetStartTime()
+        {
+            if (Entries.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
 
+            return Entries[0].DateTime;
+        }
+
+        /// <summary>
+        /// Get the Last Timestamp for a TimeLog
+        /// </summary>
+        /// <returns>
+        ///Last Timestamp or DateTime.MaxValue if no Entries exist
+        /// </returns>
+        public DateTime GetEndTime()
+        {
+            if (Entries.Count == 0)
+            {
+                return DateTime.MaxValue;
+            }
+
+            return Entries[Entries.Count - 1].DateTime;
+        }
+
+        /// <summary>
+        /// Checks if the given Timestamp is within this TimeLog.
+        /// ATTENTION: This does not mean, that this explicit timestamp is inside the timelog, it just means it starts before and ends after this TimeStamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool ContainsTime(DateTime time)
+        {
+            if (Entries.Count == 0)
+            {
+                return false;
+            }
+
+            if (time < GetStartTime())
+            {
+                return false;
+            }
+
+            if (time > GetEndTime())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Finds the Index in the Entries List closest to the given Timestamp
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public bool TryFindClosestIndex(DateTime time, out int index)
+        {
+            if (Entries.Count == 0 || !ContainsTime(time))
+            {
+                index = -1;
+                return false;
+            }
+
+            // Preserve the preceding-sample convention between timestamps. For an
+            // exact match, use the first matching row, including repeated timestamps.
+            var low = 0;
+            var high = Entries.Count;
+            while (low < high)
+            {
+                var middle = low + (high - low) / 2;
+                if (Entries[middle].DateTime < time)
+                {
+                    low = middle + 1;
+                }
+                else
+                {
+                    high = middle;
+                }
+            }
+            index = low < Entries.Count && Entries[low].DateTime == time ? low : low - 1;
+            return index >= 0;
+        }
+    }
 }

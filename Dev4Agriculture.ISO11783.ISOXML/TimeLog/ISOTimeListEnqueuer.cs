@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dev4Agriculture.ISO11783.ISOXML.Analysis;
 using Dev4Agriculture.ISO11783.ISOXML.DDI;
 using Dev4Agriculture.ISO11783.ISOXML.DDI.DDIFunctions;
 using Dev4Agriculture.ISO11783.ISOXML.IdHandling;
@@ -49,8 +50,9 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
 
         public static List<ISOTime> EnqueueTimeElements(List<ISOTime> times, List<ISODevice> devices)
         {
-            var completeDLVList = new List<ISODataLogValue>();
+            var completeDlvList = new List<ISODataLogValue>();
             times = times.OrderBy(entry => entry.Start).ToList();
+
             var dataLogValues = new Dictionary<string, IDDITotalsFunctions>();
             foreach (var currentTim in times)
             {
@@ -58,37 +60,63 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TimeLog
                 {
                     continue;
                 }
+
                 foreach (var dlv in currentTim.DataLogValue)
                 {
                     var ddi = DDIUtils.ConvertDDI(dlv.ProcessDataDDI);
-                    var device = devices.FirstOrDefault(dvc => dvc.DeviceElement.Any(det => det.DeviceElementId == dlv.DeviceElementIdRef));
+
+                    ISODevice device = null;
+
+                    if (dlv.DeviceElementNumber != null && dlv.DeviceElementNumber >= 0)
+                    {
+                        device = devices.FirstOrDefault(dvc => dvc.DeviceElement
+                            .Any(det => det.DeviceElementNumber == dlv.DeviceElementNumber));
+
+                        var devElement = device?.DeviceElement.FirstOrDefault(det => det.DeviceElementNumber == dlv.DeviceElementNumber);
+                        var detRef = devElement?.DeviceElementId;
+
+                        dlv.DeviceElementIdRef = !string.IsNullOrEmpty(detRef) ? detRef : dlv.DeviceElementIdRef;
+                    }
+                    else
+                    {
+                        device = devices
+                            .FirstOrDefault(dvc => dvc.DeviceElement
+                                .Any(det => det.DeviceElementId == dlv.DeviceElementIdRef));
+                    }
+
                     var deviceElement = IdList.ToIntId(dlv.DeviceElementIdRef);
                     var key = $"{ddi}_{deviceElement}";
                     if (device == null)
                     {
                         continue;
                     }
+
                     if (!dataLogValues.TryGetValue(key, out var dlvHandler))
                     {
                         dlvHandler = DDIAlgorithms.FindTotalDDIHandler(ddi, deviceElement, device);
-
                         dataLogValues.Add(key, dlvHandler);
                     }
+
                     if (dlvHandler != null)
                     {
                         dlv.ProcessDataValue = dlvHandler.EnqueueValueAsDataLogValueInTime(dlv.ProcessDataValue, currentTim, deviceElement, devices);
                     }
                 }
+
                 //Fill up all DLVs that were in the previous but not in the current TIM
-                foreach (var dlv in completeDLVList)
+                foreach (var dlv in completeDlvList)
                 {
-                    if (!currentTim.TryGetDataLogValue(DDIUtils.ConvertDDI(dlv.ProcessDataDDI), IdList.ToIntId(dlv.DeviceElementIdRef), out _))
+                    if (!currentTim.TryGetDataLogValue(
+                            DDIUtils.ConvertDDI(dlv.ProcessDataDDI),
+                            IdList.ToIntId(dlv.DeviceElementIdRef), out _))
                     {
                         currentTim.DataLogValue.Add(dlv);
                     }
                 }
-                completeDLVList = currentTim.DataLogValue.ToList();
+
+                completeDlvList = currentTim.DataLogValue.ToList();
             }
+
             return times;
         }
     }
