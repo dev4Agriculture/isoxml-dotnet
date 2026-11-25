@@ -447,17 +447,11 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
 
         public List<ISOTask> SplitAtDateTimes(Dictionary<ISOTask, List<DateTime>> taskSplitTimeCombos, List<ISODevice> devices, int nextTLGNo = 0)
         {
-            var splitPoints = new Dictionary<ISOTLG, List<int>>();
-            var assignments = new List<TaskSplitEntry>();
+            var assignments = new List<(ISOTask Task, DateTime Timestamp)>();
 
             var validTimeLogs = TimeLogs
                 .Where(tlg => tlg.Entries.Count > 0)
                 .ToList();
-
-            foreach (var tlg in validTimeLogs)
-            {
-                splitPoints.Add(tlg, new List<int>());
-            }
 
             foreach (var entry in taskSplitTimeCombos)
             {
@@ -470,24 +464,18 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                         continue;
                     }
 
-                    var assignment = new TaskSplitEntry
-                    {
-                        Timestamp = time,
-                        Task = entry.Key
-                    };
+                    var assignment = (Task: entry.Key, Timestamp: time);
 
                     foreach (var timeLog in validTimeLogs)
                     {
                         if (timeLog.TryFindClosestIndex(time, out var index))
                         {
-                            splitPoints[timeLog].Add(index);
-                            assignment.Index = index;
-                            assignment.TimeLog = timeLog;
                             // Assignment and cutting must use the same effective row.
                             assignment.Timestamp = timeLog.Entries[index].DateTime;
                             break;
                         }
                     }
+                    // An ownership boundary remains valid without a matching log.
                     assignments.Add(assignment);
                 }
             }
@@ -506,11 +494,6 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             {
                 return new List<ISOTask>();
             }
-
-            List<(string, DateTime, DateTime)> pairs = splitted
-                .Where(tlg => tlg.Entries.Count > 0)
-                .Select(entry => (entry.Name, entry.GetStartTime(), entry.GetEndTime()))
-                .ToList();
 
             var assignmentIndex = 0;
             var resultEntryList = new List<TaskSplitEntry>();
@@ -587,7 +570,15 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 }
             }
 
-            var reservedNames = new HashSet<string>(TimeLogs.Select(tlg => tlg.Name));
+            var reservedNumbers = new HashSet<int>();
+            // Include unchanged and empty logs so their filenames cannot be reused.
+            foreach (var timeLog in TimeLogs)
+            {
+                if (TryParseTimeLogNumber(timeLog.Name, out var number))
+                {
+                    reservedNumbers.Add(number);
+                }
+            }
             var generatedTLGs = new List<ISOTLG>();
             foreach (var entry in splitPoints)
             {
@@ -595,18 +586,19 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
                 {
                     var fragmentCount = entry.Value.Where(index => index > 0 && index < entry.Key.Entries.Count).Distinct().Count() + 1;
                     while (Enumerable.Range(nextTLGNo, fragmentCount)
-                        .Any(number => reservedNames.Contains("TLG" + number.ToString().PadLeft(5, '0'))))
+                        .Any(reservedNumbers.Contains))
                     {
                         nextTLGNo++;
                     }
 
                     var tlgsToAdd = entry.Key.SplitTimeLog(devices, entry.Value, nextTLGNo);
+                    // SplitTimeLog uses consecutive numbers starting at nextTLGNo.
+                    for (var fragment = 0; fragment < tlgsToAdd.Count; fragment++)
+                    {
+                        reservedNumbers.Add(nextTLGNo + fragment);
+                    }
                     nextTLGNo += tlgsToAdd.Count;
                     generatedTLGs.AddRange(tlgsToAdd);
-                    foreach (var tlg in tlgsToAdd)
-                    {
-                        reservedNames.Add(tlg.Name);
-                    }
                 }
                 else
                 {
@@ -616,6 +608,28 @@ namespace Dev4Agriculture.ISO11783.ISOXML.TaskFile
             return generatedTLGs;
         }
 
+
+        private static bool TryParseTimeLogNumber(string name, out int number)
+        {
+            number = 0;
+            if (name == null || !name.StartsWith("TLG", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var suffix = name.Substring(3);
+            // PadLeft also pads a negative sign, so normalize padding before parsing.
+            var unpadded = suffix.TrimStart('0');
+            if (unpadded.Length == 0)
+            {
+                unpadded = "0";
+            }
+
+            // Reserve only exact names that SplitTimeLog can generate. Alternate
+            // prefixes, casing or padding remain distinct, as in the filename set.
+            return int.TryParse(unpadded, out number) &&
+                string.Equals(suffix, number.ToString().PadLeft(5, '0'), StringComparison.Ordinal);
+        }
 
         public void SplitTaskAtDateTimes(List<DateTime> splitTimes, List<ISODevice> devices, int nextTLGNo = 0)
         {

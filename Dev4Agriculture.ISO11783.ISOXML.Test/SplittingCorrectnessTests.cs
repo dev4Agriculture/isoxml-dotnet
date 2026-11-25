@@ -335,6 +335,117 @@ public class SplittingCorrectnessTests
         Assert.AreSame(product, destination.ProductAllocation.Single());
     }
 
+    [TestMethod]
+    public void TaskDictionary_GapOnlyAssignment_AssignsFollowingLogWithoutMatchingAnyRow()
+    {
+        var owner = new ISOTask();
+        owner.TryAddTimeLog(Log(1, 0, 5));
+        var following = Log(2, 10, 5);
+        owner.TryAddTimeLog(following);
+        var target = new ISOTask();
+        var result = owner.SplitAtDateTimes(new Dictionary<ISOTask, List<DateTime>>
+        {
+            [target] = new() { Start.AddSeconds(8) }
+        }, new(), 3);
+
+        Assert.AreSame(target, result.Single());
+        Assert.AreSame(following, target.TimeLogs.Single());
+        CollectionAssert.AreEqual(Enumerable.Range(10, 5).ToArray(), Values(target.TimeLogs));
+        Assert.AreEqual(2, owner.TimeLogs.Count);
+    }
+
+    [TestMethod]
+    public void TaskDictionary_MixedGapAndSampleAssignments_PreservesOrderAndRepeatedDestinations()
+    {
+        var owner = new ISOTask();
+        owner.TryAddTimeLog(Log(1, 0, 5));
+        var middle = Log(2, 10, 5);
+        owner.TryAddTimeLog(middle);
+        owner.TryAddTimeLog(Log(3, 20, 5));
+        var a = new ISOTask();
+        var b = new ISOTask();
+        var afterAllLogs = new ISOTask();
+        var result = owner.SplitAtDateTimes(new Dictionary<ISOTask, List<DateTime>>
+        {
+            [a] = new() { middle.Entries[2].DateTime.AddMilliseconds(500), Start.AddSeconds(-1) },
+            [b] = new() { Start.AddSeconds(8) },
+            [afterAllLogs] = new() { Start.AddDays(1) }
+        }, new(), 100);
+
+        CollectionAssert.AreEqual(new[] { a, b }, result.ToArray());
+        CollectionAssert.AreEqual(Enumerable.Range(0, 5).Concat(Enumerable.Range(12, 3))
+            .Concat(Enumerable.Range(20, 5)).ToArray(), Values(a.TimeLogs));
+        CollectionAssert.AreEqual(new[] { 10, 11 }, Values(b.TimeLogs));
+        CollectionAssert.AreEqual(new[] { "TLG00001", "TLG00101", "TLG00003" }, a.TimeLogs.Select(log => log.Name).ToArray());
+        CollectionAssert.AreEqual(new[] { "TLG00100" }, b.TimeLogs.Select(log => log.Name).ToArray());
+        Assert.AreEqual(0, afterAllLogs.TimeLogs.Count);
+    }
+
+    [DataTestMethod]
+    [DataRow("TLG00002", 2, "TLG00003", "TLG00004")]
+    [DataRow("TLG00003", 2, "TLG00004", "TLG00005")]
+    [DataRow("TLG00004", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG100000", 99999, "TLG100001", "TLG100002")]
+    [DataRow("TLG000-2", -2, "TLG000-1", "TLG00000")]
+    [DataRow("ABC00002", 2, "TLG00002", "TLG00003")]
+    [DataRow("tlg00002", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG2", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG000002", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG00002 ", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG000+2", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLGxxxxx", 2, "TLG00002", "TLG00003")]
+    [DataRow("TLG", 2, "TLG00002", "TLG00003")]
+    [DataRow("", 2, "TLG00002", "TLG00003")]
+    public void TaskList_NameReservation_PreservesExactFilenameSemantics(
+        string untouchedName, int nextNumber, string firstName, string secondName)
+    {
+        var owner = new ISOTask();
+        var source = Log();
+        owner.TryAddTimeLog(source);
+        var untouched = Log(2, 20, 5);
+        // Name is public and callers can change it. Do not reinterpret alternate
+        // prefixes, casing or padding as collisions with a different filename.
+        untouched.Name = untouchedName;
+        owner.TryAddTimeLog(untouched);
+        var result = owner.SplitAtDateTimes(new List<DateTime> { source.Entries[5].DateTime }, new(), nextNumber);
+
+        CollectionAssert.AreEqual(new[] { firstName, secondName, untouchedName }, result.Select(log => log.Name).ToArray());
+        CollectionAssert.AreEqual(Enumerable.Range(0, 10).Concat(Enumerable.Range(20, 5)).ToArray(), Values(result));
+        Assert.AreSame(untouched, result[2]);
+    }
+
+    [TestMethod]
+    public void TaskList_EmptyLogsStillReserveTheirFilenames()
+    {
+        var owner = new ISOTask();
+        var source = Log();
+        owner.TryAddTimeLog(source);
+        owner.TryAddTimeLog(ISOTLG.Generate(2, Path.GetTempPath()));
+        var result = owner.SplitAtDateTimes(new List<DateTime> { source.Entries[5].DateTime }, new(), 2);
+
+        CollectionAssert.AreEqual(new[] { "TLG00003", "TLG00004" }, result.Select(log => log.Name).ToArray());
+        CollectionAssert.AreEqual(Enumerable.Range(0, 10).ToArray(), Values(result));
+        Assert.AreEqual(0, owner.TimeLogs[1].Entries.Count);
+    }
+
+    [TestMethod]
+    public void TaskList_MultipleSplitLogs_ReserveEveryGeneratedNumber()
+    {
+        var owner = new ISOTask();
+        var first = Log(1, 0, 5);
+        var second = Log(2, 10, 5);
+        owner.TryAddTimeLog(first);
+        owner.TryAddTimeLog(second);
+        var result = owner.SplitAtDateTimes(new List<DateTime>
+        {
+            second.Entries[2].DateTime, first.Entries[2].DateTime, first.Entries[2].DateTime
+        }, new(), 2);
+
+        CollectionAssert.AreEqual(new[] { "TLG00003", "TLG00004", "TLG00005", "TLG00006" }, result.Select(log => log.Name).ToArray());
+        CollectionAssert.AreEqual(new[] { 2, 3, 2, 3 }, result.Select(log => log.Entries.Count).ToArray());
+        CollectionAssert.AreEqual(Enumerable.Range(0, 5).Concat(Enumerable.Range(10, 5)).ToArray(), Values(result));
+    }
+
     private static ISODevice TotalDevice()
     {
         var device = new ISODevice { DeviceId = "DVC1" };
